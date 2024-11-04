@@ -16,8 +16,8 @@ func main() {
 
 	result := api.Build(api.BuildOptions{
 		EntryPoints: []string{
-			"ts/library/bundles/minimal.ts",
-			"ts/library/bundles/everything.ts",
+			"ts/library/bundles/datastar-core.ts",
+			"ts/library/bundles/datastar-allinone.ts",
 		},
 		Outdir:            outDir,
 		Bundle:            true,
@@ -26,7 +26,7 @@ func main() {
 		MinifyWhitespace:  true,
 		MinifyIdentifiers: true,
 		MinifySyntax:      true,
-		Sourcemap:         api.SourceMapExternal,
+		Sourcemap:         api.SourceMapLinked,
 		Target:            api.ES2023,
 		// MangleQuoted:      api.MangleQuotedTrue,
 		// External:          []string{"@starfederation/datastar"},

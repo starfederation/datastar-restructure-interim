@@ -22,3 +22,4 @@
    debugger
   }
               `;try{let g=n.argumentNames||[],_=new Function("ctx",...g,d);N.expressionFn=_}catch(g){let _=new Error(`Error creating expression function for '${d}', error: ${g}`);this.sendDatastarEvent("core","attributes","expr_construction_err",N.el,String(_)),console.error(_);debugger}}let Y=n.onLoad(N);Y&&(this.removals.has(i)||this.removals.set(i,{id:i.id,set:new Set}),this.removals.get(i).set.add(Y))}})})}walkSignalsStore(e,r){let n=Object.keys(e);for(let s=0;s<n.length;s++){let i=n[s],o=e[i],c=o instanceof f,u=typeof o=="object"&&Object.keys(o).length>0;if(c){r(i,o);continue}u&&this.walkSignalsStore(o,r)}}walkSignals(e){this.walkSignalsStore(this.store,e)}walkDownDOM(e,r,n=0){if(!e)return;let s=te(e);if(s)for(r(s),n=0,e=e.firstElementChild;e;)this.walkDownDOM(e,r,n++),e=e.nextElementSibling}};var ge=new I;ge.load(oe,ie,X,se,ee,re);var he=ge;he.load();})();
+//# sourceMappingURL=datastar-core.js.map
