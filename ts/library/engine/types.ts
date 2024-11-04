@@ -46,6 +46,7 @@ export type InitContext = {
 };
 
 export type OnRemovalFn = () => void;
+
 export type AttributePlugin = {
   pluginType: "attribute";
   prefix: string; // The prefix of the `data-${prefix}` attribute

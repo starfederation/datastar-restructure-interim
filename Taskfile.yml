@@ -10,7 +10,52 @@ tasks:
     cmds:
       - go install github.com/go-task/task/v3/cmd/task@latest
       - go install github.com/a-h/templ/cmd/templ@latest
+      - test -f go/site/twcli || wget -O go/site/twcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v1.7.20/tailwindcss-extra-linux-x64
+      - chmod +x go/site/twcli
 
   tsbuild:
+    sources:
+      - "**/*.ts"
+    generates:
+      - "ts/library/dist/**/*"
     cmds:
       - go run go/cmd/tsbuild/main.go
+      - cp -r ts/library/dist go/site/static/js
+
+  css:
+    dir: go/site
+    sources:
+      - "**/*.templ"
+      - "**/*.md"
+    generates:
+      - "static/css/site.css"
+
+    cmds:
+      - ./twcli build -o static/css/site.css
+
+  templ:
+    env:
+      TEMPL_EXPERIMENT: rawgo
+    generates:
+      - "**/*_templ.go"
+    sources:
+      - "**/*.templ"
+    cmds:
+      - templ generate .
+
+  site:
+    desc: Server hot reload
+    env:
+      ENV: dev
+    sources:
+      - "**/*.go"
+      - "**/*.md"
+      - "go/site/static/**/*"
+    deps:
+      - tsbuild
+      - templ
+      - css
+
+    cmds:
+      - go mod tidy
+      - go run go/cmd/site/main.go
