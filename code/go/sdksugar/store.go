@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	sdkcore "github.com/starfederation/datastar/go/sdkcore"
+	sdkcore "github.com/starfederation/datastar/go/sdk"
 )
 
 func (sse *ServerSentEventsHandler) PatchStoreMarshal(store any, opts ...sdkcore.PatchStoreOption) error {

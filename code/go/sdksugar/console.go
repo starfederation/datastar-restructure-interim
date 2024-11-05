@@ -1,6 +1,6 @@
 package sdk
 
-import sdkcore "github.com/starfederation/datastar/go/sdkcore"
+import sdkcore "github.com/starfederation/datastar/go/sdk"
 
 func (sse *ServerSentEventsHandler) ConsoleError(format string, args ...interface{}) {
 	sse.Console(sdkcore.ConsoleLogModeError, format, args...)

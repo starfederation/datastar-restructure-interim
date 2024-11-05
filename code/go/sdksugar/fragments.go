@@ -5,7 +5,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/delaneyj/gostar/elements"
-	sdkcore "github.com/starfederation/datastar/go/sdkcore"
+	sdkcore "github.com/starfederation/datastar/go/sdk"
 	"github.com/valyala/bytebufferpool"
 )
 

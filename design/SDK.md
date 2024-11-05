@@ -10,8 +10,8 @@ Datastar has had a few helper tools in the past for different languages.  The SD
 
 Provide a SDK in a language agnostic way, to that end
 
-1. Keep ***core*** SDK as minimal as possible
-2. Allow per language/framework extended features to live in a ***full*** SDK
+1. Keep SDK as minimal as possible
+2. Allow per language/framework extended features to live in a SDK ***sugar*** version
 
 ### Status
 
@@ -36,6 +36,20 @@ The core mechanics of Datastar's SSE support is
 
 ### Constraints
 
-foo| bar |baz
---|--|--
-foo | bar | bar
+
+# Library
+
+> [!WARNING] All naming conventions are shown using `Go` as the standard, thing may change per language norms but please keep as close as possible.
+
+## ServerSentEventsHandler
+
+1. ***There must*** be a `ServerSentEventsHandler` namespace.  In Go this is implemented as a struct, but could be a class or even namespace in languages such as C.
+2. ### Construction / Initialization
+   1. ***There must*** be a way to create a new instance of this object based on the incoming `HTTP` Request and Response objects.
+   2. The `ServerSentEventsHandler` ***must*** default to a flusher interface that has the following response headers set by default
+      1. `Cache-Control = nocache`
+      2. `Connection = keep-alive`
+      3. `Content-Type = text/event-stream`
+   3. Then the created response ***should*** `flush` immediately to avoid timeouts while 0-♾️ events are created
+   4. `ServerSentEventsHandler` ***should*** include an incrementing number to be used as an id for events when one is not provided
+3.
