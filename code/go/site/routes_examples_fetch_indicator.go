@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesFetchIndicator(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/fetch_indicator/greet", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, fetchIndicatorEmpty())
+		sse.RenderFragmentTempl(fetchIndicatorEmpty())
 		time.Sleep(2 * time.Second)
-		datastar.RenderFragmentTempl(sse, fetchIndicatorGreeting())
+		sse.RenderFragmentTempl(fetchIndicatorGreeting())
 	})
 
 	return nil

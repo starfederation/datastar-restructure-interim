@@ -7,10 +7,10 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/dustin/go-humanize"
 	"github.com/go-chi/chi/v5"
 	"github.com/goccy/go-json"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/zeebo/xxh3"
 )
 
@@ -23,7 +23,7 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 			FileNames:   []string{},
 		}
 		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, FileUploadView(store))
+		sse.RenderFragmentTempl(FileUploadView(store))
 	})
 
 	examplesRouter.Post("/file_upload/upload", func(w http.ResponseWriter, r *http.Request) {
@@ -36,14 +36,14 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 
 		if len(data) >= maxBytesSize {
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, FileUpdateAlert(err))
+			sse.RenderFragmentTempl(FileUpdateAlert(err))
 			return
 		}
 
 		store := &FileUploadStore{}
 		sse := datastar.NewSSE(w, r)
 		if err := json.Unmarshal(data, store); err != nil {
-			datastar.RenderFragmentTempl(sse, FileUpdateAlert(err))
+			sse.RenderFragmentTempl(FileUpdateAlert(err))
 			return
 		}
 
@@ -65,7 +65,7 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 			humainzeByteCount[i] = humanize.Bytes(uint64(len(file)))
 		}
 
-		datastar.RenderFragmentTempl(sse, FileUploadResults(store, humainzeByteCount, humanizedHashes))
+		sse.RenderFragmentTempl(FileUploadResults(store, humainzeByteCount, humanizedHashes))
 	})
 
 	return nil

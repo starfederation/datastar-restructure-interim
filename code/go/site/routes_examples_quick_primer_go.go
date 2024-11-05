@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/goccy/go-json"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	// "github.com/goccy/go-json"
 )
 
@@ -24,12 +24,12 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 			mu.RLock()
 			defer mu.RUnlock()
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, QuickPrimerGoView(store))
+			sse.RenderFragmentTempl(QuickPrimerGoView(store))
 		})
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
 			reqStore := &QuickPrimerGoStore{}
-			if err := datastar.BodyUnmarshal(r, reqStore); err != nil {
+			if err := datastar.ParseIncoming(r, reqStore); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -41,8 +41,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 			store = reqStore
 			mu.Unlock()
 
-			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, QuickPrimerGoPut(store))
+			datastar.NewSSE(w, r).RenderFragmentTempl(QuickPrimerGoPut(store))
 		})
 
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -56,14 +55,11 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			datastar.RenderFragmentTempl(sse, QuickPrimerGoGet(string(b)))
-
-			datastar.RenderFragmentTempl(
-				sse, QuickPrimerCheckThisOut(),
-				datastar.WithQuerySelector("main"),
+			sse.RenderFragmentTempl(
+				QuickPrimerGoGet(string(b)),
+				datastar.WithSelector("main"),
 				datastar.WithMergePrepend(),
 			)
-
 		})
 
 		dataRouter.Get("/feed", func(w http.ResponseWriter, r *http.Request) {
@@ -78,7 +74,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 				case <-ticker.C:
 					buf := make([]byte, 8)
 					binary.LittleEndian.PutUint64(buf, rand.Uint64())
-					datastar.RenderFragmentTempl(sse, QuickPrimerGoFeed(hex.EncodeToString(buf)))
+					sse.RenderFragmentTempl(QuickPrimerGoFeed(hex.EncodeToString(buf)))
 				}
 			}
 		})

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 type ContactEdit struct {
@@ -43,14 +43,14 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 	examplesRouter.Get("/edit_row/reset", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 		contacts = starterEditContacts()
-		datastar.RenderFragmentTempl(sse, EditRowContacts(contacts, emptyStore))
+		sse.RenderFragmentTempl(EditRowContacts(contacts, emptyStore))
 	})
 
 	examplesRouter.Route("/edit_row/data", func(dataRouter chi.Router) {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, EditRowContacts(contacts, emptyStore))
+			sse.RenderFragmentTempl(EditRowContacts(contacts, emptyStore))
 		})
 
 		dataRouter.Get("/{index}", func(w http.ResponseWriter, r *http.Request) {
@@ -67,14 +67,14 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 				Email:        contacts[i].Email,
 			}
 
-			datastar.RenderFragmentTempl(sse, EditRowContacts(contacts, store))
+			sse.RenderFragmentTempl(EditRowContacts(contacts, store))
 		})
 	})
 
 	examplesRouter.Route("/edit_row/edit", func(editRouter chi.Router) {
 		editRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &EditRowStore{}
-			if err := datastar.QueryStringUnmarshal(r, &store); err != nil {
+			if err := datastar.ParseIncoming(r, &store); err != nil {
 				http.Error(w, fmt.Sprintf("error unmarshalling contact : %s", err), http.StatusBadRequest)
 			}
 
@@ -92,12 +92,12 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 			}
 
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, EditRowContacts(contacts, store))
+			sse.RenderFragmentTempl(EditRowContacts(contacts, store))
 		})
 
 		editRouter.Patch("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &EditRowStore{}
-			if err := datastar.BodyUnmarshal(r, &store); err != nil {
+			if err := datastar.ParseIncoming(r, &store); err != nil {
 				http.Error(w, fmt.Sprintf("error unmarshalling store : %s", err), http.StatusBadRequest)
 				return
 			}
@@ -112,7 +112,7 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 			c.Email = store.Email
 
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, EditRowContacts(contacts, emptyStore))
+			sse.RenderFragmentTempl(EditRowContacts(contacts, emptyStore))
 		})
 	})
 

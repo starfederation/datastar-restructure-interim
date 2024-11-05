@@ -4,15 +4,15 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/click_to_load/data", func(w http.ResponseWriter, r *http.Request) {
 		store := &ClickToLoadStore{}
-		if err := datastar.QueryStringUnmarshal(r, store); err != nil {
+		if err := datastar.ParseIncoming(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 		if store.Limit < 1 {
@@ -27,13 +27,12 @@ func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 
 		if store.Offset == 0 {
-			datastar.RenderFragmentTempl(sse, ClickToEditAgentsTable(store))
+			sse.RenderFragmentTempl(ClickToEditAgentsTable(store))
 		} else {
-			datastar.RenderFragmentTempl(sse, ClickToLoadMoreButton(store))
+			sse.RenderFragmentTempl(ClickToLoadMoreButton(store))
 			for i := 0; i < store.Limit; i++ {
 				log.Printf("ClickToLoadAgentRow: %d", store.Offset+i)
-				datastar.RenderFragmentTempl(
-					sse,
+				sse.RenderFragmentTempl(
 					ClickToLoadAgentRow(store.Offset+i),
 					datastar.WithQuerySelectorID("click_to_load_rows"),
 					datastar.WithMergeAppend(),

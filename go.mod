@@ -9,7 +9,6 @@ require (
 	github.com/a-h/templ v0.2.793
 	github.com/alecthomas/chroma v0.10.0
 	github.com/benbjohnson/hashfs v0.2.2
-	github.com/delaneyj/datastar v0.19.9
 	github.com/delaneyj/gostar v0.7.3
 	github.com/delaneyj/toolbelt v0.3.7
 	github.com/drhodes/golorem v0.0.0-20220328165741-da82e5b29246

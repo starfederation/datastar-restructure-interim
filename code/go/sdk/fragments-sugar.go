@@ -1,4 +1,4 @@
-package sdk
+package datastar
 
 import (
 	"fmt"
@@ -7,6 +7,26 @@ import (
 	"github.com/delaneyj/gostar/elements"
 	"github.com/valyala/bytebufferpool"
 )
+
+var ValidFragmentMergeTypes = []FragmentMergeMode{
+	FragmentMergeModeMorph,
+	FragmentMergeModeInner,
+	FragmentMergeModeOuter,
+	FragmentMergeModePrepend,
+	FragmentMergeModeAppend,
+	FragmentMergeModeBefore,
+	FragmentMergeModeAfter,
+	FragmentMergeModeUpsert,
+}
+
+func FragmentMergeTypeFromString(s string) (FragmentMergeMode, error) {
+	for _, t := range ValidFragmentMergeTypes {
+		if string(t) == s {
+			return t, nil
+		}
+	}
+	return "", fmt.Errorf("invalid fragment merge type: %s", s)
+}
 
 func WithMergeMorph() RenderFragmentOption {
 	return WithMergeMode(FragmentMergeModeMorph)
@@ -48,6 +68,10 @@ func WithoutViewTransitions() RenderFragmentOption {
 	}
 }
 
+func (sse *ServerSentEventGenerator) RenderFragmentf(format string, args ...any) error {
+	return sse.RenderFragment(fmt.Sprintf(format, args...))
+}
+
 func (sse *ServerSentEventGenerator) RenderFragmentTempl(c templ.Component, opts ...RenderFragmentOption) error {
 	buf := bytebufferpool.Get()
 	defer bytebufferpool.Put(buf)
@@ -70,4 +94,20 @@ func (sse *ServerSentEventGenerator) RenderFragmentGostar(child elements.Element
 		return fmt.Errorf("failed to render fragment: %w", err)
 	}
 	return nil
+}
+
+func GET(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$$get('%s')`, fmt.Sprintf(urlFormat, args...))
+}
+func POST(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$$post('%s')`, fmt.Sprintf(urlFormat, args...))
+}
+func PUT(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$$put('%s')`, fmt.Sprintf(urlFormat, args...))
+}
+func PATCH(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$$patch('%s')`, fmt.Sprintf(urlFormat, args...))
+}
+func DELETE(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$$delete('%s')`, fmt.Sprintf(urlFormat, args...))
 }

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesProgressBar(examplesRouter chi.Router) error {
@@ -18,7 +18,7 @@ func setupExamplesProgressBar(examplesRouter chi.Router) error {
 
 		for progress < 100 {
 			progress = min(100, progress+rand.Intn(20)+1)
-			datastar.RenderFragmentTempl(sse, progressBarView(progress))
+			sse.RenderFragmentTempl(progressBarView(progress))
 			time.Sleep(250 * time.Millisecond)
 		}
 	})

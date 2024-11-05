@@ -206,3 +206,19 @@ Valid values should match the [ConsoleAPI](https://developer.mozilla.org/en-US/d
 * timeLog
 * trace
 * warn
+
+## `ParseIncoming(r *http.Request, store any) error`
+
+`ParseIncoming` is a helper function to parse incoming data from the browser.  It should take the incoming request and convert into an object that can be used by the backend.
+
+#### Args
+
+* `r` (http.Request) The incoming request object from the browser.  This object ***must*** be a valid a valid Request object per the language specifics.
+* `store` (any) The store object that will the incoming data will be unmarshalled into.  The exact function signature will depend on the language specifics.
+
+#### Logic
+
+1. The function ***must*** parse the incoming HTTP request
+   1. if the incoming method is `GET` then the function ***must*** parse the querystring's `datastar` key and treat it as a URL encoded JSON string.
+   2. otherwise the function ***must*** parse the body of the request as a JSON encoded string.
+   3. if the incoming data is not valid JSON the function ***must*** return an error.

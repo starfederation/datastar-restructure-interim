@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/CAFxX/httpcompression"
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/klauspost/compress/zstd"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 type AsciiAnimation struct {
@@ -65,7 +65,7 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 				Percentage: 0,
 			}
 
-			datastar.PatchStore(sse, store)
+			sse.MarshalAndPatchStore(store)
 
 			for {
 				select {
@@ -76,7 +76,7 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 					nextFrame := (currentFrameIdx + 1) % frameCount
 					store.Contents = frame
 					store.Percentage = 100 * float64(nextFrame) / float64(frameCount)
-					datastar.PatchStore(sse, store)
+					sse.MarshalAndPatchStore(store)
 					currentFrameIdx = nextFrame
 				}
 			}

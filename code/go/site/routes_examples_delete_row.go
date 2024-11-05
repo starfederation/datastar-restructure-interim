@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/samber/lo"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesDeleteRow(examplesRouter chi.Router) error {
@@ -21,7 +21,7 @@ func setupExamplesDeleteRow(examplesRouter chi.Router) error {
 			sse := datastar.NewSSE(w, r)
 			mu.RLock()
 			defer mu.RUnlock()
-			datastar.RenderFragmentTempl(sse, deleteRowContacts(contacts))
+			sse.RenderFragmentTempl(deleteRowContacts(contacts))
 		})
 
 		dataRouter.Get("/reset", func(w http.ResponseWriter, r *http.Request) {
@@ -29,11 +29,10 @@ func setupExamplesDeleteRow(examplesRouter chi.Router) error {
 			mu.Lock()
 			defer mu.Unlock()
 			contacts = starterActiveContacts()
-			datastar.RenderFragmentTempl(sse, deleteRowContacts(contacts))
+			sse.RenderFragmentTempl(deleteRowContacts(contacts))
 		})
 
 		dataRouter.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {
-			sse := datastar.NewSSE(w, r)
 			idStr := chi.URLParam(r, "id")
 			id, err := strconv.Atoi(idStr)
 			if err != nil {
@@ -46,7 +45,7 @@ func setupExamplesDeleteRow(examplesRouter chi.Router) error {
 			contacts = lo.Filter(contacts, func(cs *ContactActive, i int) bool {
 				return cs.ID != id
 			})
-			datastar.Delete(sse, "#contact_"+idStr)
+			datastar.NewSSE(w, r).DeleteFragments("#contact_" + idStr)
 		})
 	})
 

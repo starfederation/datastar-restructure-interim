@@ -20,8 +20,6 @@ github.com/chewxy/math32 v1.11.1/go.mod h1:dOB2rcuFrCn6UHrze36WSLVPKtzPMRAQvBvUw
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/delaneyj/datastar v0.19.9 h1:h+mRCr3R2lYdcLxD/p0VI8fHeerwwfYZtil2TIXkcak=
-github.com/delaneyj/datastar v0.19.9/go.mod h1:F/NZlYiVmrBkdOg/dxfknG5jXPeZdbiqlT2bErZLAf4=
 github.com/delaneyj/gostar v0.7.3 h1:+7vEN7T9Y6HESGMHwlXzsTC/apgVwQy1bR4NQ7IKYfo=
 github.com/delaneyj/gostar v0.7.3/go.mod h1:mlxRWAVbntRR2VWlpXAzt7y9HY+bQtEm/lsyFnGLx/w=
 github.com/delaneyj/toolbelt v0.3.7 h1:eBdsGAaMZCwU0o/ELTinMCXrQlnGTqYupNxzIJ6NoNI=

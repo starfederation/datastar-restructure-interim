@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExampleInlineValidation(examplesRouter chi.Router) error {
@@ -21,18 +21,18 @@ func setupExampleInlineValidation(examplesRouter chi.Router) error {
 
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			u := &inlineValidationUser{}
-			if err := datastar.QueryStringUnmarshal(r, u); err != nil {
+			if err := datastar.ParseIncoming(r, u); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			sse := datastar.NewSSE(w, r)
 			isEmailValid, isFirstNameValid, isLastNameValid, isValid := userValidation(u)
-			datastar.RenderFragmentTempl(sse, inlineValidationUserComponent(u, isEmailValid, isFirstNameValid, isLastNameValid, isValid))
+			sse.RenderFragmentTempl(inlineValidationUserComponent(u, isEmailValid, isFirstNameValid, isLastNameValid, isValid))
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			u := &inlineValidationUser{}
-			if err := datastar.BodyUnmarshal(r, u); err != nil {
+			if err := datastar.ParseIncoming(r, u); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -47,7 +47,7 @@ func setupExampleInlineValidation(examplesRouter chi.Router) error {
 				node = inlineValidationThankYou()
 			}
 
-			datastar.RenderFragmentTempl(sse, node)
+			sse.RenderFragmentTempl(node)
 		})
 	})
 

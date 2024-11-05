@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/CAFxX/httpcompression"
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesDbmon(examplesRouter chi.Router) error {
@@ -24,7 +24,7 @@ func setupExamplesDbmon(examplesRouter chi.Router) error {
 		mu.RLock()
 		c := pageDBmon(dbs.databases, mutationRate, 0)
 		mu.RUnlock()
-		datastar.RenderFragmentTempl(sse, c)
+		sse.RenderFragmentTempl(c)
 	})
 
 	examplesRouter.Post("/dbmon/inputs", func(w http.ResponseWriter, r *http.Request) {
@@ -33,13 +33,10 @@ func setupExamplesDbmon(examplesRouter chi.Router) error {
 		}
 		input := &dbmonInput{}
 
-		if err := datastar.BodyUnmarshal(r, input); err != nil {
-			sse := datastar.NewSSE(w, r)
-			datastar.Error(sse, err)
+		if err := datastar.ParseIncoming(r, input); err != nil {
+			datastar.NewSSE(w, r).ConsoleErr(err)
 			return
 		}
-
-		datastar.NewSSE(w, r)
 
 		mu.Lock()
 		mutationRate = input.MutationRate
@@ -75,14 +72,14 @@ func setupExamplesDbmon(examplesRouter chi.Router) error {
 					mu.Unlock()
 
 					now := time.Now()
-					datastar.RenderFragmentTempl(sse, dbmonApp(dbs.databases))
+					sse.RenderFragmentTempl(dbmonApp(dbs.databases))
 					renderTime += time.Since(now)
 					renderCount++
 				case <-renderTimer.C:
 					avg := renderTime / renderCount
 					renderTime = 0
 					renderCount = 0
-					datastar.RenderFragmentTempl(sse, dbmonFPS(avg), noVT)
+					sse.RenderFragmentTempl(dbmonFPS(avg), noVT)
 				}
 			}
 		})

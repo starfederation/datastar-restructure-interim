@@ -3,8 +3,8 @@ package site
 import (
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesClickToEdit(examplesRouter chi.Router) error {
@@ -20,27 +20,23 @@ func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 	examplesRouter.Route("/click_to_edit/contact/{id}", func(contactRouter chi.Router) {
 		contactRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, setupExamplesClickToEditUserComponent(c1))
+			sse.RenderFragmentTempl(setupExamplesClickToEditUserComponent(c1))
 		})
 
 		contactRouter.Get("/edit", func(w http.ResponseWriter, r *http.Request) {
-			sse := datastar.NewSSE(w, r)
-
-			datastar.RenderFragmentTempl(
-				sse,
-				setupExamplesClickToEditUserEdit(c1),
-			)
+			c := setupExamplesClickToEditUserEdit(c1)
+			datastar.NewSSE(w, r).RenderFragmentTempl(c)
 		})
 
 		contactRouter.Patch("/reset", func(w http.ResponseWriter, r *http.Request) {
 			resetContact()
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, setupExamplesClickToEditUserComponent(c1))
+			sse.RenderFragmentTempl(setupExamplesClickToEditUserComponent(c1))
 		})
 
 		contactRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
 			c := &ClickToEditContactStore{}
-			if err := datastar.BodyUnmarshal(r, c); err != nil {
+			if err := datastar.ParseIncoming(r, c); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -51,8 +47,7 @@ func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 			}
 
 			c1 = c // update the contact
-			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, setupExamplesClickToEditUserComponent(c1))
+			datastar.NewSSE(w, r).RenderFragmentTempl(setupExamplesClickToEditUserComponent(c1))
 		})
 	})
 

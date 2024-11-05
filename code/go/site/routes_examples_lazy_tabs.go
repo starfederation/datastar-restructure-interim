@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesLazyTabs(examplesRouter chi.Router) error {
@@ -16,13 +16,13 @@ func setupExamplesLazyTabs(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/lazy_tabs/data", func(w http.ResponseWriter, r *http.Request) {
 		store := &LazyTabsStore{}
-		if err := datastar.QueryStringUnmarshal(r, store); err != nil {
+		if err := datastar.ParseIncoming(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 		sse := datastar.NewSSE(w, r)
 		component := setupExamplesLazyTabsComponent(len(tabs), tabs[store.TabID], store)
-		datastar.RenderFragmentTempl(sse, component)
+		sse.RenderFragmentTempl(component)
 	})
 
 	return nil

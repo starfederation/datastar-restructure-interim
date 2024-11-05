@@ -3,8 +3,8 @@ package site
 import (
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesModelBinding(examplesRouter chi.Router) error {
@@ -18,7 +18,7 @@ func setupExamplesModelBinding(examplesRouter chi.Router) error {
 			BindBool:      true,
 		}
 
-		datastar.RenderFragmentTempl(sse, ModelBindingView(7, store))
+		sse.RenderFragmentTempl(ModelBindingView(7, store))
 	})
 
 	return nil

@@ -1,4 +1,4 @@
-package sdk
+package datastar
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/valyala/bytebufferpool"
 )
 
-func ParseIncoming(w http.ResponseWriter, r *http.Request, store any) error {
+func ParseIncoming(r *http.Request, store any) error {
 	var dsInput []byte
 
 	if r.Method != "GET" {

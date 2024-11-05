@@ -3,9 +3,9 @@ package site
 import (
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesOnLoad(examplesRouter chi.Router, store sessions.Store) error {
@@ -24,7 +24,7 @@ func setupExamplesOnLoad(examplesRouter chi.Router, store sessions.Store) error 
 
 		// You can comment out the below block and still persist the session
 		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, onLoadView(sessionKey, session.Values))
+		sse.RenderFragmentTempl(onLoadView(sessionKey, session.Values))
 	})
 
 	return nil

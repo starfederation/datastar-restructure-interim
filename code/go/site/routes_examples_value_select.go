@@ -3,10 +3,10 @@ package site
 import (
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/delaneyj/toolbelt"
 	"github.com/go-chi/chi/v5"
 	"github.com/samber/lo"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesValueSelect(examplesRouter chi.Router) error {
@@ -93,23 +93,20 @@ func setupExamplesValueSelect(examplesRouter chi.Router) error {
 
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &ValueSelectStore{}
-			if err := datastar.QueryStringUnmarshal(r, store); err != nil {
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 
 			make, model, isValid := storeValidation(store)
 
-			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(
-				sse,
-				valueSelectView(cars, store, make, model, isValid),
-			)
+			c := valueSelectView(cars, store, make, model, isValid)
+			datastar.NewSSE(w, r).RenderFragmentTempl(c)
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &ValueSelectStore{}
-			if err := datastar.BodyUnmarshal(r, store); err != nil {
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -140,7 +137,7 @@ func setupExamplesValueSelect(examplesRouter chi.Router) error {
 				return
 			}
 
-			datastar.RenderFragmentTempl(sse, valueSelectResults(make, model))
+			sse.RenderFragmentTempl(valueSelectResults(make, model))
 		})
 	})
 

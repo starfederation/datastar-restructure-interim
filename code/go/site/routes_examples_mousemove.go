@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/delaneyj/toolbelt"
 	"github.com/delaneyj/toolbelt/embeddednats"
 	"github.com/go-chi/chi/v5"
 	"github.com/goccy/go-json"
 	"github.com/nats-io/nats.go/jetstream"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/zeebo/xxh3"
 )
 
@@ -108,15 +108,15 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 			ctx := r.Context()
 			collection, _, err := cursors(ctx)
 			if err != nil {
-				datastar.Error(sse, err)
+				sse.ConsoleErr(err)
 				return
 			}
 
-			datastar.RenderFragmentTempl(sse, MouseMouseUI(id, collection))
+			sse.RenderFragmentTempl(MouseMouseUI(id, collection))
 
 			watcher, err := kv.Watch(ctx, key)
 			if err != nil {
-				datastar.Error(sse, err)
+				sse.ConsoleErr(err)
 				return
 			}
 			defer watcher.Stop()
@@ -131,11 +131,11 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 					}
 					collection, err := decodeCursors(entry)
 					if err != nil {
-						datastar.Error(sse, err)
+						sse.ConsoleErr(err)
 						return
 					}
 
-					datastar.RenderFragmentTempl(sse, cursorSVG(collection.Positions))
+					sse.RenderFragmentTempl(cursorSVG(collection.Positions))
 				}
 			}
 
@@ -148,14 +148,13 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 				Y  int    `json:"y"`
 			}
 			form := &Form{}
-			if err := datastar.BodyUnmarshal(r, form); err != nil {
-				datastar.Error(datastar.NewSSE(w, r), err)
+			if err := datastar.ParseIncoming(r, form); err != nil {
+				datastar.NewSSE(w, r).ConsoleErr(err)
 				return
 			}
 
 			// log.Printf("Received mouse move: %+v", form)
 
-			datastar.NewSSE(w, r)
 			updateCursors(r.Context(), form.ID, MouseXY{
 				X:  form.X,
 				Y:  form.Y,

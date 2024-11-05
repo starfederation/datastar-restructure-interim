@@ -16,7 +16,6 @@ import (
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
 	"github.com/benbjohnson/hashfs"
-	"github.com/delaneyj/datastar"
 	"github.com/delaneyj/toolbelt"
 	"github.com/delaneyj/toolbelt/embeddednats"
 	"github.com/go-chi/chi/v5"
@@ -24,6 +23,7 @@ import (
 	"github.com/gomarkdown/markdown/ast"
 	mdhtml "github.com/gomarkdown/markdown/html"
 	"github.com/gorilla/sessions"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 //go:embed static/*
@@ -48,7 +48,11 @@ func RunBlocking(port int) toolbelt.CtxErrFunc {
 
 		router.Use(middleware.Recoverer)
 
-		setupRoutes(ctx, router)
+		cleanup, err := setupRoutes(ctx, router)
+		defer cleanup()
+		if err != nil {
+			return fmt.Errorf("error setting up routes: %w", err)
+		}
 
 		srv := &http.Server{
 			Addr:    fmt.Sprintf(":%d", port),
@@ -68,9 +72,8 @@ func RunBlocking(port int) toolbelt.CtxErrFunc {
 func setupRoutes(ctx context.Context, router chi.Router) (cleanup func() error, err error) {
 	defer router.Handle("/static/*", hashfs.FileServer(staticSys))
 	defer router.Get("/hotreload", func(w http.ResponseWriter, r *http.Request) {
-		sse := datastar.NewSSE(w, r)
+		datastar.NewSSE(w, r)
 		<-r.Context().Done()
-		sse.Send("reload", datastar.WithSSERetry(250))
 	})
 
 	ns, err := embeddednats.New(ctx)

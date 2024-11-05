@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/samber/lo"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/zeebo/xxh3"
 )
 
 func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 	examplesRouter.Get("/merge_options/reset", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, mergeOptionsView())
+		sse.RenderFragmentTempl(mergeOptionsView())
 	})
 
 	brewerColorsBG := []string{
@@ -57,10 +57,15 @@ func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 			http.Error(w, "missing merge mode", http.StatusBadRequest)
 			return
 		case "delete":
-			datastar.Delete(sse, "#target")
+			sse.DeleteFragments("#target")
 			return
 		default:
-			mergeMode := datastar.FragmentMergeType(mergeModeRaw)
+			mergeMode, err := datastar.FragmentMergeTypeFromString(mergeModeRaw)
+			if err != nil {
+				sse.ConsoleErr(err)
+				return
+			}
+
 			if !lo.Contains(datastar.ValidFragmentMergeTypes, mergeMode) {
 				http.Error(w, "invalid merge mode", http.StatusBadRequest)
 				return
@@ -70,7 +75,7 @@ func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 			now := time.Now().UTC().Format(time.RFC3339)
 			h := fmt.Sprint(xxh3.HashString(now))
 			frag := mergeOptionsViewUpdate(brewerColorsBG[idx], brewrColorsFG[idx], h)
-			datastar.RenderFragmentTempl(sse, frag, datastar.WithMergeType(mergeMode))
+			sse.RenderFragmentTempl(frag, datastar.WithMergeMode(mergeMode))
 		}
 	})
 

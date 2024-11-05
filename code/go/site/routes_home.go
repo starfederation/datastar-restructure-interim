@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/delaneyj/toolbelt"
 	"github.com/delaneyj/toolbelt/embeddednats"
 	"github.com/dustin/go-humanize"
@@ -17,6 +16,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/samber/lo"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/wcharczuk/go-chart/v2"
 	"github.com/wcharczuk/go-chart/v2/drawing"
 )
@@ -174,7 +174,7 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 							http.Error(w, err.Error(), http.StatusInternalServerError)
 							return
 						}
-						datastar.RenderFragmentTempl(sse, TodosMVCView(mvc))
+						sse.RenderFragmentTempl(TodosMVCView(mvc))
 					}
 				}
 			})
@@ -191,8 +191,6 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-
-				datastar.NewSSE(w, r)
 			})
 
 			todosRouter.Put("/cancel", func(w http.ResponseWriter, r *http.Request) {
@@ -208,8 +206,6 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-
-				datastar.NewSSE(w, r)
 			})
 
 			todosRouter.Put("/mode/{mode}", func(w http.ResponseWriter, r *http.Request) {
@@ -238,8 +234,6 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-
-				datastar.NewSSE(w, r)
 			})
 
 			todosRouter.Route("/{idx}", func(todoRouter chi.Router) {
@@ -282,8 +276,6 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 					}
 
 					saveMVC(r.Context(), sessionID, mvc)
-
-					datastar.NewSSE(w, r)
 				})
 
 				todoRouter.Route("/edit", func(editRouter chi.Router) {
@@ -301,8 +293,6 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 
 						mvc.EditingIdx = i
 						saveMVC(r.Context(), sessionID, mvc)
-
-						datastar.NewSSE(w, r)
 					})
 
 					editRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
@@ -311,12 +301,11 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 						}
 						store := &Store{}
 
-						if err := datastar.BodyUnmarshal(r, store); err != nil {
+						if err := datastar.ParseIncoming(r, store); err != nil {
 							http.Error(w, err.Error(), http.StatusBadRequest)
 							return
 						}
 
-						datastar.NewSSE(w, r)
 						if store.Input == "" {
 							return
 						}
@@ -367,8 +356,6 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 						})
 					}
 					saveMVC(r.Context(), sessionID, mvc)
-
-					datastar.NewSSE(w, r)
 				})
 			})
 		})

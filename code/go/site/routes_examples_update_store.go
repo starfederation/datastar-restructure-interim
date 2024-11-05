@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesUpdateStore(examplesRouter chi.Router) error {
@@ -16,7 +16,7 @@ func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 		dataRouter.Route("/patch", func(patchRouter chi.Router) {
 			patchRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 				store := map[string]any{}
-				if err := datastar.BodyUnmarshal(r, &store); err != nil {
+				if err := datastar.ParseIncoming(r, &store); err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
@@ -24,13 +24,12 @@ func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 				randKey := fmt.Sprintf("%d", rand.Intn(2<<16))
 				store[randKey] = time.Now().Format(time.RFC3339Nano)
 
-				sse := datastar.NewSSE(w, r)
-				datastar.PatchStore(sse, store)
+				datastar.NewSSE(w, r).MarshalAndPatchStore(store)
 			})
 
 			patchRouter.Delete("/", func(w http.ResponseWriter, r *http.Request) {
 				store := map[string]any{}
-				if err := datastar.BodyUnmarshal(r, &store); err != nil {
+				if err := datastar.ParseIncoming(r, &store); err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
@@ -55,7 +54,7 @@ func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 					keysToDelete = keysToDelete[:maxDeletes]
 				}
 
-				datastar.DeleteFromStore(sse, keysToDelete...)
+				sse.DeleteFromStore(keysToDelete...)
 			})
 		})
 

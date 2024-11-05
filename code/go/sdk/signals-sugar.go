@@ -1,11 +1,11 @@
-package sdk
+package datastar
 
 import (
 	"encoding/json"
 	"fmt"
 )
 
-func (sse *ServerSentEventGenerator) PatchStoreMarshal(store any, opts ...PatchStoreOption) error {
+func (sse *ServerSentEventGenerator) MarshalAndPatchStore(store any, opts ...PatchStoreOption) error {
 	b, err := json.Marshal(store)
 	if err != nil {
 		panic(err)
@@ -17,8 +17,8 @@ func (sse *ServerSentEventGenerator) PatchStoreMarshal(store any, opts ...PatchS
 	return nil
 }
 
-func (sse *ServerSentEventGenerator) PatchStoreMarshalIfMissing(store any, opts ...PatchStoreOption) error {
-	if err := sse.PatchStoreMarshal(
+func (sse *ServerSentEventGenerator) MarshalAndPatchStoreIfMissing(store any, opts ...PatchStoreOption) error {
+	if err := sse.MarshalAndPatchStore(
 		store,
 		append(opts, WithOnlyIfMissing(true))...,
 	); err != nil {

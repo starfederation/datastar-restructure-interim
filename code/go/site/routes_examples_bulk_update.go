@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 type ContactActive struct {
@@ -70,12 +70,12 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 	examplesRouter.Route("/bulk_update/data", func(dataRouter chi.Router) {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, bulkUpdateContacts(defaultSelectionStore(), contacts))
+			sse.RenderFragmentTempl(bulkUpdateContacts(defaultSelectionStore(), contacts))
 		})
 
 		setActivation := func(w http.ResponseWriter, r *http.Request, isActive bool) {
 			store := &BulkUpdateSelectionStore{}
-			if err := datastar.BodyUnmarshal(r, store); err != nil {
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -99,8 +99,7 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 						}
 					}
 
-					datastar.RenderFragmentTempl(
-						sse,
+					sse.RenderFragmentTempl(
 						bulkUpdateContact(i, c, wasChanged && wasSelected),
 						// datastar.WithSettleDuration(5*time.Second),
 					)
@@ -110,7 +109,7 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 			for k := range store.Selections {
 				store.Selections[k] = false
 			}
-			datastar.PatchStore(sse, store)
+			sse.MarshalAndPatchStore(store)
 		}
 
 		dataRouter.Put("/activate", func(w http.ResponseWriter, r *http.Request) {

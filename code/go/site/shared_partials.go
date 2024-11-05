@@ -24,7 +24,7 @@ func upsertBuildSize() string {
 		return datastarBuildSizeHuman
 	}
 
-	build, err := staticFS.ReadFile("static/js/dist/datastar.js")
+	build, err := staticFS.ReadFile("static/js/datastar.js")
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +42,7 @@ func upsertBuildSize() string {
 
 	datastarBuildSizeHuman = humanize.IBytes(uint64(datastarGzipSize))
 
-	packageJSON, err := staticFS.ReadFile("static/js/dist/package.json")
+	packageJSON, err := staticFS.ReadFile("static/js/datastar-package.json")
 	if err != nil {
 		panic(err)
 	}

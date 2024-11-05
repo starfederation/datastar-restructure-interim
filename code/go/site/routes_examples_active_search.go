@@ -6,11 +6,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/delaneyj/datastar"
 	"github.com/delaneyj/toolbelt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-faker/faker/v4"
 	"github.com/lithammer/fuzzysearch/fuzzy"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesActiveSearch(examplesRouter chi.Router) error {
@@ -28,7 +28,7 @@ func setupExamplesActiveSearch(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/active_search/data", func(w http.ResponseWriter, r *http.Request) {
 		store := &ActiveSearchStore{}
-		if err := datastar.QueryStringUnmarshal(r, store); err != nil {
+		if err := datastar.ParseIncoming(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -65,8 +65,7 @@ func setupExamplesActiveSearch(examplesRouter chi.Router) error {
 			return int(10000 * (scores[b.ID] - scores[a.ID]))
 		})
 
-		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, ActiveSearchComponent(filteredUsers, scores, store))
+		datastar.NewSSE(w, r).RenderFragmentTempl(ActiveSearchComponent(filteredUsers, scores, store))
 	})
 
 	return nil

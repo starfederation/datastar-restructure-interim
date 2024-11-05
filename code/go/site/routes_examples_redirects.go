@@ -1,12 +1,11 @@
 package site
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesRedirects(examplesRouter chi.Router) error {
@@ -18,25 +17,22 @@ func setupExamplesRedirects(examplesRouter chi.Router) error {
 				RedirectTo: "/essays/grugs_around_fire",
 			}
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, redirectsView(store))
+			sse.RenderFragmentTempl(redirectsView(store))
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &RedirectsStore{}
-			if err := datastar.BodyUnmarshal(r, store); err != nil {
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 
 			sse := datastar.NewSSE(w, r)
 			for i := 5; i > 0; i-- {
-				datastar.RenderFragmentString(
-					sse,
-					fmt.Sprintf(`<div id="update">Redirecting in %d...</div>`, i),
-				)
+				sse.RenderFragmentf(`<div id="update">Redirecting in %d...</div>`, i)
 				time.Sleep(500 * time.Millisecond)
 			}
-			datastar.Redirect(sse, store.RedirectTo)
+			sse.Redirect(store.RedirectTo)
 		})
 	})
 

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesStoreIfMissing(examplesRouter chi.Router) error {
@@ -28,12 +28,9 @@ func setupExamplesStoreIfMissing(examplesRouter chi.Router) error {
 				switch i % 2 {
 				case 0:
 					fragment := fmt.Sprintf(`<div id="placeholder" data-store.ifmissing="%s" data-text="$id"></div>`, store)
-					datastar.RenderFragmentString(
-						sse, fragment,
-						datastar.WithMergeUpsertAttributes(),
-					)
+					sse.RenderFragment(fragment, datastar.WithMergeUpsertAttributes())
 				case 1:
-					datastar.PatchStoreIfMissingRaw(sse, store)
+					sse.MarshalAndPatchStoreIfMissing(store)
 				}
 				i++
 			}

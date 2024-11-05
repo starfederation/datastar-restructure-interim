@@ -2,12 +2,11 @@ package site
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	lorem "github.com/drhodes/golorem"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
@@ -34,12 +33,12 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 				Inline:   "hcenter",
 			}
 
-			datastar.RenderFragmentTempl(sse, scrollIntoViewView(paragraphs, opts, store))
+			sse.RenderFragmentTempl(scrollIntoViewView(paragraphs, opts, store))
 		})
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &ScrollIntoViewStore{}
-			if err := datastar.BodyUnmarshal(r, store); err != nil {
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -58,9 +57,7 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 			}
 
 			updated := fmt.Sprintf(`<p id="p%d" data-%s></p>`, paragraphCount/2, attr)
-
-			log.Println(updated)
-			datastar.RenderFragmentString(sse, updated, datastar.WithMergeUpsertAttributes())
+			sse.RenderFragment(updated, datastar.WithMergeUpsertAttributes())
 		})
 	})
 

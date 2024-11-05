@@ -1,6 +1,10 @@
-package sdk
+package datastar
 
 import "fmt"
+
+func (sse *ServerSentEventGenerator) ConsoleErr(err error) error {
+	return sse.ConsoleError(err.Error())
+}
 
 func (sse *ServerSentEventGenerator) ConsoleErrorf(format string, args ...any) error {
 	return sse.Consolef(ConsoleModeError, format, args...)

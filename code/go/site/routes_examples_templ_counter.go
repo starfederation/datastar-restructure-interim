@@ -5,9 +5,9 @@ import (
 	"sync/atomic"
 
 	"github.com/Jeffail/gabs/v2"
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.Store) error {
@@ -42,8 +42,8 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			User:   userVal,
 		}
 
-		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, templCounterExampleInitialContents(store))
+		c := templCounterExampleInitialContents(store)
+		datastar.NewSSE(w, r).RenderFragmentTempl(c)
 	})
 
 	updateGlobal := func(store *gabs.Container) {
@@ -55,8 +55,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			update := gabs.New()
 			updateGlobal(update)
 
-			sse := datastar.NewSSE(w, r)
-			datastar.PatchStore(sse, update)
+			datastar.NewSSE(w, r).MarshalAndPatchStore(update)
 		})
 
 		incrementRouter.Post("/user", func(w http.ResponseWriter, r *http.Request) {
@@ -75,8 +74,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			updateGlobal(update)
 			update.Set(val, "user")
 
-			sse := datastar.NewSSE(w, r)
-			datastar.PatchStore(sse, update)
+			datastar.NewSSE(w, r).MarshalAndPatchStore(update)
 		})
 	})
 

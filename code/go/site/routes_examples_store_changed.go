@@ -1,12 +1,11 @@
 package site
 
 import (
-	"fmt"
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesStoreChanged(examplesRouter chi.Router, store sessions.Store) error {
@@ -30,9 +29,9 @@ func setupExamplesStoreChanged(examplesRouter chi.Router, store sessions.Store) 
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentString(sse,
-			fmt.Sprintf(`<div id="from_server">Lifetime server updates %d</div>`, totalUpdates),
+		datastar.NewSSE(w, r).RenderFragmentf(
+			`<div id="from_server">Lifetime server updates %d</div>`,
+			totalUpdates,
 		)
 	}
 

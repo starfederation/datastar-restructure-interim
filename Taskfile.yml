@@ -20,10 +20,8 @@ tasks:
       - "bundles/**/*"
     cmds:
       - go run code/go/cmd/tsbuild/main.go
-      - rm -rf code/go/site/static/js/bundles
-      - mkdir -p code/go/site/static/js/bundles
-      - cp -r bundles/datastar.js* code/go/site/static/js/bundles/
-      - cp code/ts/library/package.json code/go/site/static/js/bundles/package.json
+      - cp -r bundles/datastar.js* code/go/site/static/js/
+      - cp code/ts/library/package.json code/go/site/static/js/datastar-package.json
 
   css:
     dir: code/go/site

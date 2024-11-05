@@ -5,18 +5,16 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesTitleUpdateBackend(examplesRouter chi.Router) error {
 	examplesRouter.Get("/title_update_backend/updates", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 		updateTitle := func() {
-			datastar.RenderFragmentString(sse,
-				fmt.Sprintf(`<title>%s from server</title>`, time.Now().Format(time.TimeOnly)),
-				datastar.WithQuerySelector("title"),
-			)
+			frag := fmt.Sprintf(`<title>%s from server</title>`, time.Now().Format(time.TimeOnly))
+			sse.RenderFragment(frag, datastar.WithSelector("title"))
 		}
 
 		updateTitle()

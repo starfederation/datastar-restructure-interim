@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesDisableButton(examplesRouter chi.Router) error {
@@ -14,10 +14,10 @@ func setupExamplesDisableButton(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 
 		fragment := fmt.Sprintf(`<div>The time is %s</div>`, time.Now().UTC().Format(time.RFC3339))
-		datastar.RenderFragmentString(sse, fragment, datastar.WithMergeAppend())
+		sse.RenderFragment(fragment, datastar.WithMergeAppend())
 
 		time.Sleep(1 * time.Second)
-		datastar.PatchStore(sse, map[string]any{
+		sse.MarshalAndPatchStore(map[string]any{
 			"shouldDisable": false,
 		})
 	})

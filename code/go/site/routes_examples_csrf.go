@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/csrf"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesCSRF(examplesRouter chi.Router) error {
@@ -19,14 +19,14 @@ func setupExamplesCSRF(examplesRouter chi.Router) error {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			token := csrf.Token(r)
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, CSRFDemo(token))
+			sse.RenderFragmentTempl(CSRFDemo(token))
 		})
 
 		r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			token := csrf.Token(r)
 
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, CSRFDemoResponse(
+			sse.RenderFragmentTempl(CSRFDemoResponse(
 				fmt.Sprintf("POST request received with token: %s", token),
 			),
 				datastar.WithQuerySelectorID("responses"),

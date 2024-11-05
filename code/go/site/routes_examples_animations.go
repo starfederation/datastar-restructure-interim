@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
 func setupExamplesAnimations(examplesRouter chi.Router) error {
@@ -38,12 +38,12 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
 
-			datastar.RenderFragmentTempl(sse, animationsFadeOutSwap(false))
-			datastar.RenderFragmentTempl(sse, animationsFadeMeIn(true))
-			datastar.RenderFragmentTempl(sse, animationsRequestInFlight())
+			sse.RenderFragmentTempl(animationsFadeOutSwap(false))
+			sse.RenderFragmentTempl(animationsFadeMeIn(true))
+			sse.RenderFragmentTempl(animationsRequestInFlight())
 
 			store := &AnimationsRestoreStore{ShouldRestore: true}
-			datastar.RenderFragmentTempl(sse, animationsViewTransition(store))
+			sse.RenderFragmentTempl(animationsViewTransition(store))
 
 			colorThrobTicker := time.NewTicker(2 * time.Second)
 			for {
@@ -53,43 +53,38 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 				case <-colorThrobTicker.C:
 					fg := fgPal[rand.Intn(len(fgPal))]
 					bg := bgPal[rand.Intn(len(bgPal))]
-					datastar.RenderFragmentTempl(
-						sse,
-						animationsColorThrob(fg, bg),
-					)
+					sse.RenderFragmentTempl(animationsColorThrob(fg, bg))
 				}
 			}
 		})
 
 		dataRouter.Delete("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, animationsFadeOutSwap(true))
+			sse.RenderFragmentTempl(animationsFadeOutSwap(true))
 			time.Sleep(2 * time.Second)
-			datastar.Delete(sse, "#fade_out_swap")
+			sse.DeleteFragments("#fade_out_swap")
 		})
 
 		dataRouter.Get("/fade_me_in", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, animationsFadeMeIn(false))
+			sse.RenderFragmentTempl(animationsFadeMeIn(false))
 			time.Sleep(500 * time.Millisecond)
-			datastar.RenderFragmentTempl(sse, animationsFadeMeIn(true))
+			sse.RenderFragmentTempl(animationsFadeMeIn(true))
 		})
 
 		dataRouter.Post("/request_in_flight", func(w http.ResponseWriter, r *http.Request) {
 			time.Sleep(2 * time.Second)
-			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentString(sse, `<div id="request_in_flight">Submitted!</div>`)
+			datastar.NewSSE(w, r).RenderFragment(`<div id="request_in_flight">Submitted!</div>`)
 		})
 
 		dataRouter.Get("/view_transition", func(w http.ResponseWriter, r *http.Request) {
 			store := &AnimationsRestoreStore{}
-			if err := datastar.QueryStringUnmarshal(r, store); err != nil {
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			store.ShouldRestore = !store.ShouldRestore
-			sse := datastar.NewSSE(w, r)
-			datastar.RenderFragmentTempl(sse, animationsViewTransition(store))
+			datastar.NewSSE(w, r).RenderFragmentTempl(animationsViewTransition(store))
 		})
 	})
 
