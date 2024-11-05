@@ -10,20 +10,21 @@ tasks:
     cmds:
       - go install github.com/go-task/task/v3/cmd/task@latest
       - go install github.com/a-h/templ/cmd/templ@latest
-      - test -f go/site/twcli || wget -O go/site/twcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v1.7.20/tailwindcss-extra-linux-x64
-      - chmod +x go/site/twcli
+      - test -f code/go/site/twcli || wget -O code/go/site/twcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v1.7.20/tailwindcss-extra-linux-x64
+      - chmod +x code/go/site/twcli
 
   tsbuild:
     sources:
       - "**/*.ts"
     generates:
-      - "ts/library/dist/**/*"
+      - "code/ts/library/dist/**/*"
     cmds:
-      - go run go/cmd/tsbuild/main.go
-      - cp -r ts/library/dist go/site/static/js
+      - go run code/go/cmd/tsbuild/main.go
+      - cp -r code/ts/library/dist code/go/site/static/js
+      - cp code/ts/library/package.json code/go/site/static/js/dist/package.json
 
   css:
-    dir: go/site
+    dir: code/go/site
     sources:
       - "**/*.templ"
       - "**/*.md"
@@ -47,6 +48,7 @@ tasks:
     desc: Server hot reload
     env:
       ENV: dev
+    method: none
     sources:
       - "**/*.go"
       - "**/*.md"
@@ -58,4 +60,13 @@ tasks:
 
     cmds:
       - go mod tidy
-      - go run go/cmd/site/main.go
+      - go run code/go/cmd/site/main.go
+
+  clean:
+    cmds:
+      - npx kill-port 4222
+
+  default:
+    desc: Default task
+    deps:
+      - site

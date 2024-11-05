@@ -16,16 +16,16 @@ templ Home() {
 				<img class="w-64 md:w-96" src={ staticPath("images/rocket.webp") }/>
 				<div class="flex flex-col items-end font-bold uppercase font-brand">
 					<div class="text-3xl md:text-6xl text-primary">Datastar</div>
-					<div class="text-sm text-secondary">v{ "XXX" }</div>
+					<div class="text-sm text-secondary">v{ datastarVersion }</div>
 				</div>
 				<div class="text-center font-brand">
 					<div class="text-xl">Real-time hypermedia framework</div>
 				</div>
 				<p>
 					A single
-					<span class="text-lg font-bold text-primary">{ iifeBuildSizeStr }</span>
+					<span class="text-lg font-bold text-primary">{ datastarBuildSizeHuman }</span>
 					CDN link gives you access to everything needed to rival a full-stack SPA framework; all in the language of your choice.
-					To give some perspective, the entire Datastar framework is over <span class="text-lg font-bold text-primary">{ fmt.Sprintf("%.0f", math.Floor(186*1024/float64(iifeBuildSize))) }x</span> smaller than the rocket image above.
+					To give some perspective, the entire Datastar framework is over <span class="text-lg font-bold text-primary">{ fmt.Sprintf("%.0f", math.Floor(186*1024/float64(datastarGzipSize))) }x</span> smaller than the rocket image above.
 				</p>
 				<div class="flex flex-wrap w-full gap-4">
 					<a

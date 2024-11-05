@@ -4,7 +4,7 @@ Real-time Hypermedia first Library and Framework
 
 # How to include on page
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar/ts/library/dist/datastar-allinone.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar/ts/library/dist/datastar.js"></script>
 ```
 
 If you just want the core and add your own plugins

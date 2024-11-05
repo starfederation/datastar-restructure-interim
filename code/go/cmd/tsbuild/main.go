@@ -1,23 +1,39 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
 	"os"
+	"time"
 
 	"github.com/evanw/esbuild/pkg/api"
 )
 
 func main() {
+	start := time.Now()
 	log.Print("Datastar built in TS compiler!")
+	defer func() {
+		log.Printf("Datastar built in %s", time.Since(start))
+	}()
 
-	outDir := "ts/library/dist"
+	ctx := context.Background()
+	if err := run(ctx); err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func run(ctx context.Context) error {
+	_ = ctx
+	outDir := "code/ts/library/dist"
 
 	os.RemoveAll(outDir)
 
 	result := api.Build(api.BuildOptions{
 		EntryPoints: []string{
-			"ts/library/bundles/datastar-core.ts",
-			"ts/library/bundles/datastar-allinone.ts",
+			"code/ts/library/src/bundles/datastar-core.ts",
+			"code/ts/library/src/bundles/datastar.ts",
 		},
 		Outdir:            outDir,
 		Bundle:            true,
@@ -33,44 +49,12 @@ func main() {
 	})
 
 	if len(result.Errors) > 0 {
-		os.Exit(1)
+		errs := make([]error, len(result.Errors))
+		for i, err := range result.Errors {
+			errs[i] = errors.New(err.Text)
+		}
+		return errors.Join(errs...)
 	}
 
-	// if err := filepath.Walk(outDir, func(path string, info fs.FileInfo, err error) error {
-	// 	if err != nil {
-	// 		return err
-	// 	}
-
-	// 	if info.IsDir() {
-	// 		return nil
-	// 	}
-
-	// 	buf := bytebufferpool.Get()
-	// 	defer bytebufferpool.Put(buf)
-
-	// 	b, err := os.ReadFile(path)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-
-	// 	w := brotli.NewWriterV2(buf, brotli.DefaultCompression)
-	// 	if _, err := w.Write(b); err != nil {
-	// 		log.Print(err)
-	// 		return err
-	// 	}
-	// 	w.Close()
-
-	// 	ratio := float64(buf.Len()) / float64(len(b))
-	// 	log.Printf(
-	// 		"Brotli compressed %s from %s to %s (%.2f%%)",
-	// 		path,
-	// 		humanize.IBytes(uint64(len(b))),
-	// 		humanize.IBytes(uint64(buf.Len())),
-	// 		100-ratio*100,
-	// 	)
-
-	// 	return nil
-	// }); err != nil {
-	// 	log.Fatal(err)
-	// }
+	return nil
 }
