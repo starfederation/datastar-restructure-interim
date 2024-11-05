@@ -4,7 +4,7 @@ Real-time Hypermedia first Library and Framework
 
 # How to include on page
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar/ts/library/dist/datastar.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar/bundles/datastar.js"></script>
 ```
 
 If you just want the core and add your own plugins
@@ -16,7 +16,7 @@ but how do I add my own plugins?
 <script type="importmap">
 {
     "imports": {
-      "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar/ts/library/dist/datastar-core.js"
+      "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar/datastar/bundles/datastar-core.js"
     }
 }
 </script>

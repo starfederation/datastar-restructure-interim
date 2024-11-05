@@ -65,7 +65,7 @@ func RunBlocking(port int) toolbelt.CtxErrFunc {
 	}
 }
 
-func setupRoutes(ctx context.Context, router chi.Router) error {
+func setupRoutes(ctx context.Context, router chi.Router) (cleanup func() error, err error) {
 	defer router.Handle("/static/*", hashfs.FileServer(staticSys))
 	defer router.Get("/hotreload", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
@@ -73,18 +73,30 @@ func setupRoutes(ctx context.Context, router chi.Router) error {
 		sse.Send("reload", datastar.WithSSERetry(250))
 	})
 
+	ns, err := embeddednats.New(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("error creating embedded nats server: %w", err)
+	}
+	ns.WaitForServer()
+
+	cleanup = func() error {
+		return errors.Join(
+			ns.Close(),
+		)
+	}
+
 	htmlFormatter := html.New(html.WithClasses(true), html.TabWidth(2))
 	if htmlFormatter == nil {
-		return fmt.Errorf("couldn't create html formatter")
+		return cleanup, fmt.Errorf("couldn't create html formatter")
 	}
 	styleName := "nord"
 	highlightStyle := styles.Get(styleName)
 	if highlightStyle == nil {
-		return fmt.Errorf("couldn't find style %s", styleName)
+		return cleanup, fmt.Errorf("couldn't find style %s", styleName)
 	}
 	highlightCSSBuffer := &bytes.Buffer{}
 	if err := htmlFormatter.WriteCSS(highlightCSSBuffer, highlightStyle); err != nil {
-		return fmt.Errorf("error writing highlight css: %w", err)
+		return cleanup, fmt.Errorf("error writing highlight css: %w", err)
 	}
 	highlightCSS = templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, fmt.Sprintf(`<style>%s</style>`, highlightCSSBuffer.String()))
@@ -132,12 +144,6 @@ func setupRoutes(ctx context.Context, router chi.Router) error {
 		})
 	}
 
-	ns, err := embeddednats.New(ctx)
-	if err != nil {
-		return fmt.Errorf("error creating embedded nats server: %w", err)
-	}
-	ns.WaitForServer()
-
 	sessionStore := sessions.NewCookieStore([]byte("datastar-session-secret"))
 	sessionStore.MaxAge(int(24 * time.Hour / time.Second))
 
@@ -149,8 +155,8 @@ func setupRoutes(ctx context.Context, router chi.Router) error {
 		setupEssays(router),
 		setupMemes(router),
 	); err != nil {
-		return fmt.Errorf("error setting up routes: %w", err)
+		return cleanup, fmt.Errorf("error setting up routes: %w", err)
 	}
 
-	return nil
+	return cleanup, nil
 }

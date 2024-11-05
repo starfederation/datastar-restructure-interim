@@ -26,7 +26,7 @@ func main() {
 
 func run(ctx context.Context) error {
 	_ = ctx
-	outDir := "code/ts/library/dist"
+	outDir := "./bundles"
 
 	os.RemoveAll(outDir)
 

@@ -17,11 +17,13 @@ tasks:
     sources:
       - "**/*.ts"
     generates:
-      - "code/ts/library/dist/**/*"
+      - "bundles/**/*"
     cmds:
       - go run code/go/cmd/tsbuild/main.go
-      - cp -r code/ts/library/dist code/go/site/static/js
-      - cp code/ts/library/package.json code/go/site/static/js/dist/package.json
+      - rm -rf code/go/site/static/js/bundles
+      - mkdir -p code/go/site/static/js/bundles
+      - cp -r bundles/datastar.js* code/go/site/static/js/bundles/
+      - cp code/ts/library/package.json code/go/site/static/js/bundles/package.json
 
   css:
     dir: code/go/site

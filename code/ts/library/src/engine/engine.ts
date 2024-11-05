@@ -1,3 +1,4 @@
+import { version } from "../../package.json";
 import { elemToSelector, nodeHTMLorSVGElement } from "../utils/dom";
 import { HTMLorSVGElement } from "../utils/types";
 import { DeepSignal, deepSignal, DeepState } from "../vendored/deepsignal";
@@ -55,6 +56,10 @@ export class Engine {
             childList: true,
             subtree: true,
         });
+    }
+
+    get version() {
+        return version;
     }
 
     load(...pluginsToLoad: DatastarPlugin[]) {
