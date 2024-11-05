@@ -11,20 +11,6 @@ var (
 	ErrNoPathsProvided = errors.New("no paths provided")
 )
 
-func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
-	if len(paths) == 0 {
-		return ErrNoPathsProvided
-	}
-
-	if err := sse.send(
-		EventTypeDelete,
-		[]string{"paths " + strings.Join(paths, " ")},
-	); err != nil {
-		return fmt.Errorf("failed to send delete from store: %w", err)
-	}
-	return nil
-}
-
 type PatchStoreOptions struct {
 	OnlyIfMissing bool
 }
@@ -59,6 +45,20 @@ func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...Pa
 		dataRows,
 	); err != nil {
 		return fmt.Errorf("failed to send patch store: %w", err)
+	}
+	return nil
+}
+
+func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
+	if len(paths) == 0 {
+		return ErrNoPathsProvided
+	}
+
+	if err := sse.send(
+		EventTypeDelete,
+		[]string{"paths " + strings.Join(paths, " ")},
+	); err != nil {
+		return fmt.Errorf("failed to send delete from store: %w", err)
 	}
 	return nil
 }

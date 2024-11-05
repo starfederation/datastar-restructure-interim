@@ -9,31 +9,31 @@ import (
 )
 
 func WithMergeMorph() RenderFragmentOption {
-	return WithMergeType(FragmentMergeMorph)
+	return WithMergeMode(FragmentMergeModeMorph)
 }
 
 func WithMergePrepend() RenderFragmentOption {
-	return WithMergeType(FragmentMergePrepend)
+	return WithMergeMode(FragmentMergeModePrepend)
 }
 
 func WithMergeAppend() RenderFragmentOption {
-	return WithMergeType(FragmentMergeAppend)
+	return WithMergeMode(FragmentMergeModeAppend)
 }
 
 func WithMergeBefore() RenderFragmentOption {
-	return WithMergeType(FragmentMergeBefore)
+	return WithMergeMode(FragmentMergeModeBefore)
 }
 
 func WithMergeAfter() RenderFragmentOption {
-	return WithMergeType(FragmentMergeAfter)
+	return WithMergeMode(FragmentMergeModeAfter)
 }
 
 func WithMergeUpsertAttributes() RenderFragmentOption {
-	return WithMergeType(FragmentMergeUpsert)
+	return WithMergeMode(FragmentMergeModeUpsert)
 }
 
 func WithQuerySelectorID(id string) RenderFragmentOption {
-	return WithQuerySelectorf("#%s", id)
+	return WithSelectorf("#%s", id)
 }
 
 func WithViewTransitions() RenderFragmentOption {

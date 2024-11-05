@@ -55,30 +55,154 @@ The core mechanics of Datastar's SSE support is
    4. `ServerSentEventGenerator` ***should*** include an incrementing number to be used as an id for events when one is not provided
    5. Multiple calls using `ServerSentEventGenerator` should be single threaded to guaruantee order.  The Go implementation use a mutex to facilitate this behavior but might not be need in a some environments
 
-### private `send`
+### `ServerSentEventGenerator.send(eventType: EventType, dataLines: string[], options?: {id?:string, rery?:durationInMilliseconds})`
 
-all top level `ServerSentEventGenerator` ***should*** use a unified sending function.
+All top level `ServerSentEventGenerator` ***should*** use a unified sending function.  This method ***should be private***
+
 ####  Args
-   *  eventType [EventType](#EventType)
-   *  dataLines []string
-   *  options
-      * `id` (string) Each event ***may*** include an `id`.  This can be used by the backend to replaye events.  If one is not provided the server ***must*** include an monotonically incrementing id
-      * `retry` (duration) Each event ***may*** include a `retry` value.  If one is not provided the SDK ***must*** default to `1 second`.
+
+##### EventType
+An enum of Datastr supported events.  Will be a string over the wire
+Currently valid values are
+
+| Event | Description |
+| --- | --- |
+| datastar-fragment | A fragment of HTML to be inserted into the DOM |
+| datastar-signal | Effect the data-store in some way |
+| datastar-delete | Delete something from the DOM or data-store |
+| datastar-redirect | Redirect the browser to a new URL |
+| datastar-console | Send a message to the browser console |
+
+##### Options
+* `id` (string) Each event ***may*** include an `id`.  This can be used by the backend to replaye events.  If one is not provided the server ***must*** include an monotonically incrementing id
+* `retry` (duration) Each event ***may*** include a `retry` value.  If one is not provided the SDK ***must*** default to `1 second`.
 
 #### Logic
-When called the function ***must*** write to the response buffer the following in specified order
+When called the function ***must*** write to the response buffer the following in specified order.  If any part of this process fails you ***must*** return/throw an error depending on language norms.
 1.   ***Must*** write `event: EVENT_TYPE\n` where `EVENT_TYPE` is [EventType](#EventType)
 2.   ***Must*** write `id: ID\n` where `ID` is either a user defined string or a monotonically increased integer starting at 0
 3.   For each string in the provided `dataLines`, you ***must*** write `data: DATA\n` where `DATA` is the provided string.
 4.  ***Must*** write a `\n\n` to complete the event per the SSE spec.
 5.  Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
 
-## EventType
-An enum of Datastr supported events.  Will be a string over the wire
-Currently valid values are
+### `ServerSentEventGenerator.RenderFragment(data: string, options ?: { selector?: string, merge ?: FragmentMergeMode, settleDuration?: durationInMilliseconds, useViewTransition?: boolean })`
 
-* datastar-fragment
-* datastar-signal
-* datastar-delete
-* datastar-redirect
-* datastar-console
+`RenderFragment` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
+
+#### Args
+
+##### FragmentMergeMode
+
+An enum of Datastr supported fragment merge modes.  Will be a string over the wire
+Valid values should match the [FragmentMergeMode](#FragmentMergeMode) and currently include
+
+| Mode | Description |
+| --- | --- |
+| morph | Use idiomorph to merge the fragment into the DOM |
+| inner | Replace the innerHTML of the selector with the fragment |
+| outer | Replace the outerHTML of the selector with the fragment |
+| prepend | Prepend the fragment to the selector |
+| append | Append the fragment to the selector |
+| before | Insert the fragment before the selector |
+| after | Insert the fragment after the selector |
+| upsertAttributes | Update the attributes of the selector with the fragment |
+
+##### Options
+* `selector` (string) The CSS selector to use to insert the fragment.  If not provided the fragment ***must*** be inserted at the end of the body.  If the selector is not found Datastar client side ***will** default to using the `id` attribute of the fragment
+* `merge` (FragmentMergeMode) The mode to use when merging the fragment into the DOM.  If not provided the Datastar client side ***will*** default to `morph`
+* If settleDuration is provided the SDK ***should*** wait for the specified duration before sending the event, if not provided the Datastar client side ***will*** default to `300 milliseconds`
+* If useViewTransition is provided the SDK ***should*** use the provided view transition, if not provided the Datastar client side ***will*** default to `false`
+
+#### Logic
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-fragment` event type.
+1. If the `selector` is provided the function ***must*** include the selector in the event data in the format `selector SELECTOR`, unless the selector is the id of the fragment
+2. If the `merge` is provided the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE`, unless the merge mode is the default of `morph`.
+3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
+4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
+
+### `ServerSentEventGenerator.DeleteFragments(seletor: string, options ?: { settleDuration?: durationInMilliseconds, useViewTransition?: boolean})`
+
+`DeleteFragments` is a helper function to send a signal to the browser to delete a fragment from the DOM.
+
+#### Args
+
+`selector` is a CSS selector that represents the fragment to be deleted from the DOM.  The selector ***must*** be a valid CSS selector.  The Datastar client side will use this selector to delete the fragment from the DOM.
+
+#### Logic
+1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-delete` event type.
+2. The function ***must*** include the selector in the event data in the format `selector SELECTOR`.
+3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration DURATION`, unless the settle duration is the default of `300 milliseconds`.  `DURATION` should be the provided duration in milliseconds.
+4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
+
+
+### `ServerSentEventGenerator.PatchStore(data: string, options ?: { onlyIfMissing?: boolean })`
+
+`PatchStore` is a helper function to send a signal to the browser to update the data-store.
+
+#### Args
+
+Data is a JS or JSON object that will be sent to the browser to update the data-store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to fine grain signals by the Datastar client side.
+
+##### Options
+
+* `onlyIfMissing` (boolean) If true the SDK ***should*** only send the signal if the data is not already in the data-store.  If not provided the Datastar client side ***will*** default to `false` which will cause the data to be merged into the data-store.
+
+#### Logic
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-signal` event type.
+
+1. If the `onlyIfMissing` is provided the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
+
+### `ServerSentEventGenerator.DeleteFromStore(...paths: string[])`
+
+`DeleteFromStore` is a helper function to send a signal to the browser to delete data from the data-store.
+
+#### Args
+
+`paths` is a list of strings that represent the path to the data to be deleted from the data-store.  The paths ***must*** be valid `.` delimnated paths within the store.  The Datastar client side will use these paths to delete the data from the data-store.
+
+#### Logic
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-delete` event type.
+
+1. The function ***must*** include the paths in the event data in the format `paths PATHS` where `PATHS` is a space separated list of the provided paths.
+
+
+### `ServerSentEventGenerator.Redirect(url: string)`
+
+#### Args
+
+`url` is a string that represents the URL to redirect the browser to.  The URL ***must*** be a valid URL.  The Datastar client side will use this URL to redirect the browser.
+
+#### Logic
+1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-redirect` event type.
+2. The function ***must*** include the URL in the event data in the format `url URL` where `URL` is the provided URL.
+
+### `ServerSentEventGenerator.Console(mode: ConsoleMode, message: string)`
+
+`Console` allows developers to send messages directly to a browser console
+
+#### Args
+
+##### ConsoleMode
+
+An enum of Datastr supported console modes.  Will be a string over the wire
+Valid values should match the [ConsoleAPI](https://developer.mozilla.org/en-US/docs/Web/API/console) methods and currently include
+
+* assert
+* clear
+* count
+* countReset
+* debug
+* dir
+* dirxml
+* error
+* group
+* groupCollapsed
+* groupEnd
+* info
+* log
+* table
+* time
+* timeEnd
+* timeLog
+* trace
+* warn

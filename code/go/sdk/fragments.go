@@ -9,42 +9,42 @@ import (
 
 const DEFAULT_SETTLE_TIME = 300 * time.Millisecond
 
-type FragmentMergeType string
+type FragmentMergeMode string
 
 const (
-	FragmentMergeMorph   FragmentMergeType = "morph"
-	FragmentMergeInner   FragmentMergeType = "inner"
-	FragmentMergeOuter   FragmentMergeType = "outer"
-	FragmentMergePrepend FragmentMergeType = "prepend"
-	FragmentMergeAppend  FragmentMergeType = "append"
-	FragmentMergeBefore  FragmentMergeType = "before"
-	FragmentMergeAfter   FragmentMergeType = "after"
-	FragmentMergeUpsert  FragmentMergeType = "upsert_attributes"
+	FragmentMergeModeMorph   FragmentMergeMode = "morph"
+	FragmentMergeModeInner   FragmentMergeMode = "inner"
+	FragmentMergeModeOuter   FragmentMergeMode = "outer"
+	FragmentMergeModePrepend FragmentMergeMode = "prepend"
+	FragmentMergeModeAppend  FragmentMergeMode = "append"
+	FragmentMergeModeBefore  FragmentMergeMode = "before"
+	FragmentMergeModeAfter   FragmentMergeMode = "after"
+	FragmentMergeModeUpsert  FragmentMergeMode = "upsertAttributes"
 )
 
 type RenderFragmentOptions struct {
-	QuerySelector      string
-	Merge              FragmentMergeType
+	Selector           string
+	MergeMode          FragmentMergeMode
 	SettleDuration     time.Duration
 	UseViewTransitions bool
 }
 
 type RenderFragmentOption func(*RenderFragmentOptions)
 
-func WithQuerySelectorf(selectorFormat string, args ...any) RenderFragmentOption {
+func WithSelectorf(selectorFormat string, args ...any) RenderFragmentOption {
 	selector := fmt.Sprintf(selectorFormat, args...)
-	return WithQuerySelector(selector)
+	return WithSelector(selector)
 }
 
-func WithQuerySelector(selector string) RenderFragmentOption {
+func WithSelector(selector string) RenderFragmentOption {
 	return func(o *RenderFragmentOptions) {
-		o.QuerySelector = selector
+		o.Selector = selector
 	}
 }
 
-func WithMergeType(merge FragmentMergeType) RenderFragmentOption {
+func WithMergeMode(merge FragmentMergeMode) RenderFragmentOption {
 	return func(o *RenderFragmentOptions) {
-		o.Merge = merge
+		o.MergeMode = merge
 	}
 }
 
@@ -60,12 +60,12 @@ func WithUseViewTransitions(useViewTransition bool) RenderFragmentOption {
 	}
 }
 
-func (sse *ServerSentEventGenerator) DeleteSelectorf(selectorFormat string, args ...any) error {
-	selector := fmt.Sprintf(selectorFormat, args...)
-	return sse.DeleteSelector(selector)
+type DeleteFragmentOptions struct {
+	SettleDuration     time.Duration
+	UseViewTransitions bool
 }
 
-func (sse *ServerSentEventGenerator) DeleteSelector(selector string, opts ...RenderFragmentOption) error {
+func (sse *ServerSentEventGenerator) DeleteFragments(selector string, opts ...DeleteFragmentOptions) error {
 	if selector == "" {
 		panic("missing selector")
 	}
@@ -79,8 +79,8 @@ func (sse *ServerSentEventGenerator) DeleteSelector(selector string, opts ...Ren
 
 func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...RenderFragmentOption) error {
 	options := &RenderFragmentOptions{
-		QuerySelector:  "",
-		Merge:          FragmentMergeMorph,
+		Selector:       "",
+		MergeMode:      FragmentMergeModeMorph,
 		SettleDuration: DEFAULT_SETTLE_TIME,
 	}
 	for _, opt := range opts {
@@ -88,11 +88,11 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 	}
 
 	dataRows := make([]string, 0, 4)
-	if options.QuerySelector != "" {
-		dataRows = append(dataRows, "selector "+options.QuerySelector)
+	if options.Selector != "" {
+		dataRows = append(dataRows, "selector "+options.Selector)
 	}
-	if options.Merge != FragmentMergeMorph {
-		dataRows = append(dataRows, "merge "+string(options.Merge))
+	if options.MergeMode != FragmentMergeModeMorph {
+		dataRows = append(dataRows, "merge "+string(options.MergeMode))
 	}
 	if options.SettleDuration > 0 && options.SettleDuration != DEFAULT_SETTLE_TIME {
 		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
