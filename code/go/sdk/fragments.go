@@ -2,6 +2,7 @@ package sdk
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -30,8 +31,12 @@ type RenderFragmentOptions struct {
 
 type RenderFragmentOption func(*RenderFragmentOptions)
 
-func WithQuerySelector(selectorFormat string, args ...any) RenderFragmentOption {
+func WithQuerySelectorf(selectorFormat string, args ...any) RenderFragmentOption {
 	selector := fmt.Sprintf(selectorFormat, args...)
+	return WithQuerySelector(selector)
+}
+
+func WithQuerySelector(selector string) RenderFragmentOption {
 	return func(o *RenderFragmentOptions) {
 		o.QuerySelector = selector
 	}
@@ -55,18 +60,24 @@ func WithUseViewTransitions(useViewTransition bool) RenderFragmentOption {
 	}
 }
 
-func (sse *ServerSentEventsHandler) DeleteSelector(selector string, opts ...RenderFragmentOption) {
+func (sse *ServerSentEventGenerator) DeleteSelectorf(selectorFormat string, args ...any) error {
+	selector := fmt.Sprintf(selectorFormat, args...)
+	return sse.DeleteSelector(selector)
+}
 
+func (sse *ServerSentEventGenerator) DeleteSelector(selector string, opts ...RenderFragmentOption) error {
 	if selector == "" {
 		panic("missing selector")
 	}
 
-	dataRows := []string{fmt.Sprintf("selector %s", selector)}
-
-	sse.send(EventTypeDelete, dataRows)
+	dataRows := []string{"selector " + selector}
+	if err := sse.send(EventTypeDelete, dataRows); err != nil {
+		return fmt.Errorf("failed to send delete: %w", err)
+	}
+	return nil
 }
 
-func (sse *ServerSentEventsHandler) RenderFragment(fragment string, opts ...RenderFragmentOption) error {
+func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...RenderFragmentOption) error {
 	options := &RenderFragmentOptions{
 		QuerySelector:  "",
 		Merge:          FragmentMergeMorph,
@@ -78,13 +89,14 @@ func (sse *ServerSentEventsHandler) RenderFragment(fragment string, opts ...Rend
 
 	dataRows := make([]string, 0, 4)
 	if options.QuerySelector != "" {
-		dataRows = append(dataRows, fmt.Sprintf("selector %s", options.QuerySelector))
+		dataRows = append(dataRows, "selector "+options.QuerySelector)
 	}
 	if options.Merge != FragmentMergeMorph {
-		dataRows = append(dataRows, fmt.Sprintf("merge %s", options.Merge))
+		dataRows = append(dataRows, "merge "+string(options.Merge))
 	}
 	if options.SettleDuration > 0 && options.SettleDuration != DEFAULT_SETTLE_TIME {
-		dataRows = append(dataRows, fmt.Sprintf("settle %d", options.SettleDuration.Milliseconds()))
+		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, "settle "+settleTime)
 	}
 	if options.UseViewTransitions {
 		dataRows = append(dataRows, "useViewTransition true")

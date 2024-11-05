@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 )
 
 const DEFAULT_SSE_SEND_RETRY = 1 * time.Second
 
-type ServerSentEventsHandler struct {
+type ServerSentEventGenerator struct {
 	ctx             context.Context
 	mu              *sync.Mutex
 	w               http.ResponseWriter
@@ -21,17 +22,22 @@ type ServerSentEventsHandler struct {
 	nextID          int
 }
 
-func NewSSE(w http.ResponseWriter, r *http.Request) (*ServerSentEventsHandler, error) {
+func NewSSE(w http.ResponseWriter, r *http.Request) *ServerSentEventGenerator {
 	flusher, ok := w.(http.Flusher)
 	if !ok {
-		return nil, ErrFlushingNotSupported
+		// This is a deliberate choice as it should never occur and is an environment issue.
+		// https://crawshaw.io/blog/go-and-sqlite
+		// In Go, errors that are part of the standard operation of a program are returned as values.
+		// Programs are expected to handle errors.
+		panic("response writer does not support flushing")
 	}
+
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("Content-Type", "text/event-stream")
 	flusher.Flush()
 
-	sseHandler := &ServerSentEventsHandler{
+	sseHandler := &ServerSentEventGenerator{
 		ctx:             r.Context(),
 		mu:              &sync.Mutex{},
 		w:               w,
@@ -39,14 +45,14 @@ func NewSSE(w http.ResponseWriter, r *http.Request) (*ServerSentEventsHandler, e
 		shouldLogPanics: true,
 		nextID:          0,
 	}
-	return sseHandler, nil
+	return sseHandler
 }
 
-func (sse *ServerSentEventsHandler) Context() context.Context {
+func (sse *ServerSentEventGenerator) Context() context.Context {
 	return sse.ctx
 }
 
-type SSEEvent struct {
+type ServerSentEventData struct {
 	Type            EventType
 	ShouldIncludeId bool
 	ID              string
@@ -54,17 +60,17 @@ type SSEEvent struct {
 	Retry           time.Duration
 }
 
-type SSEEventOption func(*SSEEvent)
+type SSEEventOption func(*ServerSentEventData)
 
 func WithSSEId(id string) SSEEventOption {
-	return func(e *SSEEvent) {
+	return func(e *ServerSentEventData) {
 		e.ID = id
 		e.ShouldIncludeId = true
 	}
 }
 
 func WithSSERetry(retry time.Duration) SSEEventOption {
-	return func(e *SSEEvent) {
+	return func(e *ServerSentEventData) {
 		e.Retry = retry
 	}
 }
@@ -81,11 +87,12 @@ func writeJustError(w io.Writer, b []byte) (err error) {
 	return err
 }
 
-func (sse *ServerSentEventsHandler) send(eventType EventType, dataLines []string, opts ...SSEEventOption) error {
+func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []string, opts ...SSEEventOption) error {
 	sse.mu.Lock()
 	defer sse.mu.Unlock()
 
-	evt := SSEEvent{
+	// create the event
+	evt := ServerSentEventData{
 		Type:  eventType,
 		Data:  dataLines,
 		Retry: DEFAULT_SSE_SEND_RETRY,
@@ -108,7 +115,7 @@ func (sse *ServerSentEventsHandler) send(eventType EventType, dataLines []string
 	// write id if needed
 	if evt.ShouldIncludeId {
 		if evt.ID == "" {
-			evt.ID = fmt.Sprintf("%d", sse.nextID)
+			evt.ID = strconv.Itoa(sse.nextID)
 			sse.nextID++
 		}
 
@@ -148,6 +155,7 @@ func (sse *ServerSentEventsHandler) send(eventType EventType, dataLines []string
 		return fmt.Errorf("failed to write newline: %w", err)
 	}
 
+	// flush the buffer to the client
 	sse.flusher.Flush()
 
 	return nil

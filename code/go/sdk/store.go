@@ -11,7 +11,7 @@ var (
 	ErrNoPathsProvided = errors.New("no paths provided")
 )
 
-func (sse *ServerSentEventsHandler) DeleteFromStore(paths ...string) error {
+func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
 	if len(paths) == 0 {
 		return ErrNoPathsProvided
 	}
@@ -39,7 +39,7 @@ func WithOnlyIfMissing(onlyIfMissing bool) PatchStoreOption {
 	}
 }
 
-func (sse *ServerSentEventsHandler) PatchStore(storeContents []byte, opts ...PatchStoreOption) error {
+func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...PatchStoreOption) error {
 	options := &PatchStoreOptions{
 		OnlyIfMissing: false,
 	}

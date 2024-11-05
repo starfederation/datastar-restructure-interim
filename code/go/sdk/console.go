@@ -14,12 +14,14 @@ const (
 	ConsoleLogModeGroupEnd ConsoleLogMode = "groupEnd"
 )
 
-func (sse *ServerSentEventsHandler) Console(Mode ConsoleLogMode, messageFormat string, args ...any) {
+func (sse *ServerSentEventGenerator) Consolef(mode ConsoleLogMode, messageFormat string, args ...any) error {
 	message := fmt.Sprintf(messageFormat, args...)
-	sse.send(
+	return sse.Console(mode, message)
+}
+
+func (sse *ServerSentEventGenerator) Console(mode ConsoleLogMode, message string) error {
+	return sse.send(
 		EventTypeConsole,
-		[]string{
-			fmt.Sprintf("%s %s", Mode, message),
-		},
+		[]string{string(mode) + message},
 	)
 }

@@ -6,9 +6,8 @@ import (
 )
 
 var (
-	ErrEventTypeError       = fmt.Errorf("event type is required")
-	ErrMissingInput         = errors.New("missing datastar input")
-	ErrFlushingNotSupported = errors.New("response writer does not support flushing")
+	ErrEventTypeError = fmt.Errorf("event type is required")
+	ErrMissingInput   = errors.New("missing datastar input")
 
 	newLineBuf       = []byte("\n")
 	doubleNewLineBuf = []byte("\n\n")
