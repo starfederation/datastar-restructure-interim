@@ -40,7 +40,7 @@ func (sse *ServerSentEventGenerator) ConsoleDebug(message string) error {
 
 func (sse *ServerSentEventGenerator) ConsoleGroupf(labelFormat string, args ...any) error {
 	label := fmt.Sprintf(labelFormat, args...)
-	return sse.ConsoleGroup(label)
+	return sse.Consolef(ConsoleLogModeGroup, label)
 }
 
 func (sse *ServerSentEventGenerator) ConsoleGroup(label string) error {

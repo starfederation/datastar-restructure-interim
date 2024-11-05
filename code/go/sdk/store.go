@@ -18,9 +18,7 @@ func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
 
 	if err := sse.send(
 		EventTypeDelete,
-		[]string{
-			fmt.Sprintf("paths %s", strings.Join(paths, " ")),
-		},
+		[]string{"paths " + strings.Join(paths, " ")},
 	); err != nil {
 		return fmt.Errorf("failed to send delete from store: %w", err)
 	}
@@ -53,7 +51,7 @@ func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...Pa
 	}
 	lines := bytes.Split(storeContents, newLineBuf)
 	for _, line := range lines {
-		dataRows = append(dataRows, fmt.Sprintf("store %s", line))
+		dataRows = append(dataRows, "store "+string(line))
 	}
 
 	if err := sse.send(

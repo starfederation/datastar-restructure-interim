@@ -43,8 +43,9 @@ The core mechanics of Datastar's SSE support is
 
 ## ServerSentEventGenerator
 
-1. ***There must*** be a `ServerSentEventGenerator` namespace.  In Go this is implemented as a struct, but could be a class or even namespace in languages such as C.
-2. ### Construction / Initialization
+***There must*** be a `ServerSentEventGenerator` namespace.  In Go this is implemented as a struct, but could be a class or even namespace in languages such as C.
+
+### Construction / Initialization
    1. ***There must*** be a way to create a new instance of this object based on the incoming `HTTP` Request and Response objects.
    2. The `ServerSentEventGenerator` ***must*** default to a flusher interface that has the following response headers set by default
       1. `Cache-Control = nocache`
@@ -53,16 +54,24 @@ The core mechanics of Datastar's SSE support is
    3. Then the created response ***should*** `flush` immediately to avoid timeouts while 0-♾️ events are created
    4. `ServerSentEventGenerator` ***should*** include an incrementing number to be used as an id for events when one is not provided
    5. Multiple calls using `ServerSentEventGenerator` should be single threaded to guaruantee order.  The Go implementation use a mutex to facilitate this behavior but might not be need in a some environments
-   6. ### private `send`
-      * Description: all top level `ServerSentEventGenerator` ***should*** use a unified sending function.
-      *  Args
-         *  eventType [EventType](#EventType)
-         *  dataLines []string
-         *  options
-            * `id` (string) Each event ***may*** include an `id`.  This can be used by the backend to replaye events.  If one is not provided the server ***must*** include an monotonically incrementing id
-            * `retry` (duration) Each event ***may*** include a `retry` value.  If one is not provided the SDK ***must*** default to `1 second`.
-          * When writing to the response buffer the following ***must*** writen in specified order
-      *
+
+### private `send`
+
+all top level `ServerSentEventGenerator` ***should*** use a unified sending function.
+####  Args
+   *  eventType [EventType](#EventType)
+   *  dataLines []string
+   *  options
+      * `id` (string) Each event ***may*** include an `id`.  This can be used by the backend to replaye events.  If one is not provided the server ***must*** include an monotonically incrementing id
+      * `retry` (duration) Each event ***may*** include a `retry` value.  If one is not provided the SDK ***must*** default to `1 second`.
+
+#### Logic
+When called the function ***must*** write to the response buffer the following in specified order
+1.   ***Must*** write `event: EVENT_TYPE\n` where `EVENT_TYPE` is [EventType](#EventType)
+2.   ***Must*** write `id: ID\n` where `ID` is either a user defined string or a monotonically increased integer starting at 0
+3.   For each string in the provided `dataLines`, you ***must*** write `data: DATA\n` where `DATA` is the provided string.
+4.  ***Must*** write a `\n\n` to complete the event per the SSE spec.
+5.  Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
 
 ## EventType
 An enum of Datastr supported events.  Will be a string over the wire

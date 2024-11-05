@@ -2,11 +2,10 @@ package sdk
 
 import (
 	"errors"
-	"fmt"
 )
 
 var (
-	ErrEventTypeError = fmt.Errorf("event type is required")
+	ErrEventTypeError = errors.New("event type is required")
 	ErrMissingInput   = errors.New("missing datastar input")
 
 	newLineBuf       = []byte("\n")
