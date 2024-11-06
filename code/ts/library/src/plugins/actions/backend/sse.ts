@@ -146,6 +146,11 @@ async function fetcher(
         });
     }
 
+    const isWrongContent = (err: any) =>
+        `${err}`.includes(
+            `Expected content-type to be text/event-stream`,
+        );
+
     const url = new URL(urlExpression, window.location.origin);
     method = method.toUpperCase();
     const req: FetchEventSourceInit = {
@@ -292,26 +297,26 @@ async function fetcher(
                     }
                     break;
 
-                case `${DATASTAR}-delete`:
-                    const [deletePrefix, ...deleteRest] = evt.data.trim().split(
+                case `${DATASTAR}-remove`:
+                    const [removePrefix, ...removeRest] = evt.data.trim().split(
                         " ",
                     );
 
-                    switch (deletePrefix) {
+                    switch (removePrefix) {
                         case "selector":
-                            const deleteSelector = deleteRest.join(" ");
-                            const deleteTargets = document.querySelectorAll(
-                                deleteSelector,
+                            const removeSelector = removeRest.join(" ");
+                            const removeTargets = document.querySelectorAll(
+                                removeSelector,
                             );
-                            deleteTargets.forEach((target) => target.remove());
+                            removeTargets.forEach((target) => target.remove());
                             break;
                         case "paths":
-                            const paths = deleteRest.join(" ").split(" ");
+                            const paths = removeRest.join(" ").split(" ");
                             ctx.removeFromStore(...paths);
                             break;
                         default:
                             throw new Error(
-                                `Unknown delete prefix: ${deletePrefix}`,
+                                `Unknown delete prefix: ${removePrefix}`,
                             );
                     }
                     break;
@@ -357,8 +362,13 @@ async function fetcher(
                     }
             }
         },
-        onerror: (evt) => {
-            console.error(evt);
+        onerror: (err) => {
+            if (isWrongContent(err)) {
+                // don't retry if the content-type is wrong
+                throw err;
+            }
+
+            // do nothing and it will retry
         },
         onclose: () => {
             try {
@@ -430,7 +440,7 @@ async function fetcher(
 
     if (method === "GET") {
         const queryParams = new URLSearchParams(url.search);
-        queryParams.append("datastar", storeJSON);
+        queryParams.append("datastar!", storeJSON);
         url.search = queryParams.toString();
     } else {
         req.body = storeJSON;
@@ -444,7 +454,18 @@ async function fetcher(
         }
     }
 
-    fetchEventSource(url.toString(), req);
+    try {
+        await fetchEventSource(url.toString(), req);
+    } catch (err) {
+        if (!isWrongContent(err)) {
+            throw err;
+        }
+
+        // exit gracefully and do nothing if the content-type is wrong
+        // this can happen if the client is sending a request
+        // where no response is expected and they haven't
+        // set the content-type to text/event-stream
+    }
 }
 
 const SETTLING_CLASS = `${DATASTAR}-settling`;
@@ -486,7 +507,7 @@ export function mergeHTMLFragment(
                             },
                         });
                         if (!result?.length) {
-                            throw new Error(`No morph result`);
+                            throw new Error(`No morph result `);
                         }
                         const first = result[0] as Element;
                         modifiedTarget = first;
