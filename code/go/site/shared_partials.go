@@ -2,61 +2,14 @@ package site
 
 import (
 	"bytes"
-	"compress/gzip"
 	"fmt"
 	"strings"
 
 	"github.com/a-h/templ"
-	"github.com/dustin/go-humanize"
-	"github.com/goccy/go-json"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/parser"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
-
-var (
-	datastarGzipSize       int
-	datastarBuildSizeHuman string
-	datastarVersion        string
-)
-
-func upsertBuildSize() string {
-	if datastarBuildSizeHuman != "" {
-		return datastarBuildSizeHuman
-	}
-
-	build, err := staticFS.ReadFile("static/js/datastar.js")
-	if err != nil {
-		panic(err)
-	}
-	buf := bytes.NewBuffer(nil)
-
-	w, err := gzip.NewWriterLevel(buf, gzip.BestCompression)
-	if err != nil {
-		panic(err)
-	}
-	if _, err := w.Write(build); err != nil {
-		panic(err)
-	}
-	w.Close()
-	datastarGzipSize = buf.Len()
-
-	datastarBuildSizeHuman = humanize.IBytes(uint64(datastarGzipSize))
-
-	packageJSON, err := staticFS.ReadFile("static/js/datastar-package.json")
-	if err != nil {
-		panic(err)
-	}
-	type PackageJSON struct {
-		Version string `json:"version"`
-	}
-	pj := &PackageJSON{}
-	if err := json.Unmarshal(packageJSON, pj); err != nil {
-		panic(err)
-	}
-	datastarVersion = pj.Version
-
-	return datastarBuildSizeHuman
-}
 
 func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string, mdAnchors map[string][]string, err error) {
 	mdDir := "static/md/" + staticMdPath
@@ -79,7 +32,7 @@ func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string,
 		}
 
 		// Package version
-		b = bytes.ReplaceAll(b, []byte("PACKAGE_VERSION"), []byte(datastarVersion))
+		b = bytes.ReplaceAll(b, []byte("PACKAGE_VERSION"), []byte(datastar.Version))
 
 		// Get all anchors
 		anchors := []string{}

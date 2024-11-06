@@ -40,8 +40,6 @@ func staticPath(path string) string {
 }
 
 func RunBlocking(port int) toolbelt.CtxErrFunc {
-	upsertBuildSize()
-
 	return func(ctx context.Context) error {
 
 		router := chi.NewRouter()

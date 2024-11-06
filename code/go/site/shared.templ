@@ -1,6 +1,7 @@
 package site
 
 import (
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"net/http"
 	"strings"
 )
@@ -75,7 +76,7 @@ templ header(r *http.Request) {
 					<span>Datastar</span>
 					<img src={ staticPath("images/datastar_icon.svg") } class="h-8"/>
 				</a>
-				<div class="font-mono text-xs text-accent">v{ datastarVersion }</div>
+				<div class="font-mono text-xs text-accent">v{ datastar.Version }</div>
 			</div>
 			<div class="hidden lg:text-md lg:text-lg lg:flex lg:gap-4 lg:visible ">
 				@headerTopLevelLinks(r)

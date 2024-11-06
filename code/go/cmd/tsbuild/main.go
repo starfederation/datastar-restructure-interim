@@ -1,13 +1,18 @@
 package main
 
 import (
+	"compress/gzip"
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"time"
 
+	"github.com/dustin/go-humanize"
 	"github.com/evanw/esbuild/pkg/api"
+	"github.com/goccy/go-json"
+	"github.com/valyala/bytebufferpool"
 )
 
 func main() {
@@ -25,9 +30,21 @@ func main() {
 }
 
 func run(ctx context.Context) error {
-	_ = ctx
-	outDir := "./bundles"
+	if err := errors.Join(
+		createBundles(ctx),
+		extractVersion(ctx),
+	); err != nil {
+		return fmt.Errorf("error creating bundles: %w", err)
+	}
 
+	return nil
+}
+
+func createBundles(ctx context.Context) error {
+	log.Print("Creating bundles...")
+	defer log.Print("Bundles created!")
+
+	outDir := "./bundles"
 	os.RemoveAll(outDir)
 
 	result := api.Build(api.BuildOptions{
@@ -44,8 +61,6 @@ func run(ctx context.Context) error {
 		MinifySyntax:      true,
 		Sourcemap:         api.SourceMapLinked,
 		Target:            api.ES2023,
-		// MangleQuoted:      api.MangleQuotedTrue,
-		// External:          []string{"@starfederation/datastar"},
 	})
 
 	if len(result.Errors) > 0 {
@@ -54,6 +69,67 @@ func run(ctx context.Context) error {
 			errs[i] = errors.New(err.Text)
 		}
 		return errors.Join(errs...)
+	}
+
+	return nil
+}
+
+func extractVersion(ctx context.Context) error {
+	log.Print("Extracting version...")
+
+	packageJSONPath := "code/ts/library/package.json"
+	packageJSON, err := os.ReadFile(packageJSONPath)
+	if err != nil {
+		return fmt.Errorf("error reading package.json: %w", err)
+	}
+
+	type PackageJSON struct {
+		Version string `json:"version"`
+	}
+	pj := &PackageJSON{}
+	if err := json.Unmarshal(packageJSON, pj); err != nil {
+		return fmt.Errorf("error unmarshalling package.json: %w", err)
+	}
+
+	build, err := os.ReadFile("bundles/datastar.js")
+	if err != nil {
+		return fmt.Errorf("error reading datastar.js: %w", err)
+	}
+	datastarSize := len(build)
+
+	buf := bytebufferpool.Get()
+	defer bytebufferpool.Put(buf)
+
+	w, err := gzip.NewWriterLevel(buf, gzip.BestCompression)
+	if err != nil {
+		panic(err)
+	}
+	if _, err := w.Write(build); err != nil {
+		panic(err)
+	}
+	w.Close()
+	datastarGzipSize := buf.Len()
+
+	versionFileContents := fmt.Sprintf(`package datastar
+
+const (
+	Version                        = "%s"
+	VersionClientByteSize          = %d
+	VersionClientByteSizeGzip      = %d
+	VersionClientByteSizeGzipHuman = "%s"
+)
+
+`,
+		pj.Version,
+		datastarSize,
+		datastarGzipSize,
+		humanize.IBytes(uint64(datastarGzipSize)),
+	)
+
+	versionFilePath := "code/go/sdk/version.go"
+
+	if err := os.WriteFile(versionFilePath, []byte(versionFileContents), 0644); err != nil {
+		return fmt.Errorf("error writing version.go: %w", err)
 	}
 
 	return nil
