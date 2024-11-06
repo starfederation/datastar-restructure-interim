@@ -99,9 +99,9 @@ templ Home() {
 						</div>
 					</div>
 				</div>
-				<div class="p-2 shadow-xl rounded-box bg-base-100 md:max-w-3xl">
-					<datastar-inspector></datastar-inspector>
-				</div>
+				// <div class="p-2 shadow-xl rounded-box bg-base-100 md:max-w-3xl">
+				// 	<datastar-inspector></datastar-inspector>
+				// </div>
 			</div>
 		</div>
 	}
@@ -297,18 +297,10 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 		(mode == TodoViewModeActive && !todo.Completed) ||
 		(mode == TodoViewModeCompleted && todo.Completed) {
 		<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
-			<div
-				class="text-4xl"
-				id={ indicatorID }
-				data-show={ fmt.Sprintf("$$isFetching('#%s')", indicatorID) }
-			>
-				@icon("svg-spinners:blocks-shuffle-3")
-			</div>
 			<label
 				class="text-4xl cursor-pointer"
 				data-on-click={ datastar.POST("/api/todos/%d/toggle", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
-				data-show={ fmt.Sprintf("!$$isFetching('#%s')", indicatorID) }
 			>
 				if todo.Completed {
 					@icon("material-symbols:check-box-outline")
@@ -321,6 +313,12 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				data-on-click={ datastar.GET("/api/todos/%d/edit", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
 			>{ todo.Text }</label>
+			<div
+				class="text-4xl"
+				id={ indicatorID }
+			>
+				@icon("svg-spinners:blocks-shuffle-3")
+			</div>
 			<button
 				class="invisible btn btn-error group-hover:visible"
 				data-on-click={ datastar.DELETE("/api/todos/%d", i) }

@@ -120,14 +120,18 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 			ValueFormatter: func(v any) string {
 				return humanize.Bytes(uint64(v.(float64)))
 			},
+			Range: &chart.ContinuousRange{
+				Min: 0.001,
+				Max: 90000,
+			},
 		},
 		Bars: []chart.Value{
 			{Label: "Next.js", Value: 86221},
 			{Label: "SvelteKit", Value: 25800},
 			{Label: "HTMX+\nhyperscript", Value: 54000},
 			{Label: "HTMX+\nAlpine", Value: 40300},
-			{Label: "Datastar", Value: float64(1234)},
-			{Label: "Datastar Core", Value: 2430},
+			{Label: "Datastar", Value: float64(datastar.VersionClientByteSizeGzip)},
+			{Label: "Datastar Core", Value: 5698},
 		},
 	}
 

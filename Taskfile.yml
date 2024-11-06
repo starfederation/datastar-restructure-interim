@@ -49,17 +49,17 @@ tasks:
   kill:
     method: none
     cmds:
-      - sudo fuser -k 4222/tcp > /dev/null 2>&1 || true
+      - fuser -k 4222/tcp > /dev/null 2>&1 || true
 
   site:
-    desc: Server hot reload
-    env:
-      ENV: dev
-    method: none
+    desc: build and run site
     sources:
-      - "**/*.go"
-      - "**/*.md"
-      - "go/site/static/**/*"
+      - code/go/**/*.templ
+      - code/go/**/*.go
+      - code/go/**/*.md
+      - code/go/site/static/**/*
+    generates:
+      - ./datastar-website
     deps:
       - kill
       - tsbuild
@@ -68,13 +68,9 @@ tasks:
 
     cmds:
       - go mod tidy
-      - go run code/go/cmd/site/main.go
-
-  clean:
-    cmds:
-      - npx kill-port 4222
+      - go build -o ./datastar-website code/go/cmd/site/main.go
+      - ./datastar-website
 
   default:
-    desc: Default task
-    deps:
-      - site
+    cmds:
+      - task: site

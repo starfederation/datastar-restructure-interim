@@ -144,6 +144,5 @@ const (
 	VersionClientByteSizeGzip      = {{datastarGzipSizeBytes}}
 	VersionClientByteSizeGzipHuman = "{{datastarGzipSizByteseHuman}}"
 )
-
 `,
 }

@@ -3,3 +3,5 @@ datastar_site
 data
 .task
 .idea
+node_modules
+datastar-website

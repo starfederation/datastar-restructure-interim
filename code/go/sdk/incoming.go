@@ -11,7 +11,7 @@ import (
 func ParseIncoming(r *http.Request, store any) error {
 	var dsInput []byte
 
-	if r.Method != "GET" {
+	if r.Method == "GET" {
 		dsJSON := r.URL.Query().Get("datastar")
 		if dsJSON == "" {
 			return ErrMissingInput
