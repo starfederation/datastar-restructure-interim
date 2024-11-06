@@ -55,7 +55,7 @@ func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
 	}
 
 	if err := sse.send(
-		EventTypeDelete,
+		EventTypeRemove,
 		[]string{"paths " + strings.Join(paths, " ")},
 	); err != nil {
 		return fmt.Errorf("failed to send delete from store: %w", err)

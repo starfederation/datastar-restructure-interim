@@ -57,7 +57,7 @@ func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 			http.Error(w, "missing merge mode", http.StatusBadRequest)
 			return
 		case "delete":
-			sse.DeleteFragments("#target")
+			sse.RemoveFragments("#target")
 			return
 		default:
 			mergeMode, err := datastar.FragmentMergeTypeFromString(mergeModeRaw)

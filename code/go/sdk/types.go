@@ -17,7 +17,7 @@ type EventType []byte
 var (
 	EventTypeFragment = EventType("datastar-fragment")
 	EventTypeSignal   = EventType("datastar-signal")
-	EventTypeDelete   = EventType("datastar-delete")
+	EventTypeRemove   = EventType("datastar-remove")
 	EventTypeRedirect = EventType("datastar-redirect")
 	EventTypeConsole  = EventType("datastar-console")
 )

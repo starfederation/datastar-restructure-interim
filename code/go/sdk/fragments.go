@@ -60,19 +60,19 @@ func WithUseViewTransitions(useViewTransition bool) RenderFragmentOption {
 	}
 }
 
-type DeleteFragmentOptions struct {
+type RemoveFragmentOptions struct {
 	SettleDuration     time.Duration
 	UseViewTransitions bool
 }
 
-func (sse *ServerSentEventGenerator) DeleteFragments(selector string, opts ...DeleteFragmentOptions) error {
+func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...RemoveFragmentOptions) error {
 	if selector == "" {
 		panic("missing selector")
 	}
 
 	dataRows := []string{"selector " + selector}
-	if err := sse.send(EventTypeDelete, dataRows); err != nil {
-		return fmt.Errorf("failed to send delete: %w", err)
+	if err := sse.send(EventTypeRemove, dataRows); err != nil {
+		return fmt.Errorf("failed to send remove: %w", err)
 	}
 	return nil
 }

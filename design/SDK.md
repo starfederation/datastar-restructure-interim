@@ -69,7 +69,7 @@ Currently valid values are
 | --- | --- |
 | datastar-fragment | A fragment of HTML to be inserted into the DOM |
 | datastar-signal | Effect the data-store in some way |
-| datastar-delete | Delete something from the DOM or data-store |
+| datastar-remove | Remove something from the DOM or data-store |
 | datastar-redirect | Redirect the browser to a new URL |
 | datastar-console | Send a message to the browser console |
 
@@ -120,16 +120,16 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
 4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
-### `ServerSentEventGenerator.DeleteFragments(seletor: string, options ?: { settleDuration?: durationInMilliseconds, useViewTransition?: boolean})`
+### `ServerSentEventGenerator.RemoveFragments(seletor: string, options ?: { settleDuration?: durationInMilliseconds, useViewTransition?: boolean})`
 
-`DeleteFragments` is a helper function to send a signal to the browser to delete a fragment from the DOM.
+`RemoveFragments` is a helper function to send a signal to the browser to remove a fragment from the DOM.
 
 #### Args
 
-`selector` is a CSS selector that represents the fragment to be deleted from the DOM.  The selector ***must*** be a valid CSS selector.  The Datastar client side will use this selector to delete the fragment from the DOM.
+`selector` is a CSS selector that represents the fragment to be removed from the DOM.  The selector ***must*** be a valid CSS selector.  The Datastar client side will use this selector to remove the fragment from the DOM.
 
 #### Logic
-1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-delete` event type.
+1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove` event type.
 2. The function ***must*** include the selector in the event data in the format `selector SELECTOR`.
 3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration DURATION`, unless the settle duration is the default of `300 milliseconds`.  `DURATION` should be the provided duration in milliseconds.
 4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
@@ -152,16 +152,16 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 1. If the `onlyIfMissing` is provided the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
 
-### `ServerSentEventGenerator.DeleteFromStore(...paths: string[])`
+### `ServerSentEventGenerator.RemoveFromStore(...paths: string[])`
 
-`DeleteFromStore` is a helper function to send a signal to the browser to delete data from the data-store.
+`RemoveFromStore` is a helper function to send a signal to the browser to remove data from the data-store.
 
 #### Args
 
-`paths` is a list of strings that represent the path to the data to be deleted from the data-store.  The paths ***must*** be valid `.` delimnated paths within the store.  The Datastar client side will use these paths to delete the data from the data-store.
+`paths` is a list of strings that represent the path to the data to be removed from the data-store.  The paths ***must*** be valid `.` delimnated paths within the store.  The Datastar client side will use these paths to remove the data from the data-store.
 
 #### Logic
-When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-delete` event type.
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove` event type.
 
 1. The function ***must*** include the paths in the event data in the format `paths PATHS` where `PATHS` is a space separated list of the provided paths.
 

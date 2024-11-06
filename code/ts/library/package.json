@@ -1,6 +1,6 @@
 {
   "name": "@starfederation/datastar",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "A hypermedia first UI framework",
   "main": "src/engine/index.ts",
   "scripts": {

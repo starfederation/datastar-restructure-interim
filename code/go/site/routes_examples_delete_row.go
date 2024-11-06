@@ -45,7 +45,7 @@ func setupExamplesDeleteRow(examplesRouter chi.Router) error {
 			contacts = lo.Filter(contacts, func(cs *ContactActive, i int) bool {
 				return cs.ID != id
 			})
-			datastar.NewSSE(w, r).DeleteFragments("#contact_" + idStr)
+			datastar.NewSSE(w, r).RemoveFragments("#contact_" + idStr)
 		})
 	})
 

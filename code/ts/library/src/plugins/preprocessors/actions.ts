@@ -12,6 +12,6 @@ export const ActionsProcessorPlugin: PreprocessorPlugin = {
             withCtx.push(...args.split(",").map((x) => x.trim()));
         }
         const argsJoined = withCtx.join(",");
-        return `ctx.actions.${action}(${argsJoined})`;
+        return `ctx.actions.${action}.method(${argsJoined})`;
     },
 };

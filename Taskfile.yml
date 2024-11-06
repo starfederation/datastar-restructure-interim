@@ -2,6 +2,8 @@
 
 version: "3"
 
+interval: 100ms
+
 vars:
   GREETING: Hello, World!
 
@@ -15,6 +17,7 @@ tasks:
 
   tsbuild:
     sources:
+      - "**/package.json"
       - "**/*.ts"
     generates:
       - "bundles/**/*"
@@ -44,6 +47,11 @@ tasks:
     cmds:
       - templ generate .
 
+  kill:
+    method: none
+    cmds:
+      - sudo fuser -k 4222/tcp > /dev/null 2>&1 || true
+
   site:
     desc: Server hot reload
     env:
@@ -54,6 +62,7 @@ tasks:
       - "**/*.md"
       - "go/site/static/**/*"
     deps:
+      - kill
       - tsbuild
       - templ
       - css

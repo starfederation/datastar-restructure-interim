@@ -1,3 +1,3 @@
-import { Datastar } from "library/src/engine";
+import { Datastar } from "../engine";
 
 Datastar.load();
