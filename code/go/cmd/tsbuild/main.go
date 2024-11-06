@@ -7,12 +7,15 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dustin/go-humanize"
 	"github.com/evanw/esbuild/pkg/api"
 	"github.com/goccy/go-json"
 	"github.com/valyala/bytebufferpool"
+	"github.com/valyala/fasttemplate"
 )
 
 func main() {
@@ -110,27 +113,37 @@ func extractVersion(ctx context.Context) error {
 	w.Close()
 	datastarGzipSize := buf.Len()
 
-	versionFileContents := fmt.Sprintf(`package datastar
+	versionData := map[string]any{
+		"version":                    pj.Version,
+		"datastarSizeBytes":          strconv.Itoa(datastarSize),
+		"datastarGzipSizeBytes":      strconv.Itoa(datastarGzipSize),
+		"datastarGzipSizByteseHuman": humanize.IBytes(uint64(datastarGzipSize)),
+	}
 
-const (
-	Version                        = "%s"
-	VersionClientByteSize          = %d
-	VersionClientByteSizeGzip      = %d
-	VersionClientByteSizeGzipHuman = "%s"
-)
-
-`,
-		pj.Version,
-		datastarSize,
-		datastarGzipSize,
-		humanize.IBytes(uint64(datastarGzipSize)),
-	)
-
-	versionFilePath := "code/go/sdk/version.go"
-
-	if err := os.WriteFile(versionFilePath, []byte(versionFileContents), 0644); err != nil {
-		return fmt.Errorf("error writing version.go: %w", err)
+	for path, tmpl := range templates {
+		t, err := fasttemplate.NewTemplate(strings.TrimSpace(tmpl), "{{", "}}")
+		if err != nil {
+			return fmt.Errorf("error creating template: %w", err)
+		}
+		s := t.ExecuteString(versionData)
+		if err := os.WriteFile(path, []byte(s), 0644); err != nil {
+			return fmt.Errorf("error writing version file: %w", err)
+		}
 	}
 
 	return nil
+}
+
+var templates = map[string]string{
+	"code/go/sdk/version.go": `
+package datastar
+
+const (
+	Version                        = "{{version}}"
+	VersionClientByteSize          = {{datastarSizeBytes}}
+	VersionClientByteSizeGzip      = {{datastarGzipSizeBytes}}
+	VersionClientByteSizeGzipHuman = "{{datastarGzipSizByteseHuman}}"
+)
+
+`,
 }

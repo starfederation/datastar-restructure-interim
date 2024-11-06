@@ -6,4 +6,3 @@ const (
 	VersionClientByteSizeGzip      = 14648
 	VersionClientByteSizeGzipHuman = "14 KiB"
 )
-

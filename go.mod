@@ -28,6 +28,7 @@ require (
 	github.com/nats-io/nats.go v1.37.0
 	github.com/samber/lo v1.47.0
 	github.com/valyala/bytebufferpool v1.0.0
+	github.com/valyala/fasttemplate v1.2.2
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/zeebo/xxh3 v1.0.2
 )
