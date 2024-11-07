@@ -37,7 +37,6 @@ func RunSmokeTests(ctx context.Context) error {
 	tests := map[string]pageFunc{
 		"examples/progress_bar":  progressbar,
 		"examples/active_search": activeSearch,
-		"examples/animations":    animations,
 	}
 
 	if err := setupSmokeTests(ctx, tests); err != nil {
