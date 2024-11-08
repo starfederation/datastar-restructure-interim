@@ -54,7 +54,7 @@ This is still a lot to explore but the main point is that we can have a reactive
 
 # Conclusion
 
-Please don't hesitate to reach out if you have any questions. We are always looking for feedback and ways to improve. If you are interested in contributing please check out the [GitHub](https://github.com/delaneyj/datastar)
+Please don't hesitate to reach out if you have any questions. We are always looking for feedback and ways to improve. If you are interested in contributing please check out the [GitHub](https://github.com/starfederation/datastar)
 
 # Choose your own adventure
 

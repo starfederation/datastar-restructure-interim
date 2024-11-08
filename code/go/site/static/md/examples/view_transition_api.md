@@ -50,7 +50,7 @@ animation-duration: 0.5s;
 
 ## Explanation
 
-This comes from an [issue](https://github.com/delaneyj/datastar/issues/19) on how to use the `data-view-transition`. This lead to simplifying the API.
+This comes from an [issue](https://github.com/starfederation/datastar/issues/19) on how to use the `data-view-transition`. This lead to simplifying the API.
 
 ## Full page transitions
 

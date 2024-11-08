@@ -16,7 +16,7 @@ Datastar started as just a plugin framework but found that by having no overlap 
 
 With Datastar, even if you have never coded before, with a few examples, you can easily create high interconnected web assets. It doesn't matter if you are a making a user interface for bank or a simple blog. The approach is simplicity through declarative HTML.
 
-If Datastar doesn't match your needs, you still might be interested in using it as originally intended [and write your own library](https://github.com/delaneyj/datastar/tree/main/packages/library/src/lib/plugins).
+If Datastar doesn't match your needs, you still might be interested in using it as originally intended [and write your own library](https://github.com/starfederation/datastar/tree/main/packages/library/src/lib/plugins).
 
 ## Time to think declaratively
 
