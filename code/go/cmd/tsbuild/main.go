@@ -14,8 +14,15 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/evanw/esbuild/pkg/api"
 	"github.com/goccy/go-json"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/valyala/bytebufferpool"
 	"github.com/valyala/fasttemplate"
+)
+
+const (
+	DefaultSettleTime        = 300 * time.Millisecond
+	DefaultSseSendRetry      = 1 * time.Second
+	DefaultFragmentMergeMode = datastar.FragmentMergeModeMorph
 )
 
 func main() {
@@ -44,6 +51,8 @@ func run(ctx context.Context) error {
 }
 
 func createBundles(ctx context.Context) error {
+	_ = ctx
+
 	log.Print("Creating bundles...")
 	defer log.Print("Bundles created!")
 
@@ -113,8 +122,11 @@ func extractVersion(ctx context.Context) error {
 	w.Close()
 	datastarGzipSize := buf.Len()
 
-	versionData := map[string]any{
+	constsData := map[string]any{
 		"version":                    pj.Version,
+		"defaultSettleTimeMs":        strconv.Itoa(int(DefaultSettleTime.Milliseconds())),
+		"defaultSSESendRetryMs":      strconv.Itoa(int(DefaultSseSendRetry.Milliseconds())),
+		"defaultFragmentMergeMode":   DefaultFragmentMergeMode,
 		"datastarSizeBytes":          strconv.Itoa(datastarSize),
 		"datastarGzipSizeBytes":      strconv.Itoa(datastarGzipSize),
 		"datastarGzipSizByteseHuman": humanize.IBytes(uint64(datastarGzipSize)),
@@ -125,7 +137,7 @@ func extractVersion(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("error creating template: %w", err)
 		}
-		s := t.ExecuteString(versionData)
+		s := t.ExecuteString(constsData)
 		if err := os.WriteFile(path, []byte(s), 0644); err != nil {
 			return fmt.Errorf("error writing version file: %w", err)
 		}
@@ -135,14 +147,20 @@ func extractVersion(ctx context.Context) error {
 }
 
 var templates = map[string]string{
-	"code/go/sdk/version.go": `
+	"code/go/sdk/consts.go": `
 package datastar
+
+import "time"
 
 const (
 	Version                        = "{{version}}"
 	VersionClientByteSize          = {{datastarSizeBytes}}
 	VersionClientByteSizeGzip      = {{datastarGzipSizeBytes}}
 	VersionClientByteSizeGzipHuman = "{{datastarGzipSizByteseHuman}}"
+
+	DefaultSettleTime = {{defaultSettleTimeMs}} * time.Millisecond
+	DefaultSseSendRetry = {{defaultSSESendRetryMs}} * time.Millisecond
+	DefaultFragmentMergeMode = FragmentMergeMode("{{defaultFragmentMergeMode}}")
 )
 `,
 }

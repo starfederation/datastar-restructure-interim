@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-const DEFAULT_SETTLE_TIME = 300 * time.Millisecond
-
 type FragmentMergeMode string
 
 const (
@@ -81,7 +79,7 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 	options := &RenderFragmentOptions{
 		Selector:       "",
 		MergeMode:      FragmentMergeModeMorph,
-		SettleDuration: DEFAULT_SETTLE_TIME,
+		SettleDuration: DefaultSettleTime,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -94,7 +92,7 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 	if options.MergeMode != FragmentMergeModeMorph {
 		dataRows = append(dataRows, "merge "+string(options.MergeMode))
 	}
-	if options.SettleDuration > 0 && options.SettleDuration != DEFAULT_SETTLE_TIME {
+	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleTime {
 		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
 		dataRows = append(dataRows, "settle "+settleTime)
 	}

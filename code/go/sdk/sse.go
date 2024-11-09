@@ -11,8 +11,6 @@ import (
 	"time"
 )
 
-const DEFAULT_SSE_SEND_RETRY = 1 * time.Second
-
 type ServerSentEventGenerator struct {
 	ctx             context.Context
 	mu              *sync.Mutex
@@ -93,7 +91,7 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 	evt := ServerSentEventData{
 		Type:  eventType,
 		Data:  dataLines,
-		Retry: DEFAULT_SSE_SEND_RETRY,
+		Retry: DefaultSseSendRetry,
 	}
 
 	// apply options
