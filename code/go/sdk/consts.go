@@ -10,5 +10,5 @@ const (
 
 	DefaultSettleTime = 300 * time.Millisecond
 	DefaultSseSendRetry = 1000 * time.Millisecond
-	DefaultFragmentMergeMode = FragmentMergeModeMorph
+	DefaultFragmentMergeMode = FragmentMergeMode("morph")
 )

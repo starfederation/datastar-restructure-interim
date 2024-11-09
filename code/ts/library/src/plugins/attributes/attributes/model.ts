@@ -172,7 +172,7 @@ export const ModelAttributePlugin: AttributePlugin = {
             } else {
                 console.log(typeof current);
                 throw new Error(
-                    `Unsupported type ${typeof current} for signal ${signalName}`,
+                    `Unsupported type '${typeof current}' for signal '${signalName}'`,
                 );
             }
         };

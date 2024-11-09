@@ -17,6 +17,14 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/code/go/cmd/sitesmoketests/main.go"
+        },
+        {
+            "name": "Build Library",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/code/go/cmd/tsbuild/main.go",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

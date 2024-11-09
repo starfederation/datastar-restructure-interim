@@ -2,7 +2,6 @@ package main
 
 import (
 	"compress/gzip"
-	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -32,17 +31,17 @@ func main() {
 		log.Printf("Datastar built in %s", time.Since(start))
 	}()
 
-	ctx := context.Background()
-	if err := run(ctx); err != nil {
+	if err := run(); err != nil {
 		log.Fatal(err)
 	}
 
 }
 
-func run(ctx context.Context) error {
+func run() error {
 	if err := errors.Join(
-		createBundles(ctx),
-		extractVersion(ctx),
+		// createPluginManifest(),
+		createBundles(),
+		writeOutConsts(),
 	); err != nil {
 		return fmt.Errorf("error creating bundles: %w", err)
 	}
@@ -50,9 +49,7 @@ func run(ctx context.Context) error {
 	return nil
 }
 
-func createBundles(ctx context.Context) error {
-	_ = ctx
-
+func createBundles() error {
 	log.Print("Creating bundles...")
 	defer log.Print("Bundles created!")
 
@@ -86,7 +83,80 @@ func createBundles(ctx context.Context) error {
 	return nil
 }
 
-func extractVersion(ctx context.Context) error {
+// func createPluginManifest() error {
+// 	log.Print("Creating plugin manifest...")
+
+// 	baseDir := "code/ts/library/src/plugins"
+
+// 	codegenDir := "code/go/site/static/codegen"
+// 	os.RemoveAll(codegenDir)
+// 	if err := os.MkdirAll(codegenDir, 0755); err != nil {
+// 		return fmt.Errorf("error creating codegen dir: %w", err)
+// 	}
+
+// 	type PluginManifestEntry struct {
+// 		Source        string `json:"source"`
+// 		SourceContent string `json:"sourceContent"`
+// 	}
+
+// 	type PluginManifest struct {
+// 		Version string                 `json:"version"`
+// 		Plugins []*PluginManifestEntry `json:"plugins"`
+// 	}
+
+// 	plugins := make([]*PluginManifestEntry, 0, 64)
+
+// 	if err := filepath.WalkDir(baseDir, func(path string, d os.DirEntry, err error) error {
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if d.IsDir() {
+// 			return nil
+// 		}
+
+// 		dir := filepath.Dir(path)
+
+// 		// Skip core plugins
+// 		if strings.Contains(dir, "core") {
+// 			return nil
+// 		}
+
+// 		relDir := strings.TrimPrefix(dir, baseDir)
+
+// 		b, err := os.ReadFile(path)
+// 		if err != nil {
+// 			return fmt.Errorf("error reading plugin: %w", err)
+// 		}
+
+// 		pluginMeta := &PluginManifestEntry{
+// 			Source:        filepath.Join(relDir, d.Name())[1:],
+// 			SourceContent: string(b),
+// 		}
+
+// 		plugins = append(plugins, pluginMeta)
+// 		return nil
+// 	}); err != nil {
+// 		return fmt.Errorf("error walking plugins: %w", err)
+// 	}
+
+// 	manifest := &PluginManifest{
+// 		Version: datastar.Version,
+// 		Plugins: plugins,
+// 	}
+
+// 	manifestJSON, err := json.MarshalIndent(manifest, "", "  ")
+// 	if err != nil {
+// 		return fmt.Errorf("error marshalling manifest: %w", err)
+// 	}
+
+// 	if err := os.WriteFile(filepath.Join(codegenDir, "manifest.json"), manifestJSON, 0644); err != nil {
+// 		return fmt.Errorf("error writing manifest: %w", err)
+// 	}
+
+// 	return nil
+// }
+
+func writeOutConsts() error {
 	log.Print("Extracting version...")
 
 	packageJSONPath := "code/ts/library/package.json"
@@ -126,7 +196,7 @@ func extractVersion(ctx context.Context) error {
 		"version":                    pj.Version,
 		"defaultSettleTimeMs":        strconv.Itoa(int(DefaultSettleTime.Milliseconds())),
 		"defaultSSESendRetryMs":      strconv.Itoa(int(DefaultSseSendRetry.Milliseconds())),
-		"defaultFragmentMergeMode":   DefaultFragmentMergeMode,
+		"defaultFragmentMergeMode":   string(DefaultFragmentMergeMode),
 		"datastarSizeBytes":          strconv.Itoa(datastarSize),
 		"datastarGzipSizeBytes":      strconv.Itoa(datastarGzipSize),
 		"datastarGzipSizByteseHuman": humanize.IBytes(uint64(datastarGzipSize)),
@@ -163,7 +233,7 @@ const (
 	DefaultFragmentMergeMode = FragmentMergeMode("{{defaultFragmentMergeMode}}")
 )
 `,
-    "code/php/sdk/src/Defaults.php": `
+	"code/php/sdk/src/Defaults.php": `
 <?php
 namespace starfederation\datastar;
 
