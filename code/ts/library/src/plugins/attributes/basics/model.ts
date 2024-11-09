@@ -50,7 +50,9 @@ export const ModelAttributePlugin: AttributePlugin = {
 
         const setInputFromSignal = () => {
             if (!signal) {
-                throw new Error(`Signal ${signalName} not found`);
+                throw new Error(
+                    `Signal '${signalName}' not found in a data-model attribute on #${el.id}`,
+                );
             }
             const hasValue = "value" in el;
             const v = signal.value;

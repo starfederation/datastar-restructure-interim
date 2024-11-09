@@ -27,6 +27,7 @@ import { ScrollIntoViewAttributePlugin } from "../plugins/attributes/visibility/
 import { ShowAttributePlugin } from "../plugins/attributes/visibility/show";
 import { TeleportAttributePlugin } from "../plugins/attributes/visibility/teleport";
 import { ViewTransitionAttributePlugin } from "../plugins/attributes/visibility/viewTransition";
+import { CacheStoreAttributePlugin } from "../plugins/storage/cache";
 
 Datastar.load(
     RemoteActionPlugin,
@@ -55,4 +56,5 @@ Datastar.load(
     ShowAttributePlugin,
     TeleportAttributePlugin,
     ViewTransitionAttributePlugin,
+    CacheStoreAttributePlugin,
 );

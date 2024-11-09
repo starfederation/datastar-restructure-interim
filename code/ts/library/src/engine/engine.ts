@@ -153,24 +153,22 @@ export class Engine {
             composed: true,
         },
     ) {
-        window.dispatchEvent(
-            new CustomEvent<DatastarEvent>(
-                DATASTAR_EVENT,
-                Object.assign(
-                    {
-                        detail: {
-                            time: new Date(),
-                            category,
-                            subcategory,
-                            type,
-                            target: elemToSelector(target),
-                            message,
-                        },
-                    },
-                    opts,
-                ),
-            ),
+        const contents = Object.assign(
+            {
+                detail: {
+                    time: new Date(),
+                    category,
+                    subcategory,
+                    type,
+                    target: elemToSelector(target),
+                    message,
+                },
+            },
+            opts,
         );
+        const evt = new CustomEvent<DatastarEvent>(DATASTAR_EVENT, contents);
+        // console.log("Sending Datastar event", evt);
+        window.dispatchEvent(evt);
     }
 
     private cleanupElementRemovals(element: Element) {
@@ -183,22 +181,23 @@ export class Engine {
         }
     }
 
+    lastMarshalledStore = "";
     private mergeStore<T extends object>(patchStore: T) {
         this.mergeRemovals.forEach((removal) => removal());
         this.mergeRemovals = this.mergeRemovals.slice(0);
 
         const revisedStore = apply(this.store.value, patchStore) as DeepState;
         this.store = deepSignal(revisedStore);
-        this.mergeRemovals.push(
-            this.reactivity.effect(() => {
-                this.sendDatastarEvent(
-                    "core",
-                    "store",
-                    "merged",
-                    "STORE",
-                    JSON.stringify(this.store.value),
-                );
-            }),
+
+        const marshalledStore = JSON.stringify(this.store.value);
+        if (marshalledStore === this.lastMarshalledStore) return;
+
+        this.sendDatastarEvent(
+            "core",
+            "store",
+            "merged",
+            "STORE",
+            marshalledStore,
         );
     }
 

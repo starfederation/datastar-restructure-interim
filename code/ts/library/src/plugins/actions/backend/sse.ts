@@ -25,7 +25,7 @@ import { idiomorph } from "library/src/vendored/idiomorph";
 import { Signal } from "library/src/vendored/preact-core";
 
 const DEFAULT_MERGE: FragmentMergeOption = "morph";
-const DEFAULT_SETTLE_TIME = 500;
+const DEFAULT_SETTLE_DURATION = 300;
 const DEFAULT_USE_VIEW_TRANSITION = false;
 
 const FragmentMergeOptions = {
@@ -179,7 +179,7 @@ async function fetcher(
 
                     let fragment = "",
                         merge = DEFAULT_MERGE,
-                        settleTime = DEFAULT_SETTLE_TIME,
+                        settleDuration = DEFAULT_SETTLE_DURATION,
                         useViewTransition = DEFAULT_USE_VIEW_TRANSITION,
                         exists = false,
                         selector = "",
@@ -211,13 +211,13 @@ async function fetcher(
                                         );
                                     }
                                     break;
-                                case "settle":
-                                    settleTime = parseInt(line);
+                                case "settleDuration":
+                                    settleDuration = parseInt(line);
                                     break;
                                 case "fragment":
                                     break;
-                                case "vt":
-                                    useViewTransition = line === "true";
+                                case "useViewTransition":
+                                    useViewTransition = line.trim() === "true";
                                     break;
                                 default:
                                     throw new Error(`Unknown data type`);
@@ -235,7 +235,7 @@ async function fetcher(
                         selector,
                         merge,
                         fragment,
-                        settleTime,
+                        settleDuration,
                         useViewTransition,
                     );
                     ctx.sendDatastarEvent(
@@ -245,7 +245,7 @@ async function fetcher(
                         selector,
                         JSON.stringify({
                             fragment,
-                            settleTime,
+                            settleTime: settleDuration,
                             useViewTransition,
                         }),
                     );
