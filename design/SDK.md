@@ -110,7 +110,7 @@ Valid values should match the [FragmentMergeMode](#FragmentMergeMode) and curren
 ##### Options
 * `selector` (string) The CSS selector to use to insert the fragment.  If not provided the fragment ***must*** be inserted at the end of the body.  If the selector is not found Datastar client side ***will** default to using the `id` attribute of the fragment
 * `merge` (FragmentMergeMode) The mode to use when merging the fragment into the DOM.  If not provided the Datastar client side ***will*** default to `morph`
-* If `settleDuration` is provided the SDK ***should*** wait for the specified duration before sending the event, if not provided the Datastar client side ***will*** default to `300 milliseconds`
+* `settleDuration` is used to control the amount of time that a fragment should take before removing any CSS related to settling.  It is use to allow for animations in the browser via the Datastar client.  If provided the value ***must*** be a positive integer of the number of miliiseconds to allow for the settlings.  If none is provided the default value of `300 milliseconds` will be used.
 * If useViewTransition is provided the SDK ***should*** use the provided view transition, if not provided the Datastar client side ***will*** default to `false`
 
 #### Logic
