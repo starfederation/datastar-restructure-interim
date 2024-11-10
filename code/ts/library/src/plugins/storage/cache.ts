@@ -9,7 +9,7 @@ import { remoteSignals } from "library/src/utils/signals";
 export const CacheStoreAttributePlugin: AttributePlugin = {
     pluginType: "attribute",
     prefix: "cache",
-    allowedModifiers: new Set(["local", "session", "querystring", "remote"]),
+    allowedModifiers: new Set(["local", "session", "remote"]),
     onLoad: (ctx) => {
         // console.log("CacheStoreAttributePlugin onLoad ", ctx);
 
@@ -33,8 +33,7 @@ export const CacheStoreAttributePlugin: AttributePlugin = {
 
         const hasLocal = ctx.modifiers.has("local");
         const hasSession = ctx.modifiers.has("session");
-        const hasQueryString = ctx.modifiers.has("querystring");
-        const hasAny = hasLocal || hasSession || hasQueryString;
+        const hasAny = hasLocal || hasSession;
         const useRemote = ctx.modifiers.has("remote");
 
         const storeUpdateHandler = ((_: CustomEvent<DatastarEvent>) => {
@@ -79,11 +78,6 @@ export const CacheStoreAttributePlugin: AttributePlugin = {
             if (hasSession) {
                 window.sessionStorage.setItem(key, marshalledStore);
             }
-            if (hasQueryString) {
-                const url = new URL(window.location.href);
-                url.searchParams.set(key, marshalledStore);
-                window.history.replaceState({}, "", url.toString());
-            }
 
             // lastCachedMarshalled = marshalledStore;
         }) as EventListener;
@@ -93,13 +87,10 @@ export const CacheStoreAttributePlugin: AttributePlugin = {
 
             let marshalledStore: string | null = null;
 
-            if (hasQueryString) {
+            if (hasLocal) {
                 marshalledStore = window.localStorage.getItem(key);
             } else if (hasSession) {
                 marshalledStore = window.sessionStorage.getItem(key);
-            } else if (hasLocal) {
-                const url = new URL(window.location.href);
-                marshalledStore = url.searchParams.get(key) || "{}";
             }
 
             if (!!marshalledStore) {
