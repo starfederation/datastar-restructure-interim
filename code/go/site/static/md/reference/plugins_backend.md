@@ -133,7 +133,8 @@ The `$$isFetching` action returns a computed value that allows you to easily rea
 
 ```html
 <div
-		data-header-x-csrf-token="JImikTbsoCYQ9oGOcvugov0Awc5LbqFsZW6ObRCxuqFHDdPbuFyc4ksPVVa9+EB4Ag+VU6rpc680edNFswIRwg=="></div>
+  data-header="{'x-csrf-token':'JImikTbsoCYQ9oGOcvugov0Awc5LbqFsZW6ObRCxuqFHDdPbuFyc4ksPVVa9+EB4Ag+VU6rpc680edNFswIRwg=='}">
+</div>
 ```
 
 Can be added anywhere on the page and will be included on SSE fetches.  In general, you should lean to Cookies unless your backend framework demand it.
