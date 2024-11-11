@@ -16,7 +16,7 @@ import { ClampFitIntActionPlugin } from "../plugins/actions/math/clampFitInt";
 import { FitActionPlugin } from "../plugins/actions/math/fit";
 import { FitIntActionPlugin } from "../plugins/actions/math/fitInt";
 import { FetchIndicatorPlugin } from "../plugins/attributes/backend/fetchIndicator";
-import { HeadersPlugin } from "../plugins/attributes/backend/headers";
+import { HeaderPlugin } from "../plugins/attributes/backend/header";
 import { ReplaceUrlAttributePlugin } from "../plugins/attributes/backend/replaceUrl";
 import { BindAttributePlugin } from "../plugins/attributes/basics/bind";
 import { ClassAttributePlugin } from "../plugins/attributes/basics/class";
@@ -51,7 +51,7 @@ Datastar.load(
     OnAttributePlugin,
     TextAttributePlugin,
     FetchIndicatorPlugin,
-    HeadersPlugin,
+    HeaderPlugin,
     ReplaceUrlAttributePlugin,
     IntersectionAttributePlugin,
     ScrollIntoViewAttributePlugin,

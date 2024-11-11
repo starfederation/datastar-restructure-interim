@@ -5,7 +5,7 @@ templ CSRFDemo(csrf string) {
 	<div
 		id="update_me"
 		class="flex flex-col gap-4"
-		data-header-X-CSRF-Token={ csrf }
+		data-header="{'X-CSRF-Token':'{ csrf }'}"
 	>
 		<button
 			class="btn btn-primary"
