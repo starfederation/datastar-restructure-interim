@@ -1,0 +1,30 @@
+package site
+
+import (
+	"github.com/dustin/go-humanize"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
+)
+
+templ PageBundler(manifest *PluginManifest, store *BundlerStore) {
+	@Page() {
+		<div data-store={ templ.JSONString(store) }>
+			<div>Version: { manifest.Version }</div>
+			<div>
+				<div>Plugins</div>
+				<div class="flex flex-wrap gap-4 justify-around">
+					for _, plugin := range manifest.Plugins {
+						<div class="card bg-base-200">
+							<div class="card-body">
+								<div class="card-title">{ plugin.Name }</div>
+								<div class="card-subtitle">{ plugin.Path }</div>
+								<div>Source size { humanize.IBytes( uint64(len(plugin.Contents))) }</div>
+								<input type="checkbox" data-model={ "includedPlugins." + plugin.Key }/>
+							</div>
+						</div>
+					}
+				</div>
+				<button class="btn btn-primary btn-block" data-on-click={ datastar.POST("/bundler") }>Bundle</button>
+			</div>
+		</div>
+	}
+}

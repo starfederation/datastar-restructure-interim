@@ -1,0 +1,20 @@
+{% func bundlerContent(data *BundlerContentData) %}
+
+import { Datastar } from "../engine";
+import { isFetchingActionPlugin } from "../plugins/actions/backend/isFetching";
+
+{%- for i, name := range data.Names -%}
+    {% code
+        path := data.Paths[i]
+    %}
+import { {%s name %} } from "..{%s path %}";
+{%- endfor -%}
+
+Datastar.load(
+    {% for _, name := range data.Names -%}
+        {%s name %},
+    {%- endfor %}
+);
+
+
+{% endfunc %}

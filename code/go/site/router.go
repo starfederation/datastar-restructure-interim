@@ -155,6 +155,7 @@ func setupRoutes(ctx context.Context, router chi.Router) (cleanup func() error, 
 		setupExamples(ctx, router, sessionStore, ns),
 		setupEssays(router),
 		setupMemes(router),
+		setupBundler(router),
 	); err != nil {
 		return cleanup, fmt.Errorf("error setting up routes: %w", err)
 	}

@@ -30,6 +30,7 @@ require (
 	github.com/samber/lo v1.47.0
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/valyala/fasttemplate v1.2.2
+	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/zeebo/xxh3 v1.0.2
 )
