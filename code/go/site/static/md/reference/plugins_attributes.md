@@ -79,3 +79,25 @@ The `data-on-*` matches DOM events, however there are currently a few special ca
 ```
 
 Adds or removes each of the keys in the set of key-value pairs to the element’s class list, depending on whether the values evaluate to true or false, respectively.
+
+### Persist
+
+```html
+<div data-persist></div>
+```
+
+Persists store values in Local Storage. This is useful for storing values between page loads.
+
+```html
+<div data-persist="'foo bar'"></div>
+```
+
+If one or more values are provided, only those store values will be persisted.
+
+#### Modifiers
+- `.session` - Persists store values in Session Storage
+- `.remote` - Persists only remotely viewable store values
+
+```html
+<div data-persist-foo.session></div>
+```

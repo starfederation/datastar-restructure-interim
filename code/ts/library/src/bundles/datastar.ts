@@ -15,8 +15,9 @@ import { ClampFitActionPlugin } from "../plugins/actions/math/clampFit";
 import { ClampFitIntActionPlugin } from "../plugins/actions/math/clampFitInt";
 import { FitActionPlugin } from "../plugins/actions/math/fit";
 import { FitIntActionPlugin } from "../plugins/actions/math/fitInt";
-import { FetchIndicatorPlugin } from "../plugins/attributes/backend/fetch-indicator";
+import { FetchIndicatorPlugin } from "../plugins/attributes/backend/fetchIndicator";
 import { HeaderPlugin } from "../plugins/attributes/backend/header";
+import { ReplaceUrlAttributePlugin } from "../plugins/attributes/backend/replaceUrl";
 import { BindAttributePlugin } from "../plugins/attributes/basics/bind";
 import { ClassAttributePlugin } from "../plugins/attributes/basics/class";
 import { ModelAttributePlugin } from "../plugins/attributes/basics/model";
@@ -27,7 +28,7 @@ import { ScrollIntoViewAttributePlugin } from "../plugins/attributes/visibility/
 import { ShowAttributePlugin } from "../plugins/attributes/visibility/show";
 import { TeleportAttributePlugin } from "../plugins/attributes/visibility/teleport";
 import { ViewTransitionAttributePlugin } from "../plugins/attributes/visibility/viewTransition";
-import { CacheStoreAttributePlugin } from "../plugins/storage/cache";
+import { PersistAttributePlugin } from "../plugins/storage/persist";
 
 Datastar.load(
     RemoteActionPlugin,
@@ -51,10 +52,11 @@ Datastar.load(
     TextAttributePlugin,
     FetchIndicatorPlugin,
     HeaderPlugin,
+    ReplaceUrlAttributePlugin,
     IntersectionAttributePlugin,
     ScrollIntoViewAttributePlugin,
     ShowAttributePlugin,
     TeleportAttributePlugin,
     ViewTransitionAttributePlugin,
-    CacheStoreAttributePlugin,
+    PersistAttributePlugin,
 );
