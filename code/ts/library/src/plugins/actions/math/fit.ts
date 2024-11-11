@@ -1,4 +1,4 @@
-import { ActionPlugin, AttributeContext } from "library/src/engine";
+import { ActionPlugin, AttributeContext } from "../../../engine";
 
 export const FitActionPlugin: ActionPlugin = {
     pluginType: "action",

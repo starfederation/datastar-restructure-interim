@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/delaneyj/toolbelt"
@@ -19,6 +20,8 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
+var datastarBundlerRegexp = regexp.MustCompile(`import { (?P<name>[^"]*) } from "(?P<path>[^"]*)";`)
+
 type BundlerStore struct {
 	IncludedPlugines map[string]bool `json:"includedPlugins"`
 }
@@ -28,17 +31,18 @@ type PluginDetails struct {
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	Type        string `json:"type"`
-	Author      string `json:"author"`
+	Authors     string `json:"author"`
 	Description string `json:"description"`
 	Contents    string `json:"contents"`
 }
 
 type PluginManifest struct {
-	Version string          `json:"version"`
-	Plugins []PluginDetails `json:"plugins"`
+	Version string           `json:"version"`
+	Plugins []*PluginDetails `json:"plugins"`
 }
 
 type BundlerContentData struct {
+	Keys  []string
 	Paths []string
 	Names []string
 }
@@ -52,6 +56,20 @@ func setupBundler(router chi.Router) error {
 
 	manifest := &PluginManifest{
 		Version: datastar.Version,
+	}
+
+	allIncludedBundler, err := staticFS.ReadFile("static/librarySource/bundles/datastar.ts")
+	if err != nil {
+		return fmt.Errorf("error reading all included bundler: %w", err)
+	}
+
+	allBundleContent := &BundlerContentData{}
+	allIncludedBundlerContents := string(allIncludedBundler)
+	matches := datastarBundlerRegexp.FindAllStringSubmatch(allIncludedBundlerContents, -1)
+	for _, match := range matches {
+		allBundleContent.Names = append(allBundleContent.Names, match[1])
+		allBundleContent.Paths = append(allBundleContent.Paths, match[2])
+
 	}
 
 	const embeddedBaseDir = "static/librarySource"
@@ -101,13 +119,44 @@ func setupBundler(router chi.Router) error {
 		}
 
 		baseName := filepath.Base(relpath)
+		ext := filepath.Ext(baseName)
+		name := strings.TrimSuffix(baseName, ext)
 
-		manifest.Plugins = append(manifest.Plugins, PluginDetails{
+		key := toolbelt.Snake(strings.ReplaceAll(relpath, string(filepath.Separator), "_"))
+		contents := buf.String()
+
+		details := &PluginDetails{
 			Path:     relpath,
-			Key:      toolbelt.Snake(strings.ReplaceAll(relpath, string(filepath.Separator), "_")),
-			Name:     baseName,
-			Contents: buf.String(),
-		})
+			Key:      key,
+			Name:     name,
+			Contents: contents,
+		}
+
+		lines := strings.Split(contents, "\n")
+		for _, line := range lines {
+			if !strings.HasPrefix(line, "//") {
+				break
+			}
+
+			line = strings.TrimPrefix(line, "//")
+			lineParts := strings.SplitN(line, ":", 2)
+
+			if len(lineParts) != 2 {
+				continue
+			}
+
+			key := strings.TrimSpace(lineParts[0])
+			value := strings.TrimSpace(lineParts[1])
+
+			switch key {
+			case "Description":
+				details.Description = value
+			case "Authors":
+				details.Authors = value
+			}
+		}
+
+		manifest.Plugins = append(manifest.Plugins, details)
 
 		return nil
 	}); err != nil {

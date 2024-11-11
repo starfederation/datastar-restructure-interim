@@ -1,5 +1,5 @@
-import { AttributePlugin } from "library/src/engine";
-import { kebabize } from "library/src/utils/text";
+import { AttributePlugin } from "../../../engine";
+import { kebabize } from "../../../utils/text";
 
 export const BindAttributePlugin: AttributePlugin = {
     pluginType: "attribute",

@@ -1,4 +1,4 @@
-import { AttributePlugin } from "library/src/engine";
+import { AttributePlugin } from "../../../engine";
 
 const INTERSECTS = "intersects";
 const ONCE = "once";

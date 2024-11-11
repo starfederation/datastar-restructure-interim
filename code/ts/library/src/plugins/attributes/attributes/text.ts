@@ -1,4 +1,4 @@
-import { AttributePlugin } from "library/src/engine";
+import { AttributePlugin } from "../../../engine";
 
 // Sets the textContent of the element
 export const TextAttributePlugin: AttributePlugin = {

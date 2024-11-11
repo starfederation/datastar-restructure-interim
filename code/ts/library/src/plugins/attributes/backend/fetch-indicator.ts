@@ -1,4 +1,4 @@
-import { AttributePlugin, DATASTAR } from "library/src/engine";
+import { AttributePlugin, DATASTAR } from "../../../engine";
 
 export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
 export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;

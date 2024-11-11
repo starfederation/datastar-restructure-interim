@@ -1,4 +1,4 @@
-import { AttributePlugin, DATASTAR } from "library/src/engine";
+import { AttributePlugin, DATASTAR } from "../../../engine";
 import { argsToMs } from "../../../utils/arguments";
 
 const DISPLAY = "display";

@@ -1,4 +1,4 @@
-import { AttributePlugin, RegexpGroups } from "library/src/engine";
+import { AttributePlugin, RegexpGroups } from "../../../engine";
 
 const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;
 const updateModelEvents = ["change", "input", "keydown"];

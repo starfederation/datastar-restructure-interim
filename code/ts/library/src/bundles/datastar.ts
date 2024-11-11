@@ -1,13 +1,12 @@
-import { Datastar } from "library/src/engine";
-import { isFetchingActionPlugin } from "../plugins/actions/backend/isFetching";
+import { Datastar } from "../engine";
+import { IsFetchingActionPlugin } from "../plugins/actions/backend/isFetching";
 import { RemoteActionPlugin } from "../plugins/actions/backend/remote";
-import {
-    DeleteSSEActionPlugin,
-    GetSSEActionPlugin,
-    PatchSSEActionPlugin,
-    PostSSEActionPlugin,
-    PutSSEActionPlugin,
-} from "../plugins/actions/backend/sse";
+import { DeleteSSEActionPlugin } from "../plugins/actions/backend/sseDelete";
+import { GetSSEActionPlugin } from "../plugins/actions/backend/sseGet";
+import { PatchSSEActionPlugin } from "../plugins/actions/backend/ssePatch";
+import { PostSSEActionPlugin } from "../plugins/actions/backend/ssePost";
+import { PutSSEActionPlugin } from "../plugins/actions/backend/ssePut";
+
 import { ClipboardActionPlugin } from "../plugins/actions/dom/clipboard";
 import { SetAllActionPlugin } from "../plugins/actions/logic/setAll";
 import { ToggleAllActionPlugin } from "../plugins/actions/logic/toggleAll";
@@ -36,7 +35,7 @@ Datastar.load(
     PutSSEActionPlugin,
     PatchSSEActionPlugin,
     DeleteSSEActionPlugin,
-    isFetchingActionPlugin,
+    IsFetchingActionPlugin,
     ClipboardActionPlugin,
     SetAllActionPlugin,
     ToggleAllActionPlugin,

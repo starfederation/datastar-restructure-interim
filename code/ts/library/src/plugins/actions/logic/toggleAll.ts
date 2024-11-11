@@ -1,4 +1,4 @@
-import { ActionPlugin } from "library/src/engine";
+import { ActionPlugin } from "../../../engine";
 
 export const ToggleAllActionPlugin: ActionPlugin = {
     pluginType: "action",

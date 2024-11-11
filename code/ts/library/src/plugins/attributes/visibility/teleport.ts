@@ -1,5 +1,5 @@
-import { AttributePlugin } from "library/src/engine";
-import { nodeHTMLorSVGElement } from "library/src/utils/dom";
+import { AttributePlugin } from "../../../engine";
+import { nodeHTMLorSVGElement } from "../../../utils/dom";
 
 const PREPEND = "prepend";
 const APPEND = "append";

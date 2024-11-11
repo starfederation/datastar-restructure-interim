@@ -1,4 +1,4 @@
-import { AttributePlugin, RegexpGroups } from "library/src/engine";
+import { AttributePlugin, RegexpGroups } from "../../../engine";
 
 export const HeadersPlugin: AttributePlugin = {
     pluginType: "attribute",

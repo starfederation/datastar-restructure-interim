@@ -3,8 +3,8 @@ import {
     DATASTAR,
     DATASTAR_EVENT,
     DatastarEvent,
-} from "library/src/engine";
-import { remoteSignals } from "library/src/utils/signals";
+} from "../../engine";
+import { remoteSignals } from "../../utils/signals";
 
 export const CacheStoreAttributePlugin: AttributePlugin = {
     pluginType: "attribute",

@@ -1,5 +1,5 @@
-import { AttributePlugin } from "library/src/engine";
-import { supportsViewTransitions } from "library/src/utils/view-transitions";
+import { AttributePlugin } from "../../../engine";
+import { supportsViewTransitions } from "../../../utils/view-transitions";
 
 // Setup view transition api
 export const ViewTransitionAttributePlugin: AttributePlugin = {

@@ -1,5 +1,5 @@
-import { AttributeContext, AttributePlugin } from "library/src/engine";
-import { scrollIntoView } from "library/src/utils/dom";
+import { AttributeContext, AttributePlugin } from "../../../engine";
+import { scrollIntoView } from "../../../utils/dom";
 
 // Scrolls the element into view
 export const ScrollIntoViewAttributePlugin: AttributePlugin = {

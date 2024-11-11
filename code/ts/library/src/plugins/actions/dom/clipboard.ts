@@ -1,4 +1,4 @@
-import { ActionPlugin } from "library/src/engine";
+import { ActionPlugin } from "../../../engine";
 
 export const ClipboardActionPlugin: ActionPlugin = {
     pluginType: "action",

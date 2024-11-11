@@ -1,8 +1,8 @@
-import { AttributePlugin } from "library/src/engine";
-import { argsHas, argsToMs } from "library/src/utils/arguments";
-import { remoteSignals } from "library/src/utils/signals";
-import { kebabize } from "library/src/utils/text";
-import { debounce, throttle } from "library/src/utils/timing";
+import { AttributePlugin } from "../../../engine";
+import { argsHas, argsToMs } from "../../../utils/arguments";
+import { remoteSignals } from "../../../utils/signals";
+import { kebabize } from "../../../utils/text";
+import { debounce, throttle } from "../../../utils/timing";
 
 const knownOnModifiers = new Set([
     "window",

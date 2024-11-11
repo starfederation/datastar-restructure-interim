@@ -1,4 +1,4 @@
-import { AttributePlugin } from "library/src/engine";
+import { AttributePlugin } from "../../../engine";
 
 export const ClassAttributePlugin: AttributePlugin = {
     pluginType: "attribute",

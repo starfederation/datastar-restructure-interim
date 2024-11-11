@@ -2,8 +2,8 @@ import {
     AttributeContext,
     AttributePlugin,
     RegexpGroups,
-} from "library/src/engine";
-import { storeFromPossibleContents } from "library/src/utils/signals";
+} from "../../../engine";
+import { storeFromPossibleContents } from "../../../utils/signals";
 
 // Setup the global store
 export const StoreAttributePlugin: AttributePlugin = {

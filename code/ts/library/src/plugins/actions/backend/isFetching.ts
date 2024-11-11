@@ -1,8 +1,8 @@
-import { ActionPlugin } from "library/src/engine";
+import { ActionPlugin } from "../../../engine";
 
 export type IndicatorReference = { el: HTMLElement; count: number };
 
-export const isFetchingActionPlugin: ActionPlugin = {
+export const IsFetchingActionPlugin: ActionPlugin = {
     pluginType: "action",
     name: "isFetching",
     method: (ctx, selector: string) => {

@@ -1,5 +1,5 @@
-import { AttributePlugin } from "library/src/engine";
-import { elemToSelector } from "library/src/utils/dom";
+import { AttributePlugin } from "../../../engine";
+import { elemToSelector } from "../../../utils/dom";
 
 // Sets the value of the element
 export const RefPlugin: AttributePlugin = {
