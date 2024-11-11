@@ -96,8 +96,8 @@ If one or more values are provided, only those store values will be persisted.
 
 #### Modifiers
 - `.session` - Persists store values in Session Storage
-- `.public` - Persists only public store values
+- `.remote` - Persists only remotely viewable store values
 
 ```html
-<div data-persist-foo.session.public="'foo'"></div>
+<div data-persist-foo.session></div>
 ```
