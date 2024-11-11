@@ -9,7 +9,7 @@ import { remoteSignals } from "library/src/utils/signals";
 export const PersistAttributePlugin: AttributePlugin = {
     pluginType: "attribute",
     prefix: "persist",
-    allowedModifiers: new Set(["local", "session", "remote"]),
+    allowedModifiers: new Set(["local", "session", "public"]),
 
     onLoad: (ctx) => {
         const key = ctx.key || DATASTAR;
@@ -26,7 +26,7 @@ export const PersistAttributePlugin: AttributePlugin = {
 
         let lastMarshalled = "";
         const storageType = ctx.modifiers.has("session") ? "session" : "local";
-        const useRemote = ctx.modifiers.has("remote");
+        const useRemote = ctx.modifiers.has("public");
 
         const storeUpdateHandler = ((_: CustomEvent<DatastarEvent>) => {
             let store = ctx.store();
