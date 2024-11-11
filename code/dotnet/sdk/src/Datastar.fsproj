@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Datastar</AssemblyName>
+        <Version>0.1.0</Version>
+        <RootNamespace>StarFederation.Datastar</RootNamespace>
+
+        <!-- General info -->
+        <Description>ng brilliant ASP.NET Core applications using F#.</Description>
+        <Authors>Greg Holden contributors</Authors>
+        <NeutralLanguage>en-CA</NeutralLanguage>
+
+        <!-- Build config -->
+        <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+        <DebugType>embedded</DebugType>
+        <OutputType>Library</OutputType>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+
+        <!-- NuGet config -->
+        <PackageId>Datastar</PackageId>
+        <PackageTags>datastar;datastar-sharp;fsharp;functional;asp.net core;asp.net;.net core;routing;web;</PackageTags>
+        <PackageProjectUrl>https://github.com/starfederation/datastar</PackageProjectUrl>
+        <!--<PackageIcon>icon.png</PackageIcon>-->
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/starfederation/datastar</RepositoryUrl>
+
+        <!-- SourceLink settings -->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="Utility.fs" />
+        <Compile Include="Defaults.fs" />
+        <Compile Include="ServerSentEvent.fs" />
+        <Compile Include="ServerSentEventGenerator.fs" />
+    </ItemGroup>
+
+</Project>
