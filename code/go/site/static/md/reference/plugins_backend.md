@@ -128,6 +128,27 @@ Show a spinner when the request is in flight. The `data-fetch-indicator` attribu
 
 The `$$isFetching` action returns a computed value that allows you to easily react to the state of the indicator.
 
+### Replace URL
+
+```html
+<div
+  data-replace-url="'?page=1'">
+</div>
+```
+
+Replaces the URL in the browser without reloading the page. The value can be a relative or absolute URL, and is an evaluated expression.
+
+```html
+<div
+  data-replace-url="`/page1`">
+</div>
+```
+
+```html
+<div
+  data-replace-url="`/p{$page}`">
+</div>
+```
 
 ### Headers
 

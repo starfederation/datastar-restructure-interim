@@ -8,7 +8,7 @@ import {
 import {
     INDICATOR_CLASS,
     INDICATOR_LOADING_CLASS,
-} from "library/src/plugins/attributes/backend/fetch-indicator";
+} from "library/src/plugins/attributes/backend/fetchIndicator";
 import {
     remoteSignals,
     storeFromPossibleContents,
