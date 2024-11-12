@@ -1,5 +1,5 @@
-import { remoteSignals } from "library/src/utils/signals";
 import { ActionPlugin } from "../../../engine";
+import { remoteSignals } from "../../../utils/signals";
 
 export const RemoteActionPlugin: ActionPlugin = {
     pluginType: "action",

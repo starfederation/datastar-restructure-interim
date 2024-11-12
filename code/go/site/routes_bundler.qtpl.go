@@ -18,81 +18,70 @@ var (
 )
 
 //line code/go/site/routes_bundler.qtpl:1
-func streambundlerContent(qw422016 *qt422016.Writer, data *BundlerContentData) {
+func streambundlerContent(qw422016 *qt422016.Writer, manifest PluginManifest) {
 //line code/go/site/routes_bundler.qtpl:1
 	qw422016.N().S(`
 
 import { Datastar } from "../engine";
-import { isFetchingActionPlugin } from "../plugins/actions/backend/isFetching";
-
 `)
-//line code/go/site/routes_bundler.qtpl:6
-	for i, name := range data.Names {
-//line code/go/site/routes_bundler.qtpl:6
-		qw422016.N().S(`    `)
-//line code/go/site/routes_bundler.qtpl:8
-		path := data.Paths[i]
-
-//line code/go/site/routes_bundler.qtpl:9
-		qw422016.N().S(`
-import { `)
-//line code/go/site/routes_bundler.qtpl:10
-		qw422016.E().S(name)
-//line code/go/site/routes_bundler.qtpl:10
-		qw422016.N().S(` } from "..`)
-//line code/go/site/routes_bundler.qtpl:10
-		qw422016.E().S(path)
-//line code/go/site/routes_bundler.qtpl:10
+//line code/go/site/routes_bundler.qtpl:4
+	for _, p := range manifest.Plugins {
+//line code/go/site/routes_bundler.qtpl:4
+		qw422016.N().S(`import { `)
+//line code/go/site/routes_bundler.qtpl:5
+		qw422016.E().S(p.Name)
+//line code/go/site/routes_bundler.qtpl:5
+		qw422016.N().S(` } from "`)
+//line code/go/site/routes_bundler.qtpl:5
+		qw422016.E().S(p.Path)
+//line code/go/site/routes_bundler.qtpl:5
 		qw422016.N().S(`";
 `)
-//line code/go/site/routes_bundler.qtpl:11
+//line code/go/site/routes_bundler.qtpl:6
 	}
-//line code/go/site/routes_bundler.qtpl:11
+//line code/go/site/routes_bundler.qtpl:6
 	qw422016.N().S(`
 Datastar.load(
-    `)
-//line code/go/site/routes_bundler.qtpl:14
-	for _, name := range data.Names {
-//line code/go/site/routes_bundler.qtpl:14
-		qw422016.N().S(`        `)
-//line code/go/site/routes_bundler.qtpl:15
-		qw422016.E().S(name)
-//line code/go/site/routes_bundler.qtpl:15
+`)
+//line code/go/site/routes_bundler.qtpl:9
+	for _, p := range manifest.Plugins {
+//line code/go/site/routes_bundler.qtpl:9
+		qw422016.N().S(`    `)
+//line code/go/site/routes_bundler.qtpl:10
+		qw422016.E().S(p.Name)
+//line code/go/site/routes_bundler.qtpl:10
 		qw422016.N().S(`,
 `)
-//line code/go/site/routes_bundler.qtpl:16
+//line code/go/site/routes_bundler.qtpl:11
 	}
-//line code/go/site/routes_bundler.qtpl:16
-	qw422016.N().S(`
-);
-
-
+//line code/go/site/routes_bundler.qtpl:11
+	qw422016.N().S(`);
 `)
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
 }
 
-//line code/go/site/routes_bundler.qtpl:20
-func writebundlerContent(qq422016 qtio422016.Writer, data *BundlerContentData) {
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
+func writebundlerContent(qq422016 qtio422016.Writer, manifest PluginManifest) {
+//line code/go/site/routes_bundler.qtpl:13
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line code/go/site/routes_bundler.qtpl:20
-	streambundlerContent(qw422016, data)
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
+	streambundlerContent(qw422016, manifest)
+//line code/go/site/routes_bundler.qtpl:13
 	qt422016.ReleaseWriter(qw422016)
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
 }
 
-//line code/go/site/routes_bundler.qtpl:20
-func bundlerContent(data *BundlerContentData) string {
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
+func bundlerContent(manifest PluginManifest) string {
+//line code/go/site/routes_bundler.qtpl:13
 	qb422016 := qt422016.AcquireByteBuffer()
-//line code/go/site/routes_bundler.qtpl:20
-	writebundlerContent(qb422016, data)
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
+	writebundlerContent(qb422016, manifest)
+//line code/go/site/routes_bundler.qtpl:13
 	qs422016 := string(qb422016.B)
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
 	qt422016.ReleaseByteBuffer(qb422016)
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
 	return qs422016
-//line code/go/site/routes_bundler.qtpl:20
+//line code/go/site/routes_bundler.qtpl:13
 }

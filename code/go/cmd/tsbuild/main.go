@@ -38,15 +38,47 @@ func main() {
 }
 
 func run() error {
+	version, err := extractVersion()
+	if err != nil {
+		return fmt.Errorf("error extracting version: %w", err)
+	}
+
 	if err := errors.Join(
 		// createPluginManifest(),
 		createBundles(),
-		writeOutConsts(),
+		writeOutConsts(version),
 	); err != nil {
 		return fmt.Errorf("error creating bundles: %w", err)
 	}
 
 	return nil
+}
+
+func extractVersion() (string, error) {
+	packageJSONPath := "code/ts/library/package.json"
+	packageJSON, err := os.ReadFile(packageJSONPath)
+	if err != nil {
+		return "", fmt.Errorf("error reading package.json: %w", err)
+	}
+
+	type PackageJSON struct {
+		Version string `json:"version"`
+	}
+	pj := &PackageJSON{}
+	if err := json.Unmarshal(packageJSON, pj); err != nil {
+		return "", fmt.Errorf("error unmarshalling package.json: %w", err)
+	}
+
+	version := pj.Version
+
+	// Write out the version to the version file.
+	versionPath := "code/ts/library/src/engine/version.ts"
+	versionContens := fmt.Sprintf("export const VERSION = '%s';\n", version)
+	if err := os.WriteFile(versionPath, []byte(versionContens), 0644); err != nil {
+		return "", fmt.Errorf("error writing version file: %w", err)
+	}
+
+	return version, nil
 }
 
 func createBundles() error {
@@ -83,22 +115,8 @@ func createBundles() error {
 	return nil
 }
 
-func writeOutConsts() error {
+func writeOutConsts(version string) error {
 	log.Print("Extracting version...")
-
-	packageJSONPath := "code/ts/library/package.json"
-	packageJSON, err := os.ReadFile(packageJSONPath)
-	if err != nil {
-		return fmt.Errorf("error reading package.json: %w", err)
-	}
-
-	type PackageJSON struct {
-		Version string `json:"version"`
-	}
-	pj := &PackageJSON{}
-	if err := json.Unmarshal(packageJSON, pj); err != nil {
-		return fmt.Errorf("error unmarshalling package.json: %w", err)
-	}
 
 	build, err := os.ReadFile("bundles/datastar.js")
 	if err != nil {
@@ -120,7 +138,7 @@ func writeOutConsts() error {
 	datastarGzipSize := buf.Len()
 
 	constsData := map[string]any{
-		"version":                    pj.Version,
+		"version":                    version,
 		"defaultSettleTimeMs":        strconv.Itoa(int(DefaultSettleTime.Milliseconds())),
 		"defaultSSESendRetryMs":      strconv.Itoa(int(DefaultSseSendRetry.Milliseconds())),
 		"defaultFragmentMergeMode":   string(DefaultFragmentMergeMode),

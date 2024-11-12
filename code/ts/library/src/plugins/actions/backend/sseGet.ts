@@ -1,4 +1,5 @@
 // Authors: Delaney Gillilan
+// Icon: ic:baseline-get-app
 // Description: Use a GET request to fetch data from a server using Server-Sent Events matching the Datastar SDK interface
 
 import { ActionPlugin } from "../../../engine";

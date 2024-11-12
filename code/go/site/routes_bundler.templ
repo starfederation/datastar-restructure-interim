@@ -1,30 +1,71 @@
 package site
 
 import (
+	"fmt"
 	"github.com/dustin/go-humanize"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-templ PageBundler(manifest *PluginManifest, store *BundlerStore) {
+templ PageBundler(manifest PluginManifest, store *BundlerStore) {
 	@Page() {
 		<div data-store={ templ.JSONString(store) }>
 			<div>Version: { manifest.Version }</div>
+			<div id="results"></div>
+			<button class="btn btn-primary btn-block" data-on-click={ datastar.POST("/bundler") }>Bundle</button>
 			<div>
-				<div>Plugins</div>
-				<div class="flex flex-wrap gap-4 justify-around">
-					for _, plugin := range manifest.Plugins {
-						<div class="card bg-base-200">
-							<div class="card-body">
-								<div class="card-title">{ plugin.Name }</div>
-								<div class="card-subtitle">{ plugin.Path }</div>
-								<div>Source size { humanize.IBytes( uint64(len(plugin.Contents))) }</div>
-								<input type="checkbox" data-model={ "includedPlugins." + plugin.Key }/>
-							</div>
-						</div>
-					}
-				</div>
-				<button class="btn btn-primary btn-block" data-on-click={ datastar.POST("/bundler") }>Bundle</button>
+				<label>
+					<div class="label-text">Include All</div>
+					<button class="btn btn-primary" data-on-click="$$toggleAll('static_library_source_plugins_')">Toggle All</button>
+				</label>
 			</div>
+			<table class="table w-full">
+				<caption>Plugins</caption>
+				<thead>
+					<tr>
+						<th>Include</th>
+						<th>Name</th>
+						<th>Path</th>
+						// <th>Authors</th>
+						// <th>Description</th>
+						// <th>Source size</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, plugin := range manifest.Plugins {
+						{{
+							signal := fmt.Sprintf("includedPlugins.%s", plugin.Key)
+						}}
+						<tr class="hover cursor-pointer" data-on-click={ fmt.Sprintf("$%s = !$%s", signal, signal) }>
+							<td><input class="toggle" type="checkbox" data-model={ signal }/></td>
+							<td>{ plugin.Name }</td>
+							<td>{ plugin.Path[11:] }</td>
+							// <td>{ plugin.Authors }</td>
+							// <td>{ plugin.Description }</td>
+							// <td>{ humanize.IBytes( uint64(len(plugin.Contents))) }</td>
+						</tr>
+					}
+				</tbody>
+			</table>
 		</div>
 	}
+}
+
+templ bundlerResultsFragment(results BundleResults) {
+	<table class="table w-full" id="results">
+		<caption>Results</caption>
+		<thead>
+			<tr>
+				<th>Hash</th>
+				<th>Compile Time</th>
+				<th>Source Size Gzipped</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{ results.Hash }</td>
+				<td>{ results.CompileTime.String() }</td>
+				<td>{ fmt.Sprintf("%d", results.SourceSizeGzipped) } ({ humanize.IBytes(results.SourceSizeGzipped) }) </td>
+			</tr>
+		</tbody>
+	</table>
 }
