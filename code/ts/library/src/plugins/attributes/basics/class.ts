@@ -7,13 +7,14 @@ export const ClassAttributePlugin: AttributePlugin = {
     mustNotEmptyExpression: true,
 
     onLoad: (ctx) => {
+        const classes: Object = ctx.expressionFn(ctx);
+
         return ctx.reactivity.effect(() => {
-            const classes: Object = ctx.expressionFn(ctx);
-            for (const [k, v] of Object.entries(classes)) {
-                if (v) {
-                    ctx.el.classList.add(k);
+            for (const [key, value] of Object.entries(classes)) {
+                if (value) {
+                    ctx.el.classList.add(key);
                 } else {
-                    ctx.el.classList.remove(k);
+                    ctx.el.classList.remove(key);
                 }
             }
 
