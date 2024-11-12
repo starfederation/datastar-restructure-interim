@@ -9,7 +9,7 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 
 <div class="alert alert-info">
     <p>
-        We’re so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case that Datastar _cannot_ handle!
+        We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case that Datastar _cannot_ handle!
     </p> 
 </div>
 
@@ -113,7 +113,9 @@ We've only scratched the surface of frontend reactivity, but let's take a look a
 
 Datastar uses [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) or SSE. There's no special backend plumbing required to use SSE, just some special syntax. Fortunately, SSE is straightforward and [provides us with many advantages](/essays/event_streams_all_the_way_down).
 
-First, set up your backend in the language of your choice. Using one of the official SDKs (Go, PHP, TypeScript, .NET) will help you get up and running faster. We're going to use the SDKs in the examples below, which set the appropriate headers and format the events for us, but this is optional.
+First, set up your backend in the language of your choice. Using one of the helper SDKs (Go, PHP, TypeScript, .NET) will help you get up and running faster. We're going to use the SDKs in the examples below, which set the appropriate headers and format the events for us, but this is optional.
+
+The following code would exist in a controller action endpoint in your backend.
 
 ```php
 use starfederation\datastar\ServerSentEventGenerator;
@@ -121,135 +123,61 @@ use starfederation\datastar\ServerSentEventGenerator;
 // Creates a new `ServerSentEventGenerator` instance.
 $sseGenerator = new ServerSentEventGenerator();
 
+// Updates the `title` store value.
+$sseGenerator->patchStore(['title' => 'Greetings']);
+
 // Swaps out an existing fragment in the DOM.
-$sseGenerator->renderFragment('<div id="main">Hello, world!</div>');
+$sseGenerator->renderFragment('<div id="greeting">Hello, world!</div>');
 ```
 
-The `renderFragment` method sends an event to the client with the HTML fragment to replace the target element with the ID `main`.
+The `patchStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
+
+The `renderFragment()` method sends an event to the client with the HTML fragment, which replaces the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
+
+With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/request-greeting` endpoint on the server.
 
 ```html
-<div data-text="$input"></div>
-```
-
-To this:
-
-```html
-<div id="output"></div>
-```
-
-Give ourselves a button to perform this action.
-
-Add this to your `<main>` element:
-
-```html
-<button data-on-click="$$put('/put')">Send State</button>
-```
-
-...and give ourselves a place to show our new state on the client.
-
-Voilà! Now if you check out what you've done, you'll find you're able to send data to your `/put` endpoint and respond with HTML updating the output `div`. Neato!
-
-Let's retrieve the backend data we're now storing.
-
-Add this to your server code:
-
-```js
-app.get("/get", (req, res) => {
-  setHeaders(res);
-
-  const output = `Backend State: ${JSON.stringify(backendData)}.`;
-  let frag = `<div id="output2">${output}</div>`;
-
-  sendSSE({
-    res,
-    frag,
-    end: true,
-  });
-});
-```
-
-And this to your HTML:
-
-```html
-<button data-on-click="$$get('/get')">Get Backend State</button>
-<div id="output2"></div>
-```
-
-We're now fetching state that's stored on the backend.
-
-Let's try something for fun. In your `/get` route, change your call to `sendSSE` so that we do not immediately end the request connection.
-
-Change your `sendSSE` function call in your `\get` route.
-
-```js
-sendSSE({
-  ...
-  end: false,
-});
-```
-
-Add this to your `sendSSE` function below the first call:
-
-```js
-frag = `<div id="output3">Check this out!</div>;`;
-sendSSE({
-  res,
-  frag,
-  selector: "#main",
-  mergeType: "prepend",
-  end: true,
-});
-```
-
-Now you'll notice you're sending two events in one call. That's because Datastar uses SSE. So using `prepend` we're able to prepend what we want to a target element. We do this using a `selector` and in our case this is the `<main>` element. Good stuff! You can check out all of Datastar's event types [here](/reference/plugins_backend).
-
-There's one last thing we're going to do. Let's add a simple data feed upon loading the page.
-
-Copy this to your server code:
-
-```js
-app.get("/feed", async (req, res) => {
-  setHeaders(res);
-  while (res.writable) {
-    const rand = randomBytes(8).toString("hex");
-    const frag = `<span id="feed">${rand}</span>`;
-    sendSSE({
-      res,
-      frag,
-      end: false,
-    });
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-  res.end();
-});
-```
-
-Add this inside your `<main>` element:
-
-```html
-<div>
-  <span>Feed from server: </span>
-  <span id="feed" data-on-load="$$get('/feed')"></span>
+<div data-store="{ title: '' }"></div>
+    <h1 data-text="$title"></h1>
+    <div id="greeting"></div>
+    <button data-on-click="$$get('/request-greeting')">
+        Request a greeting
+    </button>
 </div>
 ```
 
-I told you we would use another `data-on` action earlier and here it is. `data-on-load` will perform this request when the page loads. If you check things out now you should see a feed that updates using SSE upon loading. Cool!
+Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend – neato!
 
-Datastar supports all the verbs without requiring a `<form>` element: `GET, POST, PUT, PATCH, DELETE`.
+We're not limited to just `GET` requests. We can also use `POST`, `PUT`, `PATCH`, and `DELETE` requests.
 
-So that concludes our primer! Check out the full code for our Node example [here](/examples/node).
+```html
+<button data-on-click="$$post('/send-greeting')">
+    Send a greeting
+</button>
+```    
 
-If you're still here I imagine you want to know more. Let's define things a little better.
+Because we're using SSE, we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
-## A Better View
+```php
+// Swaps out multiple existing fragments in the DOM.
+$sseGenerator->renderFragment('<div id="greeting-world">Hello, world!</div>');
+$sseGenerator->renderFragment('<div id="greeting-galaxy">Hello, galaxy!</div>');
+$sseGenerator->renderFragment('<div id="greeting-universe">Hello, universe!</div>');
+```
 
-To be more precise, think of Datastar as an extension to HTML's [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Using attributes, you can introduce state to your frontend, then access it anywhere in your DOM, or a backend of your choice. You can also set up events that trigger endpoints, then respond with HTML that targets fragments of your DOM.
+## An Overview of What's Possible
 
-- Declare global state: `data-store="{foo: ''}"`
-- Link-up HTML elements to state slots: `data-model="foo"`
-- Adjust HTML elements text content: `data-text="$foo"`
-- Hookup other effects on your DOM to the state: `data-show="$foo"`
-- Setup events using `data-on-click="$$get(/endpoint)"`
-- Respond in HTML wrapped in SSE with a target element ID to update
+You can think of Datastar as an extension to HTML's [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Using `data-*` attributes (hence the name), you can introduce state to your frontend and access it anywhere in the DOM or from your backend. You can set up events that trigger requests to endpoints that respond with HTML fragments and store updates.
 
-It's that simple. To dive deeper check out some of the other links or just click below.
+- Declare global state: `data-store="{ foo: '' }"`
+- Bind element values to store values: `data-model="foo"`
+- Set the text content of an element to an expression.: `data-text="$foo"`
+- Show or hide an element using an expression: `data-show="$foo"`
+- Modify the classes on an element: `data-class="{ 'font-bold': $foo }"`
+- Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
+- Execute an expression whenever an event is triggered on an element: `data-on-click="$$get(/endpoint)"`
+- Persist all store values in local storage: `data-persist`
+- Create a new computed store value from an expression: `data-computed-foo="'Hello, ' + $foo"`
+- Create a reference to an element that can be referenced: `data-ref="alert"`
+- Send a header along with a request: `data-header-foo="{'x-powered-by': $foo}"`
+- Appends to or replaces the URL: `data-replace-url="'?page=1'"`
