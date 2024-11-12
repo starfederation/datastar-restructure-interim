@@ -5,7 +5,13 @@ Datastar brings libraries like [AlpineJs](https://alpinejs.dev/) (frontend react
 1. Manage state and build reactivity into your frontend using HTML attributes.
 2. Modify the DOM and state by sending HTML fragments from your backend.
 
-Datastar can do anything a full-stack framework like React, Vue.js or Svelte can do, using a much simpler, hypermedia-driven approach.
+With Datastar, you can build any UI that a full-stack framework like React, Vue.js or Svelte can, using a much simpler, hypermedia-driven approach.
+
+<div class="alert">
+    <p>
+        We’re so confident that Datastar can be used as a full-stack framework replacement that we challenge anyone to find a use-case that Datastar _cannot_ handle!
+    </p> 
+</div>
 
 ## Installation
 
