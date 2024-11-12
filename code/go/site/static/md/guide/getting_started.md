@@ -158,16 +158,16 @@ We're not limited to just `GET` requests. We can also send `POST`, `PUT`, `PATCH
 
 <div class="alert alert-info">
     <p>
-        The 🚀 emoji indicates an action plugin. While using the rocket emoji makes your code run faster, you can omit it if you prefer, so <code>🚀get()</code> can also be written as <code>get()</code>.
+        The 🚀 emoji indicates a Datastar action plugin. While using the rocket emoji makes your code run faster, you can omit it if you prefer, so <code>🚀get()</code> can also be written as <code>get()</code>.
     </p> 
 </div>
 
-Because we're using SSE, we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
+One of the advantages of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
 ```php
-// Swaps out multiple existing fragments in the DOM.
+$sseGenerator->patchStore(['title' => 'Greetings']);
+$sseGenerator->patchStore(['subtitle' => 'Earthlings']);
 $sseGenerator->renderFragment('<div id="greeting-world">Hello, world!</div>');
-$sseGenerator->renderFragment('<div id="greeting-galaxy">Hello, galaxy!</div>');
 $sseGenerator->renderFragment('<div id="greeting-universe">Hello, universe!</div>');
 ```
 
