@@ -9,7 +9,7 @@ Datastar can do anything a full-stack framework like React, Vue.js or Svelte can
 
 ## Installation
 
-**Script Tag**
+### Script Tag
 
 Include Datastar in your HTML using a script tag:
 
@@ -25,12 +25,12 @@ If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm
 
 If you want a version with source maps, download and include the [unminified file](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js) and the [source map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js.map).
 
-**NPM**
+### NPM
 
-For npm-style build systems, you can install Datastar via npm and then import this in your server file.
+You can install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
 
 ```bash
-npm i @sudodevnull/datastar
+npm install @sudodevnull/datastar
 ```
 
 ## A Quick Primer
