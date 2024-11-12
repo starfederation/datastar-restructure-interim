@@ -13,7 +13,6 @@
 
 ### Changed
 
-- Changed the `$$` prefix to `🚀` (or no prefix) for all plugin actions.
 - Changed the `data-header` syntax to accept an object of key-value pairs.
 - Renamed the `datastar-delete` event to `datastar-remove`.
 - Renamed the `upsert_attributes` merge type to `upsertAttributes` in the fragment event.
@@ -21,5 +20,6 @@
 - Renamed the `vt` option to `useViewTransition` in the fragment event.
 
 ### Removed
-
+ 
+- Removed the `$$` prefix for action plugins.
 - Removed the `local` and `session` modifiers from `data-store`. Use the `data-persist` attribute instead.
