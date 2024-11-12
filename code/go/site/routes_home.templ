@@ -12,21 +12,53 @@ templ Home() {
 	}}
 	@Page() {
 		<div class="flex flex-col w-full min-h-screen bg-base-200 md:bg-gradient-to-br md:items-center from-base-300 to-base-100">
-			<div class="flex flex-col items-center gap-8 p-4 md:pt-16 md:max-w-3xl max-w-none">
-				<img class="w-64 md:w-96" src={ staticPath("images/rocket.webp") }/>
+			<div class="flex flex-col items-center gap-8 p-4 md:pt-8 md:max-w-3xl max-w-none">
+				<img class="w-64 md:w-72" src={ staticPath("images/rocket.webp") }/>
 				<div class="flex flex-col items-end font-bold uppercase font-brand">
 					<div class="text-3xl md:text-6xl text-primary">Datastar</div>
 					<div class="text-sm text-secondary">v{ datastar.Version }</div>
 				</div>
 				<div class="text-center font-brand">
-					<div class="text-xl">Real-time hypermedia framework</div>
+					<div class="text-xl">The real-time hypermedia framework</div>
 				</div>
 				<p>
-					A single
+				    Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
+				    Include Datastar with a single
 					<span class="text-lg font-bold text-primary">{ datastar.VersionClientByteSizeGzipHuman }</span>
-					CDN link gives you access to everything needed to rival a full-stack SPA framework; all in the language of your choice.
-					To give some perspective, the entire Datastar framework is over <span class="text-lg font-bold text-primary">{ fmt.Sprintf("%.0f", math.Floor(186*1024/float64(datastar.VersionClientByteSizeGzip))) }x</span> smaller than the rocket image above.
+					file and start adding reactivity to your front-end immediately. Write your back-end in the language of your choice, and use the official SDKs (Go, PHP, TypeScript, .NET) to get up and running even faster.
 				</p>
+				<a
+					class="flex items-center w-full gap-1 btn btn-accent btn-lg"
+					href={ templ.SafeURL("/guide") }
+				>
+					@icon("simple-icons:rocket")
+					{ "Getting Started" }
+				</a>
+				<a
+					class="flex items-center w-full gap-4 btn btn-primary btn-lg"
+					href={ templ.SafeURL("/examples") }
+				>
+					@icon("svg-spinners:bars-scale-middle")
+					{ "Show me some examples!" }
+					@icon("svg-spinners:bars-scale-middle")
+				</a>
+				<div class="w-full shadow-xl card bg-base-100">
+					<div class="card-body">
+						<div class="flex items-center gap-4">
+							<button
+								class="btn btn-primary btn-ghost"
+								data-on-click={ fmt.Sprintf("$$clipboard('%s')", cdnText) }
+							>
+								@icon("material-symbols:content-copy")
+							</button>
+							<code
+								class="flex-1 overflow-auto text-xs text-primary text-ellipsis"
+							>
+								{ cdnText }
+							</code>
+						</div>
+					</div>
+				</div>
 				<div class="flex flex-wrap w-full gap-4">
 					<a
 						class="flex items-center justify-center flex-1 btn bg-discord"
@@ -50,38 +82,6 @@ templ Home() {
 						News
 					</a>
 				</div>
-				<div class="w-full shadow-xl card bg-base-100">
-					<div class="card-body">
-						<div class="flex items-center gap-4">
-							<button
-								class="btn btn-primary btn-ghost"
-								data-on-click={ fmt.Sprintf("$$clipboard('%s')", cdnText) }
-							>
-								@icon("material-symbols:content-copy")
-							</button>
-							<code
-								class="flex-1 overflow-auto text-xs text-primary text-ellipsis"
-							>
-								{ cdnText }
-							</code>
-						</div>
-					</div>
-				</div>
-				<a
-					class="flex items-center w-full gap-4 btn btn-primary btn-lg"
-					href={ templ.SafeURL("/examples") }
-				>
-					@icon("svg-spinners:bars-scale-middle")
-					{ "Show me cool examples!" }
-					@icon("svg-spinners:bars-scale-middle")
-				</a>
-				<a
-					class="flex items-center w-full gap-1 btn btn-accent btn-outline btn-lg"
-					href={ templ.SafeURL("/guide") }
-				>
-					@icon("simple-icons:rocket")
-					{ "Getting Started" }
-				</a>
 				<img class="w-full" src="/chart"/>
 				<div id="todosMVC" data-on-load="$$get('/api/todos')">
 					<p>Todos Example</p>
