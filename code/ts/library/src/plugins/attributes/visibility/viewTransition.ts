@@ -2,7 +2,7 @@ import { AttributePlugin } from "../../../engine";
 import { supportsViewTransitions } from "../../../utils/view-transitions";
 
 // Setup view transition api
-export const ViewTransitionAttributePlugin: AttributePlugin = {
+export const ViewTransition: AttributePlugin = {
     pluginType: "attribute",
     prefix: "viewTransition",
     onGlobalInit() {

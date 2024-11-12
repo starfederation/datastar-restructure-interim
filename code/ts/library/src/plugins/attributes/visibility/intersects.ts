@@ -6,7 +6,7 @@ const HALF = "half";
 const FULL = "full";
 
 // Run expression when element intersects with viewport
-export const IntersectionAttributePlugin: AttributePlugin = {
+export const Intersection: AttributePlugin = {
     pluginType: "attribute",
     prefix: INTERSECTS,
     allowedModifiers: new Set([ONCE, HALF, FULL]),

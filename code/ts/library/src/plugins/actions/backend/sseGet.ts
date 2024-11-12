@@ -5,7 +5,7 @@
 import { ActionPlugin } from "../../../engine";
 import { fetcherActionMethod } from "./sse";
 
-export const GetSSEActionPlugin: ActionPlugin = {
+export const GetSSE: ActionPlugin = {
     pluginType: "action",
     name: "get",
     method: fetcherActionMethod("GET"),

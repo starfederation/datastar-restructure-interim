@@ -2,7 +2,7 @@ import { AttributeContext, AttributePlugin } from "../../../engine";
 import { scrollIntoView } from "../../../utils/dom";
 
 // Scrolls the element into view
-export const ScrollIntoViewAttributePlugin: AttributePlugin = {
+export const ScrollIntoView: AttributePlugin = {
     pluginType: "attribute",
     prefix: "scrollIntoView",
     mustHaveEmptyKey: true,

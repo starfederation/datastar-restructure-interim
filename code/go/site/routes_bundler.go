@@ -1,6 +1,7 @@
 package site
 
 import (
+	"archive/zip"
 	"compress/gzip"
 	"errors"
 	"fmt"
@@ -16,12 +17,16 @@ import (
 	"github.com/delaneyj/toolbelt"
 	"github.com/evanw/esbuild/pkg/api"
 	"github.com/go-chi/chi/v5"
+	"github.com/segmentio/encoding/json"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/valyala/bytebufferpool"
 	"github.com/zeebo/xxh3"
 )
 
-var datastarBundlerRegexp = regexp.MustCompile(`import { (?P<name>[^"]*) } from "(?P<path>[^"]*)";`)
+var (
+	datastarBundlerRegexp = regexp.MustCompile(`import { (?P<name>[^"]*) } from "(?P<path>[^"]*)";`)
+	pluginTypeRegexp      = regexp.MustCompile(`pluginType: "(?P<name>.*)",`)
+)
 
 type BundlerStore struct {
 	IncludedPlugines map[string]bool `json:"includedPlugins"`
@@ -30,6 +35,7 @@ type BundlerStore struct {
 type PluginDetails struct {
 	Name        string `json:"name"`
 	Path        string `json:"path"`
+	Type        string `json:"type"`
 	Authors     string `json:"author"`
 	Description string `json:"description"`
 	Icon        string `json:"icon"`
@@ -124,6 +130,10 @@ func setupBundler(router chi.Router) error {
 			Contents: contents,
 		}
 
+		for _, match := range pluginTypeRegexp.FindAllStringSubmatch(contents, 1) {
+			details.Type = match[1]
+		}
+
 		lines := strings.Split(contents, "\n")
 		for _, line := range lines {
 			if !strings.HasPrefix(line, "//") {
@@ -161,7 +171,7 @@ func setupBundler(router chi.Router) error {
 			for _, plugin := range manifest.Plugins {
 				store.IncludedPlugines[plugin.Key] = true
 			}
-			PageBundler(manifest, store).Render(r.Context(), w)
+			PageBundler(r, manifest, store).Render(r.Context(), w)
 		})
 
 		bundlerRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -193,33 +203,74 @@ func setupBundler(router chi.Router) error {
 			c := bundlerResultsFragment(*bundleContents)
 			sse.RenderFragmentTempl(c)
 		})
+
+		bundlerRouter.Get("/download/{filename}", func(w http.ResponseWriter, r *http.Request) {
+			filename := chi.URLParam(r, "filename")
+			if !strings.HasSuffix(filename, ".zip") {
+				http.Error(w, "invalid filename", http.StatusBadRequest)
+				return
+			}
+
+			filename = filepath.Join(distDir, filename)
+			bundleResults, err := os.ReadFile(filename)
+			if err != nil {
+				http.Error(w, "error reading bundle results: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/zip")
+			w.Write(bundleResults)
+		})
 	})
 
 	return nil
 }
 
 type BundleResults struct {
-	Hash              string        `json:"hash"`
-	SourceSize        uint64        `json:"sourceSize"`
-	SourceSizeGzipped uint64        `json:"sourceSizeGzipped"`
-	CompileTime       time.Duration `json:"compileTime"`
+	Hash              string         `json:"hash"`
+	SourceSize        uint64         `json:"sourceSize"`
+	SourceSizeGzipped uint64         `json:"sourceSizeGzipped"`
+	CompileTime       time.Duration  `json:"compileTime"`
+	Name              string         `json:"name"`
+	DownloadURL       string         `json:"downloadURL"`
+	Manifest          PluginManifest `json:"manifest"`
 }
 
 func bundlePlugins(tmpDir string, manifest PluginManifest) (results *BundleResults, err error) {
 	start := time.Now()
+
+	distDir := filepath.Join(tmpDir, "dist")
+
 	h := xxh3.New()
 	h.WriteString(manifest.Version)
 	for _, plugin := range manifest.Plugins {
 		h.WriteString(plugin.Contents)
 	}
 	hash := h.Sum64()
-	hashedName := fmt.Sprintf("datastar-%x", hash)
-	bundleRelDir := filepath.Join("bundles", hashedName+".ts")
+	hashedName := fmt.Sprintf("datastar-%s-%x", toolbelt.Kebab(manifest.Version), hash)
 
-	distDir := filepath.Join(tmpDir, "dist")
+	bundleResultsPath := filepath.Join(distDir, hashedName+".json")
+
+	// check if the bundle already exists
+	results = &BundleResults{}
+	if _, err := os.Stat(bundleResultsPath); err == nil {
+		bundleResults, err := os.ReadFile(bundleResultsPath)
+		if err != nil {
+			return nil, fmt.Errorf("error reading bundle results: %w", err)
+		}
+
+		if err = json.Unmarshal(bundleResults, results); err != nil {
+			return nil, fmt.Errorf("error unmarshalling bundle results: %w", err)
+		}
+
+		return results, nil
+	}
+
+	bundleTypescriptPath := filepath.Join("bundles", hashedName+".ts")
+
 	// distFile := filepath.Join(distDir, hashedName+".js")
 
-	bundleOutFile := filepath.Join(tmpDir, bundleRelDir)
+	bundleOutFile := filepath.Join(tmpDir, bundleTypescriptPath)
 	bundleFileContents := bundlerContent(manifest)
 	if err = os.WriteFile(bundleOutFile, []byte(bundleFileContents), 0644); err != nil {
 		return nil, fmt.Errorf("error writing bundle file: %w", err)
@@ -269,12 +320,53 @@ func bundlePlugins(tmpDir string, manifest PluginManifest) (results *BundleResul
 	gzipContents := buf.Bytes()
 
 	results = &BundleResults{
+		Name:              hashedName,
+		Manifest:          manifest,
 		Hash:              fmt.Sprintf("%x", hash),
 		SourceSize:        uint64(len(contents)),
 		SourceSizeGzipped: uint64(len(gzipContents)),
 		CompileTime:       time.Since(start),
+		DownloadURL:       "/bundler/download/" + hashedName + ".zip",
+	}
+
+	// write the results to the dist dir with a gzipped file
+	BundleResultsContents, err := json.Marshal(results)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling results: %w", err)
+	}
+	if err = os.WriteFile(bundleResultsPath, BundleResultsContents, 0644); err != nil {
+		return nil, fmt.Errorf("error writing results file: %w", err)
+	}
+
+	bundleResultsGzippedPath := filepath.Join(distDir, hashedName+".zip")
+	zipFile, err := os.Create(bundleResultsGzippedPath)
+	if err != nil {
+		return nil, fmt.Errorf("error creating zip file: %w", err)
+	}
+	defer zipFile.Close()
+
+	zipWriter := zip.NewWriter(zipFile)
+	defer zipWriter.Close()
+
+	// add the results file to the zip
+	resultsWriter, err := zipWriter.Create(hashedName + ".json")
+	if err != nil {
+		return nil, fmt.Errorf("error creating zip file: %w", err)
+	}
+	if _, err := resultsWriter.Write(BundleResultsContents); err != nil {
+		return nil, fmt.Errorf("error writing zip file: %w", err)
+	}
+
+	for _, file := range buildResult.OutputFiles {
+		relPath := strings.TrimPrefix(file.Path, distDir)
+		w, err := zipWriter.Create(relPath)
+		if err != nil {
+			return nil, fmt.Errorf("error creating zip file: %w", err)
+		}
+		if _, err := w.Write(file.Contents); err != nil {
+			return nil, fmt.Errorf("error writing zip file: %w", err)
+		}
 	}
 
 	return results, nil
-
 }

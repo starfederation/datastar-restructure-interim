@@ -4,7 +4,7 @@ export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
 export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
 
 // Sets the fetch indicator selector
-export const FetchIndicatorPlugin: AttributePlugin = {
+export const FetchIndicator: AttributePlugin = {
     pluginType: "attribute",
     prefix: "fetchIndicator",
     mustHaveEmptyKey: true,

@@ -1,6 +1,6 @@
 import { AttributePlugin } from "../../../engine";
 
-export const ComputedPlugin: AttributePlugin = {
+export const Computed: AttributePlugin = {
     pluginType: "attribute",
     prefix: "computed",
     mustNotEmptyKey: true,

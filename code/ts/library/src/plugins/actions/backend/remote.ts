@@ -1,7 +1,7 @@
 import { ActionPlugin } from "../../../engine";
 import { remoteSignals } from "../../../utils/signals";
 
-export const RemoteActionPlugin: ActionPlugin = {
+export const RemoteSignals: ActionPlugin = {
     pluginType: "action",
     name: "remote",
     method: async (ctx) => {

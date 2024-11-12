@@ -2,7 +2,7 @@ import { PreprocessorPlugin, RegexpGroups } from "../../../engine";
 import { wholePrefixSuffix } from "../../../utils/regex";
 
 // Replacing ~foo with ctx.refs.foo
-export const RefProcessorPlugin: PreprocessorPlugin = {
+export const RefProcessor: PreprocessorPlugin = {
     name: "ref",
     pluginType: "preprocessor",
     regexp: wholePrefixSuffix("~", "ref", "", false),

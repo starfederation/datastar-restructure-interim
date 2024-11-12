@@ -1,6 +1,6 @@
 import { ActionPlugin } from "../../../engine";
 
-export const ClipboardActionPlugin: ActionPlugin = {
+export const Clipboard: ActionPlugin = {
     pluginType: "action",
     name: "clipboard",
     method: (_, text) => {

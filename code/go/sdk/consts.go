@@ -3,9 +3,9 @@ package datastar
 import "time"
 
 const (
-	Version                        = "1.0.0-beta.1"
-	VersionClientByteSize          = 43992
-	VersionClientByteSizeGzip      = 15025
+	Version                        = "0.20.0-beta"
+	VersionClientByteSize          = 43974
+	VersionClientByteSizeGzip      = 15017
 	VersionClientByteSizeGzipHuman = "15 KiB"
 
 	DefaultSettleTime = 300 * time.Millisecond

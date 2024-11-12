@@ -1,6 +1,6 @@
 import { ActionPlugin } from "../../../engine";
 
-export const SetAllActionPlugin: ActionPlugin = {
+export const SetAll: ActionPlugin = {
     pluginType: "action",
     name: "setAll",
     method: (ctx, regexp, newValue) => {

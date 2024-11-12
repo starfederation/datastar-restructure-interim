@@ -1,6 +1,6 @@
 import { ActionPlugin, AttributeContext } from "../../../engine";
 
-export const ClampFitIntActionPlugin: ActionPlugin = {
+export const ClampFitInt: ActionPlugin = {
     pluginType: "action",
     name: "clampFitInt",
     method: (

@@ -18,7 +18,7 @@ const knownOnModifiers = new Set([
 let lastStoreMarshalled = "";
 
 // Sets the event listener of the element
-export const OnAttributePlugin: AttributePlugin = {
+export const On: AttributePlugin = {
     pluginType: "attribute",
     prefix: "on",
     mustNotEmptyKey: true,

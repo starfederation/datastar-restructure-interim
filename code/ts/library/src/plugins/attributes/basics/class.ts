@@ -1,25 +1,23 @@
 import { AttributePlugin } from "../../../engine";
 
-export const ClassAttributePlugin: AttributePlugin = {
+export const Class: AttributePlugin = {
     pluginType: "attribute",
     prefix: "class",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
 
     onLoad: (ctx) => {
+        const classes: Object = ctx.expressionFn(ctx);
+
         return ctx.reactivity.effect(() => {
-            const classes: Object = ctx.expressionFn(ctx);
             for (const [k, v] of Object.entries(classes)) {
+                const clss = k.split(" ");
                 if (v) {
-                    ctx.el.classList.add(k);
+                    ctx.el.classList.add(...clss);
                 } else {
-                    ctx.el.classList.remove(k);
+                    ctx.el.classList.remove(...clss);
                 }
             }
-
-            return () => {
-                ctx.el.classList.remove(...Object.keys(classes));
-            };
         });
     },
 };

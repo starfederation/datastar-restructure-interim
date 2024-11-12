@@ -2,7 +2,7 @@ import { ActionPlugin } from "../../../engine";
 
 export type IndicatorReference = { el: HTMLElement; count: number };
 
-export const IsFetchingActionPlugin: ActionPlugin = {
+export const IsFetching: ActionPlugin = {
     pluginType: "action",
     name: "isFetching",
     method: (ctx, selector: string) => {

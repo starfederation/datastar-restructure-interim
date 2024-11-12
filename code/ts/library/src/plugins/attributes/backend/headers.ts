@@ -1,6 +1,6 @@
 import { AttributePlugin, RegexpGroups } from "../../../engine";
 
-export const HeadersPlugin: AttributePlugin = {
+export const Headers: AttributePlugin = {
     pluginType: "attribute",
     prefix: "header",
     mustNotEmptyKey: true,

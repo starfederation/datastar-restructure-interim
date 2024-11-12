@@ -7,7 +7,7 @@ const teleportParentErr = new Error(
     "Target element must have a parent if using prepend or append",
 );
 // Teleports the element to another element
-export const TeleportAttributePlugin: AttributePlugin = {
+export const Teleport: AttributePlugin = {
     pluginType: "attribute",
     prefix: "teleport",
     allowedModifiers: new Set([PREPEND, APPEND]),

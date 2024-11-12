@@ -1,7 +1,7 @@
 import { AttributePlugin } from "../../../engine";
 
 // Sets the textContent of the element
-export const TextAttributePlugin: AttributePlugin = {
+export const Text: AttributePlugin = {
     pluginType: "attribute",
     prefix: "text",
     mustHaveEmptyKey: true,

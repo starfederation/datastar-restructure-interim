@@ -1,8 +1,7 @@
-import { RefProcessorPlugin } from "../plugins/actions/core/ref";
-import { ComputedPlugin } from "../plugins/attributes/core/computed";
-import { RefPlugin } from "../plugins/attributes/core/ref";
+import { Ref } from "../plugins/attributes/core/ref";
 import { StoreAttributePlugin } from "../plugins/attributes/core/store";
 import { ActionsProcessorPlugin } from "../plugins/preprocessors/core/actions";
+import { RefProcessor } from "../plugins/preprocessors/core/ref";
 import { SignalsProcessorPlugin } from "../plugins/preprocessors/core/signals";
 import { Engine } from "./engine";
 
@@ -13,10 +12,9 @@ const ds = new Engine();
 ds.load(
     ActionsProcessorPlugin,
     SignalsProcessorPlugin,
-    RefProcessorPlugin,
+    RefProcessor,
     StoreAttributePlugin,
-    ComputedPlugin,
-    RefPlugin,
+    Ref,
 );
 
 export const Datastar = ds;

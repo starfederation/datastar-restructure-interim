@@ -1,7 +1,7 @@
 import { AttributePlugin } from "../../../engine";
 import { kebabize } from "../../../utils/text";
 
-export const BindAttributePlugin: AttributePlugin = {
+export const Bind: AttributePlugin = {
     pluginType: "attribute",
     prefix: "bind",
     mustNotEmptyKey: true,

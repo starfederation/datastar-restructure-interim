@@ -3,7 +3,7 @@ import { AttributePlugin, RegexpGroups } from "../../../engine";
 const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;
 const updateModelEvents = ["change", "input", "keydown"];
 
-export const ModelAttributePlugin: AttributePlugin = {
+export const Model: AttributePlugin = {
     pluginType: "attribute",
     prefix: "model",
     mustHaveEmptyKey: true,

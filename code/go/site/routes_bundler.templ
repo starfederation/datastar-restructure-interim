@@ -4,68 +4,86 @@ import (
 	"fmt"
 	"github.com/dustin/go-humanize"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
+	"net/http"
 )
 
-templ PageBundler(manifest PluginManifest, store *BundlerStore) {
+templ PageBundler(r *http.Request, manifest PluginManifest, store *BundlerStore) {
 	@Page() {
-		<div data-store={ templ.JSONString(store) }>
-			<div>Version: { manifest.Version }</div>
+		@header(r)
+		<div data-store={ templ.JSONString(store) } class="p-8 flex flex-col gap-4">
 			<div id="results"></div>
-			<button class="btn btn-primary btn-block" data-on-click={ datastar.POST("/bundler") }>Bundle</button>
-			<div>
-				<label>
-					<div class="label-text">Include All</div>
-					<button class="btn btn-primary" data-on-click="$$toggleAll('static_library_source_plugins_')">Toggle All</button>
-				</label>
-			</div>
-			<table class="table w-full">
-				<caption>Plugins</caption>
-				<thead>
-					<tr>
-						<th>Include</th>
-						<th>Name</th>
-						<th>Path</th>
-						// <th>Authors</th>
-						// <th>Description</th>
-						// <th>Source size</th>
-					</tr>
-				</thead>
-				<tbody>
+			<button class="btn btn-primary btn-block" data-on-click={ datastar.POST("/bundler") }>
+				@icon("material-symbols:build")
+				Bundle
+			</button>
+			<div class="flex flex-col gap-2">
+				<div class="flex justify-between items-center">
+					<div class="font-bold text-3xl">Plugins</div>
+					<div class="flex gap-2">
+						<button class="btn" data-on-click="$$toggleAll('static_library_source_plugins_')">Toggle</button>
+						<button class="btn" data-on-click="$$setAll('static_library_source_plugins_',true)">All</button>
+						<button class="btn" data-on-click="$$setAll('static_library_source_plugins_',false)">None</button>
+					</div>
+				</div>
+				<div class="flex flex-wrap gap-2 justify-around">
 					for _, plugin := range manifest.Plugins {
 						{{
-							signal := fmt.Sprintf("includedPlugins.%s", plugin.Key)
+						signal := fmt.Sprintf("includedPlugins.%s", plugin.Key)
+						// cls := fmt.Sprintf("{'bg-base-200':!$%s, 'bg-success text-success-content': $%s}", signal, signal)
 						}}
-						<tr class="hover cursor-pointer" data-on-click={ fmt.Sprintf("$%s = !$%s", signal, signal) }>
-							<td><input class="toggle" type="checkbox" data-model={ signal }/></td>
-							<td>{ plugin.Name }</td>
-							<td>{ plugin.Path[11:] }</td>
-							// <td>{ plugin.Authors }</td>
-							// <td>{ plugin.Description }</td>
-							// <td>{ humanize.IBytes( uint64(len(plugin.Contents))) }</td>
-						</tr>
+						<details class="collapse collapse-arrow bg-base-200">
+							<summary class="collapse-title">
+								<div class="flex items-center justify-between">
+									<div class="flex gap-4 items-center">
+										<input class="toggle toggle-success" type="checkbox" data-model={ signal }/>
+										<div class="flex item-center">
+											if plugin.Icon != "" {
+												@icon(plugin.Icon)
+											}
+											<div>{ plugin.Name }</div>
+										</div>
+										<div class="text-xs italic">{ plugin.Description }</div>
+									</div>
+								</div>
+							</summary>
+							<div class="collapse-content">
+								<div>Authors: { plugin.Authors }</div>
+								<div>Path: { plugin.Path[11:] }.ts</div>
+								<div>Path: { plugin.Type }.ts</div>
+								<div>Source size: { humanize.IBytes(uint64(len(plugin.Contents))) }</div>
+							</div>
+						</details>
 					}
-				</tbody>
-			</table>
+				</div>
+			</div>
 		</div>
 	}
 }
 
 templ bundlerResultsFragment(results BundleResults) {
-	<table class="table w-full" id="results">
-		<caption>Results</caption>
-		<thead>
-			<tr>
-				<th>Hash</th>
-				<th>Compile Time</th>
-				<th>Source Size Gzipped</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>{ results.Hash }</td>
-				<td>{ results.CompileTime.String() }</td>
-				<td>{ fmt.Sprintf("%d", results.SourceSizeGzipped) } ({ humanize.IBytes(results.SourceSizeGzipped) }) </td>
-			</tr>
-		</tbody>
-	</table>
+	<div id="results" class="flex gap-8">
+		<table class="table w-full">
+			<thead>
+				<tr>
+					<th>Hash</th>
+					<th>Compile Time</th>
+					<th>Source Size Gzipped</th>
+					<th class="text-right">Download</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{ results.Hash }</td>
+					<td>{ results.CompileTime.String() }</td>
+					<td>{ humanize.Comma(int64( results.SourceSizeGzipped)) } ({ humanize.IBytes(results.SourceSizeGzipped) }) </td>
+					<td class="text-right">
+						<a class="btn btn-success" href={ templ.SafeURL(results.DownloadURL) }>
+							@icon("material-symbols:folder-zip")
+							{ results.Name }.zip
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 }

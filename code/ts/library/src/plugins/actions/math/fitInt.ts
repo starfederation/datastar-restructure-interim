@@ -1,6 +1,6 @@
 import { ActionPlugin, AttributeContext } from "../../../engine";
 
-export const FitIntActionPlugin: ActionPlugin = {
+export const FitInt: ActionPlugin = {
     pluginType: "action",
     name: "fitInt",
     method: (

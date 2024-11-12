@@ -6,7 +6,7 @@ import {
 } from "../../engine";
 import { remoteSignals } from "../../utils/signals";
 
-export const CacheStoreAttributePlugin: AttributePlugin = {
+export const CacheStore: AttributePlugin = {
     pluginType: "attribute",
     prefix: "cache",
     allowedModifiers: new Set(["local", "session", "querystring", "remote"]),

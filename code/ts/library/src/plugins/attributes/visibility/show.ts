@@ -11,7 +11,7 @@ const SHOW_CLASS = `${DATASTAR}-showing`;
 const HIDE_CLASS = `${DATASTAR}-hiding`;
 const SHOW_DURATION_TRANSITION_STYLE = `${DATASTAR}-show-duration-transition`;
 
-export const ShowAttributePlugin: AttributePlugin = {
+export const Show: AttributePlugin = {
     pluginType: "attribute",
     prefix: SHOW,
     "allowedModifiers": new Set([IMPORTANT, DURATION]),

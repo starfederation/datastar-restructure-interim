@@ -1,6 +1,6 @@
 import { ActionPlugin } from "../../../engine";
 
-export const ToggleAllActionPlugin: ActionPlugin = {
+export const ToggleAll: ActionPlugin = {
     pluginType: "action",
     name: "toggleAll",
     method: (ctx, regexp) => {
