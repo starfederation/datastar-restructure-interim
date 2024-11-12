@@ -172,9 +172,9 @@ async function fetcher(
                     const knownEventTypes = [
                         "selector",
                         "merge",
-                        "settle",
+                        "settleDuration",
                         "fragment",
-                        "vt",
+                        "useViewTransition",
                     ];
 
                     let fragment = "",

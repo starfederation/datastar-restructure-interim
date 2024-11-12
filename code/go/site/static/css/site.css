@@ -4383,6 +4383,10 @@ html:has(.drawer-toggle:checked) {
   position: static;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .relative {
   position: relative;
 }
