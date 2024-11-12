@@ -36,7 +36,7 @@ const FragmentMergeOptions = {
     AppendElement: "append",
     BeforeElement: "before",
     AfterElement: "after",
-    UpsertAttributes: "upsert_attributes",
+    UpsertAttributes: "upsertAttributes",
 } as const;
 export type FragmentMergeOption =
     (typeof FragmentMergeOptions)[keyof typeof FragmentMergeOptions];
