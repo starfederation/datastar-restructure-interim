@@ -134,13 +134,13 @@ The `patchStore()` method updates one or more store values in the frontend, or c
 
 The `renderFragment()` method sends an event to the client with the HTML fragment, which replaces the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
 
-With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/request-greeting` endpoint on the server.
+With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
 
 ```html
 <div data-store="{ title: '' }"></div>
     <h1 data-text="$title"></h1>
     <div id="greeting"></div>
-    <button data-on-click="$$get('/request-greeting')">
+    <button data-on-click="🚀get('/actions/greeting')">
         Request a greeting
     </button>
 </div>
@@ -148,13 +148,19 @@ With our backend in place, we can now use a `data-on-click` on a button to send 
 
 Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend – neato!
 
-We're not limited to just `GET` requests. We can also use `POST`, `PUT`, `PATCH`, and `DELETE` requests.
+We're not limited to just `GET` requests. We can also send `POST`, `PUT`, `PATCH` and `DELETE` requests, using `🚀post()`, `🚀put()`, `🚀patch()` and `🚀delete()` respectively.
 
 ```html
-<button data-on-click="$$post('/send-greeting')">
+<button data-on-click="🚀post('/actions/greeting')">
     Send a greeting
 </button>
 ```    
+
+<div class="alert alert-info">
+    <p>
+        The 🚀 emoji indicates an action plugin. While using the rocket emoji makes your code run faster, you can omit it if you prefer, so <code>🚀get()</code> can also be written as <code>get()</code>.
+    </p> 
+</div>
 
 Because we're using SSE, we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
@@ -175,7 +181,7 @@ You can think of Datastar as an extension to HTML's [data attributes](https://de
 - Show or hide an element using an expression: `data-show="$foo"`
 - Modify the classes on an element: `data-class="{ 'font-bold': $foo }"`
 - Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
-- Execute an expression whenever an event is triggered on an element: `data-on-click="$$get(/endpoint)"`
+- Execute an expression whenever an event is triggered on an element: `data-on-click="🚀get(/endpoint)"`
 - Persist all store values in local storage: `data-persist`
 - Create a new computed store value from an expression: `data-computed-foo="'Hello, ' + $name"`
 - Create a reference to an element that can be referenced: `data-ref="alert"`
