@@ -36,7 +36,7 @@ data: ifmissing true
 data: store {id:73}
 
 event: datastar-fragment
-data: merge upsert_attributes
+data: merge upsertAttributes
 data: fragment <div id="demo" data-store.ifmissing="{id:74}"></div>
 
 event: datastar-signal
@@ -44,7 +44,7 @@ data: ifmissing true
 data: store {id:75}
 
 event: datastar-fragment
-data: merge upsert_attributes
+data: merge upsertAttributes
 data: fragment <div id="demo" data-store.ifmissing="{id:76}"></div>
 
 event: datastar-signal

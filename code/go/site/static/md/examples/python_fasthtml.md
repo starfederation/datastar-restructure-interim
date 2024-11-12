@@ -93,7 +93,7 @@ class FragmentMergeType(str, Enum):
   APPEND = "append"
   BEFORE = "before"
   AFTER = "after"
-  UPSERT_ATTRIBUTES = "upsert_attributes"
+  UPSERT_ATTRIBUTES = "upsertAttributes"
 
 
 class DatastarEventMessage:

@@ -48,7 +48,7 @@ The server will either activate or deactivate the checked users and then rerende
 event: datastar-fragment
 id: 129798448043016254
 data: selector
-data: merge upsert_attributes
+data: merge upsertAttributes
 data: settle 500
 data: fragment ...
 ```

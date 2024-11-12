@@ -20,7 +20,7 @@ type FragmentMergeMode =
 module internal FragmentMergeMode =
     let toString (this:FragmentMergeMode) =
         match this with
-        | UpsertAttributes -> "upsert_attributes"
+        | UpsertAttributes -> "upsertAttributes"
         | _ -> Utility.lowerFirstCharacter this
 
     let fromString (str:string) = Utility.unionCaseFromString<FragmentMergeMode> str [||]
