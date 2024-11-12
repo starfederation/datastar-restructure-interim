@@ -2,7 +2,7 @@
 
 ## The true troll trolls themselves
 
-[HTMX Sucks](https://htmx.org/essays/htmx-sucks/) is probably the epitome of self-trolling. The author, [Carson Gross](https://twitter.com/carson_gross), is the creator of HTMX. The essay is a critique of the project and the web development community in general. It's a fun read and I recommend it.
+[HTMX Sucks](https://htmx.org/essays/htmx-sucks/) is probably the epitome of self-trolling. The author, [Carson Gross](https://bigsky.software/cv/), is the creator of HTMX. The essay is a critique of the project and the web development community in general. It's a fun read and I recommend it.
 
 During the Big Sky Conference Carson had a [talk](https://www.youtube.com/watch?v=zGyAWH5btwY) about open source marketing where one of his big points was...
 
