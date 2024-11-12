@@ -1,3 +1,8 @@
+// Authors: Delaney Gillilan
+// Icon: material-symbols:home-storage
+// Slug: Store signals into a singleton per page
+// Description: This action stores signals into a singleton per page. This is useful for storing signals that are used across multiple components.
+
 import {
     AttributeContext,
     AttributePlugin,

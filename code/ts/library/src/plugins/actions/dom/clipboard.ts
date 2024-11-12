@@ -1,3 +1,8 @@
+// Authors: Delaney Gillilan
+// Icon: mdi:clipboard
+// Slug: Copy text to the clipboard
+// Description: This action copies text to the clipboard using the Clipboard API.
+
 import { ActionPlugin } from "../../../engine";
 
 export const Clipboard: ActionPlugin = {

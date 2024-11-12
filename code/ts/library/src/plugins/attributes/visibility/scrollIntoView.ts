@@ -1,3 +1,8 @@
+// Authors: Delaney Gillilan
+// Icon: hugeicons:mouse-scroll-01
+// Slug: Scroll an element into view
+// Description: This attribute scrolls the element into view.
+
 import { AttributeContext, AttributePlugin } from "../../../engine";
 import { scrollIntoView } from "../../../utils/dom";
 

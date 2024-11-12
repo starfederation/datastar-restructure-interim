@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 	"time"
 
@@ -26,6 +27,8 @@ import (
 var (
 	datastarBundlerRegexp = regexp.MustCompile(`import { (?P<name>[^"]*) } from "(?P<path>[^"]*)";`)
 	pluginTypeRegexp      = regexp.MustCompile(`pluginType: "(?P<name>.*)",`)
+	nameRegexp            = regexp.MustCompile(`name: "(?P<name>.*)",`)
+	prefixRegexp          = regexp.MustCompile(`prefix: "(?P<name>.*)",`)
 )
 
 type BundlerStore struct {
@@ -33,10 +36,12 @@ type BundlerStore struct {
 }
 
 type PluginDetails struct {
+	Label       string `json:"label"`
 	Name        string `json:"name"`
 	Path        string `json:"path"`
 	Type        string `json:"type"`
 	Authors     string `json:"author"`
+	Slug        string `json:"slug"`
 	Description string `json:"description"`
 	Icon        string `json:"icon"`
 	Key         string `json:"key"`
@@ -124,14 +129,27 @@ func setupBundler(router chi.Router) error {
 		key := toolbelt.Snake(strings.ReplaceAll(tsSrcFilepath, string(filepath.Separator), "_"))
 
 		details := PluginDetails{
+			Label:    name,
 			Name:     name,
 			Path:     path,
+			Icon:     "ic:baseline-rocket-launch",
 			Key:      key,
 			Contents: contents,
 		}
 
 		for _, match := range pluginTypeRegexp.FindAllStringSubmatch(contents, 1) {
-			details.Type = match[1]
+			details.Type = toolbelt.Upper(match[1])
+		}
+
+		switch details.Type {
+		case "ACTION", "PREPROCESSOR":
+			for _, match := range nameRegexp.FindAllStringSubmatch(contents, 1) {
+				details.Label = match[1]
+			}
+		case "ATTRIBUTE":
+			for _, match := range prefixRegexp.FindAllStringSubmatch(contents, 1) {
+				details.Label = "data-" + toolbelt.Kebab(match[1])
+			}
 		}
 
 		lines := strings.Split(contents, "\n")
@@ -151,6 +169,8 @@ func setupBundler(router chi.Router) error {
 			value := strings.TrimSpace(lineParts[1])
 
 			switch key {
+			case "Slug":
+				details.Slug = value
 			case "Description":
 				details.Description = value
 			case "Authors":
@@ -162,6 +182,15 @@ func setupBundler(router chi.Router) error {
 
 		manifest.Plugins = append(manifest.Plugins, details)
 	}
+
+	slices.SortFunc(manifest.Plugins, func(a, b PluginDetails) int {
+		typ := strings.Compare(a.Type, b.Type)
+		if typ != 0 {
+			return typ
+		}
+
+		return strings.Compare(a.Path, b.Path)
+	})
 
 	router.Route("/bundler", func(bundlerRouter chi.Router) {
 		bundlerRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {

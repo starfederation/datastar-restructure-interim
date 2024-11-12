@@ -3,7 +3,7 @@ import { wholePrefixSuffix } from "../../../utils/regex";
 
 // Replacing $signal with ctx.store.signal.value`
 export const SignalsProcessorPlugin: PreprocessorPlugin = {
-    name: "signal",
+    name: "👾signal",
     pluginType: "preprocessor",
     regexp: wholePrefixSuffix("$", "signal", "(?<method>\\([^\\)]*\\))?"),
     replacer: (groups: RegexpGroups) => {

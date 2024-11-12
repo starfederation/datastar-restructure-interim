@@ -1,3 +1,8 @@
+// Authors: Delaney Gillilan
+// Icon: material-symbols:scrollable-header-outline
+// Slug: Add headers to a SSE request
+// Description: Add headers to a Server-Sent Events request.  In general this shouldn't be necessary, but it can be useful for debugging or working with a server that requires headers or when interacting with a backend that requires headers.
+
 import { AttributePlugin, RegexpGroups } from "../../../engine";
 
 export const Headers: AttributePlugin = {

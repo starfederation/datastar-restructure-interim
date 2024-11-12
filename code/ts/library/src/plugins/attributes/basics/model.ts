@@ -1,3 +1,8 @@
+// Authors: Delaney Gillilan
+// Icon: clarity:two-way-arrows-line
+// Slug: Enable two-way data binding
+// Description: This attribute plugin enables two-way data binding for input elements.
+
 import { AttributePlugin, RegexpGroups } from "../../../engine";
 
 const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;

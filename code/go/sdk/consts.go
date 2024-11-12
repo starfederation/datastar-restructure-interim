@@ -4,8 +4,8 @@ import "time"
 
 const (
 	Version                        = "0.20.0-beta"
-	VersionClientByteSize          = 43974
-	VersionClientByteSizeGzip      = 15017
+	VersionClientByteSize          = 43989
+	VersionClientByteSizeGzip      = 15026
 	VersionClientByteSizeGzipHuman = "15 KiB"
 
 	DefaultSettleTime = 300 * time.Millisecond
