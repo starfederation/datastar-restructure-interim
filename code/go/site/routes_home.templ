@@ -2,6 +2,7 @@ package site
 
 import (
 	"fmt"
+	"github.com/dustin/go-humanize"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"math"
 )
@@ -23,7 +24,7 @@ templ Home() {
 				</div>
 				<p>
 					A single
-					<span class="text-lg font-bold text-primary">{ datastar.VersionClientByteSizeGzipHuman }</span>
+					<span class="text-lg font-bold text-primary">{ humanize.IBytes( datastar.VersionClientByteSizeGzip) }</span>
 					CDN link gives you access to everything needed to rival a full-stack SPA framework; all in the language of your choice.
 					To give some perspective, the entire Datastar framework is over <span class="text-lg font-bold text-primary">{ fmt.Sprintf("%.0f", math.Floor(186*1024/float64(datastar.VersionClientByteSizeGzip))) }x</span> smaller than the rocket image above.
 				</p>

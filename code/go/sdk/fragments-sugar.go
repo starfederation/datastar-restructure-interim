@@ -16,7 +16,7 @@ var ValidFragmentMergeTypes = []FragmentMergeMode{
 	FragmentMergeModeAppend,
 	FragmentMergeModeBefore,
 	FragmentMergeModeAfter,
-	FragmentMergeModeUpsert,
+	FragmentMergeModeUpsertAttributes,
 }
 
 func FragmentMergeTypeFromString(s string) (FragmentMergeMode, error) {
@@ -49,7 +49,7 @@ func WithMergeAfter() RenderFragmentOption {
 }
 
 func WithMergeUpsertAttributes() RenderFragmentOption {
-	return WithMergeMode(FragmentMergeModeUpsert)
+	return WithMergeMode(FragmentMergeModeUpsertAttributes)
 }
 
 func WithQuerySelectorID(id string) RenderFragmentOption {

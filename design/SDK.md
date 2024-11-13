@@ -14,7 +14,7 @@ Provide an SDK in a language agnostic way, to that end
 ### Status
 
 - [x] Create a document (this) to allow any one to make a spec compliant SDK for any language or framework
-- [ ] Provide a [reference implementation](../code/go/sdk) in Go
+- [x] Provide a [reference implementation](../code/go/sdk) in Go
 - [ ] Provide SDKs for
   - [ ] JS/TS
   - [ ] PHP
@@ -56,10 +56,10 @@ The core mechanics of Datastar's SSE support is
 
 ```
 ServerSentEventGenerator.send(
-    eventType: EventType, 
-    dataLines: string[], 
+    eventType: EventType,
+    dataLines: string[],
     options?: {
-        eventId?: string, 
+        eventId?: string,
         retryDuration?: durationInMilliseconds
     }
 )
@@ -98,13 +98,13 @@ When called the function ***must*** write to the response buffer the following i
 
 ```
 ServerSentEventGenerator.RenderFragment(
-    data: string, 
-    options?: { 
-        selector?: string, 
-        mergeMode?: FragmentMergeMode, 
-        settleDuration?: durationInMilliseconds, 
+    data: string,
+    options?: {
+        selector?: string,
+        mergeMode?: FragmentMergeMode,
+        settleDuration?: durationInMilliseconds,
         useViewTransition?: boolean,
-        eventId?: string, 
+        eventId?: string,
         retry?: durationInMilliseconds
      }
  )
@@ -147,11 +147,11 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 ```
 ServerSentEventGenerator.RemoveFragments(
-    selector: string, 
-    options?: { 
-        settleDuration?: durationInMilliseconds, 
+    selector: string,
+    options?: {
+        settleDuration?: durationInMilliseconds,
         useViewTransition?: boolean,
-        eventId?: string, 
+        eventId?: string,
         retry?: durationInMilliseconds
     }
 )
@@ -174,10 +174,10 @@ ServerSentEventGenerator.RemoveFragments(
 
 ```
 ServerSentEventGenerator.PatchStore(
-    data: string, 
-    options ?: { 
+    data: string,
+    options ?: {
         onlyIfMissing?: boolean,
-        eventId?: string, 
+        eventId?: string,
         retry?: durationInMilliseconds
      }
  )
@@ -202,9 +202,9 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 ```html
 ServerSentEventGenerator.RemoveFromStore(
-    paths: string[], 
-    options?: { 
-        eventId?: string, 
+    paths: string[],
+    options?: {
+        eventId?: string,
         retry?: durationInMilliseconds
     }
 )
@@ -226,9 +226,9 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 ```
 ServerSentEventGenerator.Redirect(
-    url: string, 
-    options?: { 
-        eventId?: string, 
+    url: string,
+    options?: {
+        eventId?: string,
         retry?: durationInMilliseconds
     }
 )
@@ -246,10 +246,10 @@ ServerSentEventGenerator.Redirect(
 
 ```
 ServerSentEventGenerator.Console(
-    mode: ConsoleMode, 
-    message: string, 
-    options?: { 
-        eventId?: string, 
+    mode: ConsoleMode,
+    message: string,
+    options?: {
+        eventId?: string,
         retry?: durationInMilliseconds
     }
 )

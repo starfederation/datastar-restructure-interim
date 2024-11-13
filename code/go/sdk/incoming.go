@@ -12,7 +12,7 @@ func ParseIncoming(r *http.Request, store any) error {
 	var dsInput []byte
 
 	if r.Method == "GET" {
-		dsJSON := r.URL.Query().Get("datastar")
+		dsJSON := r.URL.Query().Get(DatastarKey)
 		if dsJSON == "" {
 			return nil
 		} else {
