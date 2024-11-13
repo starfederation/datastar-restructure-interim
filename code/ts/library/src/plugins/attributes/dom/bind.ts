@@ -1,7 +1,12 @@
-import { AttributePlugin } from "library/src/engine";
-import { kebabize } from "library/src/utils/text";
+// Authors: Delaney Gillilan
+// Icon: akar-icons:link-chain
+// Slug: Bind attributes to expressions
+// Description: Any attribute can be bound to an expression. The attribute will be updated reactively whenever the expression signal changes.
 
-export const BindAttributePlugin: AttributePlugin = {
+import { AttributePlugin } from "../../../engine";
+import { kebabize } from "../../../utils/text";
+
+export const Bind: AttributePlugin = {
     pluginType: "attribute",
     prefix: "bind",
     mustNotEmptyKey: true,

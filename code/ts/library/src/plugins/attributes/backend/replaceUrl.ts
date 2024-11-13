@@ -1,8 +1,11 @@
-import {
-    AttributePlugin,
-} from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: carbon:url
+// Slug: Replace the current URL with a new URL
+// Description: This plugin allows you to replace the current URL with a new URL.  Once you add this attribute the current URL will be replaced with the new URL.
 
-export const ReplaceUrlAttributePlugin: AttributePlugin = {
+import { AttributePlugin } from "../../../engine";
+
+export const ReplaceUrl: AttributePlugin = {
     pluginType: "attribute",
     prefix: "replaceUrl",
     mustHaveEmptyKey: true,
@@ -13,6 +16,6 @@ export const ReplaceUrlAttributePlugin: AttributePlugin = {
         const baseUrl = window.location.href;
         const url = new URL(value, baseUrl).toString();
 
-        window.history.replaceState({}, '', url);
+        window.history.replaceState({}, "", url);
     },
 };

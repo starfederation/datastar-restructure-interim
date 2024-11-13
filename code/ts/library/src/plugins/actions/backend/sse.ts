@@ -1,28 +1,27 @@
-import { DATASTAR } from "library/src/engine/const";
 import {
     ActionMethod,
-    ActionPlugin,
     AttributeContext,
+    DATASTAR,
     ExpressionFunction,
-} from "library/src/engine/types";
-import {
-    INDICATOR_CLASS,
-    INDICATOR_LOADING_CLASS,
-} from "library/src/plugins/attributes/backend/fetchIndicator";
+} from "../../../engine";
 import {
     remoteSignals,
     storeFromPossibleContents,
-} from "library/src/utils/signals";
+} from "../../../utils/signals";
 import {
     docWithViewTransitionAPI,
     supportsViewTransitions,
-} from "library/src/utils/view-transitions";
+} from "../../../utils/view-transitions";
 import {
     fetchEventSource,
     FetchEventSourceInit,
-} from "library/src/vendored/fetch-event-source";
-import { idiomorph } from "library/src/vendored/idiomorph";
-import { Signal } from "library/src/vendored/preact-core";
+} from "../../../vendored/fetch-event-source";
+import { idiomorph } from "../../../vendored/idiomorph";
+import { Signal } from "../../../vendored/preact-core";
+import {
+    INDICATOR_CLASS,
+    INDICATOR_LOADING_CLASS,
+} from "../../attributes/backend/fetchIndicator";
 
 const DEFAULT_MERGE: FragmentMergeOption = "morph";
 const DEFAULT_SETTLE_DURATION = 300;
@@ -40,36 +39,6 @@ const FragmentMergeOptions = {
 } as const;
 export type FragmentMergeOption =
     (typeof FragmentMergeOptions)[keyof typeof FragmentMergeOptions];
-
-export const GetSSEActionPlugin: ActionPlugin = {
-    pluginType: "action",
-    name: "get",
-    method: fetcherActionMethod("GET"),
-};
-
-export const PostSSEActionPlugin: ActionPlugin = {
-    pluginType: "action",
-    name: "post",
-    method: fetcherActionMethod("POST"),
-};
-
-export const PutSSEActionPlugin: ActionPlugin = {
-    pluginType: "action",
-    name: "put",
-    method: fetcherActionMethod("PUT"),
-};
-
-export const PatchSSEActionPlugin: ActionPlugin = {
-    pluginType: "action",
-    name: "patch",
-    method: fetcherActionMethod("PATCH"),
-};
-
-export const DeleteSSEActionPlugin: ActionPlugin = {
-    pluginType: "action",
-    name: "delete",
-    method: fetcherActionMethod("DELETE"),
-};
 
 export function fetcherActionMethod(method: string): ActionMethod {
     return (ctx, urlExpression, onlyRemoteRaw) => {

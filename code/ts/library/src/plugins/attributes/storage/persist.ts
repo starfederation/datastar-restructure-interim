@@ -1,12 +1,17 @@
+// Authors: Delaney Gillilan
+// Icon: mdi:floppy-variant
+// Slug: Persist data to local storage or session storage
+// Description: This plugin allows you to persist data to local storage or session storage.  Once you add this attribute the data will be persisted to local storage or session storage.
+
 import {
     AttributePlugin,
     DATASTAR,
     DATASTAR_EVENT,
     DatastarEvent,
-} from "library/src/engine";
-import { remoteSignals } from "library/src/utils/signals";
+} from "../../../engine";
+import { remoteSignals } from "../../../utils/signals";
 
-export const PersistAttributePlugin: AttributePlugin = {
+export const Persist: AttributePlugin = {
     pluginType: "attribute",
     prefix: "persist",
     allowedModifiers: new Set(["local", "session", "remote"]),

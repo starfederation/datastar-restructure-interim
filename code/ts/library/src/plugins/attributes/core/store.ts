@@ -1,12 +1,17 @@
+// Authors: Delaney Gillilan
+// Icon: material-symbols:home-storage
+// Slug: Store signals into a singleton per page
+// Description: This action stores signals into a singleton per page. This is useful for storing signals that are used across multiple components.
+
 import {
     AttributeContext,
     AttributePlugin,
     RegexpGroups,
-} from "library/src/engine";
-import { storeFromPossibleContents } from "library/src/utils/signals";
+} from "../../../engine";
+import { storeFromPossibleContents } from "../../../utils/signals";
 
 // Setup the global store
-export const StoreAttributePlugin: AttributePlugin = {
+export const Store: AttributePlugin = {
     pluginType: "attribute",
     prefix: "store",
     removeNewLines: true,

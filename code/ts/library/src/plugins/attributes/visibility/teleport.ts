@@ -1,5 +1,10 @@
-import { AttributePlugin } from "library/src/engine";
-import { nodeHTMLorSVGElement } from "library/src/utils/dom";
+// Authors: Delaney Gillilan
+// Icon: game-icons:teleport
+// Slug: Teleport an element to another element
+// Description: This attribute teleports an element to another element in the DOM.
+
+import { AttributePlugin } from "../../../engine";
+import { nodeHTMLorSVGElement } from "../../../utils/dom";
 
 const PREPEND = "prepend";
 const APPEND = "append";
@@ -7,7 +12,7 @@ const teleportParentErr = new Error(
     "Target element must have a parent if using prepend or append",
 );
 // Teleports the element to another element
-export const TeleportAttributePlugin: AttributePlugin = {
+export const Teleport: AttributePlugin = {
     pluginType: "attribute",
     prefix: "teleport",
     allowedModifiers: new Set([PREPEND, APPEND]),

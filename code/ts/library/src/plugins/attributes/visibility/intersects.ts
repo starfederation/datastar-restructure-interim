@@ -1,14 +1,18 @@
-import { AttributePlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: mdi-light:vector-intersection
+// Slug: Run expression when element intersects with viewport
+// Description: An attribute that runs an expression when the element intersects with the viewport.
 
-const INTERSECTS = "intersects";
+import { AttributePlugin } from "../../../engine";
+
 const ONCE = "once";
 const HALF = "half";
 const FULL = "full";
 
 // Run expression when element intersects with viewport
-export const IntersectionAttributePlugin: AttributePlugin = {
+export const Intersection: AttributePlugin = {
     pluginType: "attribute",
-    prefix: INTERSECTS,
+    prefix: "intersects",
     allowedModifiers: new Set([ONCE, HALF, FULL]),
     mustHaveEmptyKey: true,
     onLoad: (ctx) => {

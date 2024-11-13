@@ -1,6 +1,11 @@
-import { AttributePlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: fluent:missing-metadata-24-filled
+// Slug: Add headers to fetch requests
+// Description: This plugin allows you to add headers to fetch requests.  Once you add this attribute the headers will be added to the fetch request.
 
-export const HeaderPlugin: AttributePlugin = {
+import { AttributePlugin } from "../../../engine";
+
+export const Header: AttributePlugin = {
     pluginType: "attribute",
     prefix: "header",
     mustHaveEmptyKey: true,

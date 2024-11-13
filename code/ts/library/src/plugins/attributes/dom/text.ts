@@ -1,7 +1,11 @@
-import { AttributePlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: tabler:typography
+// Slug: Set the text content of an element
+// Description: This attribute sets the text content of an element to the result of the expression.
 
-// Sets the textContent of the element
-export const TextAttributePlugin: AttributePlugin = {
+import { AttributePlugin } from "../../../engine";
+
+export const Text: AttributePlugin = {
     pluginType: "attribute",
     prefix: "text",
     mustHaveEmptyKey: true,

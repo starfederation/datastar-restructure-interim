@@ -1,8 +1,12 @@
-import { AttributePlugin } from "library/src/engine";
-import { supportsViewTransitions } from "library/src/utils/view-transitions";
+// Authors: Delaney Gillilan
+// Icon: material-symbols:masked-transitions
+// Slug: Setup view transitions
+// Description: This attribute plugin sets up view transitions for the current view. This plugin requires the view transition API to be enabled in the browser. If the browser does not support view transitions, an error will be logged to the console.
 
-// Setup view transition api
-export const ViewTransitionAttributePlugin: AttributePlugin = {
+import { AttributePlugin } from "../../../engine";
+import { supportsViewTransitions } from "../../../utils/view-transitions";
+
+export const ViewTransition: AttributePlugin = {
     pluginType: "attribute",
     prefix: "viewTransition",
     onGlobalInit() {
