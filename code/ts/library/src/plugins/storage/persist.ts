@@ -36,6 +36,7 @@ export const PersistAttributePlugin: AttributePlugin = {
             if (keys.size > 0) {
                 const newStore: Record<string, any> = {};
                 for (const key of keys) {
+                    const parts = key.split(".");
                     let newSubstore = newStore;
                     let subStore = store;
                     for (let i = 0; i < parts.length - 1; i++) {
@@ -70,7 +71,7 @@ export const PersistAttributePlugin: AttributePlugin = {
 
         window.addEventListener(DATASTAR_EVENT, storeUpdateHandler);
 
-        let marshalledStore: string | null = null;
+        let marshalledStore: string | null;
 
         if (storageType === "session") {
             marshalledStore = window.sessionStorage.getItem(key);
