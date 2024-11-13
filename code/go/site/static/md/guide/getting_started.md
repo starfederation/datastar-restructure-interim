@@ -17,19 +17,19 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 
 ### Script Tag
 
-Include Datastar in your HTML using a script tag:
+Include Datastar in your HTML using a script tag hosted on a CDN.
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.min.js" defer></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar" defer></script>
 ```
 
-If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.min.js) the file or create your own custom bundle using the [bundler](/bundler), then include it from the appropriate path:
+If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) the file or create your own custom bundle using the [bundler](/bundler), then include it from the appropriate path:
     
 ```html
 <script type="module" src="/path/to/datastar.min.js" defer></script>
 ```
 
-If you want a version with source maps, download and include the [unminified file](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.js) and the [source map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.js.map).
+If you want a version with source maps, download and include the [unminified file](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js) and the [source map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js.map).
 
 ### NPM
 
@@ -41,15 +41,15 @@ npm install @sudodevnull/datastar
 
 ## Handling State
 
-Let's start with how Datastar handles state. Enter the [`data-store`](/reference/plugins_core#store) attribute.
+Let's start with how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
 <div data-store="{ title: '' }"></div>
 ```
 
-This is a global store. If you add `data-store` to multiple elements, the values will be merged into one single store (values defined later in the DOM tree override those defined earlier). The value must be written as a JavaScript object literal _or_ using JSON syntax.
+This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). The value must be written as a JavaScript object literal _or_ using JSON syntax.
 
-Store values can be nested, which is useful for namespacing values with similar names.
+Store values are nestable, which can be useful for namespacing values.
 
 ```html
 <div data-store="{ primary: { title: '' }, secondary: { title: '' }}"></div>
@@ -57,7 +57,7 @@ Store values can be nested, which is useful for namespacing values with similar 
 
 ## Adding Reactivity
 
-Datastar provides us with a way to set up two-way data binding on an element. In our case this `input` element. Say hello to the [`data-model`](/reference/plugins_attributes#model) attribute.
+Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be place on any form field (`input`, `textarea`, `select`, `checkbox` and `radio` elements).
 
 ```html
 <input data-model="title" type="text" placeholder="Type here!">
@@ -65,7 +65,7 @@ Datastar provides us with a way to set up two-way data binding on an element. In
 
 This binds the input field's value to the store value of the same name (`title`). If either is changed, the other will automatically update. 
 
-Good stuff so far. So how can we see this? We can check the changes locally using the [`data-text`](/reference/plugins_attributes#text) attribute.
+To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
 ```html
 <div data-text="$title"></div>
@@ -79,6 +79,14 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 <div data-text="$title.toUpperCase()"></div>
 ```
 
+<div data-store="{ title1: '' }" class="alert flex flex-col items-start p-8">
+    <div>
+        Title:
+        <span data-text="$title1.toUpperCase()"></span>
+    </div>
+    <input data-model="title1" placeholder="Enter a title" class="input input-bordered">
+</div>
+
 Another common attribute is `data-show`, which can be used to show or hide an element based on whether a JavaScript expression evaluates to `true` or `false`.
 
 ```html
@@ -86,6 +94,15 @@ Another common attribute is `data-show`, which can be used to show or hide an el
 ```
 
 This results in the submit button being visible only when the title is _not_ an empty string.
+
+<div data-store="{ title2: '' }" class="alert flex flex-col items-start p-8">
+    <div>
+        Title:
+        <span data-text="$title2.toUpperCase()"></span>
+    </div>
+    <input data-model="title2" placeholder="Enter a title" class="input input-bordered">
+    <button data-show="$title2 != ''">Save</button>
+</div>
 
 ## Events
 
@@ -99,15 +116,30 @@ The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to exec
 
 This results in the `title` store value being set to `New title` when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
 
-So what else can we do with these expressions? Anything we want, really:. 
+<div data-store="{ title3: '' }" class="alert flex flex-col items-start p-8">
+    <div>
+        Title:
+        <span data-text="$title3.toUpperCase()"></span>
+    </div>
+    <input data-model="title3" placeholder="Enter a title" class="input input-bordered">
+    <button data-on-click="$title3 = 'New title'">Reset</button>
+</div>
+
+So what else can we do with these expressions? Well anything we want, really:. 
 
 ```html
-<div data-on-click="$prompt = prompt('Enter a value', $prompt); confirm('Are you sure?') && console.log($prompt)">
+<button data-on-click="$prompt = prompt('Enter a value', $prompt); confirm('Are you sure?') && console.log($prompt)">
     Click me to log a prompt value
-</div>
+</button>
 ```
 
-We've only scratched the surface of frontend reactivity, but let's take a look at backend reactivity.
+<div data-store="{ prompt: '' }" class="alert flex flex-col items-start p-8">
+    <button data-on-click="$prompt = prompt('Enter a value', $prompt); confirm('Are you sure?') && console.log($prompt)">
+        Click me to log a prompt value
+    </button>
+</div>
+
+We've only scratched the surface of frontend reactivity, but let's now take a look at how the backend can come into play.
 
 ## Backend Setup
 
