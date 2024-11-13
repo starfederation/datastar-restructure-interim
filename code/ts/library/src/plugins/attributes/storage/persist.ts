@@ -76,7 +76,7 @@ export const Persist: AttributePlugin = {
 
         window.addEventListener(DATASTAR_EVENT, storeUpdateHandler);
 
-        let marshalledStore: string | null = null;
+        let marshalledStore: string | null;
 
         if (storageType === "session") {
             marshalledStore = window.sessionStorage.getItem(key);
