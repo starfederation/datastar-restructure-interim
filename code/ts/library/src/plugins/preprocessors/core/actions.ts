@@ -2,7 +2,7 @@ import { PreprocessorPlugin, RegexpGroups } from "../../../engine";
 import { wholePrefixSuffix } from "../../../utils/regex";
 
 // Replacing $$action(args) with ctx.actions.action(ctx, args)
-export const ActionsProcessorPlugin: PreprocessorPlugin = {
+export const ActionsProcessor: PreprocessorPlugin = {
     name: "action",
     pluginType: "preprocessor",
     regexp: wholePrefixSuffix("$\\$", "action", "(?<call>\\((?<args>.*)\\))?"),

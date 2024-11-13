@@ -11,7 +11,7 @@ import {
 import { storeFromPossibleContents } from "../../../utils/signals";
 
 // Setup the global store
-export const StoreAttributePlugin: AttributePlugin = {
+export const Store: AttributePlugin = {
     pluginType: "attribute",
     prefix: "store",
     removeNewLines: true,
