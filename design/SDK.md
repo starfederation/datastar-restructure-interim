@@ -55,9 +55,20 @@ The core mechanics of Datastar's SSE support is
    4. `ServerSentEventGenerator` ***should*** include an incrementing number to be used as an id for events when one is not provided
    5. Multiple calls using `ServerSentEventGenerator` should be single threaded to guarantee order.  The Go implementation use a mutex to facilitate this behavior but might not be need in a some environments
 
-### `ServerSentEventGenerator.send(eventType: EventType, dataLines: string[], options?: {id?:string, rery?:durationInMilliseconds})`
+### `ServerSentEventGenerator.send`
 
-All top level `ServerSentEventGenerator` ***should*** use a unified sending function.  This method ***should be private***
+```
+ServerSentEventGenerator.send(
+    eventType: EventType, 
+    dataLines: string[], 
+    options?: {
+        id?: string, 
+        retry?: durationInMilliseconds
+    }
+)
+```
+
+All top level `ServerSentEventGenerator` ***should*** use a unified sending function.  This method ***should be private/protected***
 
 ####  Args
 
@@ -85,7 +96,21 @@ When called the function ***must*** write to the response buffer the following i
 4.  ***Must*** write a `\n\n` to complete the event per the SSE spec.
 5.  Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
 
-### `ServerSentEventGenerator.RenderFragment(data: string, options ?: { selector?: string, merge ?: FragmentMergeMode, settleDuration?: durationInMilliseconds, useViewTransition?: boolean })`
+### `ServerSentEventGenerator.RenderFragment`
+
+```
+ServerSentEventGenerator.RenderFragment(
+    data: string, 
+    options?: { 
+        selector?: string, 
+        merge?: FragmentMergeMode, 
+        settleDuration?: durationInMilliseconds, 
+        useViewTransition?: boolean,
+        eventId?: string, 
+        retry?: durationInMilliseconds
+     }
+ )
+```
 
 `RenderFragment` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
 
@@ -120,8 +145,19 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
 4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
-### `ServerSentEventGenerator.RemoveFragments(seletor: string, options ?: { settleDuration?: durationInMilliseconds, useViewTransition?: boolean})`
+### `ServerSentEventGenerator.RemoveFragments`
 
+```
+ServerSentEventGenerator.RemoveFragments(
+    seletor: string, 
+    options?: { 
+        settleDuration?: durationInMilliseconds, 
+        useViewTransition?: boolean,
+        eventId?: string, 
+        retry?: durationInMilliseconds
+    }
+)
+```
 `RemoveFragments` is a helper function to send a signal to the browser to remove a fragment from the DOM.
 
 #### Args
@@ -135,7 +171,18 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
 
-### `ServerSentEventGenerator.PatchStore(data: string, options ?: { onlyIfMissing?: boolean })`
+### `ServerSentEventGenerator.PatchStore`
+
+```
+ServerSentEventGenerator.PatchStore(
+    data: string, 
+    options ?: { 
+        onlyIfMissing?: boolean,
+        eventId?: string, 
+        retry?: durationInMilliseconds
+     }
+ )
+```
 
 `PatchStore` is a helper function to send a signal to the browser to update the data-store.
 
@@ -152,7 +199,17 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 1. If the `onlyIfMissing` is provided the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
 
-### `ServerSentEventGenerator.RemoveFromStore(...paths: string[])`
+### `ServerSentEventGenerator.RemoveFromStore`
+
+```html
+ServerSentEventGenerator.RemoveFromStore(
+    paths: string[], 
+    options?: { 
+        eventId?: string, 
+        retry?: durationInMilliseconds
+    }
+)
+```
 
 `RemoveFromStore` is a helper function to send a signal to the browser to remove data from the data-store.
 
@@ -166,7 +223,17 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 1. The function ***must*** include the paths in the event data in the format `paths PATHS` where `PATHS` is a space separated list of the provided paths.
 
 
-### `ServerSentEventGenerator.Redirect(url: string)`
+### `ServerSentEventGenerator.Redirect`
+
+```
+ServerSentEventGenerator.Redirect(
+    url: string, 
+    options?: { 
+        eventId?: string, 
+        retry?: durationInMilliseconds
+    }
+)
+```
 
 #### Args
 
@@ -176,7 +243,18 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-redirect` event type.
 2. The function ***must*** include the URL in the event data in the format `url URL` where `URL` is the provided URL.
 
-### `ServerSentEventGenerator.Console(mode: ConsoleMode, message: string)`
+### `ServerSentEventGenerator.Console`
+
+```
+ServerSentEventGenerator.Console(
+    mode: ConsoleMode, 
+    message: string, 
+    options?: { 
+        eventId?: string, 
+        retry?: durationInMilliseconds
+    }
+)
+```
 
 `Console` allows developers to send messages directly to a browser console
 
