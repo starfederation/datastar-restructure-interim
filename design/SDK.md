@@ -52,8 +52,7 @@ The core mechanics of Datastar's SSE support is
       2. `Connection = keep-alive`
       3. `Content-Type = text/event-stream`
    3. Then the created response ***should*** `flush` immediately to avoid timeouts while 0-♾️ events are created
-   4. `ServerSentEventGenerator` ***should*** include an incrementing number to be used as an id for events when one is not provided
-   5. Multiple calls using `ServerSentEventGenerator` should be single threaded to guarantee order.  The Go implementation use a mutex to facilitate this behavior but might not be need in a some environments
+   4. Multiple calls using `ServerSentEventGenerator` should be single threaded to guarantee order.  The Go implementation use a mutex to facilitate this behavior but might not be need in a some environments
 
 ### `ServerSentEventGenerator.send`
 
@@ -85,16 +84,17 @@ Currently valid values are
 | datastar-console  | Send a message to the browser console          |
 
 ##### Options
-* `id` (string) Each event ***may*** include an `id`.  This can be used by the backend to replay events.  If one is not provided the server ***must*** include a monotonically incrementing id.  This is part of the SSE spec and is used to tell the browser how to handle the event.  For more details see https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#id
+* `id` (string) Each event ***may*** include an `id`.  This can be used by the backend to replay events.  This is part of the SSE spec and is used to tell the browser how to handle the event.  For more details see https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#id
 * `retry` (duration) Each event ***may*** include a `retry` value.  If one is not provided the SDK ***must*** default to `1 second`.  This is part of the SSE spec and is used to tell the browser how long to wait before reconnecting if the connection is lost. For more details see https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#retry
 
 #### Logic
 When called the function ***must*** write to the response buffer the following in specified order.  If any part of this process fails you ***must*** return/throw an error depending on language norms.
-1.   ***Must*** write `event: EVENT_TYPE\n` where `EVENT_TYPE` is [EventType](#EventType)
-2.   ***Must*** write `id: ID\n` where `ID` is either a user defined string or a monotonically increased integer starting at 0
-3.   For each string in the provided `dataLines`, you ***must*** write `data: DATA\n` where `DATA` is the provided string.
-4.  ***Must*** write a `\n\n` to complete the event per the SSE spec.
-5.  Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
+1. ***Must*** write `event: EVENT_TYPE\n` where `EVENT_TYPE` is [EventType](#EventType)
+2. If a user defined event `ID` is provided, the function ***must*** write `id: ID\n`.
+3. ***Must*** write `retry: RETRY\n` where `RETRY` is the provided retry duration or the default value of 1000 milliseconds, if none is provided.
+4. For each string in the provided `dataLines`, you ***must*** write `data: DATA\n` where `DATA` is the provided string.
+5. ***Must*** write a `\n\n` to complete the event per the SSE spec.
+6. Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
 
 ### `ServerSentEventGenerator.RenderFragment`
 
