@@ -2443,6 +2443,12 @@ input.tab:checked + .tab-content,
   --alert-bg-mix: var(--fallback-b1,oklch(var(--b1)/1));
 }
 
+.btm-nav > *:where(.active) {
+  border-top-width: 2px;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+}
+
 .btm-nav > *.disabled,
     .btm-nav > *[disabled] {
   pointer-events: none;
@@ -4095,6 +4101,22 @@ details.collapse summary::-webkit-details-marker {
   height: 320px;
 }
 
+.btm-nav-xs > *:where(.active) {
+  border-top-width: 1px;
+}
+
+.btm-nav-sm > *:where(.active) {
+  border-top-width: 2px;
+}
+
+.btm-nav-md > *:where(.active) {
+  border-top-width: 2px;
+}
+
+.btm-nav-lg > *:where(.active) {
+  border-top-width: 4px;
+}
+
 .btn-xs {
   height: 1.5rem;
   min-height: 1.5rem;
@@ -4636,6 +4658,10 @@ html:has(.drawer-toggle:checked) {
 
 .static {
   position: static;
+}
+
+.absolute {
+  position: absolute;
 }
 
 .relative {

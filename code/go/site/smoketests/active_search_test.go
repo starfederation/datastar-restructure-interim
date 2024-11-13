@@ -9,7 +9,7 @@ import (
 	"github.com/playwright-community/playwright-go"
 )
 
-func activeSearch(ctx context.Context, page playwright.Page) error {
+func activeSearchExampleTest(ctx context.Context, page playwright.Page) error {
 	searchPlaceholder := page.GetByTestId("search")
 	searchPlaceholderExpect := expect.Locator(searchPlaceholder)
 	if err := errors.Join(

@@ -186,7 +186,7 @@ use starfederation\datastar\enums\FragmentMergeMode;
 
 class Defaults
 {
-    public const DEFAULT_SETTLE_TIME = {{defaultSettleTimeMs}};
+    public const DEFAULT_SETTLE_DURATION = {{defaultSettleTimeMs}};
     public const DEFAULT_SSE_SEND_RETRY = {{defaultSSESendRetryMs}};
     public const DEFAULT_FRAGMENT_MERGE_MODE = FragmentMergeMode::Morph;
 }

@@ -21,7 +21,7 @@ import { Signal } from "../../../vendored/preact-core";
 import {
     INDICATOR_CLASS,
     INDICATOR_LOADING_CLASS,
-} from "../../attributes/backend/fetch-indicator";
+} from "../../attributes/backend/fetchIndicator";
 
 const DEFAULT_MERGE: FragmentMergeOption = "morph";
 const DEFAULT_SETTLE_DURATION = 300;
@@ -35,7 +35,7 @@ const FragmentMergeOptions = {
     AppendElement: "append",
     BeforeElement: "before",
     AfterElement: "after",
-    UpsertAttributes: "upsert_attributes",
+    UpsertAttributes: "upsertAttributes",
 } as const;
 export type FragmentMergeOption =
     (typeof FragmentMergeOptions)[keyof typeof FragmentMergeOptions];
@@ -141,9 +141,9 @@ async function fetcher(
                     const knownEventTypes = [
                         "selector",
                         "merge",
-                        "settle",
+                        "settleDuration",
                         "fragment",
-                        "vt",
+                        "useViewTransition",
                     ];
 
                     let fragment = "",

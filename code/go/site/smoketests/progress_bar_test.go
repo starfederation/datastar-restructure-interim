@@ -7,8 +7,7 @@ import (
 	"github.com/playwright-community/playwright-go"
 )
 
-func progressbar(ctx context.Context, page playwright.Page) error {
-
+func progressbarExampleTest(ctx context.Context, page playwright.Page) error {
 	progressElement := page.Locator("#progress-bar")
 	if err := expect.Locator(progressElement).ToContainText("Progress Bar"); err != nil {
 		return fmt.Errorf("could not find progress bar: %w", err)
