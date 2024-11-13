@@ -149,7 +149,7 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 ```
 ServerSentEventGenerator.RemoveFragments(
-    seletor: string, 
+    selector: string, 
     options?: { 
         settleDuration?: durationInMilliseconds, 
         useViewTransition?: boolean,
