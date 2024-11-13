@@ -103,7 +103,7 @@ ServerSentEventGenerator.RenderFragment(
     data: string, 
     options?: { 
         selector?: string, 
-        merge?: FragmentMergeMode, 
+        mergeMode?: FragmentMergeMode, 
         settleDuration?: durationInMilliseconds, 
         useViewTransition?: boolean,
         eventId?: string, 
@@ -133,17 +133,17 @@ Valid values should match the [FragmentMergeMode](#FragmentMergeMode) and curren
 | upsertAttributes | Update the attributes of the selector with the fragment |
 
 ##### Options
-* `selector` (string) The CSS selector to use to insert the fragment.  If not provided the fragment ***must*** be inserted at the end of the body.  If the selector is not found Datastar client side ***will** default to using the `id` attribute of the fragment
-* `merge` (FragmentMergeMode) The mode to use when merging the fragment into the DOM.  If not provided the Datastar client side ***will*** default to `morph`
-* `settleDuration` is used to control the amount of time that a fragment should take before removing any CSS related to settling.  It is use to allow for animations in the browser via the Datastar client.  If provided the value ***must*** be a positive integer of the number of miliiseconds to allow for the settlings.  If none is provided the default value of `300 milliseconds` will be used.
-* If useViewTransition is provided the SDK ***should*** use the provided view transition, if not provided the Datastar client side ***will*** default to `false`
+* `selector` (string) The CSS selector to use to insert the fragment.  If not provided the fragment ***must*** be inserted at the end of the body.  If the selector is not found, Datastar **will** default to using the `id` attribute of the fragment.
+* `mergeMode` (FragmentMergeMode) The mode to use when merging the fragment into the DOM.  If not provided the Datastar client side ***will*** default to `morph`.
+* `settleDuration` is used to control the amount of time that a fragment should take before removing any CSS related to settling.  It is used to allow for animations in the browser via the Datastar client.  If provided the value ***must*** be a positive integer of the number of milliseconds to allow for settling.  If none is provided, the default value of `300 milliseconds` will be used.
+* If `useViewTransition` is provided, the SDK ***should*** use the provided view transition, if not provided the Datastar client side ***will*** default to `false`.
 
 #### Logic
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-fragment` event type.
-1. If the `selector` is provided the function ***must*** include the selector in the event data in the format `selector SELECTOR`, unless the selector is the id of the fragment
-2. If the `merge` is provided the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE`, unless the merge mode is the default of `morph`.
-3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
-4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
+1. If `selector` is provided, the function ***must*** include the selector in the event data in the format `selector SELECTOR`, unless the selector is the id of the fragment
+2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE`, unless the merge mode is the default of `morph`.
+3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
+4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
 ### `ServerSentEventGenerator.RemoveFragments`
 
@@ -167,8 +167,8 @@ ServerSentEventGenerator.RemoveFragments(
 #### Logic
 1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove` event type.
 2. The function ***must*** include the selector in the event data in the format `selector SELECTOR`.
-3. If the `settleDuration` is provided the function ***must*** include the settle duration in the event data in the format `settleDuration DURATION`, unless the settle duration is the default of `300 milliseconds`.  `DURATION` should be the provided duration in milliseconds.
-4. If the `useViewTransition` is provided the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
+3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration DURATION`, unless the settle duration is the default of `300 milliseconds`.  `DURATION` should be the provided duration in milliseconds.
+4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
 
 ### `ServerSentEventGenerator.PatchStore`
@@ -197,7 +197,7 @@ Data is a JS or JSON object that will be sent to the browser to update the data-
 #### Logic
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-signal` event type.
 
-1. If the `onlyIfMissing` is provided the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
+1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
 
 ### `ServerSentEventGenerator.RemoveFromStore`
 
@@ -297,6 +297,6 @@ Valid values should match the [ConsoleAPI](https://developer.mozilla.org/en-US/d
 #### Logic
 
 1. The function ***must*** parse the incoming HTTP request
-   1. if the incoming method is `GET` then the function ***must*** parse the query string's `datastar` key and treat it as a URL encoded JSON string.
-   2. otherwise the function ***must*** parse the body of the request as a JSON encoded string.
-   3. if the incoming data is not valid JSON the function ***must*** return an error.
+   1. If the incoming method is `GET`, the function ***must*** parse the query string's `datastar` key and treat it as a URL encoded JSON string.
+   2. Otherwise, the function ***must*** parse the body of the request as a JSON encoded string.
+   3. If the incoming data is not valid JSON, the function ***must*** return an error.
