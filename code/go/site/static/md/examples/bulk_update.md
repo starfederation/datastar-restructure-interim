@@ -18,7 +18,7 @@ transition: all 1.2s;
 
 <div
     id="bulk_update"
-    data-on-load="$$get('/examples/bulk_update/data')"
+    data-on-load="get('/examples/bulk_update/data')"
 >
 </div>
 
@@ -48,8 +48,8 @@ The server will either activate or deactivate the checked users and then rerende
 event: datastar-fragment
 id: 129798448043016254
 data: selector
-data: merge upsertAttributes
-data: settle 500
+data: mergeMode upsertAttributes
+data: settleDuration 500
 data: fragment ...
 ```
 

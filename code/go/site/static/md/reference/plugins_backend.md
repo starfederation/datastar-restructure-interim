@@ -10,15 +10,15 @@ Request for data from the server via SSE and merge with the page.
 
 ## Action Plugins
 
-### `$$get`, `$$post`, `$$put`, `$$patch`, `$$delete`
+### `get`, `post`, `put`, `patch`, `delete`
 
 ```html
-<div data-on-click="$$get('/examples/click_to_edit/contact/1')"></div>
+<div data-on-click="get('/examples/click_to_edit/contact/1')"></div>
 ```
 
 Makes an HTML_VERB request to the server and merges the response with the current DOM and store. The URL can be any valid URL but the response must be a Datastar formatted SSE event.
 
-Every request will be sent with a `{datastar: *}` object containing the current store (except for store keys beginning with an underscore). When using `$$get` the store will be sent as a query parameter, otherwise it will be sent as a JSON body.
+Every request will be sent with a `{datastar: *}` object containing the current store (except for store keys beginning with an underscore). When using `get` the store will be sent as a query parameter, otherwise it will be sent as a JSON body.
 
 ## Datastar SSE Event
 
@@ -42,45 +42,45 @@ Additional `data` lines can be added to the response to override the default beh
 
 ### datastar-fragment
 
-| Key                            | Description                                                                                                             |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| `data: selector #foo`          | Selects the target element of the `merge` process using a CSS selector.                                                 |
-| `data: selector self`          | Selects the initiating element as the target.                                                                           |
-| `data: merge morph`            | Merges the fragment using [Idiomorph](https://github.com/bigskysoftware/idiomorph). This is the default merge strategy. |
-| `data: merge inner`            | Replaces the target's innerHTML with the fragment.                                                                      |
-| `data: merge outer`            | Replaces the target's outerHTML with the fragment.                                                                      |
-| `data: merge prepend`          | Prepends the fragment to the target's children.                                                                         |
-| `data: merge append`           | Appends the fragment to the target's children.                                                                          |
-| `data: merge before`           | Inserts the fragment before the target as a sibling.                                                                    |
-| `data: merge after`            | Inserts the fragment after the target as a sibling.                                                                     |
-| `data: merge upsertAttributes` | Merges attributes from the fragment into the target – useful for updating a store.                                      |
-| `data: settle 1000`            | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
-| `data: useViewTransition true` | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
-| `data: fragment`               | The HTML fragment to merge into the DOM.                                                                                |
+| Key                                | Description                                                                                                             |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `data: selector #foo`              | Selects the target element of the `merge` process using a CSS selector.                                                 |
+| `data: selector self`              | Selects the initiating element as the target.                                                                           |
+| `data: mergeMode morph`            | Merges the fragment using [Idiomorph](https://github.com/bigskysoftware/idiomorph). This is the default merge strategy. |
+| `data: mergeMode inner`            | Replaces the target's innerHTML with the fragment.                                                                      |
+| `data: mergeMode outer`            | Replaces the target's outerHTML with the fragment.                                                                      |
+| `data: mergeMode prepend`          | Prepends the fragment to the target's children.                                                                         |
+| `data: mergeMode append`           | Appends the fragment to the target's children.                                                                          |
+| `data: mergeMode before`           | Inserts the fragment before the target as a sibling.                                                                    |
+| `data: mergeMode after`            | Inserts the fragment after the target as a sibling.                                                                     |
+| `data: mergeMode upsertAttributes` | Merges attributes from the fragment into the target – useful for updating a store.                                      |
+| `data: settleDuration 1000`        | Settles the element after 1000ms, useful for transitions. Defaults to `300`.                                            |
+| `data: useViewTransition true`     | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
+| `data: fragment`                   | The HTML fragment to merge into the DOM.                                                                                |
 
-**Note:** `script` tags are not executed by the browser when merged into the DOM in this way. You should use signals and event listeners to instead.
+**Note:** `script` tags are not executed by the browser when merged into the DOM in this way. You should use signals and event listeners instead.
 
 ### datastar-signal
 
 ```go
 event: datastar-signal
-data: onlyIfMissing false
+data: onlyIfMissing true
 data: store {foo: 1234}
 ```
 
 The `datastar-signal` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `store` line should be a valid `data-store` attribute. This will get merged into the store.
 
-### datastar-delete
+### datastar-remove
 
 ```go
-event: datastar-delete
+event: datastar-remove
 data: selector #foo
 ```
 
-The `datastar-delete` event is used to delete all elements that match the provided selector.
+The `datastar-remove` event is used to remove all elements that match the provided selector.
 
 ```go
-event: datastar-delete
+event: datastar-remove
 data: paths foo.bar 1234 abc
 ```
 
@@ -118,15 +118,15 @@ The `datastar-console` event is used to output a message to the browser console.
 ```html
 <svg id="foo">Spinner</svg>
 <button
-  data-on-click="$$get('/examples/click_to_edit/contact/1')"
+  data-on-click="get('/examples/click_to_edit/contact/1')"
   data-fetch-indicator="#foo"
-  data-bind-disabled="$$isFetching('#foo')"
+  data-bind-disabled="isFetching('#foo')"
 ></button>
 ```
 
 Show a spinner when the request is in flight. The `data-fetch-indicator` attribute should be a CSS selector to the element(s). When the attribute is present, the element will be hidden when requests are not in flight and shown when they are.
 
-The `$$isFetching` action returns a computed value that allows you to easily react to the state of the indicator.
+The `isFetching` action returns a computed value that allows you to easily react to the state of the indicator.
 
 ### Replace URL
 

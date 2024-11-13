@@ -3,7 +3,7 @@
 ## Demo
 
 <div
-  data-on-load="$$get('/examples/store_ifmissing/updates')"
+  data-on-load="get('/examples/store_ifmissing/updates')"
 >
   <div>
     Should always be 1234:
@@ -17,7 +17,7 @@
 <div
   id="demo"
   data-store="{id: 1234}"
-  data-on-load="$$get('/examples/store_ifmissing/updates')"
+  data-on-load="get('/examples/store_ifmissing/updates')"
 >
   <div>
     Should always be 1234:
@@ -36,7 +36,7 @@ data: ifmissing true
 data: store {id:73}
 
 event: datastar-fragment
-data: merge upsertAttributes
+data: mergeMode upsertAttributes
 data: fragment <div id="demo" data-store.ifmissing="{id:74}"></div>
 
 event: datastar-signal
@@ -44,7 +44,7 @@ data: ifmissing true
 data: store {id:75}
 
 event: datastar-fragment
-data: merge upsertAttributes
+data: mergeMode upsertAttributes
 data: fragment <div id="demo" data-store.ifmissing="{id:76}"></div>
 
 event: datastar-signal

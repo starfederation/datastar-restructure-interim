@@ -10,7 +10,7 @@ Let’s focus on the final row (or the last element of your content):
 
 ```html
 <div
-  data-intersects="$offset=0;$limit=10;$$get('/examples/infinite_scroll/data')"
+  data-intersects="$offset=0;$limit=10;get('/examples/infinite_scroll/data')"
   id="more_btn"
 >
   <div>Loading...</div>
@@ -22,13 +22,13 @@ This last element contains a listener which, when scrolled into view, will trigg
 ```bash
 event: datastar-fragment
 data: selector #more_btn
-data: merge morph
-data: settle 500
-data: fragment <div data-intersects="$offset=10;$limit=10;$$get('/examples/infinite_scroll/data')" id="more_btn"><div>Loading...</div></div>
+data: mergeMode morph
+data: settleDuration 500
+data: fragment <div data-intersects="$offset=10;$limit=10;get('/examples/infinite_scroll/data')" id="more_btn"><div>Loading...</div></div>
 
 event: datastar-fragment
 data: selector #click_to_load_rows
-data: merge append
+data: mergeMode append
 data: settle: 500
 data: fragment <<tr id=\"agent_60\"><td>Agent Smith 3c</td><td>void61@null.org</td><td class=\"uppercase\">39b02fcf39c047c5</td></tr>"
 
@@ -42,7 +42,7 @@ Don't scroll too far, there are consequences
 <div>
 <div
     id="infinite_scroll"
-    data-on-load="$$get('/examples/infinite_scroll/data')"
+    data-on-load="get('/examples/infinite_scroll/data')"
 >
 </div>
 <div id="more_btn"></div>

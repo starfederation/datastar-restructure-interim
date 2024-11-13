@@ -21,9 +21,9 @@ function indexPage() {
         <h2>Node/Express + Datastar Example</h2>
         <main class="container" id="main" data-store='{ input: "", show: false }'>
         <input type="text" placeholder="Type here!" data-model="input" />
-        <button data-on-click="$$put('/put')">Send State</button>
+        <button data-on-click="put('/put')">Send State</button>
         <div id="output"></div>
-        <button data-on-click="$$get('/get')">Get Backend State</button>
+        <button data-on-click="get('/get')">Get Backend State</button>
         <div id="output2"></div>
         <button data-on-click="$show=!$show">Toggle</button>
         <div data-show="$show">
@@ -31,7 +31,7 @@ function indexPage() {
         </div>
         <div>
           <span>Feed from server: </span>
-          <span id="feed" data-on-load="$$get('/feed')"></span>
+          <span id="feed" data-on-load="get('/feed')"></span>
         </div>
       </body>
     </html>`;
@@ -54,7 +54,7 @@ function setHeaders(res) {
 function sendSSE({ res, frag, selector, merge, mergeType, end }) {
   res.write("event: datastar-fragment\n");
   if (selector) res.write(`data: selector ${selector}\n`);
-  if (merge) res.write(`data: merge ${mergeType}\n`);
+  if (merge) res.write(`data: mergeMode ${mergeType}\n`);
   res.write(`data: fragment ${frag}\n\n`);
   if (end) res.end();
 }

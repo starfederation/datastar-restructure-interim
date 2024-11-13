@@ -8,7 +8,7 @@ Datastar is designed to allow you to use CSS transitions to add smooth animation
 
 Datastar also allows you to use the new View Transitions API for creating animations.
 
-<div id="animations" data-on-load="$$get('/examples/animations/data')"></div>
+<div id="animations" data-on-load="get('/examples/animations/data')"></div>
 
 ## Basic CSS Animations
 
@@ -69,7 +69,7 @@ One of the nice features for reactivity is to show a spinner when a request is i
 ```html
 <button
   data-fetch-indicator="'#request_in_flight_indicator'"
-  data-on-click="$$post('/examples/animations/data/request_in_flight')"
+  data-on-click="post('/examples/animations/data/request_in_flight')"
   id="submit_request_in_flight"
 >
   Submit

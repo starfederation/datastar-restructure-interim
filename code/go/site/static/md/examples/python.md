@@ -21,14 +21,14 @@ def send_index():
     <h2>Python/Starlette + Datastar Example</h2>
     <main class="container" id="main" data-store=\'{json.dumps(store)}\'>
         <input type="text" placeholder="Send to server..." data-model="input"/>
-        <button data-on-click="$$get('/get')">Send State Roundtrip</button>
-        <button data-on-click="$$get('/target')">Target HTML Element</button>
+        <button data-on-click="get('/get')">Send State Roundtrip</button>
+        <button data-on-click="get('/target')">Target HTML Element</button>
         <button data-on-click="$show=!$show">Toggle Feed</button>
         <div id="output" data-text="$output"></div>
         <div id="{target}"></div>
         <div data-show="$show">
             <span>Feed from server: </span>
-            <span id="feed" data-on-load="$$get('/feed')"></span>
+            <span id="feed" data-on-load="get('/feed')"></span>
         </div></main></body></html>
 '''
     return HTMLResponse(index_page)
@@ -36,7 +36,7 @@ def send_index():
 def send_event(frag, merge=False):
     yield 'event: datastar-fragment\n'
     if merge:
-        yield 'data: merge upsertAttributes\n'
+        yield 'data: mergeMode upsertAttributes\n'
     yield f'data: fragment {frag}\n\n'
 
 def send_stream():

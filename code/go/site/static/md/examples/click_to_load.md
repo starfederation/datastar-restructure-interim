@@ -6,7 +6,7 @@
 
 <div
     id="click_to_load"
-    data-on-load="$$get('/examples/click_to_load/data')"
+    data-on-load="get('/examples/click_to_load/data')"
 >
 </div>
 
@@ -17,7 +17,7 @@ This example shows how to implement click-to-load the next page in a table of da
 ```html
 <button
   id="more_btn"
-  data-on-click="$offset=30; $limit=10; $$get('/examples/click_to_load/data')"
+  data-on-click="$offset=30; $limit=10; get('/examples/click_to_load/data')"
 >
   Load More
 </button>
@@ -27,32 +27,32 @@ This button respond with a set of fragments in a text/event-stream with the next
 
 ```html
 <!-- Removed styling for brevity -->
-event: datastar-fragment id: 129804115990544446 data: merge morph data:
+event: datastar-fragment id: 129804115990544446 data: mergeMode morph data:
 settle 500 data: fragment
 <button
   id="more_btn"
-  data-on-click="$offset=20; $limit=10; $$get('/examples/click_to_load/data')"
+  data-on-click="$offset=20; $limit=10; get('/examples/click_to_load/data')"
 >
   Load More
 </button>
 backend.ts:201 Received event block: event: datastar-fragment id:
-129804153571508286 data: selector #click_to_load_rows data: merge append
-data: settle 500 data: fragment
+129804153571508286 data: selector #click_to_load_rows data: mergeMode append
+data: settleDuration 500 data: fragment
 <tr id="agent_10">
   <td>Agent Smith</td>
   <td>void11@null.org</td>
   <td class="uppercase">50698444ed39c832</td>
 </tr>
 backend.ts:201 Received event block: event: datastar-fragment id:
-129804153571512382 data: selector #click_to_load_rows data: merge append
-data: settle 500 data: fragment
+129804153571512382 data: selector #click_to_load_rows data: mergeMode append
+data: settleDuration 500 data: fragment
 <tr id="agent_11">
   <td>Agent Smith</td>
   <td>void12@null.org</td>
   <td class="uppercase">205381dc855b977a</td>
 </tr>
 backend.ts:201 Received event block: id: 129804153571516478 data: selector
-#click_to_load_rows data: merge append data: settle 500 data: fragment
+#click_to_load_rows data: mergeMode append data: settleDuration 500 data: fragment
 <tr id="agent_12">
   <td>Agent Smith</td>
   <td>void13@null.org</td>

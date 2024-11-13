@@ -48,7 +48,7 @@ Takes a `$var` and converts into a `ctx.store().var.value`. Since all expression
 
 ### ActionProcessor
 
-Takes a `$$fn('foo','bar',1234)` and converts into a `ctx.actions.fn('foo','bar',1234()`. This is used to trigger actions plugins.
+Takes a `fn('foo','bar',1234)` and converts into a `ctx.actions.fn('foo','bar',1234()`. This is used to trigger actions plugins.
 
 ### RefProcessor
 

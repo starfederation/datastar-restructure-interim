@@ -3,7 +3,7 @@
 ## Demo
 
 <div
-    data-on-load="$$put('/examples/backoff/notValid')"
+    data-on-load="put('/examples/backoff/notValid')"
 >
      <div id="results">This should get replaced, but won't be.</div>
 </div>
