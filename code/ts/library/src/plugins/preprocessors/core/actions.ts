@@ -3,7 +3,7 @@ import { wholePrefixSuffix } from "../../../utils/regex";
 
 // Replacing $$action(args) with ctx.actions.action(ctx, args)
 export const ActionsProcessorPlugin: PreprocessorPlugin = {
-    name: "👾action",
+    name: "action",
     pluginType: "preprocessor",
     regexp: wholePrefixSuffix("$\\$", "action", "(?<call>\\((?<args>.*)\\))?"),
     replacer: ({ action, args }: RegexpGroups) => {

@@ -3,7 +3,7 @@ import { wholePrefixSuffix } from "../../../utils/regex";
 
 // Replacing ~foo with ctx.refs.foo
 export const RefProcessor: PreprocessorPlugin = {
-    name: "👾ref",
+    name: "ref",
     pluginType: "preprocessor",
     regexp: wholePrefixSuffix("~", "ref", "", false),
     replacer({ ref }: RegexpGroups) {
