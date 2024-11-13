@@ -16,14 +16,24 @@ tasks:
       - chmod +x code/go/site/twcli
       - go install github.com/valyala/quicktemplate/qtc@latest
 
+  qtc:
+    sources:
+      - "**/*.qtpl"
+    generates:
+      - "**/*_qtpl.go"
+    cmds:
+      - qtc
+
   tsbuild:
+    deps:
+      - tools
+      - qtc
     sources:
       - "**/package.json"
       - "**/*.ts"
     generates:
       - "bundles/**/*"
     cmds:
-      - qtc
       - go run code/go/cmd/tsbuild/main.go
       - cp -r bundles/datastar.js* code/go/site/static/js/
       - mkdir -p code/go/site/static/librarySource
