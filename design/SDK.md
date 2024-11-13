@@ -2,8 +2,6 @@
 
 ## Summary
 
-### Issue
-
 Datastar has had a few helper tools in the past for different languages.  The SDK effort is to unify around the tooling needed for Hypermedia On Whatever your Like (HOWL) based UIs.  Although Datastar the library can use any plugins the default bundle includes robust Server Sent Event (SSE) base approach.  Most current languages and backend don't have great tooling around the style of delivering content to the frontend.
 
 ### Decision
@@ -16,7 +14,7 @@ Provide an SDK in a language agnostic way, to that end
 ### Status
 
 - [x] Create a document (this) to allow any one to make a spec compliant SDK for any language or framework
-- [ ] Provide a [reference implementation](../code/go/sdkcore) in Go
+- [ ] Provide a [reference implementation](../code/go/sdk) in Go
 - [ ] Provide SDKs for
   - [ ] JS/TS
   - [ ] PHP
@@ -158,6 +156,7 @@ ServerSentEventGenerator.RemoveFragments(
     }
 )
 ```
+
 `RemoveFragments` is a helper function to send a signal to the browser to remove a fragment from the DOM.
 
 #### Args

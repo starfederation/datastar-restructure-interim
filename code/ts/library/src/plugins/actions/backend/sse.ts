@@ -172,8 +172,8 @@ async function fetcher(
                     const knownEventTypes = [
                         "selector",
                         "merge",
-                        "settleDuration",
                         "fragment",
+                        "settleDuration",
                         "useViewTransition",
                     ];
 
