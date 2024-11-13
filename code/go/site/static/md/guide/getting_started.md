@@ -9,7 +9,7 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 
 <div class="alert alert-info">
     <p>
-        We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find an example of a web app that Datastar _cannot_ realistically be used to build!
+        We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case for a web app that Datastar _cannot_ realistically be used to build!
     </p> 
 </div>
 
@@ -17,7 +17,7 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 
 ### Script Tag
 
-Include Datastar in your HTML using a script tag hosted on a CDN.
+The quickest way to use Datastar is to include it in your HTML using a script tag hosted on a CDN.
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar" type="module" defer></script>
@@ -33,7 +33,7 @@ If you want a version with source maps, download and include the [unminified fil
 
 ### NPM
 
-You can install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
+You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
 
 ```bash
 npm install @sudodevnull/datastar
