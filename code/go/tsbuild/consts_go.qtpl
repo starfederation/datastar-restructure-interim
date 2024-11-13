@@ -1,16 +1,15 @@
-{% func goConsts(data *ConstTemplateData) %}
-
+{%- func goConsts(data *ConstTemplateData) -%}
 package datastar
 
 import "time"
 
 const (
-    Version                        = "{%s data.Version %}"
-    VersionClientByteSize          = {%d data.VersionClientByteSize %}
-    VersionClientByteSizeGzip      = {%d data.VersionClientByteSizeGzip %}
-    DatastarKey                    = "{%s data.DatastarKey %}"
-    DefaultSettleTime = {%d durationToMs(data.DefaultSettleTime) %} * time.Millisecond
-    DefaultSSERetryDuration = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
+    Version                   = "{%s data.Version %}"
+    VersionClientByteSize     = {%d data.VersionClientByteSize %}
+    VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
+    DatastarKey               = "{%s data.DatastarKey %}"
+    DefaultSettleTime         = {%d durationToMs(data.DefaultSettleTime) %} * time.Millisecond
+    DefaultSSERetryDuration   = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
     DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
 )
 
@@ -18,19 +17,17 @@ const (
 type {%s enum.Name.Pascal %} string
 
 const (
-
 {%- if enum.Default != nil -%}
     // Default value for {%s enum.Name.Pascal %}
     Default{%s enum.Name.Pascal %} = {%s enum.Name.Pascal %}{%s enum.Default.Name.Pascal %}
+
 {%- endif -%}
 {%- for _, entry := range enum.Values -%}
     // {%s entry.Description %}
-    {%s enum.Name.Pascal %}{%s entry.Name.Pascal %} = "{%s entry.Value %}"
+    {%s enum.Name.Pascal %}{%s entry.Name.Pascal %} {%s enum.Name.Pascal %} = "{%s entry.Value %}"
 
 {%- endfor -%}
 )
 
 {%- endfor -%}
-
-
-{% endfunc %}
+{%- endfunc -%}

@@ -20,7 +20,7 @@ tasks:
     sources:
       - "**/*.qtpl"
     generates:
-      - "**/*_qtpl.go"
+      - "**/*.qtpl.go"
     cmds:
       - qtc
 
@@ -29,6 +29,7 @@ tasks:
       - tools
       - qtc
     sources:
+      - "**/*.qtpl"
       - "**/package.json"
       - "**/*.ts"
     generates:
