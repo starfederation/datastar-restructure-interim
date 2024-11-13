@@ -27,17 +27,17 @@ package datastar
 import "time"
 
 const (
-	Version                        = "`)
+    Version                        = "`)
 //line code/go/tsbuild/consts_go.qtpl:8
 	qw422016.E().S(data.Version)
 //line code/go/tsbuild/consts_go.qtpl:8
 	qw422016.N().S(`"
-	VersionClientByteSize          = `)
+    VersionClientByteSize          = `)
 //line code/go/tsbuild/consts_go.qtpl:9
 	qw422016.N().D(data.VersionClientByteSize)
 //line code/go/tsbuild/consts_go.qtpl:9
 	qw422016.N().S(`
-	VersionClientByteSizeGzip      = `)
+    VersionClientByteSizeGzip      = `)
 //line code/go/tsbuild/consts_go.qtpl:10
 	qw422016.N().D(data.VersionClientByteSizeGzip)
 //line code/go/tsbuild/consts_go.qtpl:10
@@ -47,117 +47,116 @@ const (
 	qw422016.E().S(data.DatastarKey)
 //line code/go/tsbuild/consts_go.qtpl:11
 	qw422016.N().S(`"
-
-	DefaultSettleTime = `)
-//line code/go/tsbuild/consts_go.qtpl:13
+    DefaultSettleTime = `)
+//line code/go/tsbuild/consts_go.qtpl:12
 	qw422016.N().D(durationToMs(data.DefaultSettleTime))
-//line code/go/tsbuild/consts_go.qtpl:13
+//line code/go/tsbuild/consts_go.qtpl:12
 	qw422016.N().S(` * time.Millisecond
-	DefaultSSERetryDuration = `)
-//line code/go/tsbuild/consts_go.qtpl:14
+    DefaultSSERetryDuration = `)
+//line code/go/tsbuild/consts_go.qtpl:13
 	qw422016.N().D(durationToMs(data.DefaultSSERetryDuration))
-//line code/go/tsbuild/consts_go.qtpl:14
+//line code/go/tsbuild/consts_go.qtpl:13
 	qw422016.N().S(` * time.Millisecond
     DefaultUseViewTransitions = `)
-//line code/go/tsbuild/consts_go.qtpl:15
+//line code/go/tsbuild/consts_go.qtpl:14
 	qw422016.E().V(data.DefaultUseViewTransitions)
-//line code/go/tsbuild/consts_go.qtpl:15
+//line code/go/tsbuild/consts_go.qtpl:14
 	qw422016.N().S(`
 )
 
 `)
-//line code/go/tsbuild/consts_go.qtpl:18
+//line code/go/tsbuild/consts_go.qtpl:17
 	for _, enum := range data.Enums {
-//line code/go/tsbuild/consts_go.qtpl:18
+//line code/go/tsbuild/consts_go.qtpl:17
 		qw422016.N().S(`type `)
-//line code/go/tsbuild/consts_go.qtpl:19
+//line code/go/tsbuild/consts_go.qtpl:18
 		qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:19
+//line code/go/tsbuild/consts_go.qtpl:18
 		qw422016.N().S(` string
 
 const (
 
 `)
-//line code/go/tsbuild/consts_go.qtpl:23
+//line code/go/tsbuild/consts_go.qtpl:22
 		if enum.Default != nil {
-//line code/go/tsbuild/consts_go.qtpl:23
+//line code/go/tsbuild/consts_go.qtpl:22
 			qw422016.N().S(`    // Default value for `)
-//line code/go/tsbuild/consts_go.qtpl:24
+//line code/go/tsbuild/consts_go.qtpl:23
 			qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:24
+//line code/go/tsbuild/consts_go.qtpl:23
 			qw422016.N().S(`
     Default`)
-//line code/go/tsbuild/consts_go.qtpl:25
+//line code/go/tsbuild/consts_go.qtpl:24
 			qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:25
+//line code/go/tsbuild/consts_go.qtpl:24
 			qw422016.N().S(` = `)
-//line code/go/tsbuild/consts_go.qtpl:25
+//line code/go/tsbuild/consts_go.qtpl:24
 			qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:25
+//line code/go/tsbuild/consts_go.qtpl:24
 			qw422016.E().S(enum.Default.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:25
+//line code/go/tsbuild/consts_go.qtpl:24
 			qw422016.N().S(`
 `)
-//line code/go/tsbuild/consts_go.qtpl:26
+//line code/go/tsbuild/consts_go.qtpl:25
 		}
-//line code/go/tsbuild/consts_go.qtpl:27
+//line code/go/tsbuild/consts_go.qtpl:26
 		for _, entry := range enum.Values {
-//line code/go/tsbuild/consts_go.qtpl:27
+//line code/go/tsbuild/consts_go.qtpl:26
 			qw422016.N().S(`    // `)
-//line code/go/tsbuild/consts_go.qtpl:28
+//line code/go/tsbuild/consts_go.qtpl:27
 			qw422016.E().S(entry.Description)
-//line code/go/tsbuild/consts_go.qtpl:28
+//line code/go/tsbuild/consts_go.qtpl:27
 			qw422016.N().S(`
     `)
-//line code/go/tsbuild/consts_go.qtpl:29
+//line code/go/tsbuild/consts_go.qtpl:28
 			qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:29
+//line code/go/tsbuild/consts_go.qtpl:28
 			qw422016.E().S(entry.Name.Pascal)
-//line code/go/tsbuild/consts_go.qtpl:29
+//line code/go/tsbuild/consts_go.qtpl:28
 			qw422016.N().S(` = "`)
-//line code/go/tsbuild/consts_go.qtpl:29
+//line code/go/tsbuild/consts_go.qtpl:28
 			qw422016.E().S(entry.Value)
-//line code/go/tsbuild/consts_go.qtpl:29
+//line code/go/tsbuild/consts_go.qtpl:28
 			qw422016.N().S(`"
 
 `)
-//line code/go/tsbuild/consts_go.qtpl:31
+//line code/go/tsbuild/consts_go.qtpl:30
 		}
-//line code/go/tsbuild/consts_go.qtpl:31
+//line code/go/tsbuild/consts_go.qtpl:30
 		qw422016.N().S(`)
 
 `)
-//line code/go/tsbuild/consts_go.qtpl:34
+//line code/go/tsbuild/consts_go.qtpl:33
 	}
-//line code/go/tsbuild/consts_go.qtpl:34
+//line code/go/tsbuild/consts_go.qtpl:33
 	qw422016.N().S(`
 
 `)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 }
 
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 func writegoConsts(qq422016 qtio422016.Writer, data *ConstTemplateData) {
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	streamgoConsts(qw422016, data)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	qt422016.ReleaseWriter(qw422016)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 }
 
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 func goConsts(data *ConstTemplateData) string {
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	qb422016 := qt422016.AcquireByteBuffer()
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	writegoConsts(qb422016, data)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	qs422016 := string(qb422016.B)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	qt422016.ReleaseByteBuffer(qb422016)
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 	return qs422016
-//line code/go/tsbuild/consts_go.qtpl:37
+//line code/go/tsbuild/consts_go.qtpl:36
 }

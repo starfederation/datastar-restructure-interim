@@ -5,13 +5,12 @@ package datastar
 import "time"
 
 const (
-	Version                        = "{%s data.Version %}"
-	VersionClientByteSize          = {%d data.VersionClientByteSize %}
-	VersionClientByteSizeGzip      = {%d data.VersionClientByteSizeGzip %}
+    Version                        = "{%s data.Version %}"
+    VersionClientByteSize          = {%d data.VersionClientByteSize %}
+    VersionClientByteSizeGzip      = {%d data.VersionClientByteSizeGzip %}
     DatastarKey                    = "{%s data.DatastarKey %}"
-
-	DefaultSettleTime = {%d durationToMs(data.DefaultSettleTime) %} * time.Millisecond
-	DefaultSSERetryDuration = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
+    DefaultSettleTime = {%d durationToMs(data.DefaultSettleTime) %} * time.Millisecond
+    DefaultSSERetryDuration = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
     DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
 )
 
