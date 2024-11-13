@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/delaneyj/toolbelt"
@@ -134,7 +135,7 @@ func writeOutConsts(version string) error {
 	}
 
 	for path, tmplFn := range templates {
-		contents := tmplFn(ConstsData)
+		contents := strings.TrimSpace(tmplFn(ConstsData))
 		if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
 			return fmt.Errorf("error writing version file: %w", err)
 		}
@@ -143,22 +144,6 @@ func writeOutConsts(version string) error {
 	return nil
 }
 
-// var templates = map[string]string{
-// 	"code/go/sdk/consts.go": `
-// package datastar
-
-// import "time"
-
-// const (
-// 	Version                        = "{{version}}"
-// 	VersionClientByteSize          = {{datastarSizeBytes}}
-// 	VersionClientByteSizeGzip      = {{datastarGzipSizeBytes}}
-// 	VersionClientByteSizeGzipHuman = "{{datastarGzipSizByteseHuman}}"
-
-// 	DefaultSettleTime = {{defaultSettleTimeMs}} * time.Millisecond
-// 	DefaultSseSendRetry = {{defaultSSESendRetryMs}} * time.Millisecond
-// 	DefaultFragmentMergeMode = FragmentMergeMode("{{defaultFragmentMergeMode}}")
-// )
 // `,
 // 	"code/php/sdk/src/Defaults.php": `
 // <?php

@@ -1,5 +1,3 @@
-
-
 package datastar
 
 import "time"
@@ -130,6 +128,3 @@ const (
     ConsoleModeWarn = "warn"
 
 )
-
-
-
