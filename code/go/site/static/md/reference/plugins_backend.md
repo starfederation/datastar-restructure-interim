@@ -55,7 +55,7 @@ Additional `data` lines can be added to the response to override the default beh
 | `data: merge after`            | Inserts the fragment after the target as a sibling.                                                                     |
 | `data: merge upsertAttributes` | Merges attributes from the fragment into the target – useful for updating a store.                                      |
 | `data: settle 1000`            | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
-| `data: vt false`               | Turns off View-Transitions on Datastar messages. Defaults to `true`.                                                    |
+| `data: useViewTransition true` | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
 | `data: fragment`               | The HTML fragment to merge into the DOM.                                                                                |
 
 **Note:** `script` tags are not executed by the browser when merged into the DOM in this way. You should use signals and event listeners to instead.
