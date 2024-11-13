@@ -225,7 +225,7 @@ func setupBundler(router chi.Router) error {
 
 			bundleContents, err := bundlePlugins(tmpDir, revisedManifest)
 			if err != nil {
-				http.Error(w, "error bundling plugins: "+err.Error(), http.StatusInternalServerError)
+				sse.ConsoleErr(err)
 				return
 			}
 
