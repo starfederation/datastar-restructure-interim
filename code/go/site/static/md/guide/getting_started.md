@@ -44,7 +44,7 @@ npm install @sudodevnull/datastar
 Let's start with how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
-<div data-store="{ title: '' }"></div>
+<div data-store="{title: ''}"></div>
 ```
 
 This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). The value must be written as a JavaScript object literal _or_ using JSON syntax.
@@ -52,7 +52,7 @@ This is a global store. If you add `data-store` to multiple elements, the values
 Store values are nestable, which can be useful for namespacing values.
 
 ```html
-<div data-store="{ primary: { title: '' }, secondary: { title: '' }}"></div>
+<div data-store="{primary: {title: ''}, secondary: {title: '' }}"</div>
 ```
 
 ## Adding Reactivity
@@ -79,7 +79,7 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 <div data-text="$title.toUpperCase()"></div>
 ```
 
-<div data-store="{ title1: '' }" class="alert flex flex-col items-start p-8">
+<div data-store="{title1: ''}" class="alert flex flex-col items-start p-8">
     <div>
         Title:
         <span data-text="$title1.toUpperCase()"></span>
@@ -95,7 +95,7 @@ Another common attribute is `data-show`, which can be used to show or hide an el
 
 This results in the submit button being visible only when the title is _not_ an empty string.
 
-<div data-store="{ title2: '' }" class="alert flex flex-col items-start p-8">
+<div data-store="{title2: ''}" class="alert flex flex-col items-start p-8">
     <div>
         Title:
         <span data-text="$title2.toUpperCase()"></span>
@@ -116,7 +116,7 @@ The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to exec
 
 This results in the `title` store value being set to `New title` when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
 
-<div data-store="{ title3: '' }" class="alert flex flex-col items-start p-8">
+<div data-store="{title3: ''}" class="alert flex flex-col items-start p-8">
     <div>
         Title:
         <span data-text="$title3.toUpperCase()"></span>
@@ -133,7 +133,7 @@ So what else can we do with these expressions? Well anything we want, really:.
 </button>
 ```
 
-<div data-store="{ prompt: '' }" class="alert flex flex-col items-start p-8">
+<div data-store="{prompt: ''}" class="alert flex flex-col items-start p-8">
     <button data-on-click="$prompt = prompt('Enter a value', $prompt); confirm('Are you sure?') && console.log($prompt)">
         Click me to log a prompt value
     </button>
@@ -169,7 +169,7 @@ The `renderFragment()` method sends an event to the client with the HTML fragmen
 With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
 
 ```html
-<div data-store="{ title: '' }"></div>
+<div data-store="{title: ''}"></div>
     <h1 data-text="$title"></h1>
     <div id="greeting"></div>
     <button data-on-click="get('/actions/greeting')">
@@ -201,11 +201,11 @@ $sseGenerator->renderFragment('<div id="greeting-universe">Hello, universe!</div
 
 You can think of Datastar as an extension to HTML's [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Using `data-*` attributes (hence the name), you can introduce state to your frontend and access it anywhere in the DOM or from your backend. You can set up events that trigger requests to endpoints that respond with HTML fragments and store updates.
 
-- Declare global state: `data-store="{ foo: '' }"`
+- Declare global state: `data-store="{foo: ''}"`
 - Bind element values to store values: `data-model="foo"`
 - Set the text content of an element to an expression.: `data-text="$foo"`
 - Show or hide an element using an expression: `data-show="$foo"`
-- Modify the classes on an element: `data-class="{ 'font-bold': $foo }"`
+- Modify the classes on an element: `data-class="{'font-bold': $foo}"`
 - Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
 - Execute an expression whenever an event is triggered on an element: `data-on-click="get(/endpoint)"`
 - Persist all store values in local storage: `data-persist`
