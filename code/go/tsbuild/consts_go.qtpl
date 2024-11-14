@@ -7,10 +7,20 @@ const (
     Version                   = "{%s data.Version %}"
     VersionClientByteSize     = {%d data.VersionClientByteSize %}
     VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
-    DatastarKey               = "{%s data.DatastarKey %}"
     DefaultSettleDuration     = {%d durationToMs(data.DefaultSettleDuration) %} * time.Millisecond
     DefaultSSERetryDuration   = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
     DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
+    DefaultOnlyIfMissing      = {%v data.DefaultOnlyIfMissing %}
+
+    DatastarLiteral = "{%s data.DatastarLiteral %}"
+    SelectorLiteral = "{%s data.SelectorLiteral %}"
+    MergeLiteral = "{%s data.MergeLiteral %}"
+    SettleDurationLiteral = "{%s data.SettleDurationLiteral %}"
+    FragmentLiteral = "{%s data.FragmentLiteral %}"
+    UseViewTransitionLiteral = "{%s data.UseViewTransitionLiteral %}"
+    StoreLiteral = "{%s data.StoreLiteral %}"
+    OnlyIfMissingLiteral = "{%s data.OnlyIfMissingLiteral %}"
+    UrlLiteral = "{%s data.UrlLiteral %}"
 )
 
 {%- for _, enum := range data.Enums -%}

@@ -131,10 +131,12 @@ func writeOutConsts(version string) error {
 	}
 
 	templates := map[string]func(data *ConstTemplateData) string{
-		"code/go/sdk/consts.go": goConsts,
+		"code/go/sdk/consts.go":         goConsts,
+		"code/dotnet/sdk/src/Consts.fs": dotnetConsts,
 	}
 
 	for path, tmplFn := range templates {
+		log.Printf("Writing %s...", path)
 		contents := strings.TrimSpace(tmplFn(ConstsData))
 		if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
 			return fmt.Errorf("error writing version file: %w", err)

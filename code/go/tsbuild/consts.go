@@ -21,20 +21,38 @@ type EnumDefinition struct {
 
 type ConstTemplateData struct {
 	Version                   string
-	DatastarKey               string
 	VersionClientByteSize     int
 	VersionClientByteSizeGzip int
 	DefaultSettleDuration     time.Duration
 	DefaultSSERetryDuration   time.Duration
 	DefaultUseViewTransitions bool
+	DefaultOnlyIfMissing      bool
+	DatastarLiteral           string
+	SelectorLiteral           string
+	MergeLiteral              string
+	SettleDurationLiteral     string
+	FragmentLiteral           string
+	UseViewTransitionLiteral  string
+	StoreLiteral              string
+	OnlyIfMissingLiteral      string
+	UrlLiteral                string
 	Enums                     []*EnumDefinition
 }
 
 var ConstsData = &ConstTemplateData{
-	DatastarKey:               "datastar",
 	DefaultSettleDuration:     300 * time.Millisecond,
 	DefaultSSERetryDuration:   1 * time.Second,
 	DefaultUseViewTransitions: false,
+	DefaultOnlyIfMissing:      false,
+	DatastarLiteral:           "datastar",
+	SelectorLiteral:           "selector",
+	MergeLiteral:              "merge",
+	SettleDurationLiteral:     "settleDuration",
+	FragmentLiteral:           "fragment",
+	UseViewTransitionLiteral:  "useViewTransition",
+	StoreLiteral:              "store",
+	OnlyIfMissingLiteral:      "onlyIfMissing",
+	UrlLiteral:                "url",
 	Enums: []*EnumDefinition{
 		{
 			Name:         toolbelt.ToCasedString("FragmentMergeMode"),

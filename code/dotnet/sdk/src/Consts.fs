@@ -3,79 +3,74 @@ namespace StarFederation.Datastar
 
 open System
 
-type ServerSentEventType = | Fragment | Signal | Remove | Redirect | Console
+type FragmentMergeMode = | Morph | Inner | Outer | Prepend | Append | Before | After | UpsertAttributes
 
-type FragmentMergeMode = | Default | Morph | Inner | Outer | Prepend | Append | Before | After | UpsertAttributes
+type EventType = | Fragment | Signal | Remove | Redirect | Console
 
-type ConsoleMode =
-    | Assert | Clear | Count | CountReset | Debug | Dir | Dirxml | Error
-    | Group | GroupCollapsed | GroupEnd | Info | Log | Table | Time | TimeEnd
-    | TimeLog | Trace | Warn
+type ConsoleMode = | Assert | Clear | Count | CountReset | Debug | Dir | Dirxml | Error | Group | GroupCollapsed | GroupEnd | Info | Log | Table | Time | TimeEnd | TimeLog | Trace | Warn
+
 
 module Consts =
 
-    let [<Literal>] Version = "1.0.0-beta.1"
-    let [<Literal>] VersionClientByteSize = 43972
-    let [<Literal>] VersionClientByteSizeGzip = 15021
-    let [<Literal>] VersionClientByteSizeGzipHuman = "15 KiB"
+    let [<Literal>] Version                   = "0.20.0"
+    let [<Literal>] VersionClientByteSize     = 43803
+    let [<Literal>] VersionClientByteSizeGzip = 14866
 
-    let DefaultSettleTime = TimeSpan.FromMilliseconds 300
-    let DefaultSseSendRetry = TimeSpan.FromMilliseconds 1000
-    let [<Literal>] datastarQueryKey = "datastar"
-    let [<Literal>] DefaultUseViewTransition = false
+    let DefaultSettleDuration     = TimeSpan.FromMilliseconds 300
+    let DefaultSSERetryDuration   = TimeSpan.FromMilliseconds 1000
+    let [<Literal>] DefaultUseViewTransitions = false
     let [<Literal>] DefaultOnlyIfMissing = false
 
-    module FragmentMergeMode =
-        let toString (this:FragmentMergeMode) =
-            match this with
-            | Default -> "morph"
-            | Morph -> "morph"
-            | Inner -> "inner"
-            | Outer -> "outer"
-            | Prepend -> "prepend"
-            | Append -> "append"
-            | Before -> "before"
-            | After -> "after"
-            | UpsertAttributes -> "upsertAttributes"
+    let [<Literal>] DatastarLiteral = "datastar"
+    let [<Literal>] SelectorLiteral = "selector"
+    let [<Literal>] MergeLiteral = "merge"
+    let [<Literal>] SettleDurationLiteral = "settleDuration"
+    let [<Literal>] FragmentLiteral = "fragment"
+    let [<Literal>] UseViewTransitionLiteral = "useViewTransition"
+    let [<Literal>] StoreLiteral = "store"
+    let [<Literal>] OnlyIfMissingLiteral = "onlyIfMissing"
+    let [<Literal>] UrlLiteral = "url"
 
-    module ServerSentEventType =
-        let toString this =
+    module FragmentMergeMode =
+        let toString (this.FragmentMergeMode) =
             match this with
-            | Fragment -> "datastar-fragment"
-            | Signal -> "datastar-signal"
-            | Remove -> "datastar-remove"
-            | Redirect -> "datastar-redirect"
-            | Console -> "datastar-console"
+                | FragmentMergeMode.Morph -> "morph"
+                | FragmentMergeMode.Inner -> "inner"
+                | FragmentMergeMode.Outer -> "outer"
+                | FragmentMergeMode.Prepend -> "prepend"
+                | FragmentMergeMode.Append -> "append"
+                | FragmentMergeMode.Before -> "before"
+                | FragmentMergeMode.After -> "after"
+                | FragmentMergeMode.UpsertAttributes -> "upsertAttributes"
+
+    module EventType =
+        let toString (this.EventType) =
+            match this with
+                | EventType.Fragment -> "datastar-fragment"
+                | EventType.Signal -> "datastar-signal"
+                | EventType.Remove -> "datastar-remove"
+                | EventType.Redirect -> "datastar-redirect"
+                | EventType.Console -> "datastar-console"
 
     module ConsoleMode =
-        let toString (this:ConsoleMode) =
+        let toString (this.ConsoleMode) =
             match this with
-            | Assert -> "assert"
-            | Clear -> "clear"
-            | Count -> "count"
-            | CountReset -> "countReset"
-            | Debug -> "debug"
-            | Dir -> "dir"
-            | Dirxml -> "dirxml"
-            | Error -> "error"
-            | Group -> "group"
-            | GroupCollapsed -> "groupCollapsed"
-            | GroupEnd -> "groupEnd"
-            | Info -> "info"
-            | Log -> "log"
-            | Table -> "table"
-            | Time -> "time"
-            | TimeEnd -> "timeEnd"
-            | TimeLog -> "timeLog"
-            | Trace -> "trace"
-            | Warn -> "warn"
-
-    let [<Literal>] dataSelector = "selector"
-    let [<Literal>] dataMerge = "merge"
-    let [<Literal>] dataSettleDuration = "settleDuration"
-    let [<Literal>] dataFragment = "fragment"
-    let [<Literal>] dataUseViewTransition = "useViewTransition"
-    let [<Literal>] dataStore = "store"
-    let [<Literal>] dataOnlyIfMissing = "onlyIfMissing"
-    let [<Literal>] dataUrl = "url"
-
+                | ConsoleMode.Assert -> "assert"
+                | ConsoleMode.Clear -> "clear"
+                | ConsoleMode.Count -> "count"
+                | ConsoleMode.CountReset -> "countReset"
+                | ConsoleMode.Debug -> "debug"
+                | ConsoleMode.Dir -> "dir"
+                | ConsoleMode.Dirxml -> "dirxml"
+                | ConsoleMode.Error -> "error"
+                | ConsoleMode.Group -> "group"
+                | ConsoleMode.GroupCollapsed -> "groupCollapsed"
+                | ConsoleMode.GroupEnd -> "groupEnd"
+                | ConsoleMode.Info -> "info"
+                | ConsoleMode.Log -> "log"
+                | ConsoleMode.Table -> "table"
+                | ConsoleMode.Time -> "time"
+                | ConsoleMode.TimeEnd -> "timeEnd"
+                | ConsoleMode.TimeLog -> "timeLog"
+                | ConsoleMode.Trace -> "trace"
+                | ConsoleMode.Warn -> "warn"
