@@ -10,3 +10,11 @@ let unionCaseFromString<'a> (str:string) args =
 
 let lowerFirstCharacter item =
     String.Concat(Char.ToLowerInvariant($"%A{item}"[0]), $"%A{item}".Substring(1))
+
+let inline toLower item = item.ToString().ToLower()
+
+module ValueOption =
+    let inline fromNullable thing =
+        if thing = null
+        then ValueNone
+        else ValueSome thing
