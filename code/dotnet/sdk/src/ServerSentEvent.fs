@@ -27,11 +27,11 @@ type RenderFragmentOptions =
       SettleDuration: TimeSpan
       UseViewTransition: bool }
 module RenderFragmentOptions =
-    let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleTime; UseViewTransition = true }
+    let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleTime; UseViewTransition = Consts.DefaultUseViewTransition }
 
 type RemoveFragmentOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
 module RemoveFragmentOptions =
-    let defaults = { SettleDuration = Consts.DefaultSettleTime; UseViewTransition = false }
+    let defaults = { SettleDuration = Consts.DefaultSettleTime; UseViewTransition = Consts.DefaultUseViewTransition }
 
 type EventOptions = { EventId: string voption; Retry: TimeSpan voption }
 module EventOptions =

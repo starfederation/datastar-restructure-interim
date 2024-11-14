@@ -22,6 +22,7 @@ module Consts =
     let DefaultSettleTime = TimeSpan.FromMilliseconds 300
     let DefaultSseSendRetry = TimeSpan.FromMilliseconds 1000
     let [<Literal>] datastarQueryKey = "datastar"
+    let [<Literal>] DefaultUseViewTransition = false
 
     module FragmentMergeMode =
         let toString (this:FragmentMergeMode) =
