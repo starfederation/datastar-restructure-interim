@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>Datastar</AssemblyName>
-        <Version>0.1.0</Version>
+        <Version>0.20.0</Version>
         <RootNamespace>StarFederation.Datastar</RootNamespace>
 
         <!-- General info -->
-        <Description>ng brilliant ASP.NET Core applications using F#.</Description>
-        <Authors>Greg Holden contributors</Authors>
+        <Description>SDK for ServerSentEvents and convenience methods for Datastar</Description>
+        <Authors>Greg Holden and contributors</Authors>
         <NeutralLanguage>en-CA</NeutralLanguage>
 
         <!-- Build config -->
@@ -19,9 +19,10 @@
 
         <!-- NuGet config -->
         <PackageId>Datastar</PackageId>
-        <PackageTags>datastar;datastar-sharp;fsharp;functional;asp.net core;asp.net;.net core;routing;web;</PackageTags>
+        <PackageTags>datastar;datastar-sharp;fsharp;functional;asp.net core;asp.net;.net core;routing;web;csharp</PackageTags>
         <PackageProjectUrl>https://github.com/starfederation/datastar</PackageProjectUrl>
-        <!--<PackageIcon>icon.png</PackageIcon>-->
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageIcon>datastar_icon.svg</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <RepositoryType>git</RepositoryType>
@@ -39,9 +40,18 @@
 
     <ItemGroup>
         <Compile Include="Utility.fs" />
-        <Compile Include="Defaults.fs" />
+        <Compile Include="Consts.fs" />
         <Compile Include="ServerSentEvent.fs" />
         <Compile Include="ServerSentEventGenerator.fs" />
+        <Compile Include="DependencyInjection\HttpServices.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../../go/site/static/images/datastar_icon.svg">
+            <Pack>true</Pack>
+            <PackagePath>$(PackageIconUrl)</PackagePath>
+        </None>
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

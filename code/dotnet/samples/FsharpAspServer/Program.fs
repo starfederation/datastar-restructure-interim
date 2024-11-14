@@ -1,22 +1,24 @@
 open System
+open System.Net.Mime
 open System.Text.Json
 open System.Threading.Tasks
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
-open Microsoft.Extensions.Primitives
-open Microsoft.Net.Http.Headers
 open StarFederation.Datastar
 
 type Store = { input: string; output: string; show: bool }
 
 let storeDefaults = { input = ""; output = ""; show = true }
-let indexPage = $"""<!doctype html>
+
+let datastarjs = @"https://cdn.jsdelivr.net/gh/starfederation/datastar/bundles/datastar.js"
+//let datastarjs = @"https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"
+let indexPage = $"""
+<!doctype html>
 <html>
 <head>
     <title>F# + D* Example</title>
-    <!--<script type="module" defer src="https://cdn.jsdelivr.net/gh/starfederation/datastar/bundles/datastar.js"></script>-->
-    <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
+    <script type="module" defer src="{datastarjs}"></script>
 </head>
 <body>
     <h2>F# + D* Example</h2>
@@ -38,17 +40,11 @@ let indexPage = $"""<!doctype html>
 </body>
 </html>"""
 
-let addHeaders (headers: (string * string) list) (ctx:HttpContext) =
-    let setHeader (name, content:string) =
-        if ctx.Response.Headers.ContainsKey(name) |> not then
-            ctx.Response.Headers.Add(name, StringValues(content))
-    headers |> List.iter setHeader
-
 module Handlers =
 
     let respondHtml (html:string) = RequestDelegate(fun ctx -> task {
-        ctx.Response.Headers.Add(HeaderNames.ContentType, StringValues("text/html; charset=utf-8"))
         let bytes = System.Text.Encoding.UTF8.GetBytes(html)
+        ctx.Response.ContentType <- MediaTypeNames.Text.Html
         ctx.Response.ContentLength <- Nullable<int64>(bytes.LongLength)
         do! ctx.Response.BodyWriter.WriteAsync(bytes).AsTask() :> Task
         })
@@ -84,7 +80,8 @@ let main args =
 
     let app = builder.Build()
 
-    app.MapGet("/", Handlers.respondHtml indexPage) |> ignore
+    app.UseFileServer() |> ignore;
+
     app.MapGet("/get", Handlers.get) |> ignore
     app.MapGet("/target", Handlers.target) |> ignore
     app.MapGet("/feed", Handlers.feed) |> ignore
