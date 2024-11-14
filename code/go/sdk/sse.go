@@ -17,7 +17,6 @@ type ServerSentEventGenerator struct {
 	w               http.ResponseWriter
 	flusher         http.Flusher
 	shouldLogPanics bool
-	nextID          int
 }
 
 func NewSSE(w http.ResponseWriter, r *http.Request) *ServerSentEventGenerator {
@@ -41,7 +40,6 @@ func NewSSE(w http.ResponseWriter, r *http.Request) *ServerSentEventGenerator {
 		w:               w,
 		flusher:         flusher,
 		shouldLogPanics: true,
-		nextID:          0,
 	}
 	return sseHandler
 }
@@ -51,23 +49,23 @@ func (sse *ServerSentEventGenerator) Context() context.Context {
 }
 
 type ServerSentEventData struct {
-	Type  EventType
-	ID    string
-	Data  []string
-	Retry time.Duration
+	Type          EventType
+	EventID       string
+	Data          []string
+	RetryDuration time.Duration
 }
 
 type SSEEventOption func(*ServerSentEventData)
 
-func WithSSEId(id string) SSEEventOption {
+func WithSSEEventId(id string) SSEEventOption {
 	return func(e *ServerSentEventData) {
-		e.ID = id
+		e.EventID = id
 	}
 }
 
-func WithSSERetry(retry time.Duration) SSEEventOption {
+func WithSSERetryDuration(retryDuration time.Duration) SSEEventOption {
 	return func(e *ServerSentEventData) {
-		e.Retry = retry
+		e.RetryDuration = retryDuration
 	}
 }
 
@@ -89,9 +87,9 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 
 	// create the event
 	evt := ServerSentEventData{
-		Type:  eventType,
-		Data:  dataLines,
-		Retry: DefaultSseSendRetry,
+		Type:          eventType,
+		Data:          dataLines,
+		RetryDuration: DefaultSSERetryDuration,
 	}
 
 	// apply options
@@ -102,29 +100,26 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 	// write event type
 	if err := errors.Join(
 		writeJustError(sse.w, eventLinePrefix),
-		writeJustError(sse.w, evt.Type),
+		writeJustError(sse.w, []byte(evt.Type)),
 		writeJustError(sse.w, newLineBuf),
 	); err != nil {
 		return fmt.Errorf("failed to write event type: %w", err)
 	}
 
 	// write id if needed
-	if evt.ID == "" {
-		evt.ID = strconv.Itoa(sse.nextID)
-		sse.nextID++
-	}
-
-	if err := errors.Join(
-		writeJustError(sse.w, idLinePrefix),
-		writeJustError(sse.w, []byte(evt.ID)),
-		writeJustError(sse.w, newLineBuf),
-	); err != nil {
-		return fmt.Errorf("failed to write id: %w", err)
+	if evt.EventID != "" {
+		if err := errors.Join(
+			writeJustError(sse.w, idLinePrefix),
+			writeJustError(sse.w, []byte(evt.EventID)),
+			writeJustError(sse.w, newLineBuf),
+		); err != nil {
+			return fmt.Errorf("failed to write id: %w", err)
+		}
 	}
 
 	// write retry if needed
-	if evt.Retry.Milliseconds() > 0 {
-		retry := int(evt.Retry.Milliseconds())
+	if evt.RetryDuration.Milliseconds() > 0 {
+		retry := int(evt.RetryDuration.Milliseconds())
 		retryStr := strconv.Itoa(retry)
 		if err := errors.Join(
 			writeJustError(sse.w, retryLinePrefix),

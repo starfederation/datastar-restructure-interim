@@ -7,11 +7,11 @@ func (sse *ServerSentEventGenerator) Redirectf(format string, args ...any) error
 	return sse.Redirect(url)
 }
 
-func (sse *ServerSentEventGenerator) Redirect(url string) error {
+func (sse *ServerSentEventGenerator) Redirect(url string, opts ...SSEEventOption) error {
 	if err := sse.send(
 		EventTypeRedirect,
 		[]string{"url " + url},
-		WithSSERetry(0),
+		opts...,
 	); err != nil {
 		return fmt.Errorf("failed to send redirect: %w", err)
 	}

@@ -38,7 +38,7 @@ Allows you to define a computed store value that automatically updates its value
 <div data-ref="foo"></div>
 ```
 
-Makes an element available in the `ctx._dsPlugins.refs` object. This is useful for accessing elements in the DOM. Can be accessed in scripts via `~foo`.
+Makes an element available in the `ctx._dsPlugins.refs` object. This is useful for accessing elements in the DOM. Can be accessed in scripts via `#(foo)`.
 
 ## Preprocessor Plugins
 
@@ -48,7 +48,7 @@ Takes a `$var` and converts into a `ctx.store().var.value`. Since all expression
 
 ### ActionProcessor
 
-Takes a `$$fn('foo','bar',1234)` and converts into a `ctx.actions.fn('foo','bar',1234()`. This is used to trigger actions plugins.
+Takes a `$fn('foo','bar',1234)` and converts into a `ctx.actions.fn('foo','bar',1234()`. This is used to trigger actions plugins.
 
 ### RefProcessor
 
