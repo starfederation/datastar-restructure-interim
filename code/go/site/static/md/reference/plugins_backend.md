@@ -10,15 +10,15 @@ Request for data from the server via SSE and merge with the page.
 
 ## Action Plugins
 
-### `$$get`, `$$post`, `$$put`, `$$patch`, `$$delete`
+### `@get`, `@post`, `@put`, `@patch`, `@delete`
 
 ```html
-<div data-on-click="$$get('/examples/click_to_edit/contact/1')"></div>
+<div data-on-click="@get('/examples/click_to_edit/contact/1')"></div>
 ```
 
 Makes an HTML_VERB request to the server and merges the response with the current DOM and store. The URL can be any valid URL but the response must be a Datastar formatted SSE event.
 
-Every request will be sent with a `{datastar: *}` object containing the current store (except for store keys beginning with an underscore). When using `$$get` the store will be sent as a query parameter, otherwise it will be sent as a JSON body.
+Every request will be sent with a `{datastar: *}` object containing the current store (except for store keys beginning with an underscore). When using `@get` the store will be sent as a query parameter, otherwise it will be sent as a JSON body.
 
 ## Datastar SSE Event
 
@@ -118,15 +118,15 @@ The `datastar-console` event is used to output a message to the browser console.
 ```html
 <svg id="foo">Spinner</svg>
 <button
-  data-on-click="$$get('/examples/click_to_edit/contact/1')"
+  data-on-click="@get('/examples/click_to_edit/contact/1')"
   data-fetch-indicator="#foo"
-  data-bind-disabled="$$isFetching('#foo')"
+  data-bind-disabled="@isFetching('#foo')"
 ></button>
 ```
 
 Show a spinner when the request is in flight. The `data-fetch-indicator` attribute should be a CSS selector to the element(s). When the attribute is present, the element will be hidden when requests are not in flight and shown when they are.
 
-The `$$isFetching` action returns a computed value that allows you to easily react to the state of the indicator.
+The `@isFetching` action returns a computed value that allows you to easily react to the state of the indicator.
 
 ### Replace URL
 

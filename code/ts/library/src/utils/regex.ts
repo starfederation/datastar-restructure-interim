@@ -9,7 +9,7 @@ export function wholePrefixSuffix(
 ) {
     const identifier = nestable ? validNestedJSIdentifier : validJSIdentifier;
     return new RegExp(
-        `(?<whole>\\${rune}(?<${prefix}>${identifier})${suffix})`,
+        `(?<whole>${rune}(?<${prefix}>${identifier})${suffix})`,
         `g`,
     );
 }

@@ -7,6 +7,7 @@
 
 ### Added
 
+- Added @ prefix for action plugins.
 - Added SDKs for .NET, Go, PHP and TypeScript.
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
@@ -20,6 +21,6 @@
 - Renamed the `vt` option to `useViewTransition` in the fragment event.
 
 ### Removed
- 
+
 - Removed the `$$` prefix for action plugins.
 - Removed the `local` and `session` modifiers from `data-store`. Use the `data-persist` attribute instead.

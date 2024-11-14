@@ -7,7 +7,7 @@
 
 <div
     id="shoelace_kitchensink"
-    data-on-load="$$get('/examples/shoelace_kitchensink/data')"
+    data-on-load="@get('/examples/shoelace_kitchensink/data')"
 >
 </div>
 
