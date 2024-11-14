@@ -41,8 +41,8 @@ On the backend (Go in this case) we return a set of render fragments in the form
 event: datastar-fragment
 id: 129618219840307262
 data: selector
-data: merge morph
-data: settle 0
+data: mergeMode morph
+data: settleDuration 0
 data: fragment <div ...>...</div>
 
 

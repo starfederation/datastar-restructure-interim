@@ -25,7 +25,7 @@ func setupExamplesBackoff(examplesRouter chi.Router) error {
 		// this is going to generate error because inner_html is not a valid merge type <= this should be also corrected in documentation; should be inner
 		//
 		// WHEN ENDPOINT IS GETTING ERROR DATASTAR IS STARTING TO REPEAT THE SAME REQUEST OVER AND OVER AGAIN
-		w.Write([]byte("data: merge inner_html\n"))
+		w.Write([]byte("data: mergeMode inner_html\n"))
 		/////////////////////////////
 		w.Write([]byte(fmt.Sprintf("data: fragment %s\n\n", frag)))
 

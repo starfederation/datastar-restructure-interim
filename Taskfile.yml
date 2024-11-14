@@ -12,6 +12,7 @@ tasks:
     cmds:
       - go install github.com/go-task/task/v3/cmd/task@latest
       - go install github.com/a-h/templ/cmd/templ@latest
+      # Replace `linux-x64` with `macos-x64` or `macos-arm64` for macOS.
       - test -f code/go/site/twcli || wget -O code/go/site/twcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v1.7.20/tailwindcss-extra-linux-x64
       - chmod +x code/go/site/twcli
       - go install github.com/valyala/quicktemplate/qtc@latest

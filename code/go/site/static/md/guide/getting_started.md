@@ -1,355 +1,245 @@
 # Getting Started
 
-## A Birds Eye View
+Datastar brings the functionality provided by libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, in one cohesive solution. It's a tiny, extensible framework that allows you to:
 
-If you are familiar with libraries like [HTMX](https://htmx.org/) or [AlpineJs](https://alpinejs.dev/); Datastar brings them together. This breaks down essentially to:
+1. Manage state and build reactivity into your frontend using HTML attributes.
+2. Modify the DOM and state by sending events from your backend.
 
-1. Send the current UI from your backend via HTML fragments like HTMX.
-2. Manage client side state that wouldn't make sense to be managed by your backend like AlpineJS.
+With Datastar, you can build any UI that a full-stack framework like React, Vue.js or Svelte can, using a much simpler, hypermedia-driven approach.
 
-I've had [thoughts](/essays/why_another_framework) on both of these in the past. TLDR; While both libraries are great, I wanted to go in a different direction.
-
-Datastar accomplishes both tasks in a unified manner and it's [tiny](https://bundlephobia.com/package/@sudodevnull/datastar).
+<div class="alert alert-info">
+    <iconify-icon icon="simple-icons:rocket"></iconify-icon>
+    <div>
+        We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case for a web app that Datastar <em>cannot</em> realistically be used to build!
+    </div>
+</div>
 
 ## Installation
 
-To get started you must first get a copy of Datastar. There are a few ways to do this.
+### Using a Script Tag
 
-**Remotely**
-
-You can include it directly into your html using a script tag:
+The quickest way to use Datastar is to include it in your HTML using a script tag hosted on a CDN.
 
 ```html
-<script
-  type="module"
-  src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.min.js"
-  defer
-></script>
+<script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
 
-**NPM**
+If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) it or create your own [custom bundle](/bundler), then include it from the appropriate path.
+    
+```html
+<script type="module" defer src="/path/to/datastar.min.js"></script>
+```
 
-For npm-style build systems, you can install Datastar via npm and then import this in your server file.
+If you want a version with source maps, download and include the [unminified file](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js) and the [source map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js.map).
+
+### Using NPM
+
+You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
 
 ```bash
-npm i @sudodevnull/datastar
+npm install @sudodevnull/datastar
 ```
-
-**Copy Locally**
-
-Here is a
-<a href="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.min.js">
-minified</a> version of the library. If you want a version with source maps use [Module](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.js) and the [Source Map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar@PACKAGE_VERSION/dist/datastar.js.map).
-
-## A Quick Primer
-
-Now let's get our feet wet. We'll walk through some ways to use Datastar with a quick example. For our example we'll just spin up an [Express](https://expressjs.com/en/starter/hello-world.html) server on Node. We'll have the server prepare a template for us when we first navigate to it.
-
-You can copy the code below to get started. Don't worry, we've already installed Datastar for you using a [CDN](#remotely).
-
-```js
-const express = require("express");
-const { randomBytes } = require("crypto");
-
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const backendData = {};
-
-function indexPage() {
-  const indexPage = `
-    <!doctype html><html>
-      <head>
-        <title>Node/Express + Datastar Example</title>
-        <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script></head>
-      <body>
-        <h2>Node/Express + Datastar Example</h2>
-        <main class="container" id="main"></main>
-      </body>
-    </html>`;
-  return indexPage;
-}
-
-app.get("/", (req, res) => {
-  res.send(indexPage()).end();
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-```
-
-We have basic server set up. Now let's get to the fun part. Let's add some Datastar functionality.
 
 ## Handling State
 
-Let's start out with how Datastar handles state. Enter the [store](/reference/plugins_core#store) attribute.
-
-Go ahead and add this as a data attribute to the `<main>` element:
+Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
-<main class="container" id="main" data-store='{ "input": "" }'></main>
+<div data-store="{title: ''}"></div>
 ```
 
-This is the global store, if you make multiple stores they will actually merge into one store behind the scenes. If there are two fields with the same name, Datastar will resolve as last in wins.
+This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). 
 
-The store is great and all but how can we use it? There are many ways. Let's check some of them out.
-
-## Some Reactivity
-
-If you had a keen eye, you noticed we put `input` as a field on our store. What's that about? Glad you asked! It's Datastar's way to sets up two-way data binding on an element. In our case this `input` element. Say hi to the [Model](/reference/plugins_attributes#model) attribute.
-
-Stick this inside of your `<main>` element:
+Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
 
 ```html
-<input type="text" placeholder="Type here!" data-model="input" />
+<div data-store="{primary: {title: ''}, secondary: {title: '' }}"></div>
 ```
 
-This binds to a signal so our store can stay up to date with whatever is typed into this input. You can even nest your state like this `{"nested":{"label":"foo"}}` and use `data-model="nested.label"` or access it from the backend as needed.
+## Adding Reactivity
 
-Good stuff so far. How can we see this? We can check the changes locally using the [data-text](/reference/plugins_attributes#text) attribute.
-
-Create a div in your `<main>` Element:
+Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be placed on `input`, `textarea`, `select`, `checkbox` and `radio` elements.
 
 ```html
-<div data-text="$input"></div>
+<input data-model="title" type="text" placeholder="Type here!">
 ```
 
-Sets the text content of an element to the value of the signal. Now check it out, client-side reactivity! We can have different types of state as well. We can even do fun stuff like `data-text="$value.toUpperCase()"`.
+This binds the input field's value to the store value of the same name (`title`). If either is changed, the other will automatically update. 
 
-Speaking of which, let's do some more! Let's play hide 'n seek with the [data-show](/reference/plugins_visibility#show) attribute.
+To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
-Add this to your store:
-
-```js
-{ input: "", show: false };
+```html
+<div data-text="$title"></div>
 ```
 
-We can hide elements and show them without using JavaScript! How will we trigger this though?
+This sets the text content of an element to the store value with the name `title`. The `$` indicates that `$title` is a store value.
+
+The value of the `data-text` attribute is an expression that is evaluated, meaning that we can include JavaScript in it.
+
+```html
+<div data-text="$title.toUpperCase()"></div>
+```
+
+<div data-store="{title1: ''}" class="alert flex flex-col items-start p-8">
+    <input data-model="title1" placeholder="Enter a title" class="input input-bordered">
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title1.toUpperCase()"></div>
+    </div>
+</div>
+
+Another common attribute is `data-show`, which can be used to show or hide an element based on whether a JavaScript expression evaluates to `true` or `false`.
+
+```html
+<button data-show="$title != ''">Save</button>
+```
+
+This results in the button being visible only when the title is _not_ empty.
+
+<div data-store="{title2: ''}" class="alert flex flex-col items-start p-8">
+    <input data-model="title2" placeholder="Enter a title" class="input input-bordered">
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title2.toUpperCase()"></div>
+    </div>
+    <button data-show="$title2 != ''" class="btn btn-primary">
+        Save
+    </button>
+</div>
+
+The `data-bind-*` attribute can be used to bind a JavaScript expression to any valid HTML attribute.
+
+```html
+<button data-bind-disabled="$title == ''">Save</button>
+```
+
+This results in the button being given the `disabled` attribute whenever the title _is_ empty.
+
+<div data-store="{title3: ''}" class="alert flex flex-col items-start p-8">
+    <input data-model="title3" placeholder="Enter a title" class="input input-bordered">
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title3.toUpperCase()"></div>
+    </div>
+    <button data-bind-disabled="$title3 == ''" class="btn btn-primary">
+        Save
+    </button>
+</div>
 
 ## Events
 
-We bring in the [On](/reference/plugins_attributes#on) attribute. This sets up an event listener on an element. In this example, we're using `data-on-click`. You will later see there are other `data-on` actions we can utilize. You can also do silly things like `data-on-click="console.log('hello world')"`.
-
-Add this inside of your `<main>` element:
+The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
 
 ```html
-<button data-on-click="$show=!$show">Toggle</button>
-<div data-show="$show">
-  <span>Hello From Datastar!</span>
+<button data-on-click="$title = ''">
+    Reset
+</button>
+```
+
+This results in the `title` store value being set to an empty string when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
+
+<div data-store="{title4: ''}" class="alert flex flex-col items-start p-8">
+    <input data-model="title4" placeholder="Enter a title" class="input input-bordered">
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title4.toUpperCase()"></div>
+    </div>
+    <button data-on-click="$title4 = ''" class="btn btn-secondary">
+        Reset
+    </button>
+</div>
+
+So what else can we do with these expressions? Anything we want, really. 
+
+See if you can guess what the following code does _before_ trying the demo below.
+
+```html
+<div data-store="{prompt: ''}">
+    <button data-on-click="$prompt = prompt()">
+        Click me
+    </button>
+    <div data-text="$prompt"></div>
 </div>
 ```
 
-So what else can we do? You can mess around and do some fun stuff with expressions. For instance, something like: `"$prompt=prompt('Enter something',$prompt);$confirm=confirm('Sure?');$confirm && $get('/sure')"` is totally feasible.
+<div data-store="{prompt: ''}" class="alert flex items-center gap-4 p-8">
+    <button data-on-click="$prompt = prompt()" class="btn btn-primary">
+        Click me
+    </button>
+    <div data-text="$prompt"></div>
+</div>
 
-Anyhow, we haven't really even scratched the surface. Let's keep going.
+We've just scratched the surface of frontend reactivity, but let's take a look at how we can bring the backend into play.
 
-## Backend Plumbing
+## Backend Setup
 
-Now, let's send some data. To do this there's a few things we must understand, but it's all fun and easy, and you'll want to know it if you do not already!
+Datastar uses [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) or SSE. There's no special backend plumbing required to use SSE, just some special syntax. Fortunately, SSE is straightforward and [provides us with some advantages](/essays/event_streams_all_the_way_down).
 
-Datastar uses [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) or SSE. To use SSE, we have to set our backend up for it. Luckily it's extremely simple and [provides us with many advantages](/essays/event_streams_all_the_way_down).
+First, set up your backend in the language of your choice. Using one of the helper SDKs (available for Go, PHP, TypeScript and .NET) will help you get up and running faster. We're going to use the SDKs in the examples below, which set the appropriate headers and format the events for us, but this is optional.
 
-Let's set things up. Copy the below code to your server.
+The following code would exist in a controller action endpoint in your backend.
 
-Copy this to your server code:
+```php
+use starfederation\datastar\ServerSentEventGenerator;
 
-```js
-function setHeaders(res) {
-  res.set({
-    "Cache-Control": "no-cache",
-    "Content-Type": "text/event-stream",
-    Connection: "keep-alive",
-  });
-  res.flushHeaders();
-}
+// Creates a new `ServerSentEventGenerator` instance.
+$sseGenerator = new ServerSentEventGenerator();
+
+// Updates the `title` store value.
+$sseGenerator->patchStore(['title' => 'Greetings']);
+
+// Renders a fragment in the DOM.
+$sseGenerator->renderFragment('<div id="greeting">Hello, world!</div>');
 ```
 
-`setHeaders` is simple a utility function we will use on our endpoints to set our headers to use SSE.
+The `patchStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
 
-Copy this to your server code:
+The `renderFragment()` method renders the HTML fragment in the DOM, replacing the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
 
-```js
-function sendSSE({ res, frag, selector, mergeType, end }) {
-  res.write("event: datastar-fragment\n");
-  if (selector) res.write(`data: selector ${selector}\n`);
-  if (mergeType?.length) res.write(`data: merge ${mergeType}\n`);
-  res.write(`data: fragment ${frag}\n\n`);
-  if (end) res.end();
-}
-```
-
-We will use `sendSSE` as another utility function that will help us configure our response to fit SSE and Datastar formats. Let's check that out real quick.
-
-## Stay In Formation
-
-SSE messages are text-based and consist of one or more "events". Each event is separated by a pair (`\n\n`) of newline characters. An individual event consists of one or more lines of text, each followed by a newline character (`\n)`), and uses a simple key-value pair [format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format).
-
-For our Datastar example:
-
-```
-event: datastar-fragment // \n
-id: 129618219840307262 // \n
-data: merge morph // \n
-data: fragment <div id="id">...</div> // \n\n
-
-```
-
-**NOTE** in the real message the comments and newlines wouldn't be visible
-
-Each data message in the event is separated by a (`\n`) newline and each event is separated by a pair of (`\n\n`) newlines. If you notice that is what we are doing in `sendSSE` except with a little flavor added so we can tell Datastar what we want to do using [Datastar's format](/reference/plugins_backend#datastar-sse-event).
-
-Now let's make our route.
-
-Copy this to your server code:
-
-```js
-app.put("/put", (req, res) => {
-  setHeaders(res);
-  const { input } = req.body;
-  backendData.input = input;
-  const output = `Your input: ${input}, is ${input.length} long.`;
-  let frag = `<div id="output">${output}</div>`;
-  sendSSE({
-    res,
-    frag,
-    end: true,
-  });
-});
-```
-
-So here you see we're setting our headers with `setHeaders`. We modify state that's stored specifically on the backend. This can be anything you want, like a database. Then we construct the response string much like HTMX and include the store attribute. We send the response with the `morph` merge type.
-
-We need to make some changes now to reflect this.
-
-Go ahead and modify your html.
-
-Change this in your `<main>` element:
+With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
 
 ```html
-<div data-text="$input"></div>
-```
-
-To this:
-
-```html
-<div id="output"></div>
-```
-
-Give ourselves a button to perform this action.
-
-Add this to your `<main>` element:
-
-```html
-<button data-on-click="$put('/put')">Send State</button>
-```
-
-...and give ourselves a place to show our new state on the client.
-
-Voilà! Now if you check out what you've done, you'll find you're able to send data to your `/put` endpoint and respond with HTML updating the output `div`. Neato!
-
-Let's retrieve the backend data we're now storing.
-
-Add this to your server code:
-
-```js
-app.get("/get", (req, res) => {
-  setHeaders(res);
-
-  const output = `Backend State: ${JSON.stringify(backendData)}.`;
-  let frag = `<div id="output2">${output}</div>`;
-
-  sendSSE({
-    res,
-    frag,
-    end: true,
-  });
-});
-```
-
-And this to your HTML:
-
-```html
-<button data-on-click="$get('/get')">Get Backend State</button>
-<div id="output2"></div>
-```
-
-We're now fetching state that's stored on the backend.
-
-Let's try something for fun. In your `/get` route, change your call to `sendSSE` so that we do not immediately end the request connection.
-
-Change your `sendSSE` function call in your `\get` route.
-
-```js
-sendSSE({
-  ...
-  end: false,
-});
-```
-
-Add this to your `sendSSE` function below the first call:
-
-```js
-frag = `<div id="output3">Check this out!</div>;`;
-sendSSE({
-  res,
-  frag,
-  selector: "#main",
-  mergeType: "prepend",
-  end: true,
-});
-```
-
-Now you'll notice you're sending two events in one call. That's because Datastar uses SSE. So using `prepend` we're able to prepend what we want to a target element. We do this using a `selector` and in our case this is the `<main>` element. Good stuff! You can check out all of Datastar's event types [here](/reference/plugins_backend).
-
-There's one last thing we're going to do. Let's add a simple data feed upon loading the page.
-
-Copy this to your server code:
-
-```js
-app.get("/feed", async (req, res) => {
-  setHeaders(res);
-  while (res.writable) {
-    const rand = randomBytes(8).toString("hex");
-    const frag = `<span id="feed">${rand}</span>`;
-    sendSSE({
-      res,
-      frag,
-      end: false,
-    });
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-  res.end();
-});
-```
-
-Add this inside your `<main>` element:
-
-```html
-<div>
-  <span>Feed from server: </span>
-  <span id="feed" data-on-load="$get('/feed')"></span>
+<div data-store="{title: ''}"></div>
+    <h1 data-text="$title"></h1>
+    <div id="greeting"></div>
+    <button data-on-click="$get('/actions/greeting')">
+        Request a greeting
+    </button>
 </div>
 ```
 
-I told you we would use another `data-on` action earlier and here it is. `data-on-load` will perform this request when the page loads. If you check things out now you should see a feed that updates using SSE upon loading. Cool!
+Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend – neat!
 
-Datastar supports all the verbs without requiring a `<form>` element: `GET, POST, PUT, PATCH, DELETE`.
+We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`, `PATCH` and `DELETE` requests, using `get()`, `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
 
-So that concludes our primer! Check out the full code for our Node example [here](/examples/node).
+```html
+<button data-on-click="$post('/actions/greeting')">
+    Send a greeting
+</button>
+```    
 
-If you're still here I imagine you want to know more. Let's define things a little better.
+One of the advantages of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
-## A Better View
+```php
+$sseGenerator->patchStore(['title' => 'Greetings']);
+$sseGenerator->patchStore(['subtitle' => 'Earthlings']);
+$sseGenerator->renderFragment('<div id="greeting-world">Hello, world!</div>');
+$sseGenerator->renderFragment('<div id="greeting-universe">Hello, universe!</div>');
+```
 
-To be more precise, think of Datastar as an extension to HTML's [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Using attributes, you can introduce state to your frontend, then access it anywhere in your DOM, or a backend of your choice. You can also set up events that trigger endpoints, then respond with HTML that targets fragments of your DOM.
+## An Overview of What's Possible
+
+You can think of Datastar as an extension to HTML's [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Using `data-*` attributes (hence the name), you can introduce state to your frontend and access it anywhere in the DOM or from your backend. You can set up events that trigger requests to endpoints that respond with HTML fragments and store updates.
 
 - Declare global state: `data-store="{foo: ''}"`
-- Link-up HTML elements to state slots: `data-model="foo"`
-- Adjust HTML elements text content: `data-text="$foo"`
-- Hookup other effects on your DOM to the state: `data-show="$foo"`
-- Setup events using `data-on-click="$get(/endpoint)"`
-- Respond in HTML wrapped in SSE with a target element ID to update
-
-It's that simple. To dive deeper check out some of the other links or just click below.
+- Bind element values to store values: `data-model="foo"`
+- Set the text content of an element to an expression.: `data-text="$foo"`
+- Show or hide an element using an expression: `data-show="$foo"`
+- Modify the classes on an element: `data-class="{'font-bold': $foo}"`
+- Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
+- Execute an expression on an event: `data-on-click="$get(/endpoint)"`
+- Persist all store values in local storage: `data-persist`
+- Create a computed store value: `data-computed-foo="$bar + 1"`
+- Create a reference to an element: `data-ref="alert"`
+- Send a header with a request: `data-header-foo="{'x-powered-by': $foo}"`
+- Replaces the URL: `data-replace-url="'/page1'"`

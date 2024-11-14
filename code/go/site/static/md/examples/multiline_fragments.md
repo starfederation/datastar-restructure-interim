@@ -11,8 +11,8 @@ As long as the fragment has a newline at the end of the line it will be treated 
 
 ```text
 event: datastar-fragment
-data: merge morph
-data: settle 500
+data: mergeMode morph
+data: settleDuration 500
 data: fragment
 data: <div id="replaceMe">
 data:   <pre>

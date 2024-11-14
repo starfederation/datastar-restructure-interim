@@ -4,59 +4,52 @@ import (
 	"fmt"
 	"github.com/dustin/go-humanize"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
-	"math"
 )
 
 templ Home() {
 	{{
-		cdnText := `<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar/bundles/datastar.js"></script>`
+		cdnText := `<script type="module" defer src="https://cdn.jsdelivr.net/gh/starfederation/datastar/bundles/datastar.js"></script>`
 	}}
 	@Page() {
 		<div class="flex flex-col w-full min-h-screen bg-base-200 md:bg-gradient-to-br md:items-center from-base-300 to-base-100">
-			<div class="flex flex-col items-center gap-8 p-4 md:pt-16 md:max-w-3xl max-w-none">
-				<img class="w-64 md:w-96" src={ staticPath("images/rocket.webp") }/>
+			<div class="flex flex-col items-center gap-7 p-4 md:pt-8 md:max-w-3xl max-w-none">
+				<img class="w-64" src={ staticPath("images/rocket.webp") }/>
 				<div class="flex flex-col items-end font-bold uppercase font-brand">
-					<div class="text-3xl md:text-6xl text-primary">Datastar</div>
+					<div class="text-3xl md:text-5xl text-primary">Datastar</div>
 					<div class="text-sm text-secondary">v{ datastar.Version }</div>
 				</div>
 				<div class="text-center font-brand">
-					<div class="text-xl">Real-time hypermedia framework</div>
+					<div class="text-xl md:text-2xl">A real-time hypermedia framework</div>
 				</div>
-				<p>
-					A single
+				<p class="md:text-xl">
+				    Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
+                </p>
+				<a
+					class="flex items-center w-full gap-1 btn btn-accent btn-lg"
+					href={ templ.SafeURL("/guide") }
+				>
+					@icon("simple-icons:rocket")
+					{ "Get started" }
+				</a>
+				<a
+					class="flex items-center w-full gap-4 btn btn-primary btn-lg"
+					href={ templ.SafeURL("/examples") }
+				>
+					@icon("svg-spinners:bars-scale-middle")
+					{ "Show me some examples!" }
+					@icon("svg-spinners:bars-scale-middle")
+				</a>
+                <p>
+				    Include Datastar with a single
 					<span class="text-lg font-bold text-primary">{ humanize.IBytes( datastar.VersionClientByteSizeGzip) }</span>
-					CDN link gives you access to everything needed to rival a full-stack SPA framework; all in the language of your choice.
-					To give some perspective, the entire Datastar framework is over <span class="text-lg font-bold text-primary">{ fmt.Sprintf("%.0f", math.Floor(186*1024/float64(datastar.VersionClientByteSizeGzip))) }x</span> smaller than the rocket image above.
+					file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (available for Go, PHP, TypeScript and .NET) to get up and running even faster.
 				</p>
-				<div class="flex flex-wrap w-full gap-4">
-					<a
-						class="flex items-center justify-center flex-1 btn bg-discord"
-						href="https://discord.gg/bnRNgZjgPh"
-					>
-						@icon("simple-icons:discord")
-						Discuss
-					</a>
-					<a
-						class="flex items-center justify-center flex-1 btn bg-github"
-						href="https://github.com/starfederation/datastar/tree/main/packages/library/src/lib"
-					>
-						@icon("simple-icons:github")
-						Source
-					</a>
-					<a
-						class="flex items-center justify-center flex-1 btn bg-reddit"
-						href="https://www.reddit.com/r/datastardev/"
-					>
-						@icon("simple-icons:reddit")
-						News
-					</a>
-				</div>
 				<div class="w-full shadow-xl card bg-base-100">
 					<div class="card-body">
 						<div class="flex items-center gap-4">
 							<button
 								class="btn btn-primary btn-ghost"
-								data-on-click={ fmt.Sprintf("$clipboard('%s')", cdnText) }
+								data-on-click={ fmt.Sprintf("$$clipboard('%s')", cdnText) }
 							>
 								@icon("material-symbols:content-copy")
 							</button>
@@ -68,23 +61,24 @@ templ Home() {
 						</div>
 					</div>
 				</div>
-				<a
-					class="flex items-center w-full gap-4 btn btn-primary btn-lg"
-					href={ templ.SafeURL("/examples") }
-				>
-					@icon("svg-spinners:bars-scale-middle")
-					{ "Show me cool examples!" }
-					@icon("svg-spinners:bars-scale-middle")
-				</a>
-				<a
-					class="flex items-center w-full gap-1 btn btn-accent btn-outline btn-lg"
-					href={ templ.SafeURL("/guide") }
-				>
-					@icon("simple-icons:rocket")
-					{ "Getting Started" }
-				</a>
+				<div class="flex flex-wrap w-full gap-4">
+					<a
+						class="flex items-center justify-center flex-1 btn bg-discord"
+						href="https://discord.gg/bnRNgZjgPh"
+					>
+						@icon("simple-icons:discord")
+						Discuss on Discord
+					</a>
+					<a
+						class="flex items-center justify-center flex-1 btn bg-github"
+						href="https://github.com/starfederation/datastar/tree/main/packages/library/src/lib"
+					>
+						@icon("simple-icons:github")
+						View the Source Code
+					</a>
+				</div>
 				<img class="w-full" src="/chart"/>
-				<div id="todosMVC" data-on-load="$get('/api/todos')">
+				<div id="todosMVC" data-on-load="$$get('/api/todos')">
 					<p>Todos Example</p>
 					<p>If you are seeing this message, please clear your cookies and refresh the page.</p>
 					<p>We recently updated the site and the old cookies are causing issues.</p>
@@ -159,7 +153,6 @@ templ TodosMVCView(mvc *TodoMVC) {
 							<p>
 								<div class="text-sm">
 									This mini application is driven by a
-									<br/>
 									<span class="italic font-bold uppercase text-primary">single get request!</span>
 									As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open your dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
 								</div>
@@ -179,7 +172,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 							<div
 								class="text-4xl"
 								id={ indicatorID }
-								data-show={ fmt.Sprintf("$isFetching('#%s')", indicatorID) }
+								data-show={ fmt.Sprintf("$$isFetching('#%s')", indicatorID) }
 							>
 								@icon("svg-spinners:blocks-shuffle-3")
 							</div>
@@ -187,10 +180,10 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<div class="tooltip" data-tip="toggle all todos">
 									<button
 										class="btn btn-lg"
-										data-on-click="$post('/api/todos/-1/toggle')"
+										data-on-click="$$post('/api/todos/-1/toggle')"
 										data-testid="toggle_all_todos"
 										data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
-										data-show={ fmt.Sprintf("!$isFetching('#%s')", indicatorID) }
+										data-show={ fmt.Sprintf("!$$isFetching('#%s')", indicatorID) }
 									>
 										@icon("material-symbols:checklist")
 									</button>
@@ -227,7 +220,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 									} else {
 										<button
 											class="btn btn-xs join-item"
-											data-on-click={ fmt.Sprintf("$put('/api/todos/mode/%d')", i) }
+											data-on-click={ fmt.Sprintf("$$put('/api/todos/mode/%d')", i) }
 											data-testid={ TodoViewModeStrings[i] + "_mode" }
 										>
 											{ TodoViewModeStrings[i] }
@@ -240,7 +233,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 									<div class="tooltip" data-tip={ fmt.Sprintf("clear %d completed todos", completed) }>
 										<button
 											class="btn btn-error btn-xs join-item"
-											data-on-click="$delete('/api/todos/-1')"
+											data-on-click="$$delete('/api/todos/-1')"
 											data-testid="clear_todos"
 										>
 											@icon("material-symbols:delete")
@@ -250,7 +243,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<div class="tooltip" data-tip="Reset list">
 									<button
 										class="btn btn-warning btn-xs join-item"
-										data-on-click="$put('/api/todos/reset')"
+										data-on-click="$$put('/api/todos/reset')"
 										data-testid="reset_todos"
 									>
 										@icon("material-symbols:delete-sweep")
@@ -277,7 +270,7 @@ templ TodoInput(i int) {
 		data-model="input"
 		data-on-keypress={ fmt.Sprintf(`
 			if (event.key === 'Enter' && $input.trim().length) {
-				$put('/api/todos/%d/edit');
+				$$put('/api/todos/%d/edit');
 				$input = '';
 			}
 		`, i) }
@@ -325,7 +318,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
 				data-testid={ fmt.Sprintf("delete_todo%d", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
-				data-show={ fmt.Sprintf("!$isFetching('#%s')", indicatorID) }
+				data-show={ fmt.Sprintf("!$$isFetching('#%s')", indicatorID) }
 			>
 				@icon("material-symbols:close")
 			</button>

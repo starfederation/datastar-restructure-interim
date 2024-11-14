@@ -5,8 +5,7 @@ module.exports = {
     extend: {
       colors: {
         discord: '#5865F2',
-        github: '#333',
-        reddit: '#FF4500',
+        github: '#554B4B',
       },
     },
     fontFamily: {

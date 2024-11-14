@@ -49,7 +49,7 @@ class FragmentMergeType(str, Enum):
   APPEND = "append"
   BEFORE = "before"
   AFTER = "after"
-  UPSERT_ATTRIBUTES = "upsert_attributes"
+  upsertAttributes = "upsertAttributes"
 
 
 class DatastarEventMessage:
@@ -67,13 +67,13 @@ class DatastarEventMessage:
       data_lines.append(f"selector {query_selector}")
 
     if merge:
-      data_lines.append(f"merge {merge.value}")
+      data_lines.append(f"mergeMode {merge.value}")
 
     if settle_duration:
-      data_lines.append(f"settle {settle_duration}")
+      data_lines.append(f"settleDuration {settle_duration}")
 
     if use_view_transitions is not None:
-      data_lines.append(f"vt {str(use_view_transitions).lower()}")
+      data_lines.append(f"useViewTransitions {str(use_view_transitions).lower()}")
 
     data_lines.append(f"fragment {fragment}")
 
