@@ -105,7 +105,7 @@ ServerSentEventGenerator.RenderFragment(
         settleDuration?: durationInMilliseconds, 
         useViewTransition?: boolean,
         eventId?: string, 
-        retry?: durationInMilliseconds
+        retryDuration?: durationInMilliseconds
      }
  )
 ```
@@ -152,7 +152,7 @@ ServerSentEventGenerator.RemoveFragments(
         settleDuration?: durationInMilliseconds, 
         useViewTransition?: boolean,
         eventId?: string, 
-        retry?: durationInMilliseconds
+        retryDuration?: durationInMilliseconds
     }
 )
 ```
@@ -178,7 +178,7 @@ ServerSentEventGenerator.PatchStore(
     options ?: { 
         onlyIfMissing?: boolean,
         eventId?: string, 
-        retry?: durationInMilliseconds
+        retryDuration?: durationInMilliseconds
      }
  )
 ```
@@ -205,7 +205,7 @@ ServerSentEventGenerator.RemoveFromStore(
     paths: string[], 
     options?: { 
         eventId?: string, 
-        retry?: durationInMilliseconds
+        retryDuration?: durationInMilliseconds
     }
 )
 ```
@@ -229,7 +229,7 @@ ServerSentEventGenerator.Redirect(
     url: string, 
     options?: { 
         eventId?: string, 
-        retry?: durationInMilliseconds
+        retryDuration?: durationInMilliseconds
     }
 )
 ```
@@ -250,7 +250,7 @@ ServerSentEventGenerator.Console(
     message: string, 
     options?: { 
         eventId?: string, 
-        retry?: durationInMilliseconds
+        retryDuration?: durationInMilliseconds
     }
 )
 ```
