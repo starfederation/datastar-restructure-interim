@@ -5,16 +5,10 @@ import { wholePrefixSuffix } from "../../../utils/regex";
 export const SignalsProcessor: PreprocessorPlugin = {
     name: "signal",
     pluginType: "preprocessor",
-    regexp: wholePrefixSuffix("$", "signal", "(?<method>\\([^\\)]*\\))?"),
+    regexp: wholePrefixSuffix("\\$", "signal", ""),
     replacer: (groups: RegexpGroups) => {
-        const { signal, method } = groups;
+        const { signal } = groups;
         const prefix = `ctx.store()`;
-        if (!method?.length) {
-            return `${prefix}.${signal}.value`;
-        }
-        const parts = signal.split(".");
-        const methodName = parts.pop();
-        const nestedSignal = parts.join(".");
-        return `${prefix}.${nestedSignal}.value.${methodName}${method}`;
+        return `${prefix}.${signal}.value`;
     },
 };

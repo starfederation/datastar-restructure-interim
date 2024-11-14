@@ -7,6 +7,7 @@ import { PatchSSE } from "../plugins/actions/backend/ssePatch";
 import { PostSSE } from "../plugins/actions/backend/ssePost";
 import { PutSSE } from "../plugins/actions/backend/ssePut";
 import { Clipboard } from "../plugins/actions/dom/clipboard";
+import { RefAction } from "../plugins/actions/dom/ref";
 import { SetAll } from "../plugins/actions/logic/setAll";
 import { ToggleAll } from "../plugins/actions/logic/toggleAll";
 import { ClampFit } from "../plugins/actions/math/clampFit";
@@ -20,6 +21,7 @@ import { Bind } from "../plugins/attributes/dom/bind";
 import { Class } from "../plugins/attributes/dom/class";
 import { Model } from "../plugins/attributes/dom/model";
 import { On } from "../plugins/attributes/dom/on";
+import { RefAttribute } from "../plugins/attributes/dom/ref";
 import { Text } from "../plugins/attributes/dom/text";
 import { Persist } from "../plugins/attributes/storage/persist";
 import { Intersection } from "../plugins/attributes/visibility/intersects";
@@ -39,6 +41,7 @@ Datastar.load(
     PutSSE,
     // actions/dom
     Clipboard,
+    RefAction,
     // actions/logic
     SetAll,
     ToggleAll,
@@ -51,11 +54,12 @@ Datastar.load(
     FetchIndicator,
     Header,
     ReplaceUrl,
-    // attributes/basics
+    // attributes/dom
     Bind,
     Class,
     Model,
     On,
+    RefAttribute,
     Text,
     // attributes/storage
     Persist,

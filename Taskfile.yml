@@ -26,7 +26,6 @@ tasks:
 
   tsbuild:
     deps:
-      - tools
       - qtc
     sources:
       - "**/*.qtpl"
@@ -68,6 +67,7 @@ tasks:
       - fuser -k 4222/tcp > /dev/null 2>&1 || true
 
   site:
+    method: none
     desc: build and run site
     sources:
       - code/go/**/*.templ

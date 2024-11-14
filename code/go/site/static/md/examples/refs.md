@@ -10,7 +10,7 @@
      >
           Stuff in store
      </pre>
-     <div data-text="`I'm using content of '${#(foo).innerHTML}'`">
+     <div data-text="`I'm using content of '${$ref('foo').innerHTML}'`">
 </div>
 
 ## Explanation
