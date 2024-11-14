@@ -23,11 +23,11 @@ import {
     INDICATOR_LOADING_CLASS,
 } from "../../attributes/backend/fetchIndicator";
 
-const DEFAULT_MERGE: FragmentMergeOption = "morph";
+const DEFAULT_MERGE_MODE: FragmentMergeMode = "morph";
 const DEFAULT_SETTLE_DURATION = 300;
 const DEFAULT_USE_VIEW_TRANSITION = false;
 
-const FragmentMergeOptions = {
+const FragmentMergeModes = {
     MorphElement: "morph",
     InnerElement: "inner",
     OuterElement: "outer",
@@ -37,8 +37,7 @@ const FragmentMergeOptions = {
     AfterElement: "after",
     UpsertAttributes: "upsertAttributes",
 } as const;
-export type FragmentMergeOption =
-    (typeof FragmentMergeOptions)[keyof typeof FragmentMergeOptions];
+export type FragmentMergeMode = (typeof FragmentMergeModes)[keyof typeof FragmentMergeModes];
 
 export function fetcherActionMethod(method: string): ActionMethod {
     return (ctx, urlExpression, onlyRemoteRaw) => {
@@ -62,7 +61,9 @@ async function fetcher(
     }
 
     let storeValue = { ...store.value };
-    if (onlyRemote) storeValue = remoteSignals(storeValue);
+    if (onlyRemote) {
+        storeValue = remoteSignals(storeValue);
+    }
     const storeJSON = JSON.stringify(storeValue);
 
     const loadingTarget = ctx.el as HTMLElement;
@@ -76,28 +77,29 @@ async function fetcher(
     );
     const indicatorElements: HTMLElement[] =
         store?._dsPlugins?.fetch?.indicatorElements
-            ? store._dsPlugins.fetch.indicatorElements[loadingTarget.id]
-                ?.value || []
+            ? store._dsPlugins.fetch.indicatorElements[loadingTarget.id]?.value || []
             : [];
-    const indicatorsVisible: Signal<IndicatorReference[]> | undefined = store
-        ?._dsPlugins.fetch?.indicatorsVisible;
+    const indicatorsVisible: Signal<IndicatorReference[]> | undefined = store?._dsPlugins.fetch?.indicatorsVisible;
     if (!!indicatorElements?.forEach) {
         indicatorElements.forEach((indicator) => {
-            if (!indicator || !indicatorsVisible) return;
+            if (!indicator || !indicatorsVisible) {
+                return;
+            }
             const indicatorVisibleIndex = indicatorsVisible.value.findIndex(
                 (indicatorVisible) => {
-                    if (!indicatorVisible) return false;
+                    if (!indicatorVisible) {
+                        return false;
+                    }
                     return indicator.isSameNode(indicatorVisible.el);
                 },
             );
             if (indicatorVisibleIndex > -1) {
-                const indicatorVisible =
-                    indicatorsVisible.value[indicatorVisibleIndex];
+                const indicatorVisible = indicatorsVisible.value[indicatorVisibleIndex];
                 const indicatorsVisibleNew = [...indicatorsVisible.value];
                 delete indicatorsVisibleNew[indicatorVisibleIndex];
                 indicatorsVisible.value = [
-                    ...indicatorsVisibleNew.filter((ind) => {
-                        return !!ind;
+                    ...indicatorsVisibleNew.filter((indicator) => {
+                        return !!indicator;
                     }),
                     { el: indicator, count: indicatorVisible.count + 1 },
                 ];
@@ -129,7 +131,9 @@ async function fetcher(
             [`${DATASTAR}-request`]: "true",
         },
         onmessage: (evt) => {
-            if (!evt.event) return;
+            if (!evt.event) {
+                return;
+            }
             else if (!evt.event.startsWith(DATASTAR)) {
                 console.log(`Unknown event: ${evt.event}`);
                 debugger;
@@ -137,31 +141,32 @@ async function fetcher(
 
             switch (evt.event) {
                 case `${DATASTAR}-fragment`:
-                    const lines = evt.data.trim().split("\n");
+                    const fragmentLines = evt.data.trim().split("\n");
                     const knownEventTypes = [
                         "selector",
-                        "merge",
-                        "fragment",
+                        "mergeMode",
                         "settleDuration",
                         "useViewTransition",
+                        "fragment",
                     ];
 
                     let fragment = "",
-                        merge = DEFAULT_MERGE,
+                        selector = "",
+                        mergeMode = DEFAULT_MERGE_MODE,
                         settleDuration = DEFAULT_SETTLE_DURATION,
                         useViewTransition = DEFAULT_USE_VIEW_TRANSITION,
                         exists = false,
-                        selector = "",
                         currentDatatype = "";
 
-                    for (let i = 0; i < lines.length; i++) {
-                        let line = lines[i];
-                        if (!line?.length) continue;
+                    for (let i = 0; i < fragmentLines.length; i++) {
+                        let line = fragmentLines[i];
+                        if (!line?.length) {
+                            continue;
+                        }
 
                         const firstWord = line.split(" ", 1)[0];
                         const isDatatype = knownEventTypes.includes(firstWord);
-                        const isNewDatatype = isDatatype &&
-                            firstWord !== currentDatatype;
+                        const isNewDatatype = isDatatype && firstWord !== currentDatatype;
                         if (isNewDatatype) {
                             currentDatatype = firstWord;
                             line = line.slice(firstWord.length + 1);
@@ -170,23 +175,22 @@ async function fetcher(
                                 case "selector":
                                     selector = line;
                                     break;
-                                case "merge":
-                                    merge = line as FragmentMergeOption;
-                                    exists = Object.values(FragmentMergeOptions)
-                                        .includes(merge);
+                                case "mergeMode":
+                                    mergeMode = line as FragmentMergeMode;
+                                    exists = Object.values(FragmentMergeModes).includes(mergeMode);
                                     if (!exists) {
                                         throw new Error(
-                                            `Unknown merge option: ${merge}`,
+                                            `Unknown merge option: ${mergeMode}`,
                                         );
                                     }
                                     break;
                                 case "settleDuration":
                                     settleDuration = parseInt(line);
                                     break;
-                                case "fragment":
-                                    break;
                                 case "useViewTransition":
                                     useViewTransition = line.trim() === "true";
+                                    break;
+                                case "fragment":
                                     break;
                                 default:
                                     throw new Error(`Unknown data type`);
@@ -198,14 +202,16 @@ async function fetcher(
                         }
                     }
 
-                    if (!fragment?.length) fragment = "<div></div>";
+                    if (!fragment?.length) {
+                        fragment = "<div></div>";
+                    }
                     mergeHTMLFragment(
                         ctx,
                         selector,
-                        merge,
-                        fragment,
+                        mergeMode,
                         settleDuration,
                         useViewTransition,
+                        fragment,
                     );
                     ctx.sendDatastarEvent(
                         "plugin",
@@ -214,7 +220,7 @@ async function fetcher(
                         selector,
                         JSON.stringify({
                             fragment,
-                            settleTime: settleDuration,
+                            settleDuration,
                             useViewTransition,
                         }),
                     );
@@ -244,8 +250,7 @@ async function fetcher(
                         }
                     }
 
-                    const fnContents =
-                        ` return Object.assign({...ctx.store()}, ${storeToMerge})`;
+                    const fnContents = ` return Object.assign({...ctx.store()}, ${storeToMerge})`;
                     try {
                         const fn = new Function(
                             "ctx",
@@ -267,9 +272,7 @@ async function fetcher(
                     break;
 
                 case `${DATASTAR}-remove`:
-                    const [removePrefix, ...removeRest] = evt.data.trim().split(
-                        " ",
-                    );
+                    const [removePrefix, ...removeRest] = evt.data.trim().split(" ");
 
                     switch (removePrefix) {
                         case "selector":
@@ -283,6 +286,12 @@ async function fetcher(
                             const paths = removeRest.join(" ").split(" ");
                             ctx.removeFromStore(...paths);
                             break;
+                        case "settleDuration":
+                            // TODO: Implement
+                            break;
+                        case "useViewTransition":
+                            // TODO: Implement
+                            break;
                         default:
                             throw new Error(
                                 `Unknown delete prefix: ${removePrefix}`,
@@ -291,8 +300,7 @@ async function fetcher(
                     break;
 
                 case `${DATASTAR}-redirect`:
-                    const [redirectSelector, ...redirectRest] = evt.data.trim()
-                        .split(" ");
+                    const [redirectSelector, ...redirectRest] = evt.data.trim().split(" ");
                     if (redirectSelector !== "url") {
                         throw new Error(
                             `Unknown redirect selector: ${redirectSelector}`,
@@ -310,9 +318,7 @@ async function fetcher(
                     break;
 
                 case `${DATASTAR}-console`:
-                    const [consoleMode, ...consoleRest] = evt.data.trim().split(
-                        " ",
-                    );
+                    const [consoleMode, ...consoleRest] = evt.data.trim().split(" ");
                     const consoleMessage = consoleRest.join(" ");
                     switch (consoleMode) {
                         case "assert":
@@ -359,24 +365,28 @@ async function fetcher(
                     store?._dsPlugins?.fetch?.indicatorsVisible || [];
                 const indicatorElements: HTMLElement[] =
                     store?._dsPlugins?.fetch?.indicatorElements
-                        ? store._dsPlugins.fetch
-                            .indicatorElements[loadingTarget.id]?.value || []
+                        ? store._dsPlugins.fetch.indicatorElements[loadingTarget.id]?.value || []
                         : [];
                 const indicatorCleanupPromises: Promise<() => void>[] = [];
                 if (indicatorElements?.forEach) {
                     indicatorElements.forEach((indicator) => {
-                        if (!indicator || !indicatorsVisible) return;
+                        if (!indicator || !indicatorsVisible) {
+                            return;
+                        }
                         const indicatorsVisibleNew = indicatorsVisible.value;
                         const indicatorVisibleIndex = indicatorsVisibleNew
                             .findIndex((indicatorVisible) => {
-                                if (!indicatorVisible) return false;
+                                if (!indicatorVisible) {
+                                    return false;
+                                }
                                 return indicator.isSameNode(
                                     indicatorVisible.el,
                                 );
                             });
-                        const indicatorVisible =
-                            indicatorsVisibleNew[indicatorVisibleIndex];
-                        if (!indicatorVisible) return;
+                        const indicatorVisible = indicatorsVisibleNew[indicatorVisibleIndex];
+                        if (!indicatorVisible) {
+                            return;
+                        }
                         if (indicatorVisible.count < 2) {
                             indicatorCleanupPromises.push(
                                 new Promise(() =>
@@ -387,18 +397,16 @@ async function fetcher(
                                         indicator.classList.add(
                                             INDICATOR_CLASS,
                                         );
-                                    }, 300)
+                                    }, DEFAULT_SETTLE_DURATION)
                                 ),
                             );
                             delete indicatorsVisibleNew[indicatorVisibleIndex];
                         } else if (indicatorVisibleIndex > -1) {
-                            indicatorsVisibleNew[indicatorVisibleIndex].count =
-                                indicatorsVisibleNew[indicatorVisibleIndex]
-                                    .count - 1;
+                            indicatorsVisibleNew[indicatorVisibleIndex].count = indicatorsVisibleNew[indicatorVisibleIndex].count - 1;
                         }
                         indicatorsVisible.value = indicatorsVisibleNew.filter(
-                            (ind) => {
-                                return !!ind;
+                            (indicator) => {
+                                return !!indicator;
                             },
                         );
                     });
@@ -431,7 +439,9 @@ async function fetcher(
     const headers = store?._dsPlugins?.fetch?.headers || {};
     if (req.headers) {
         for (const [key, value] of Object.entries(headers)) {
-            if (key.startsWith("_")) continue;
+            if (key.startsWith("_")) {
+                continue;
+            }
             req.headers[key] = `${value}`;
         }
     }
@@ -445,7 +455,7 @@ async function fetcher(
 
         // exit gracefully and do nothing if the content-type is wrong
         // this can happen if the client is sending a request
-        // where no response is expected and they haven't
+        // where no response is expected, and they haven't
         // set the content-type to text/event-stream
     }
 }
@@ -453,21 +463,21 @@ async function fetcher(
 const SETTLING_CLASS = `${DATASTAR}-settling`;
 const SWAPPING_CLASS = `${DATASTAR}-swapping`;
 
-const fragContainer = document.createElement("template");
+const fragmentContainer = document.createElement("template");
 export function mergeHTMLFragment(
     ctx: AttributeContext,
     selector: string,
-    merge: FragmentMergeOption,
-    fragmentsRaw: string,
-    settleTime: number,
+    mergeMode: FragmentMergeMode,
+    settleDuration: number,
     useViewTransition: boolean,
+    fragmentsRaw: string,
 ) {
     const { el } = ctx;
 
-    fragContainer.innerHTML = fragmentsRaw.trim();
-    const frags = [...fragContainer.content.children];
-    frags.forEach((frag) => {
-        if (!(frag instanceof Element)) {
+    fragmentContainer.innerHTML = fragmentsRaw.trim();
+    const fragments = [...fragmentContainer.content.children];
+    fragments.forEach((fragment) => {
+        if (!(fragment instanceof Element)) {
             throw new Error(`No fragment found`);
         }
         const applyToTargets = (capturedTargets: Element[]) => {
@@ -475,9 +485,9 @@ export function mergeHTMLFragment(
                 initialTarget.classList.add(SWAPPING_CLASS);
                 const originalHTML = initialTarget.outerHTML;
                 let modifiedTarget = initialTarget;
-                switch (merge) {
-                    case FragmentMergeOptions.MorphElement:
-                        const result = idiomorph(modifiedTarget, frag, {
+                switch (mergeMode) {
+                    case FragmentMergeModes.MorphElement:
+                        const result = idiomorph(modifiedTarget, fragment, {
                             callbacks: {
                                 beforeNodeRemoved: (
                                     oldNode: Element,
@@ -494,35 +504,39 @@ export function mergeHTMLFragment(
                         const first = result[0] as Element;
                         modifiedTarget = first;
                         break;
-                    case FragmentMergeOptions.InnerElement:
+                    case FragmentMergeModes.InnerElement:
                         // Replace the contents of the target element with the response
-                        modifiedTarget.innerHTML = frag.innerHTML;
+                        modifiedTarget.innerHTML = fragment.innerHTML;
                         break;
-                    case FragmentMergeOptions.OuterElement:
+                    case FragmentMergeModes.OuterElement:
                         // Replace the entire target element with the response
-                        modifiedTarget.replaceWith(frag);
+                        modifiedTarget.replaceWith(fragment);
                         break;
-                    case FragmentMergeOptions.PrependElement:
-                        modifiedTarget.prepend(frag); //  Insert the response before the first child of the target element
+                    case FragmentMergeModes.PrependElement:
+                        // Insert the response before the first child of the target element
+                        modifiedTarget.prepend(fragment);
                         break;
-                    case FragmentMergeOptions.AppendElement:
-                        modifiedTarget.append(frag); //  Insert the response after the last child of the target element
+                    case FragmentMergeModes.AppendElement:
+                        // Insert the response after the last child of the target element
+                        modifiedTarget.append(fragment);
                         break;
-                    case FragmentMergeOptions.BeforeElement:
-                        modifiedTarget.before(frag); //  Insert the response before the target element
+                    case FragmentMergeModes.BeforeElement:
+                        // Insert the response before the target element
+                        modifiedTarget.before(fragment);
                         break;
-                    case FragmentMergeOptions.AfterElement:
-                        modifiedTarget.after(frag); //  Insert the response after the target element
+                    case FragmentMergeModes.AfterElement:
+                        // Insert the response after the target element
+                        modifiedTarget.after(fragment);
                         break;
-                    case FragmentMergeOptions.UpsertAttributes:
-                        //  Upsert the attributes of the target element
-                        frag.getAttributeNames().forEach((attrName) => {
-                            const value = frag.getAttribute(attrName)!;
+                    case FragmentMergeModes.UpsertAttributes:
+                        // Upsert the attributes of the target element
+                        fragment.getAttributeNames().forEach((attrName) => {
+                            const value = fragment.getAttribute(attrName)!;
                             modifiedTarget.setAttribute(attrName, value);
                         });
                         break;
                     default:
-                        throw new Error(`Unknown merge type: ${merge}`);
+                        throw new Error(`Unknown merge type: ${mergeMode}`);
                 }
                 ctx.cleanupElementRemovals(modifiedTarget);
                 modifiedTarget.classList.add(SWAPPING_CLASS);
@@ -532,7 +546,7 @@ export function mergeHTMLFragment(
                 setTimeout(() => {
                     initialTarget.classList.remove(SWAPPING_CLASS);
                     modifiedTarget.classList.remove(SWAPPING_CLASS);
-                }, settleTime);
+                }, settleDuration);
 
                 const revisedHTML = modifiedTarget.outerHTML;
 
@@ -540,7 +554,7 @@ export function mergeHTMLFragment(
                     modifiedTarget.classList.add(SETTLING_CLASS);
                     setTimeout(() => {
                         modifiedTarget.classList.remove(SETTLING_CLASS);
-                    }, settleTime);
+                    }, settleDuration);
                 }
             }
         };
@@ -551,7 +565,7 @@ export function mergeHTMLFragment(
         if (useElAsTarget) {
             targets = [el];
         } else {
-            const selectorOrID = selector || `#${frag.getAttribute("id")}`;
+            const selectorOrID = selector || `#${fragment.getAttribute("id")}`;
             targets = document.querySelectorAll(selectorOrID) || [];
             if (!!!targets) {
                 throw new Error(`No targets found for ${selectorOrID}`);
