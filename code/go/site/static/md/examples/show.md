@@ -2,7 +2,7 @@
 
 ## Demo
 
-<div id="container" data-on-load="get('/examples/show/data')"></div>
+<div id="container" data-on-load="$$get('/examples/show/data')"></div>
 
 ## Explanation
 

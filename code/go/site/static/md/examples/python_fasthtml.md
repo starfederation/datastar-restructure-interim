@@ -52,14 +52,14 @@ def page_main(store):
   return Main(
   Div(
     Input(type="text", placeholder="Send to server...", data_model="input"),
-    Button("Send State Roundtrip", data_on_click='get("/get")'),
-    Button("Target HTML Element", data_on_click='get("/target")'),
+    Button("Send State Roundtrip", data_on_click='$$get("/get")'),
+    Button("Target HTML Element", data_on_click='$$get("/target")'),
     Button("Toggle Feed", data_on_click="$show=!$show"),
     Div(id="output", data_text="$output"),
     Div(id=f"{target}"),
     Div(
       Span("Feed from server: "),
-      Span(id="feed", **{'data-on-load':"get('/feed')"}),
+      Span(id="feed", **{'data-on-load':"$$get('/feed')"}),
       **{"data-show.duration_500ms":"$show"},
     ),
   ),
@@ -111,13 +111,13 @@ class DatastarEventMessage:
       data_lines.append(f"selector {query_selector}")
 
     if merge:
-      data_lines.append(f"merge {merge.value}")
+      data_lines.append(f"mergeMode {merge.value}")
 
     if settle_duration:
-      data_lines.append(f"settle {settle_duration}")
+      data_lines.append(f"settleDuration {settle_duration}")
 
     if use_view_transitions is not None:
-      data_lines.append(f"vt {str(use_view_transitions).lower()}")
+      data_lines.append(f"useViewTransitions {str(use_view_transitions).lower()}")
 
     data_lines.append(f"fragment {fragment}")
 
