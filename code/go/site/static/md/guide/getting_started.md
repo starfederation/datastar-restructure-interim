@@ -217,9 +217,9 @@ You can think of Datastar as an extension to HTML's [data attributes](https://de
 - Show or hide an element using an expression: `data-show="$foo"`
 - Modify the classes on an element: `data-class="{'font-bold': $foo}"`
 - Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
-- Execute an expression whenever an event is triggered on an element: `data-on-click="$get(/endpoint)"`
+- Execute an expression on an event: `data-on-click="$get(/endpoint)"`
 - Persist all store values in local storage: `data-persist`
-- Create a new computed store value from an expression: `data-computed-foo="'Hello, ' + $name"`
-- Create a reference to an element that can be referenced: `data-ref="alert"`
-- Send a header along with a request: `data-header-foo="{'x-powered-by': $foo}"`
+- Create a computed store value: `data-computed-foo="$bar + 1"`
+- Create a reference to an element: `data-ref="alert"`
+- Send a header with a request: `data-header-foo="{'x-powered-by': $foo}"`
 - Replaces the URL: `data-replace-url="'/page1'"`
