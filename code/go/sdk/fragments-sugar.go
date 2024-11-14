@@ -96,18 +96,18 @@ func (sse *ServerSentEventGenerator) RenderFragmentGostar(child elements.Element
 	return nil
 }
 
-func GET(urlFormat string, args ...any) string {
+func GetSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$get('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func POST(urlFormat string, args ...any) string {
+func PostSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$post('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func PUT(urlFormat string, args ...any) string {
+func PutSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$put('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func PATCH(urlFormat string, args ...any) string {
+func PatchSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$patch('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func DELETE(urlFormat string, args ...any) string {
+func DeleteSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$delete('%s')`, fmt.Sprintf(urlFormat, args...))
 }
