@@ -1,37 +1,39 @@
-import { z } from "zod";
+import { requireThatString, assertThatString } from "@cowwoc/requirements";
+import { DatastarEvent, DatastarEventOptions } from "./types.ts";
 
-const zConsoleMode = z.enum([
-    "assert" 
-    , "clear" 
-    , "count" 
-    , "countReset" 
-    , "debug" 
-    , "dir" 
-    , "dirxml" 
-    , "error" 
-    , "group" 
-    , "groupCollapsed" 
-    , "groupEnd" 
-    , "info" 
-    , "log" 
-    , "table" 
-    , "time" 
-    , "timeEnd" 
-    , "timeLog" 
-    , "trace" 
+export const consoleModes = [
+    "assert"
+    , "clear"
+    , "count"
+    , "countReset"
+    , "debug"
+    , "dir"
+    , "dirxml"
+    , "error"
+    , "group"
+    , "groupCollapsed"
+    , "groupEnd"
+    , "info"
+    , "log"
+    , "table"
+    , "time"
+    , "timeEnd"
+    , "timeLog"
+    , "trace"
     , "warn"
-]);
+] as const;
 
-export type ConsoleMode = z.infer<zConsoleMode>;
+export type ConsoleMode = typeof consoleModes[number];
 
-const zConsoleEvent = z.object({
-    mode: zConsoleMode,
-    message: z.string()
-});
+interface ConsoleGroupEndEvent extends DatastarEvent {
+    type: "datastar-console";
+    mode: "groupEnd";
+}
 
-export type ConsoleEvent = z.infer<typeof zConsoleEvent>;
+interface ConsoleMessageEvent extends DatastarEvent {
+    type: "datastar-console";
+    mode: Omit<ConsoleMode, "groupEnd">;
+    message: String;
+};
 
-export const console = z.function()
-    .args(
-       z.string().min(1, {message: "The console message must be a non empty string"})
-    ).returns(zConsoleEvent);
+export type ConsoleEvent = ConsoleGroupEndEvent | ConsoleMessageEvent;

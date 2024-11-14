@@ -1,7 +1,7 @@
 {
-  "name": "@starfederation/datastar-sdk",
+  "name": "@starfederation/datastar-sdk-node",
   "version": "0.0.1",
-  "description": "Typescript SDK for Datastar",
+  "description": "Typescript SDK for Datastar that supports node js",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,7 +21,8 @@
   "homepage": "https://github.com/starfederation/datastar#readme",
   "dependencies": {
     "@cowwoc/requirements": "4.0.8",
-    "@starfederation/datastar": "workspace:../library"
+    "better-sse": "^0.14.1",
+    "@starfederation/datastar-sdk": "workspace:../sdk"
   },
   "devDependencies": {
     "fast-check": "^3.23.1",
