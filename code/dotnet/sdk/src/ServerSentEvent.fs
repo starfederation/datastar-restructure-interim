@@ -1,55 +1,25 @@
 namespace StarFederation.Datastar
 
 open System
+open System.Text.RegularExpressions
 open System.Threading.Tasks
 
-type IGetNextId = abstract member GetNextId: unit -> string
-type ServerSideEventId =
-    | Specified of string
-    | Requested
-module ServerSideEventId =
-    let private getNextId (env:IGetNextId) = env.GetNextId()
-    let value env id =
-        match id with
-        | Specified str -> str
-        | Requested -> getNextId env
-
-type FragmentMergeMode =
-    | Morph | Inner | Outer | Prepend | Append
-    | Before | After | UpsertAttributes
-module internal FragmentMergeMode =
-    let toString (this:FragmentMergeMode) =
-        match this with
-        | UpsertAttributes -> "upsertAttributes"
-        | _ -> Utility.lowerFirstCharacter this
-
-    let fromString (str:string) = Utility.unionCaseFromString<FragmentMergeMode> str [||]
-
-    let defaultMergeMode =
-        match fromString Defaults.DefaultFragmentMergeMode with
-        | ValueSome def -> def
-        | ValueNone -> failwith $"Default Merge Mode from {nameof Defaults}.fs, '{Defaults.DefaultFragmentMergeMode}' is unhandled. Add a union case to the FragmentMergeMode type"
-
-type ConsoleMode =
-    | Assert | Clear | Count | CountReset | Debug | Dir | Dirxml | Error
-    | Group | GroupCollapsed | GroupEnd | Info | Log | Table | Time | TimeEnd
-    | TimeLog | Trace | Warn
-module internal ConsoleMode =
-    let toString (this:ConsoleMode) = Utility.lowerFirstCharacter this
-
-type DataStore = string
-module DataStore =
-    let value (dataStore:DataStore) = dataStore
-    let tryCreate (dataStore:string) = Some (DataStore dataStore)
+type IDatastarStore = interface end
 type DataStorePath = string
 module DataStorePath =
     let value (dataStorePath:DataStorePath) = dataStorePath
-    let tryCreate (dataStorePath:string) = Ok (DataStorePath dataStorePath)
+    let create (dataStorePath:string) = DataStorePath dataStorePath
+    let tryCreate (dataStorePath:string) = ValueSome (create dataStorePath)
+
 type Selector = string
 module Selector =
     let value (selector:Selector) = selector
-    let tryCreate (selector:string) = Ok (Selector selector)
-type IGetDataStore = abstract member GetDataStore: unit -> DataStore
+    let regex = Regex(@"[#.][-_]?[_a-zA-Z]+(?:\w|\\.)*|(?<=\s+|^)(?:\w+|\*)|\[[^\s""'=<>`]+?(?<![~|^$*])([~|^$*]?=(?:['""].*['""]|[^\s""'=<>`]+))?\]|:[\w-]+(?:\(.*\))?", RegexOptions.Compiled)
+    let create (selectorString:string) = Selector selectorString
+    let tryCreate (selector:string) =
+        match regex.IsMatch selector with
+        | true -> ValueSome (create selector)
+        | false -> ValueNone
 
 type RenderFragmentOptions =
     { Selector: Selector voption
@@ -57,99 +27,98 @@ type RenderFragmentOptions =
       SettleDuration: TimeSpan
       UseViewTransition: bool }
 module RenderFragmentOptions =
-    let defaults = { Selector = ValueNone; MergeMode = FragmentMergeMode.defaultMergeMode; SettleDuration = Defaults.DefaultSettleDuration; UseViewTransition = false }
-type RemoveFragmentOptions =
-    { SettleDuration: TimeSpan
-      UseViewTransition: bool }
-module RemoveFragmentOptions =
-    let defaults = { SettleDuration = Defaults.DefaultSettleDuration; UseViewTransition = false }
+    let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleTime; UseViewTransition = Consts.DefaultUseViewTransition }
 
-type ServerSideEventType = | Fragment | Signal | Remove | Redirect | Console
-module ServerSideEventType =
-    let toString this =
-        match this with
-        | Fragment -> "datastar-fragment"
-        | Signal -> "datastar-signal"
-        | Remove -> "datastar-remove"
-        | Redirect -> "datastar-redirect"
-        | Console -> "datastar-console"
+type RemoveFragmentOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
+module RemoveFragmentOptions =
+    let defaults = { SettleDuration = Consts.DefaultSettleTime; UseViewTransition = Consts.DefaultUseViewTransition }
+
+type EventOptions = { EventId: string voption; Retry: TimeSpan }
+module EventOptions =
+    let defaults = { EventId = ValueNone; Retry = Consts.DefaultSseSendRetry }
 
 type ISendEvent = abstract member SendEvent: string -> Task
 
-type ServerSideEvent =
-    { EventType: ServerSideEventType
-      Id: ServerSideEventId
-      Retry: TimeSpan voption
+type ServerSentEvent =
+    { EventType: ServerSentEventType
+      Id: string voption
+      Retry: TimeSpan
       DataLines: string[] }
-module ServerSideEvent =
-    let serializeEvent env (sseEvent:ServerSideEvent) =
+module ServerSentEvent =
+    let serializeEvent sseEvent =
         seq {
-            $"event: {sseEvent.EventType |> ServerSideEventType.toString}"
-            $"id: {sseEvent.Id |> ServerSideEventId.value env}"
-            if (sseEvent.Retry |> ValueOption.isSome)
-            then $"retry: {sseEvent.Retry |> ValueOption.get |> (_.Milliseconds)}"
+            $"event: {sseEvent.EventType |> Consts.ServerSentEventType.toString}"
+
+            if sseEvent.Id |> ValueOption.isSome
+            then $"id: {sseEvent.Id |> ValueOption.get}"
+
+            if (sseEvent.Retry <> Consts.DefaultSseSendRetry)
+            then $"retry: {sseEvent.Retry.Milliseconds}"
+
             yield! sseEvent.DataLines |> Array.map (fun dataLine -> $"data: {dataLine}")
+
             ""; ""
         } |> String.concat "\n"
 
-    let send env (sseEvent:ServerSideEvent) =
-        // replace Id with
-        let serializedEvent = sseEvent |> serializeEvent env
+    let send env sseEvent =
+        let serializedEvent = sseEvent |> serializeEvent
         let sendEvent (env:ISendEvent) (event:string) = env.SendEvent(event)
         sendEvent env serializedEvent
 
-    let renderFragment env (options:RenderFragmentOptions) fragment =
+    let renderFragment env eventOptions options (fragment:string) =
+        let fragmentLines = fragment.Split( [| "\r\n"; "\n"; "\r" |], StringSplitOptions.None)
         { EventType = Fragment
-          Id = Requested
-          Retry = ValueNone
-          DataLines = seq {
-                options.Selector          |> ValueOption.map (fun selector ->          $"selector {selector |> Selector.value}")
-                options.MergeMode         |> (fun mergeMode ->               ValueSome $"merge {mergeMode |> FragmentMergeMode.toString}")
-                options.SettleDuration    |> (fun settleDuration ->          ValueSome $"settle {settleDuration.Milliseconds}")
-                options.UseViewTransition |> (fun useViewTransition ->       ValueSome $"vt {useViewTransition}")
-                $"fragment %s{fragment}"  |> ValueSome
-                } |> Seq.filter ValueOption.isSome |> Seq.map ValueOption.get |> Seq.toArray }
-        |> send env
-
-    let removeFragment env (options:RemoveFragmentOptions) selector =
-        { EventType = Remove
-          Id = Requested
-          Retry = ValueNone
-          DataLines = seq {
-                $"selector {selector |> Selector.value}" |> ValueSome
-                options.SettleDuration    |> (fun settleDuration ->          ValueSome $"settle {settleDuration.Milliseconds}")
-                options.UseViewTransition |> (fun useViewTransition ->       ValueSome $"vt {useViewTransition}")
-                } |> Seq.filter ValueOption.isSome |> Seq.map ValueOption.get |> Seq.toArray }
-        |> send env
-
-    let patchStore env onlyIfMissing data =
-        { EventType = Signal
-          Id = Requested
-          Retry = ValueNone
+          Id = eventOptions.EventId
+          Retry = eventOptions.Retry
           DataLines = [|
-                if onlyIfMissing then "onlyIfMissing true"
-                $"store {data |> DataStore.value}"
-                |] }
+            if options.Selector |> ValueOption.isSome then $"{Consts.dataSelector} {options.Selector |> ValueOption.get |> Selector.value}"
+            $"{Consts.dataMerge} {options.MergeMode |> Consts.FragmentMergeMode.toString}"
+            if (options.SettleDuration <> Consts.DefaultSettleTime) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
+            if (options.UseViewTransition <> Consts.DefaultUseViewTransition) then $"{Consts.dataUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
+            yield! (fragmentLines |> Seq.map (fun fragmentLine -> $"{Consts.dataFragment} %s{fragmentLine}"))
+            |] }
         |> send env
 
-    let removeFromStore env paths =
+    let removeFragment env eventOptions options selector =
+        { EventType = Remove
+          Id = eventOptions.EventId
+          Retry = eventOptions.Retry
+          DataLines = [|
+            $"{Consts.dataSelector} {selector |> Selector.value}"
+            if (options.SettleDuration <> Consts.DefaultSettleTime) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
+            if (options.UseViewTransition <> Consts.DefaultUseViewTransition) then $"{Consts.dataUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
+            |] }
+        |> send env
+
+    let patchStore env eventOptions onlyIfMissing (data:string) =
+        let dataLines = data.Split( [| "\r\n"; "\n"; "\r" |], StringSplitOptions.None)
+        { EventType = Signal
+          Id = eventOptions.EventId
+          Retry = eventOptions.Retry
+          DataLines = [|
+            if onlyIfMissing <> Consts.DefaultOnlyIfMissing then $"{Consts.dataOnlyIfMissing} {onlyIfMissing |> Utility.toLower}"
+            yield! (dataLines |> Seq.map (fun dataLine -> $"{Consts.dataStore} %s{dataLine}"))
+            |] }
+        |> send env
+
+    let removeFromStore env eventOptions paths =
         let paths' = paths |> Seq.map DataStorePath.value |> String.concat " "
         { EventType = Remove
-          Id = Requested
-          Retry = ValueNone
-          DataLines = [| $"selector {paths'}" |] }
+          Id = eventOptions.EventId
+          Retry = eventOptions.Retry
+          DataLines = [| $"{Consts.dataSelector} {paths'}" |] }
         |> send env
 
-    let redirect env url =
+    let redirect env eventOptions url =
         { EventType = Redirect
-          Id = Requested
-          Retry = ValueNone
-          DataLines = [| $"url %s{url}" |] }
+          Id = eventOptions.EventId
+          Retry = eventOptions.Retry
+          DataLines = [| $"{Consts.dataUrl} %s{url}" |] }
         |> send env
 
-    let console env mode message =
-        { EventType = Console
-          Id = Requested
-          Retry = ValueNone
-          DataLines = [| $"{mode |> ConsoleMode.toString} %s{message}" |] }
+    let console env eventOptions mode message =
+        { EventType = ServerSentEventType.Console
+          Id = eventOptions.EventId
+          Retry = eventOptions.Retry
+          DataLines = [| $"{mode |> Consts.ConsoleMode.toString} %s{message}" |] }
         |> send env
