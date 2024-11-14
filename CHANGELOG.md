@@ -7,13 +7,14 @@
 
 ### Added
 
-- Added @ prefix for action plugins.
 - Added SDKs for .NET, Go, PHP and TypeScript.
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
 
 ### Changed
 
+- Changed $$ prefix for action plugins to @
+- Changed ~(ref) syntax to #(ref)
 - Changed the `data-header` syntax to accept an object of key-value pairs.
 - Renamed the `datastar-delete` event to `datastar-remove`.
 - Renamed the `upsert_attributes` merge type to `upsertAttributes` in the fragment event.
@@ -22,5 +23,4 @@
 
 ### Removed
 
-- Removed the `$$` prefix for action plugins.
 - Removed the `local` and `session` modifiers from `data-store`. Use the `data-persist` attribute instead.

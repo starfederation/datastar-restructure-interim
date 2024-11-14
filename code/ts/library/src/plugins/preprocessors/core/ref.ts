@@ -5,7 +5,7 @@ import { wholePrefixSuffix } from "../../../utils/regex";
 export const RefProcessor: PreprocessorPlugin = {
     name: "ref",
     pluginType: "preprocessor",
-    regexp: wholePrefixSuffix("~", "ref", "", false),
+    regexp: wholePrefixSuffix("#\\(", "ref", "\\)", false),
     replacer({ ref }: RegexpGroups) {
         return `document.querySelector(ctx.store()._dsPlugins.refs.${ref})`;
     },

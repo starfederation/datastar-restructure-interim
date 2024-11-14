@@ -32,7 +32,7 @@ Allows you to define a computed store value that automatically updates its value
 <div data-ref="foo"></div>
 ```
 
-Makes an element available in the `ctx._dsPlugins.refs` object. This is useful for accessing elements in the DOM. Can be accessed in scripts via `~foo`.
+Makes an element available in the `ctx._dsPlugins.refs` object. This is useful for accessing elements in the DOM. Can be accessed in scripts via `#(foo)`.
 
 ## Preprocessor Plugins
 
