@@ -4,6 +4,7 @@ package datastar
 import "time"
 
 const (
+    DatastarKey = "{%s data.DatastarKey %}"
     Version                   = "{%s data.Version %}"
     VersionClientByteSize     = {%d data.VersionClientByteSize %}
     VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
@@ -11,16 +12,9 @@ const (
     DefaultSSERetryDuration   = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
     DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
     DefaultOnlyIfMissing      = {%v data.DefaultOnlyIfMissing %}
-
-    DatastarLiteral = "{%s data.DatastarLiteral %}"
-    SelectorLiteral = "{%s data.SelectorLiteral %}"
-    MergeLiteral = "{%s data.MergeLiteral %}"
-    SettleDurationLiteral = "{%s data.SettleDurationLiteral %}"
-    FragmentLiteral = "{%s data.FragmentLiteral %}"
-    UseViewTransitionLiteral = "{%s data.UseViewTransitionLiteral %}"
-    StoreLiteral = "{%s data.StoreLiteral %}"
-    OnlyIfMissingLiteral = "{%s data.OnlyIfMissingLiteral %}"
-    UrlLiteral = "{%s data.UrlLiteral %}"
+    {%- for _, literal := range data.DatalineLiterals -%}
+    {%s literal.Pascal %}DatalineLiteral = "{%s literal.Camel %} "
+    {%- endfor -%}
 )
 
 {%- for _, enum := range data.Enums -%}

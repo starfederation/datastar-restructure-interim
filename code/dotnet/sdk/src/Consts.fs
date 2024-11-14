@@ -12,6 +12,7 @@ type ConsoleMode = | Assert | Clear | Count | CountReset | Debug | Dir | Dirxml 
 
 module Consts =
 
+    let [<Literal>] DatastarKey = "datastar"
     let [<Literal>] Version                   = "0.20.0"
     let [<Literal>] VersionClientByteSize     = 43803
     let [<Literal>] VersionClientByteSizeGzip = 14866
@@ -21,15 +22,15 @@ module Consts =
     let [<Literal>] DefaultUseViewTransitions = false
     let [<Literal>] DefaultOnlyIfMissing = false
 
-    let [<Literal>] DatastarLiteral = "datastar"
-    let [<Literal>] SelectorLiteral = "selector"
-    let [<Literal>] MergeLiteral = "merge"
-    let [<Literal>] SettleDurationLiteral = "settleDuration"
-    let [<Literal>] FragmentLiteral = "fragment"
-    let [<Literal>] UseViewTransitionLiteral = "useViewTransition"
-    let [<Literal>] StoreLiteral = "store"
-    let [<Literal>] OnlyIfMissingLiteral = "onlyIfMissing"
-    let [<Literal>] UrlLiteral = "url"
+    let [<Literal>] datastarDatalineSelector = "selector "
+    let [<Literal>] datastarDatalineMerge = "merge "
+    let [<Literal>] datastarDatalineSettleDuration = "settleDuration "
+    let [<Literal>] datastarDatalineFragment = "fragment "
+    let [<Literal>] datastarDatalineUseViewTransition = "useViewTransition "
+    let [<Literal>] datastarDatalineStore = "store "
+    let [<Literal>] datastarDatalineOnlyIfMissing = "onlyIfMissing "
+    let [<Literal>] datastarDatalineUrl = "url "
+    let [<Literal>] datastarDatalinePaths = "paths "
 
     module FragmentMergeMode =
         let toString (this.FragmentMergeMode) =

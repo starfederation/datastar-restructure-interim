@@ -52,154 +52,131 @@ open System
 	qw422016.N().S(`
 module Consts =
 
-    let [<Literal>] Version                   = "`)
+    let [<Literal>] DatastarKey = "`)
 //line code/go/tsbuild/consts_dotnet.qtpl:13
-	qw422016.E().S(data.Version)
+	qw422016.E().S(data.DatastarKey)
 //line code/go/tsbuild/consts_dotnet.qtpl:13
 	qw422016.N().S(`"
+    let [<Literal>] Version                   = "`)
+//line code/go/tsbuild/consts_dotnet.qtpl:14
+	qw422016.E().S(data.Version)
+//line code/go/tsbuild/consts_dotnet.qtpl:14
+	qw422016.N().S(`"
     let [<Literal>] VersionClientByteSize     = `)
-//line code/go/tsbuild/consts_dotnet.qtpl:14
+//line code/go/tsbuild/consts_dotnet.qtpl:15
 	qw422016.N().D(data.VersionClientByteSize)
-//line code/go/tsbuild/consts_dotnet.qtpl:14
+//line code/go/tsbuild/consts_dotnet.qtpl:15
 	qw422016.N().S(`
     let [<Literal>] VersionClientByteSizeGzip = `)
-//line code/go/tsbuild/consts_dotnet.qtpl:15
+//line code/go/tsbuild/consts_dotnet.qtpl:16
 	qw422016.N().D(data.VersionClientByteSizeGzip)
-//line code/go/tsbuild/consts_dotnet.qtpl:15
+//line code/go/tsbuild/consts_dotnet.qtpl:16
 	qw422016.N().S(`
 
     let DefaultSettleDuration     = TimeSpan.FromMilliseconds `)
-//line code/go/tsbuild/consts_dotnet.qtpl:17
+//line code/go/tsbuild/consts_dotnet.qtpl:18
 	qw422016.N().D(durationToMs(data.DefaultSettleDuration))
-//line code/go/tsbuild/consts_dotnet.qtpl:17
+//line code/go/tsbuild/consts_dotnet.qtpl:18
 	qw422016.N().S(`
     let DefaultSSERetryDuration   = TimeSpan.FromMilliseconds `)
-//line code/go/tsbuild/consts_dotnet.qtpl:18
+//line code/go/tsbuild/consts_dotnet.qtpl:19
 	qw422016.N().D(durationToMs(data.DefaultSSERetryDuration))
-//line code/go/tsbuild/consts_dotnet.qtpl:18
+//line code/go/tsbuild/consts_dotnet.qtpl:19
 	qw422016.N().S(`
     let [<Literal>] DefaultUseViewTransitions = `)
-//line code/go/tsbuild/consts_dotnet.qtpl:19
+//line code/go/tsbuild/consts_dotnet.qtpl:20
 	qw422016.E().V(data.DefaultUseViewTransitions)
-//line code/go/tsbuild/consts_dotnet.qtpl:19
+//line code/go/tsbuild/consts_dotnet.qtpl:20
 	qw422016.N().S(`
     let [<Literal>] DefaultOnlyIfMissing = `)
-//line code/go/tsbuild/consts_dotnet.qtpl:20
+//line code/go/tsbuild/consts_dotnet.qtpl:21
 	qw422016.E().V(data.DefaultOnlyIfMissing)
-//line code/go/tsbuild/consts_dotnet.qtpl:20
+//line code/go/tsbuild/consts_dotnet.qtpl:21
 	qw422016.N().S(`
 
-    let [<Literal>] DatastarLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:22
-	qw422016.E().S(data.DatastarLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:22
-	qw422016.N().S(`"
-    let [<Literal>] SelectorLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:23
-	qw422016.E().S(data.SelectorLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:23
-	qw422016.N().S(`"
-    let [<Literal>] MergeLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:24
-	qw422016.E().S(data.MergeLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:24
-	qw422016.N().S(`"
-    let [<Literal>] SettleDurationLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:25
-	qw422016.E().S(data.SettleDurationLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:25
-	qw422016.N().S(`"
-    let [<Literal>] FragmentLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:26
-	qw422016.E().S(data.FragmentLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:26
-	qw422016.N().S(`"
-    let [<Literal>] UseViewTransitionLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:27
-	qw422016.E().S(data.UseViewTransitionLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:27
-	qw422016.N().S(`"
-    let [<Literal>] StoreLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:28
-	qw422016.E().S(data.StoreLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:28
-	qw422016.N().S(`"
-    let [<Literal>] OnlyIfMissingLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:29
-	qw422016.E().S(data.OnlyIfMissingLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:29
-	qw422016.N().S(`"
-    let [<Literal>] UrlLiteral = "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:30
-	qw422016.E().S(data.UrlLiteral)
-//line code/go/tsbuild/consts_dotnet.qtpl:30
-	qw422016.N().S(`"
-
 `)
-//line code/go/tsbuild/consts_dotnet.qtpl:32
+//line code/go/tsbuild/consts_dotnet.qtpl:23
+	for _, literal := range data.DatalineLiterals {
+//line code/go/tsbuild/consts_dotnet.qtpl:23
+		qw422016.N().S(`    let [<Literal>] datastarDataline`)
+//line code/go/tsbuild/consts_dotnet.qtpl:24
+		qw422016.E().S(literal.Pascal)
+//line code/go/tsbuild/consts_dotnet.qtpl:24
+		qw422016.N().S(` = "`)
+//line code/go/tsbuild/consts_dotnet.qtpl:24
+		qw422016.E().S(literal.Camel)
+//line code/go/tsbuild/consts_dotnet.qtpl:24
+		qw422016.N().S(` "
+`)
+//line code/go/tsbuild/consts_dotnet.qtpl:25
+	}
+//line code/go/tsbuild/consts_dotnet.qtpl:25
+	qw422016.N().S(`
+`)
+//line code/go/tsbuild/consts_dotnet.qtpl:27
 	for _, enum := range data.Enums {
-//line code/go/tsbuild/consts_dotnet.qtpl:32
+//line code/go/tsbuild/consts_dotnet.qtpl:27
 		qw422016.N().S(`    module `)
-//line code/go/tsbuild/consts_dotnet.qtpl:33
+//line code/go/tsbuild/consts_dotnet.qtpl:28
 		qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_dotnet.qtpl:33
+//line code/go/tsbuild/consts_dotnet.qtpl:28
 		qw422016.N().S(` =
         let toString (this.`)
-//line code/go/tsbuild/consts_dotnet.qtpl:34
+//line code/go/tsbuild/consts_dotnet.qtpl:29
 		qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_dotnet.qtpl:34
+//line code/go/tsbuild/consts_dotnet.qtpl:29
 		qw422016.N().S(`) =
             match this with
 `)
-//line code/go/tsbuild/consts_dotnet.qtpl:36
+//line code/go/tsbuild/consts_dotnet.qtpl:31
 		for _, entry := range enum.Values {
-//line code/go/tsbuild/consts_dotnet.qtpl:36
+//line code/go/tsbuild/consts_dotnet.qtpl:31
 			qw422016.N().S(`                | `)
-//line code/go/tsbuild/consts_dotnet.qtpl:37
+//line code/go/tsbuild/consts_dotnet.qtpl:32
 			qw422016.E().S(enum.Name.Pascal)
-//line code/go/tsbuild/consts_dotnet.qtpl:37
+//line code/go/tsbuild/consts_dotnet.qtpl:32
 			qw422016.N().S(`.`)
-//line code/go/tsbuild/consts_dotnet.qtpl:37
+//line code/go/tsbuild/consts_dotnet.qtpl:32
 			qw422016.E().S(entry.Name.Pascal)
-//line code/go/tsbuild/consts_dotnet.qtpl:37
+//line code/go/tsbuild/consts_dotnet.qtpl:32
 			qw422016.N().S(` -> "`)
-//line code/go/tsbuild/consts_dotnet.qtpl:37
+//line code/go/tsbuild/consts_dotnet.qtpl:32
 			qw422016.E().S(entry.Value)
-//line code/go/tsbuild/consts_dotnet.qtpl:37
+//line code/go/tsbuild/consts_dotnet.qtpl:32
 			qw422016.N().S(`"
 `)
-//line code/go/tsbuild/consts_dotnet.qtpl:38
+//line code/go/tsbuild/consts_dotnet.qtpl:33
 		}
-//line code/go/tsbuild/consts_dotnet.qtpl:38
+//line code/go/tsbuild/consts_dotnet.qtpl:33
 		qw422016.N().S(`
 `)
-//line code/go/tsbuild/consts_dotnet.qtpl:40
+//line code/go/tsbuild/consts_dotnet.qtpl:35
 	}
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 }
 
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 func writedotnetConsts(qq422016 qtio422016.Writer, data *ConstTemplateData) {
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	streamdotnetConsts(qw422016, data)
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	qt422016.ReleaseWriter(qw422016)
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 }
 
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 func dotnetConsts(data *ConstTemplateData) string {
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	qb422016 := qt422016.AcquireByteBuffer()
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	writedotnetConsts(qb422016, data)
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	qs422016 := string(qb422016.B)
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	qt422016.ReleaseByteBuffer(qb422016)
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 	return qs422016
-//line code/go/tsbuild/consts_dotnet.qtpl:41
+//line code/go/tsbuild/consts_dotnet.qtpl:36
 }

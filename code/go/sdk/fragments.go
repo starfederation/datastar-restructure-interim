@@ -82,7 +82,7 @@ func WithRemoveUseViewTransitions(useViewTransition bool) RemoveFragmentOption {
 
 func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...RemoveFragmentOption) error {
 	if selector == "" {
-		panic("missing selector")
+		panic("missing " + SelectorDatalineLiteral)
 	}
 
 	options := &RemoveFragmentOptions{
@@ -95,13 +95,13 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 		opt(options)
 	}
 
-	dataRows := []string{"selector " + selector}
+	dataRows := []string{SelectorDatalineLiteral + selector}
 	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
 		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, "settleDuration "+settleDuration)
+		dataRows = append(dataRows, SettleDurationDatalineLiteral+settleDuration)
 	}
 	if options.UseViewTransitions != nil {
-		dataRows = append(dataRows, "useViewTransition "+strconv.FormatBool(*options.UseViewTransitions))
+		dataRows = append(dataRows, UseViewTransitionDatalineLiteral+strconv.FormatBool(*options.UseViewTransitions))
 	}
 
 	sendOptions := make([]SSEEventOption, 0, 2)
@@ -140,23 +140,23 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 
 	dataRows := make([]string, 0, 4)
 	if options.Selector != "" {
-		dataRows = append(dataRows, "selector "+options.Selector)
+		dataRows = append(dataRows, SelectorDatalineLiteral+options.Selector)
 	}
 	if options.MergeMode != FragmentMergeModeMorph {
-		dataRows = append(dataRows, "merge "+string(options.MergeMode))
+		dataRows = append(dataRows, MergeDatalineLiteral+string(options.MergeMode))
 	}
 	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
 		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, "settle "+settleDuration)
+		dataRows = append(dataRows, SettleDurationDatalineLiteral+settleDuration)
 	}
 	if options.UseViewTransitions {
-		dataRows = append(dataRows, "useViewTransition true")
+		dataRows = append(dataRows, UseViewTransitionDatalineLiteral+"true")
 	}
 
 	if fragment != "" {
 		parts := strings.Split(fragment, "\n")
 		for _, part := range parts {
-			dataRows = append(dataRows, "fragment "+part)
+			dataRows = append(dataRows, FragmentDatalineLiteral+part)
 		}
 	}
 

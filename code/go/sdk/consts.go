@@ -3,6 +3,7 @@ package datastar
 import "time"
 
 const (
+    DatastarKey = "datastar"
     Version                   = "0.20.0"
     VersionClientByteSize     = 43803
     VersionClientByteSizeGzip = 14866
@@ -10,16 +11,15 @@ const (
     DefaultSSERetryDuration   = 1000 * time.Millisecond
     DefaultUseViewTransitions = false
     DefaultOnlyIfMissing      = false
-
-    DatastarLiteral = "datastar"
-    SelectorLiteral = "selector"
-    MergeLiteral = "merge"
-    SettleDurationLiteral = "settleDuration"
-    FragmentLiteral = "fragment"
-    UseViewTransitionLiteral = "useViewTransition"
-    StoreLiteral = "store"
-    OnlyIfMissingLiteral = "onlyIfMissing"
-    UrlLiteral = "url"
+    SelectorDatalineLiteral = "selector "
+    MergeDatalineLiteral = "merge "
+    SettleDurationDatalineLiteral = "settleDuration "
+    FragmentDatalineLiteral = "fragment "
+    UseViewTransitionDatalineLiteral = "useViewTransition "
+    StoreDatalineLiteral = "store "
+    OnlyIfMissingDatalineLiteral = "onlyIfMissing "
+    UrlDatalineLiteral = "url "
+    PathsDatalineLiteral = "paths "
 )
 
 type FragmentMergeMode string

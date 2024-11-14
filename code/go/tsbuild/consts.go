@@ -27,15 +27,8 @@ type ConstTemplateData struct {
 	DefaultSSERetryDuration   time.Duration
 	DefaultUseViewTransitions bool
 	DefaultOnlyIfMissing      bool
-	DatastarLiteral           string
-	SelectorLiteral           string
-	MergeLiteral              string
-	SettleDurationLiteral     string
-	FragmentLiteral           string
-	UseViewTransitionLiteral  string
-	StoreLiteral              string
-	OnlyIfMissingLiteral      string
-	UrlLiteral                string
+	DatastarKey               string
+	DatalineLiterals          []toolbelt.CasedString
 	Enums                     []*EnumDefinition
 }
 
@@ -44,15 +37,18 @@ var ConstsData = &ConstTemplateData{
 	DefaultSSERetryDuration:   1 * time.Second,
 	DefaultUseViewTransitions: false,
 	DefaultOnlyIfMissing:      false,
-	DatastarLiteral:           "datastar",
-	SelectorLiteral:           "selector",
-	MergeLiteral:              "merge",
-	SettleDurationLiteral:     "settleDuration",
-	FragmentLiteral:           "fragment",
-	UseViewTransitionLiteral:  "useViewTransition",
-	StoreLiteral:              "store",
-	OnlyIfMissingLiteral:      "onlyIfMissing",
-	UrlLiteral:                "url",
+	DatastarKey:               "datastar",
+	DatalineLiterals: []toolbelt.CasedString{
+		toolbelt.ToCasedString("selector"),
+		toolbelt.ToCasedString("merge"),
+		toolbelt.ToCasedString("settleDuration"),
+		toolbelt.ToCasedString("fragment"),
+		toolbelt.ToCasedString("useViewTransition"),
+		toolbelt.ToCasedString("store"),
+		toolbelt.ToCasedString("onlyIfMissing"),
+		toolbelt.ToCasedString("url"),
+		toolbelt.ToCasedString("paths"),
+	},
 	Enums: []*EnumDefinition{
 		{
 			Name:         toolbelt.ToCasedString("FragmentMergeMode"),

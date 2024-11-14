@@ -99,15 +99,19 @@ func (sse *ServerSentEventGenerator) RenderFragmentGostar(child elements.Element
 func GetSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$get('%s')`, fmt.Sprintf(urlFormat, args...))
 }
+
 func PostSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$post('%s')`, fmt.Sprintf(urlFormat, args...))
 }
+
 func PutSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$put('%s')`, fmt.Sprintf(urlFormat, args...))
 }
+
 func PatchSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$patch('%s')`, fmt.Sprintf(urlFormat, args...))
 }
+
 func DeleteSSE(urlFormat string, args ...any) string {
 	return fmt.Sprintf(`$delete('%s')`, fmt.Sprintf(urlFormat, args...))
 }

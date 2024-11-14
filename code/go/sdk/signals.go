@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -50,11 +51,11 @@ func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...Pa
 
 	dataRows := make([]string, 0, 32)
 	if options.OnlyIfMissing {
-		dataRows = append(dataRows, fmt.Sprintf("onlyIfMissing %t", options.OnlyIfMissing))
+		dataRows = append(dataRows, OnlyIfMissingDatalineLiteral+strconv.FormatBool(options.OnlyIfMissing))
 	}
 	lines := bytes.Split(storeContents, newLineBuf)
 	for _, line := range lines {
-		dataRows = append(dataRows, "store "+string(line))
+		dataRows = append(dataRows, StoreDatalineLiteral+string(line))
 	}
 
 	sendOptions := make([]SSEEventOption, 0, 2)
@@ -82,7 +83,7 @@ func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
 
 	if err := sse.send(
 		EventTypeRemove,
-		[]string{"paths " + strings.Join(paths, " ")},
+		[]string{PathsDatalineLiteral + strings.Join(paths, " ")},
 	); err != nil {
 		return fmt.Errorf("failed to send delete from store: %w", err)
 	}
