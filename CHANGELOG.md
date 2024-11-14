@@ -13,7 +13,6 @@
 
 ### Changed
 
-- Changed $$ prefix for action plugins to @
 - Changed ~(ref) syntax to #(ref)
 - Changed the `data-header` syntax to accept an object of key-value pairs.
 - Renamed the `datastar-delete` event to `datastar-remove`.
@@ -22,5 +21,4 @@
 - Renamed the `vt` option to `useViewTransition` in the fragment event.
 
 ### Removed
-
 - Removed the `local` and `session` modifiers from `data-store`. Use the `data-persist` attribute instead.

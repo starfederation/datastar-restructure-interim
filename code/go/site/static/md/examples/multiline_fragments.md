@@ -2,7 +2,7 @@
 
 ## Demo
 
-<div id="replaceMe" data-on-load="@get('/examples/multiline_fragments/data')">
+<div id="replaceMe" data-on-load="$$get('/examples/multiline_fragments/data')">
 </div>
 
 ## Explanation

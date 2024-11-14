@@ -9,7 +9,7 @@ templ CSRFDemo(csrf string) {
 	>
 		<button
 			class="btn btn-primary"
-			data-on-click="@post('/examples/csrf/data')"
+			data-on-click="$$post('/examples/csrf/data')"
 		>Send update</button>
 		<div class="card bg-base-200">
 			<div id="responses" class="card-body">

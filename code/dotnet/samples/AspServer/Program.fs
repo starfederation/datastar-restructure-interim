@@ -22,14 +22,14 @@ let indexPage = $"""<!doctype html>
     <h2>F# + D* Example</h2>
     <main class="container" id="main" data-store='{storeDefaults |> JsonSerializer.Serialize}'>
         <input type="text" placeholder="Send to server..." data-model="input"/><br>
-        <button data-on-click="@get('/get')">Send State Roundtrip</button><br>
-        <button data-on-click="@get('/target')">Target HTML Element</button><br>
+        <button data-on-click="$$get('/get')">Send State Roundtrip</button><br>
+        <button data-on-click="$$get('/target')">Target HTML Element</button><br>
         <button data-on-click="$show=!$show">Toggle Feed</button><br>
         <div id="output" data-text="$output"></div>
         <div id="target"></div>
         <div data-show="$show">
             <span>Feed from server: </span>
-            <span id="feed" data-on-load="@get('/feed')"></span>
+            <span id="feed" data-on-load="$$get('/feed')"></span>
         </div>
 
         <h5>Datastar Store</h5>

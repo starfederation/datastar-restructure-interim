@@ -1,6 +1,8 @@
 package site
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ScrollIntoViewStore struct {
 	Behavior string `json:"behavior"`
@@ -34,10 +36,10 @@ templ scrollIntoViewView(paragraphs []string, opts []ScrollIntoViewOption, store
 			</div>
 			<button
 				class="btn btn-accent"
-				data-on-click="@put('/examples/scroll_into_view/data')"
+				data-on-click="$$put('/examples/scroll_into_view/data')"
 			>Scroll into view</button>
 		</div>
-		{{ middle := len(paragraphs) / 2 }}
+		{{ middle :=  len(paragraphs)/2 }}
 		for i, p := range paragraphs {
 			{{
 				isMiddle := i == middle

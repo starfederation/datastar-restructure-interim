@@ -5,7 +5,7 @@ import { wholePrefixSuffix } from "../../../utils/regex";
 export const SignalsProcessor: PreprocessorPlugin = {
     name: "signal",
     pluginType: "preprocessor",
-    regexp: wholePrefixSuffix("\\$", "signal", "(?<method>\\([^\\)]*\\))?"),
+    regexp: wholePrefixSuffix("$", "signal", "(?<method>\\([^\\)]*\\))?"),
     replacer: (groups: RegexpGroups) => {
         const { signal, method } = groups;
         const prefix = `ctx.store()`;
