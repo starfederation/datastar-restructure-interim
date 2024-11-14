@@ -28,8 +28,10 @@ require (
 	github.com/nats-io/nats.go v1.37.0
 	github.com/playwright-community/playwright-go v0.4702.0
 	github.com/samber/lo v1.47.0
+	github.com/segmentio/encoding v0.4.0
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/valyala/fasttemplate v1.2.2
+	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
 	github.com/zeebo/xxh3 v1.0.2
 )
@@ -60,6 +62,7 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rzajac/clock v0.2.0 // indirect
 	github.com/rzajac/zflake v0.8.0 // indirect
+	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/ysmood/fetchup v0.2.4 // indirect
 	github.com/ysmood/goob v0.4.0 // indirect
 	github.com/ysmood/got v0.40.0 // indirect

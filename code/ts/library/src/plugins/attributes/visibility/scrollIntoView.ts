@@ -1,8 +1,13 @@
-import { AttributeContext, AttributePlugin } from "library/src/engine";
-import { scrollIntoView } from "library/src/utils/dom";
+// Authors: Delaney Gillilan
+// Icon: hugeicons:mouse-scroll-01
+// Slug: Scroll an element into view
+// Description: This attribute scrolls the element into view.
+
+import { AttributeContext, AttributePlugin } from "../../../engine";
+import { scrollIntoView } from "../../../utils/dom";
 
 // Scrolls the element into view
-export const ScrollIntoViewAttributePlugin: AttributePlugin = {
+export const ScrollIntoView: AttributePlugin = {
     pluginType: "attribute",
     prefix: "scrollIntoView",
     mustHaveEmptyKey: true,

@@ -24,6 +24,9 @@ tasks:
     cmds:
       - go run code/go/cmd/tsbuild/main.go
       - cp -r bundles/datastar.js* code/go/site/static/js/
+      - mkdir -p code/go/site/static/librarySource
+      - rm -rf code/go/site/static/librarySource/*
+      - cp -r code/ts/library/src/* code/go/site/static/librarySource/
 
   css:
     dir: code/go/site

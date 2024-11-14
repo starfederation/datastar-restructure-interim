@@ -1,6 +1,10 @@
-import { ActionPlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: material-symbols:toggle-off
+// Slug: Toggle all signals that match a regular expression
 
-export const ToggleAllActionPlugin: ActionPlugin = {
+import { ActionPlugin } from "../../../engine";
+
+export const ToggleAll: ActionPlugin = {
     pluginType: "action",
     name: "toggleAll",
     method: (ctx, regexp) => {

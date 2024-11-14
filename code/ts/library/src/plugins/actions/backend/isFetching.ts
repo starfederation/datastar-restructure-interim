@@ -1,8 +1,12 @@
-import { ActionPlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: carbon:fetch-upload
+// Slug: Check if a fetch request is currently in progress
+// Description: This action checks if a fetch request is currently in progress. This is useful for showing loading indicators or disabling buttons while a fetch request is in progress.
 
+import { ActionPlugin } from "../../../engine";
 export type IndicatorReference = { el: HTMLElement; count: number };
 
-export const isFetchingActionPlugin: ActionPlugin = {
+export const IsFetching: ActionPlugin = {
     pluginType: "action",
     name: "isFetching",
     method: (ctx, selector: string) => {

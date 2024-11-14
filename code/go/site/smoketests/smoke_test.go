@@ -5,22 +5,23 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"testing"
 	"time"
 
 	"github.com/delaneyj/toolbelt"
 	"github.com/playwright-community/playwright-go"
+	"github.com/starfederation/datastar/code/go/site"
 )
 
 const port = 8080
 
-var (
-	expect = playwright.NewPlaywrightAssertions()
-)
+var expect = playwright.NewPlaywrightAssertions()
 
-func RunSmokeTests(ctx context.Context) error {
+func TestSite(t *testing.T) {
+	ctx := context.Background()
 	start := time.Now()
 	if err := playwright.Install(); err != nil {
-		return fmt.Errorf("error installing playwright: %w", err)
+		t.Fatal(fmt.Errorf("error installing playwright: %w", err))
 	}
 	log.Printf("playwright installed in %v", time.Since(start))
 
@@ -28,23 +29,38 @@ func RunSmokeTests(ctx context.Context) error {
 	defer cancel()
 
 	log.Printf("running site on port %d", port)
-	// defer log.Print("closing site")
-	// go site.RunBlocking(port)(ctx)
+	defer log.Print("closing site")
+	go site.RunBlocking(port)(ctx)
 
 	start = time.Now()
 	log.Printf("running smoke tests")
 
 	tests := map[string]pageFunc{
-		"examples/progress_bar":  progressbar,
-		"examples/active_search": activeSearch,
+		"":                           todoExampleTest,
+		"examples/active_search":     activeSearchExampleTest,
+		"examples/animations":        animationsExampleTest,
+		"examples/bulk_update":       bulkUpdateExampleTest,
+		"examples/click_to_edit":     clickToEditExampleTest,
+		"examples/click_to_load":     clickToLoadExampleTest,
+		"examples/delete_row":        deleteRowExampleTest,
+		"examples/dialogs_browser":   dialogsBrowserExampleTest,
+		"examples/edit_row":          editRowExampleTest,
+		"examples/fetch_indicator":   fetchIndicatorExampleTest,
+		"examples/infinite_scroll":   infiniteScrollExampleTest,
+		"examples/inline_validation": inlineValidationExampleTest,
+		"examples/lazy_load":         lazyLoadExampleTest,
+		"examples/lazy_tabs":         lazyTabsExampleTest,
+		"examples/progress_bar":      progressbarExampleTest,
+		"examples/raf_update":        rafUpdateExampleTest,
+		"examples/store_changed":     storeChangedExampleTest,
+		"examples/value_select":      valueSelectExampleTest,
 	}
 
 	if err := setupSmokeTests(ctx, tests); err != nil {
-		return fmt.Errorf("error running smoke tests: %w", err)
+		t.Fatal(fmt.Errorf("error running smoke tests: %w", err))
 	}
 	log.Printf("entire smoke tests process took %v", time.Since(start))
 
-	return nil
 }
 
 type pageFunc func(ctx context.Context, page playwright.Page) error

@@ -38,15 +38,47 @@ func main() {
 }
 
 func run() error {
+	version, err := extractVersion()
+	if err != nil {
+		return fmt.Errorf("error extracting version: %w", err)
+	}
+
 	if err := errors.Join(
 		// createPluginManifest(),
 		createBundles(),
-		writeOutConsts(),
+		writeOutConsts(version),
 	); err != nil {
 		return fmt.Errorf("error creating bundles: %w", err)
 	}
 
 	return nil
+}
+
+func extractVersion() (string, error) {
+	packageJSONPath := "code/ts/library/package.json"
+	packageJSON, err := os.ReadFile(packageJSONPath)
+	if err != nil {
+		return "", fmt.Errorf("error reading package.json: %w", err)
+	}
+
+	type PackageJSON struct {
+		Version string `json:"version"`
+	}
+	pj := &PackageJSON{}
+	if err := json.Unmarshal(packageJSON, pj); err != nil {
+		return "", fmt.Errorf("error unmarshalling package.json: %w", err)
+	}
+
+	version := pj.Version
+
+	// Write out the version to the version file.
+	versionPath := "code/ts/library/src/engine/version.ts"
+	versionContens := fmt.Sprintf("export const VERSION = '%s';\n", version)
+	if err := os.WriteFile(versionPath, []byte(versionContens), 0644); err != nil {
+		return "", fmt.Errorf("error writing version file: %w", err)
+	}
+
+	return version, nil
 }
 
 func createBundles() error {
@@ -83,95 +115,8 @@ func createBundles() error {
 	return nil
 }
 
-// func createPluginManifest() error {
-// 	log.Print("Creating plugin manifest...")
-
-// 	baseDir := "code/ts/library/src/plugins"
-
-// 	codegenDir := "code/go/site/static/codegen"
-// 	os.RemoveAll(codegenDir)
-// 	if err := os.MkdirAll(codegenDir, 0755); err != nil {
-// 		return fmt.Errorf("error creating codegen dir: %w", err)
-// 	}
-
-// 	type PluginManifestEntry struct {
-// 		Source        string `json:"source"`
-// 		SourceContent string `json:"sourceContent"`
-// 	}
-
-// 	type PluginManifest struct {
-// 		Version string                 `json:"version"`
-// 		Plugins []*PluginManifestEntry `json:"plugins"`
-// 	}
-
-// 	plugins := make([]*PluginManifestEntry, 0, 64)
-
-// 	if err := filepath.WalkDir(baseDir, func(path string, d os.DirEntry, err error) error {
-// 		if err != nil {
-// 			return err
-// 		}
-// 		if d.IsDir() {
-// 			return nil
-// 		}
-
-// 		dir := filepath.Dir(path)
-
-// 		// Skip core plugins
-// 		if strings.Contains(dir, "core") {
-// 			return nil
-// 		}
-
-// 		relDir := strings.TrimPrefix(dir, baseDir)
-
-// 		b, err := os.ReadFile(path)
-// 		if err != nil {
-// 			return fmt.Errorf("error reading plugin: %w", err)
-// 		}
-
-// 		pluginMeta := &PluginManifestEntry{
-// 			Source:        filepath.Join(relDir, d.Name())[1:],
-// 			SourceContent: string(b),
-// 		}
-
-// 		plugins = append(plugins, pluginMeta)
-// 		return nil
-// 	}); err != nil {
-// 		return fmt.Errorf("error walking plugins: %w", err)
-// 	}
-
-// 	manifest := &PluginManifest{
-// 		Version: datastar.Version,
-// 		Plugins: plugins,
-// 	}
-
-// 	manifestJSON, err := json.MarshalIndent(manifest, "", "  ")
-// 	if err != nil {
-// 		return fmt.Errorf("error marshalling manifest: %w", err)
-// 	}
-
-// 	if err := os.WriteFile(filepath.Join(codegenDir, "manifest.json"), manifestJSON, 0644); err != nil {
-// 		return fmt.Errorf("error writing manifest: %w", err)
-// 	}
-
-// 	return nil
-// }
-
-func writeOutConsts() error {
+func writeOutConsts(version string) error {
 	log.Print("Extracting version...")
-
-	packageJSONPath := "code/ts/library/package.json"
-	packageJSON, err := os.ReadFile(packageJSONPath)
-	if err != nil {
-		return fmt.Errorf("error reading package.json: %w", err)
-	}
-
-	type PackageJSON struct {
-		Version string `json:"version"`
-	}
-	pj := &PackageJSON{}
-	if err := json.Unmarshal(packageJSON, pj); err != nil {
-		return fmt.Errorf("error unmarshalling package.json: %w", err)
-	}
 
 	build, err := os.ReadFile("bundles/datastar.js")
 	if err != nil {
@@ -193,7 +138,7 @@ func writeOutConsts() error {
 	datastarGzipSize := buf.Len()
 
 	constsData := map[string]any{
-		"version":                    pj.Version,
+		"version":                    version,
 		"defaultSettleTimeMs":        strconv.Itoa(int(DefaultSettleTime.Milliseconds())),
 		"defaultSSESendRetryMs":      strconv.Itoa(int(DefaultSseSendRetry.Milliseconds())),
 		"defaultFragmentMergeMode":   string(DefaultFragmentMergeMode),
@@ -241,7 +186,7 @@ use starfederation\datastar\enums\FragmentMergeMode;
 
 class Defaults
 {
-    public const DEFAULT_SETTLE_TIME = {{defaultSettleTimeMs}};
+    public const DEFAULT_SETTLE_DURATION = {{defaultSettleTimeMs}};
     public const DEFAULT_SSE_SEND_RETRY = {{defaultSSESendRetryMs}};
     public const DEFAULT_FRAGMENT_MERGE_MODE = FragmentMergeMode::Morph;
 }

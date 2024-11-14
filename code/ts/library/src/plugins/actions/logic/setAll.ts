@@ -1,6 +1,10 @@
-import { ActionPlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: ion:checkmark-round
+// Slug: Set all signals that match a regular expression
 
-export const SetAllActionPlugin: ActionPlugin = {
+import { ActionPlugin } from "../../../engine";
+
+export const SetAll: ActionPlugin = {
     pluginType: "action",
     name: "setAll",
     method: (ctx, regexp, newValue) => {

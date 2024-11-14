@@ -1,6 +1,11 @@
-import { ActionPlugin } from "library/src/engine";
+// Authors: Delaney Gillilan
+// Icon: mdi:clipboard
+// Slug: Copy text to the clipboard
+// Description: This action copies text to the clipboard using the Clipboard API.
 
-export const ClipboardActionPlugin: ActionPlugin = {
+import { ActionPlugin } from "../../../engine";
+
+export const Clipboard: ActionPlugin = {
     pluginType: "action",
     name: "clipboard",
     method: (_, text) => {

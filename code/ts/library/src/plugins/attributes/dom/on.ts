@@ -1,8 +1,13 @@
-import { AttributePlugin } from "library/src/engine";
-import { argsHas, argsToMs } from "library/src/utils/arguments";
-import { remoteSignals } from "library/src/utils/signals";
-import { kebabize } from "library/src/utils/text";
-import { debounce, throttle } from "library/src/utils/timing";
+// Authors: Delaney Gillilan
+// Icon: material-symbols:mail
+// Slug: Add an event listener to an element
+// Description: This action adds an event listener to an element. The event listener can be triggered by a variety of events, such as clicks, keypresses, and more. The event listener can also be set to trigger only once, or to be passive or capture. The event listener can also be debounced or throttled. The event listener can also be set to trigger only when the event target is outside the element.
+
+import { AttributePlugin } from "../../../engine";
+import { argsHas, argsToMs } from "../../../utils/arguments";
+import { remoteSignals } from "../../../utils/signals";
+import { kebabize } from "../../../utils/text";
+import { debounce, throttle } from "../../../utils/timing";
 
 const knownOnModifiers = new Set([
     "window",
@@ -18,7 +23,7 @@ const knownOnModifiers = new Set([
 let lastStoreMarshalled = "";
 
 // Sets the event listener of the element
-export const OnAttributePlugin: AttributePlugin = {
+export const On: AttributePlugin = {
     pluginType: "attribute",
     prefix: "on",
     mustNotEmptyKey: true,

@@ -1,4 +1,3 @@
-import { version } from "../../package.json";
 import { elemToSelector, nodeHTMLorSVGElement } from "../utils/dom";
 import { HTMLorSVGElement } from "../utils/types";
 import { DeepSignal, deepSignal, DeepState } from "../vendored/deepsignal";
@@ -16,6 +15,7 @@ import {
     PreprocessorPlugin,
     Reactivity,
 } from "./types";
+import { VERSION } from "./version";
 
 export class Engine {
     plugins: AttributePlugin[] = [];
@@ -59,7 +59,7 @@ export class Engine {
     }
 
     get version() {
-        return version;
+        return VERSION;
     }
 
     load(...pluginsToLoad: DatastarPlugin[]) {
