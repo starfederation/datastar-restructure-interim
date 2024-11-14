@@ -37,7 +37,8 @@ const FragmentMergeModes = {
     AfterElement: "after",
     UpsertAttributes: "upsertAttributes",
 } as const;
-export type FragmentMergeMode = (typeof FragmentMergeModes)[keyof typeof FragmentMergeModes];
+export type FragmentMergeMode =
+    (typeof FragmentMergeModes)[keyof typeof FragmentMergeModes];
 
 export function fetcherActionMethod(method: string): ActionMethod {
     return (ctx, urlExpression, onlyRemoteRaw) => {
@@ -77,9 +78,11 @@ async function fetcher(
     );
     const indicatorElements: HTMLElement[] =
         store?._dsPlugins?.fetch?.indicatorElements
-            ? store._dsPlugins.fetch.indicatorElements[loadingTarget.id]?.value || []
+            ? store._dsPlugins.fetch.indicatorElements[loadingTarget.id]
+                ?.value || []
             : [];
-    const indicatorsVisible: Signal<IndicatorReference[]> | undefined = store?._dsPlugins.fetch?.indicatorsVisible;
+    const indicatorsVisible: Signal<IndicatorReference[]> | undefined = store
+        ?._dsPlugins.fetch?.indicatorsVisible;
     if (!!indicatorElements?.forEach) {
         indicatorElements.forEach((indicator) => {
             if (!indicator || !indicatorsVisible) {
@@ -94,7 +97,8 @@ async function fetcher(
                 },
             );
             if (indicatorVisibleIndex > -1) {
-                const indicatorVisible = indicatorsVisible.value[indicatorVisibleIndex];
+                const indicatorVisible =
+                    indicatorsVisible.value[indicatorVisibleIndex];
                 const indicatorsVisibleNew = [...indicatorsVisible.value];
                 delete indicatorsVisibleNew[indicatorVisibleIndex];
                 indicatorsVisible.value = [
@@ -133,8 +137,7 @@ async function fetcher(
         onmessage: (evt) => {
             if (!evt.event) {
                 return;
-            }
-            else if (!evt.event.startsWith(DATASTAR)) {
+            } else if (!evt.event.startsWith(DATASTAR)) {
                 console.log(`Unknown event: ${evt.event}`);
                 debugger;
             }
@@ -154,51 +157,43 @@ async function fetcher(
                         selector = "",
                         mergeMode = DEFAULT_MERGE_MODE,
                         settleDuration = DEFAULT_SETTLE_DURATION,
-                        useViewTransition = DEFAULT_USE_VIEW_TRANSITION,
-                        exists = false,
-                        currentDatatype = "";
+                        useViewTransition = DEFAULT_USE_VIEW_TRANSITION;
 
                     for (let i = 0; i < fragmentLines.length; i++) {
-                        let line = fragmentLines[i];
-                        if (!line?.length) {
-                            continue;
+                        const line = fragmentLines[i];
+                        const [dataType, ...rest] = line.split(" ");
+                        const data = rest.join(" ");
+                        const isDatatype = knownEventTypes.includes(dataType);
+                        if (!isDatatype) {
+                            throw new Error(`Unknown data type: '${dataType}'`);
                         }
 
-                        const firstWord = line.split(" ", 1)[0];
-                        const isDatatype = knownEventTypes.includes(firstWord);
-                        const isNewDatatype = isDatatype && firstWord !== currentDatatype;
-                        if (isNewDatatype) {
-                            currentDatatype = firstWord;
-                            line = line.slice(firstWord.length + 1);
-
-                            switch (currentDatatype) {
-                                case "selector":
-                                    selector = line;
-                                    break;
-                                case "mergeMode":
-                                    mergeMode = line as FragmentMergeMode;
-                                    exists = Object.values(FragmentMergeModes).includes(mergeMode);
-                                    if (!exists) {
-                                        throw new Error(
-                                            `Unknown merge option: ${mergeMode}`,
-                                        );
-                                    }
-                                    break;
-                                case "settleDuration":
-                                    settleDuration = parseInt(line);
-                                    break;
-                                case "useViewTransition":
-                                    useViewTransition = line.trim() === "true";
-                                    break;
-                                case "fragment":
-                                    break;
-                                default:
-                                    throw new Error(`Unknown data type`);
-                            }
-                        }
-
-                        if (currentDatatype === "fragment") {
-                            fragment += line + "\n";
+                        switch (dataType) {
+                            case "selector":
+                                selector = data;
+                                break;
+                            case "mergeMode":
+                                mergeMode = data as FragmentMergeMode;
+                                if (
+                                    !Object.values(FragmentMergeModes)
+                                        .includes(mergeMode)
+                                ) {
+                                    throw new Error(
+                                        `Unknown merge option: ${mergeMode}`,
+                                    );
+                                }
+                                break;
+                            case "settleDuration":
+                                settleDuration = parseInt(data);
+                                break;
+                            case "useViewTransition":
+                                useViewTransition = data.trim() === "true";
+                                break;
+                            case "fragment":
+                                fragment += data + "\n";
+                                break;
+                            default:
+                                throw new Error(`Unknown data type`);
                         }
                     }
 
@@ -250,7 +245,8 @@ async function fetcher(
                         }
                     }
 
-                    const fnContents = ` return Object.assign({...ctx.store()}, ${storeToMerge})`;
+                    const fnContents =
+                        ` return Object.assign({...ctx.store()}, ${storeToMerge})`;
                     try {
                         const fn = new Function(
                             "ctx",
@@ -272,7 +268,9 @@ async function fetcher(
                     break;
 
                 case `${DATASTAR}-remove`:
-                    const [removePrefix, ...removeRest] = evt.data.trim().split(" ");
+                    const [removePrefix, ...removeRest] = evt.data.trim().split(
+                        " ",
+                    );
 
                     switch (removePrefix) {
                         case "selector":
@@ -300,7 +298,8 @@ async function fetcher(
                     break;
 
                 case `${DATASTAR}-redirect`:
-                    const [redirectSelector, ...redirectRest] = evt.data.trim().split(" ");
+                    const [redirectSelector, ...redirectRest] = evt.data.trim()
+                        .split(" ");
                     if (redirectSelector !== "url") {
                         throw new Error(
                             `Unknown redirect selector: ${redirectSelector}`,
@@ -318,7 +317,9 @@ async function fetcher(
                     break;
 
                 case `${DATASTAR}-console`:
-                    const [consoleMode, ...consoleRest] = evt.data.trim().split(" ");
+                    const [consoleMode, ...consoleRest] = evt.data.trim().split(
+                        " ",
+                    );
                     const consoleMessage = consoleRest.join(" ");
                     switch (consoleMode) {
                         case "assert":
@@ -365,7 +366,8 @@ async function fetcher(
                     store?._dsPlugins?.fetch?.indicatorsVisible || [];
                 const indicatorElements: HTMLElement[] =
                     store?._dsPlugins?.fetch?.indicatorElements
-                        ? store._dsPlugins.fetch.indicatorElements[loadingTarget.id]?.value || []
+                        ? store._dsPlugins.fetch
+                            .indicatorElements[loadingTarget.id]?.value || []
                         : [];
                 const indicatorCleanupPromises: Promise<() => void>[] = [];
                 if (indicatorElements?.forEach) {
@@ -383,7 +385,8 @@ async function fetcher(
                                     indicatorVisible.el,
                                 );
                             });
-                        const indicatorVisible = indicatorsVisibleNew[indicatorVisibleIndex];
+                        const indicatorVisible =
+                            indicatorsVisibleNew[indicatorVisibleIndex];
                         if (!indicatorVisible) {
                             return;
                         }
@@ -402,7 +405,9 @@ async function fetcher(
                             );
                             delete indicatorsVisibleNew[indicatorVisibleIndex];
                         } else if (indicatorVisibleIndex > -1) {
-                            indicatorsVisibleNew[indicatorVisibleIndex].count = indicatorsVisibleNew[indicatorVisibleIndex].count - 1;
+                            indicatorsVisibleNew[indicatorVisibleIndex].count =
+                                indicatorsVisibleNew[indicatorVisibleIndex]
+                                    .count - 1;
                         }
                         indicatorsVisible.value = indicatorsVisibleNew.filter(
                             (indicator) => {

@@ -142,7 +142,7 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE`, unless the merge mode is the default of `morph`.
 3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
 4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
-5. The function ***must*** include the word `fragment` at the ***end*** of the event data, followed by a new line and the fragment content. Each line of the fragment content should be a separate line in the event data (prefixed with `data: `).
+5. The function ***must*** include the fragment content in the event data, with each line prefixed with `fragment `. This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveFragments`
 
@@ -198,6 +198,7 @@ Data is a JS or JSON object that will be sent to the browser to update the data-
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-signal` event type.
 
 1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
+2. The function ***must*** include the store patches in the event data, with each line prefixed with `store `.  This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveFromStore`
 

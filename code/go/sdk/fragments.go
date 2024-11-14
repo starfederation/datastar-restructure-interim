@@ -97,8 +97,8 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 
 	dataRows := []string{"selector " + selector}
 	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
-		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, "settle "+settleTime)
+		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, "settleDuration "+settleDuration)
 	}
 	if options.UseViewTransitions != nil {
 		dataRows = append(dataRows, "useViewTransition "+strconv.FormatBool(*options.UseViewTransitions))
@@ -146,8 +146,8 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 		dataRows = append(dataRows, "merge "+string(options.MergeMode))
 	}
 	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
-		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, "settle "+settleTime)
+		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, "settle "+settleDuration)
 	}
 	if options.UseViewTransitions {
 		dataRows = append(dataRows, "useViewTransition true")
@@ -155,8 +155,9 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 
 	if fragment != "" {
 		parts := strings.Split(fragment, "\n")
-		parts[0] = "fragment " + parts[0]
-		dataRows = append(dataRows, parts...)
+		for _, part := range parts {
+			dataRows = append(dataRows, "fragment "+part)
+		}
 	}
 
 	if err := sse.send(
