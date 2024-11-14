@@ -57,12 +57,12 @@ type RenderFragmentOptions =
       SettleDuration: TimeSpan
       UseViewTransition: bool }
 module RenderFragmentOptions =
-    let defaults = { Selector = ValueNone; MergeMode = FragmentMergeMode.defaultMergeMode; SettleDuration = Defaults.DefaultSettleTime; UseViewTransition = false }
+    let defaults = { Selector = ValueNone; MergeMode = FragmentMergeMode.defaultMergeMode; SettleDuration = Defaults.DefaultSettleDuration; UseViewTransition = false }
 type RemoveFragmentOptions =
     { SettleDuration: TimeSpan
       UseViewTransition: bool }
 module RemoveFragmentOptions =
-    let defaults = { SettleDuration = Defaults.DefaultSettleTime; UseViewTransition = false }
+    let defaults = { SettleDuration = Defaults.DefaultSettleDuration; UseViewTransition = false }
 
 type ServerSideEventType = | Fragment | Signal | Remove | Redirect | Console
 module ServerSideEventType =

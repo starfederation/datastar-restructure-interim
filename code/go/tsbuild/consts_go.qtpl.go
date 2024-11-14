@@ -45,9 +45,9 @@ const (
 	qw422016.E().S(data.DatastarKey)
 //line code/go/tsbuild/consts_go.qtpl:10
 	qw422016.N().S(`"
-    DefaultSettleTime         = `)
+    DefaultSettleDuration         = `)
 //line code/go/tsbuild/consts_go.qtpl:11
-	qw422016.N().D(durationToMs(data.DefaultSettleTime))
+	qw422016.N().D(durationToMs(data.DefaultSettleDuration))
 //line code/go/tsbuild/consts_go.qtpl:11
 	qw422016.N().S(` * time.Millisecond
     DefaultSSERetryDuration   = `)

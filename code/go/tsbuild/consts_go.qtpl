@@ -8,7 +8,7 @@ const (
     VersionClientByteSize     = {%d data.VersionClientByteSize %}
     VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
     DatastarKey               = "{%s data.DatastarKey %}"
-    DefaultSettleTime         = {%d durationToMs(data.DefaultSettleTime) %} * time.Millisecond
+    DefaultSettleDuration     = {%d durationToMs(data.DefaultSettleDuration) %} * time.Millisecond
     DefaultSSERetryDuration   = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
     DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
 )
