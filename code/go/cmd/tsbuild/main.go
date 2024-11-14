@@ -199,8 +199,8 @@ export const versionClientByteSize = {{datastarSizeBytes}};
 export const versionClientByteSizeGzip = {{datastarGzipSizeBytes}};
 export const versionClientByteSizeGzipHuman = "{{datastarGzipSizByteseHuman"}};
 
-export const defaultSettleTime = {{defaultSettleTimeMs}} * 1000;
-export const defaultSettleTime = {{defaultSSESendRetryMs}} * 1000;
-export const defaultSettleTime = "{{defaultFragmentMergeMode}}";
+export const defaultSettleDuration = {{defaultSettleTimeMs}} * 1000;
+export const defaultSseSendRetry = {{defaultSSESendRetryMs}} * 1000;
+export const defaultFragmentMergeMode = "{{defaultFragmentMergeMode}}";
 `,
 }
