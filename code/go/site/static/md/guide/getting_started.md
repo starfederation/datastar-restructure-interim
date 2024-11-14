@@ -141,7 +141,7 @@ Add this inside of your `<main>` element:
 </div>
 ```
 
-So what else can we do? You can mess around and do some fun stuff with expressions. For instance, something like: `"$prompt=prompt('Enter something',$prompt);$confirm=confirm('Sure?');$confirm && $$get('/sure')"` is totally feasible.
+So what else can we do? You can mess around and do some fun stuff with expressions. For instance, something like: `"$prompt=prompt('Enter something',$prompt);$confirm=confirm('Sure?');$confirm && $get('/sure')"` is totally feasible.
 
 Anyhow, we haven't really even scratched the surface. Let's keep going.
 
@@ -242,7 +242,7 @@ Give ourselves a button to perform this action.
 Add this to your `<main>` element:
 
 ```html
-<button data-on-click="$$put('/put')">Send State</button>
+<button data-on-click="$put('/put')">Send State</button>
 ```
 
 ...and give ourselves a place to show our new state on the client.
@@ -271,7 +271,7 @@ app.get("/get", (req, res) => {
 And this to your HTML:
 
 ```html
-<button data-on-click="$$get('/get')">Get Backend State</button>
+<button data-on-click="$get('/get')">Get Backend State</button>
 <div id="output2"></div>
 ```
 
@@ -329,7 +329,7 @@ Add this inside your `<main>` element:
 ```html
 <div>
   <span>Feed from server: </span>
-  <span id="feed" data-on-load="$$get('/feed')"></span>
+  <span id="feed" data-on-load="$get('/feed')"></span>
 </div>
 ```
 
@@ -349,7 +349,7 @@ To be more precise, think of Datastar as an extension to HTML's [data attributes
 - Link-up HTML elements to state slots: `data-model="foo"`
 - Adjust HTML elements text content: `data-text="$foo"`
 - Hookup other effects on your DOM to the state: `data-show="$foo"`
-- Setup events using `data-on-click="$$get(/endpoint)"`
+- Setup events using `data-on-click="$get(/endpoint)"`
 - Respond in HTML wrapped in SSE with a target element ID to update
 
 It's that simple. To dive deeper check out some of the other links or just click below.
