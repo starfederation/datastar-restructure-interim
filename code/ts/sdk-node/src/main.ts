@@ -3,8 +3,8 @@ import { serverSentEventGenerator as BaseSseGenerator } from "@starfederation/da
 import { sseHeaders } from "@starfederation/datastar-sdk/src/sse.ts";
 import { requireThatString } from "@cowwoc/requirements";
 import { URL } from 'url';
-import  * as querystring from "querystring"
-;
+import  * as querystring from "querystring";
+
 export class ServerSentGenerator extends BaseSseGenerator {
     res: http.Response;
     req: http.Request;
