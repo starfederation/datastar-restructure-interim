@@ -7,7 +7,7 @@ const (
     VersionClientByteSize     = 43808
     VersionClientByteSizeGzip = 14870
     DatastarKey               = "datastar"
-    DefaultSettleTime         = 300 * time.Millisecond
+    DefaultSettleDuration     = 300 * time.Millisecond
     DefaultSSERetryDuration   = 1000 * time.Millisecond
     DefaultUseViewTransitions = false
 )

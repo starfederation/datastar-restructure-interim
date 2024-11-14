@@ -24,7 +24,7 @@ type ConstTemplateData struct {
 	DatastarKey               string
 	VersionClientByteSize     int
 	VersionClientByteSizeGzip int
-	DefaultSettleTime         time.Duration
+	DefaultSettleDuration     time.Duration
 	DefaultSSERetryDuration   time.Duration
 	DefaultUseViewTransitions bool
 	Enums                     []*EnumDefinition
@@ -32,7 +32,7 @@ type ConstTemplateData struct {
 
 var ConstsData = &ConstTemplateData{
 	DatastarKey:               "datastar",
-	DefaultSettleTime:         300 * time.Millisecond,
+	DefaultSettleDuration:     300 * time.Millisecond,
 	DefaultSSERetryDuration:   1 * time.Second,
 	DefaultUseViewTransitions: false,
 	Enums: []*EnumDefinition{

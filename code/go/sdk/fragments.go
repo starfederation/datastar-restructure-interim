@@ -88,7 +88,7 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 	options := &RemoveFragmentOptions{
 		EventID:            "",
 		RetryDuration:      DefaultSSERetryDuration,
-		SettleDuration:     DefaultSettleTime,
+		SettleDuration:     DefaultSettleDuration,
 		UseViewTransitions: nil,
 	}
 	for _, opt := range opts {
@@ -96,9 +96,9 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 	}
 
 	dataRows := []string{"selector " + selector}
-	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleTime {
-		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, "settle "+settleTime)
+	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
+		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, "settleDuration "+settleDuration)
 	}
 	if options.UseViewTransitions != nil {
 		dataRows = append(dataRows, "useViewTransition "+strconv.FormatBool(*options.UseViewTransitions))
@@ -124,7 +124,7 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 		RetryDuration:  DefaultSSERetryDuration,
 		Selector:       "",
 		MergeMode:      FragmentMergeModeMorph,
-		SettleDuration: DefaultSettleTime,
+		SettleDuration: DefaultSettleDuration,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -145,9 +145,9 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 	if options.MergeMode != FragmentMergeModeMorph {
 		dataRows = append(dataRows, "merge "+string(options.MergeMode))
 	}
-	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleTime {
-		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, "settle "+settleTime)
+	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
+		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, "settle "+settleDuration)
 	}
 	if options.UseViewTransitions {
 		dataRows = append(dataRows, "useViewTransition true")
