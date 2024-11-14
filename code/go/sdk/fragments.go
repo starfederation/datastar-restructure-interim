@@ -155,8 +155,9 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 
 	if fragment != "" {
 		parts := strings.Split(fragment, "\n")
-		parts[0] = "fragment " + parts[0]
-		dataRows = append(dataRows, parts...)
+		for _, part := range parts {
+			dataRows = append(dataRows, "fragment "+part)
+		}
 	}
 
 	if err := sse.send(
