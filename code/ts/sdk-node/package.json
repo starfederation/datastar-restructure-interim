@@ -21,8 +21,9 @@
   "homepage": "https://github.com/starfederation/datastar#readme",
   "dependencies": {
     "@cowwoc/requirements": "4.0.8",
+    "@starfederation/datastar-sdk": "workspace:../sdk",
     "better-sse": "^0.14.1",
-    "@starfederation/datastar-sdk": "workspace:../sdk"
+    "milliparsec": "^5.0.0"
   },
   "devDependencies": {
     "fast-check": "^3.23.1",

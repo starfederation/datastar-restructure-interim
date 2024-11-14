@@ -3,12 +3,13 @@ import { serverSentEventGenerator as BaseSseGenerator } from "@starfederation/da
 import { sseHeaders } from "@starfederation/datastar-sdk/src/sse.ts";
 import { requireThatString } from "@cowwoc/requirements";
 import { URL } from 'url';
-
+import  * as querystring from "querystring"
+;
 export class ServerSentGenerator extends BaseSseGenerator {
     res: http.Response;
     req: http.Request;
 
-    public constructor(req: http.Request, res: http.Response) {
+    public constructor(req: Request, res: Response) {
         super();
         this.res = res;
         this.req = req;
@@ -33,5 +34,16 @@ export class ServerSentGenerator extends BaseSseGenerator {
         requireThatString(url.protocol, "url protocol must be http(s)").matches(\^https?$\);
 
         super(url.href, options);
+    }
+
+    public async parseIncoming() {
+        if (this.req.method === "GET") {
+            const query = queryString.parse(this.req.url.search);
+            return JSON.parse(query.datastar);
+        }
+
+        await json()(this.req, this.res, (err) => void err && this.res.end(err));
+
+        return this.req.body.datastar;
     }
 }

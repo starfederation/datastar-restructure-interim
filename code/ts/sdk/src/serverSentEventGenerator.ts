@@ -101,4 +101,6 @@ export abstract class ServerSentEventGenerator {
 
         return this.send('datastar-console', dataLines, { eventId, retryDuration });
     }
+
+    abstract parseIncoming()
 }
