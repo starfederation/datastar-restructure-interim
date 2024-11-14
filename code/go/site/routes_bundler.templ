@@ -18,7 +18,7 @@ templ PageBundler(r *http.Request, manifest PluginManifest, store *BundlerStore)
 				<div class="text-center">While Datastar is still one of the smallest frameworks available, you can bundle only the plugins you need to reduce the size even further.</div>
 			</div>
 			<div id="results"></div>
-			<button class="btn btn-primary btn-block" data-on-click={ datastar.POST("/bundler") }>
+			<button class="btn btn-primary btn-block" data-on-click={ datastar.PostSSE("/bundler") }>
 				@icon("material-symbols:build")
 				Bundle
 			</button>

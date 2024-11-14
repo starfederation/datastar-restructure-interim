@@ -274,7 +274,7 @@ templ TodoInput(i int) {
 			}
 		`, i) }
 		if i >= 0 {
-			data-on-click.outside.capture={ datastar.PUT("/api/todos/cancel") }
+			data-on-click.outside.capture={ datastar.PutSSE("/api/todos/cancel") }
 		}
 	/>
 }
@@ -292,7 +292,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 		<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
 			<label
 				class="text-4xl cursor-pointer"
-				data-on-click={ datastar.POST("/api/todos/%d/toggle", i) }
+				data-on-click={ datastar.PostSSE("/api/todos/%d/toggle", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
 			>
 				if todo.Completed {
@@ -303,7 +303,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 			</label>
 			<label
 				class="flex-1 text-lg cursor-pointer select-none"
-				data-on-click={ datastar.GET("/api/todos/%d/edit", i) }
+				data-on-click={ datastar.GetSSE("/api/todos/%d/edit", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
 			>{ todo.Text }</label>
 			<div
@@ -314,7 +314,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 			</div>
 			<button
 				class="invisible btn btn-error group-hover:visible"
-				data-on-click={ datastar.DELETE("/api/todos/%d", i) }
+				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
 				data-testid={ fmt.Sprintf("delete_todo%d", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
 				data-show={ fmt.Sprintf("!$$isFetching('#%s')", indicatorID) }
