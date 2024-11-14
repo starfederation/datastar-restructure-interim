@@ -3,7 +3,6 @@ package site
 import (
 	"fmt"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
-	"math"
 )
 
 templ Home() {
@@ -19,14 +18,11 @@ templ Home() {
 					<div class="text-sm text-secondary">v{ datastar.Version }</div>
 				</div>
 				<div class="text-center font-brand">
-					<div class="text-xl">A real-time hypermedia framework</div>
+					<div class="text-xl md:text-2xl">A real-time hypermedia framework</div>
 				</div>
-				<p>
+				<p class="md:text-xl">
 				    Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
-				    Include Datastar with a single
-					<span class="text-lg font-bold text-primary">{ datastar.VersionClientByteSizeGzipHuman }</span>
-					file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (Go, PHP, TypeScript, .NET) to get up and running even faster.
-				</p>
+                </p>
 				<a
 					class="flex items-center w-full gap-1 btn btn-accent btn-lg"
 					href={ templ.SafeURL("/guide") }
@@ -42,6 +38,11 @@ templ Home() {
 					{ "Show me some examples!" }
 					@icon("svg-spinners:bars-scale-middle")
 				</a>
+                <p>
+				    Include Datastar with a single
+					<span class="text-lg font-bold text-primary">{ datastar.VersionClientByteSizeGzipHuman }</span>
+					file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (available for Go, PHP, .NET and TypeScript) to get up and running even faster.
+				</p>
 				<div class="w-full shadow-xl card bg-base-100">
 					<div class="card-body">
 						<div class="flex items-center gap-4">
