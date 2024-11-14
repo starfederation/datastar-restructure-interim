@@ -94,7 +94,7 @@ Another common attribute is `data-show`, which can be used to show or hide an el
 <button data-show="$title != ''">Save</button>
 ```
 
-This results in the submit button being visible only when the title is _not_ an empty string.
+This results in the button being visible only when the title is _not_ empty.
 
 <div data-store="{title2: ''}" class="alert flex flex-col items-start p-8">
     <input data-model="title2" placeholder="Enter a title" class="input input-bordered">
@@ -107,17 +107,13 @@ This results in the submit button being visible only when the title is _not_ an 
     </button>
 </div>
 
-## Events
-
-The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
+The `data-bind-*` attribute can be used to bind a JavaScript expression to any valid HTML attribute.
 
 ```html
-<button data-on-click="$title = 'New title'">
-    Reset
-</button>
+<button data-bind-disabled="$title == ''">Save</button>
 ```
 
-This results in the `title` store value being set to `New title` when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
+This results in the button being given the `disabled` attribute whenever the title _is_ empty.
 
 <div data-store="{title3: ''}" class="alert flex flex-col items-start p-8">
     <input data-model="title3" placeholder="Enter a title" class="input input-bordered">
@@ -125,26 +121,50 @@ This results in the `title` store value being set to `New title` when the button
         Title:
         <div data-text="$title3.toUpperCase()"></div>
     </div>
-    <button data-on-click="$title3 = 'New title'" class="btn btn-secondary">
+    <button data-bind-disabled="$title3 == ''" class="btn btn-primary">
+        Save
+    </button>
+</div>
+
+## Events
+
+The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
+
+```html
+<button data-on-click="$title = ''">
+    Reset
+</button>
+```
+
+This results in the `title` store value being set to an empty string when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
+
+<div data-store="{title4: ''}" class="alert flex flex-col items-start p-8">
+    <input data-model="title4" placeholder="Enter a title" class="input input-bordered">
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title4.toUpperCase()"></div>
+    </div>
+    <button data-on-click="$title4 = ''" class="btn btn-secondary">
         Reset
     </button>
 </div>
 
-So what else can we do with these expressions? Well anything we want, really:. 
+So what else can we do with these expressions? Anything we want, really. 
+
+See if you can guess what the following code does _before_ trying the demo below.
 
 ```html
-
 <div data-store="{prompt: ''}">
-    <button data-on-click="$prompt = prompt('Enter a prompt', $prompt)">
-        Click me to input a prompt
+    <button data-on-click="$prompt = prompt()">
+        Click me
     </button>
     <div data-text="$prompt"></div>
 </div>
 ```
 
-<div data-store="{prompt: ''}" class="alert flex items-center gap-8 p-8">
-    <button data-on-click="$prompt = prompt('Enter a prompt', $prompt)" class="btn btn-primary">
-        Click me to input a prompt
+<div data-store="{prompt: ''}" class="alert flex items-center gap-4 p-8">
+    <button data-on-click="$prompt = prompt()" class="btn btn-primary">
+        Click me
     </button>
     <div data-text="$prompt"></div>
 </div>
