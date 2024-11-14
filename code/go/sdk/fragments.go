@@ -7,20 +7,9 @@ import (
 	"time"
 )
 
-type FragmentMergeMode string
-
-const (
-	FragmentMergeModeMorph   FragmentMergeMode = "morph"
-	FragmentMergeModeInner   FragmentMergeMode = "inner"
-	FragmentMergeModeOuter   FragmentMergeMode = "outer"
-	FragmentMergeModePrepend FragmentMergeMode = "prepend"
-	FragmentMergeModeAppend  FragmentMergeMode = "append"
-	FragmentMergeModeBefore  FragmentMergeMode = "before"
-	FragmentMergeModeAfter   FragmentMergeMode = "after"
-	FragmentMergeModeUpsert  FragmentMergeMode = "upsertAttributes"
-)
-
 type RenderFragmentOptions struct {
+	EventID            string
+	RetryDuration      time.Duration
 	Selector           string
 	MergeMode          FragmentMergeMode
 	SettleDuration     time.Duration
@@ -59,17 +48,71 @@ func WithUseViewTransitions(useViewTransition bool) RenderFragmentOption {
 }
 
 type RemoveFragmentOptions struct {
+	EventID            string
+	RetryDuration      time.Duration
 	SettleDuration     time.Duration
-	UseViewTransitions bool
+	UseViewTransitions *bool
 }
 
-func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...RemoveFragmentOptions) error {
+type RemoveFragmentOption func(*RemoveFragmentOptions)
+
+func WithRemoveEventID(id string) RemoveFragmentOption {
+	return func(o *RemoveFragmentOptions) {
+		o.EventID = id
+	}
+}
+
+func WithRemoveRetryDuration(d time.Duration) RemoveFragmentOption {
+	return func(o *RemoveFragmentOptions) {
+		o.RetryDuration = d
+	}
+}
+
+func WithRemoveSettleDuration(d time.Duration) RemoveFragmentOption {
+	return func(o *RemoveFragmentOptions) {
+		o.SettleDuration = d
+	}
+}
+
+func WithRemoveUseViewTransitions(useViewTransition bool) RemoveFragmentOption {
+	return func(o *RemoveFragmentOptions) {
+		o.UseViewTransitions = &useViewTransition
+	}
+}
+
+func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...RemoveFragmentOption) error {
 	if selector == "" {
 		panic("missing selector")
 	}
 
+	options := &RemoveFragmentOptions{
+		EventID:            "",
+		RetryDuration:      DefaultSSERetryDuration,
+		SettleDuration:     DefaultSettleTime,
+		UseViewTransitions: nil,
+	}
+	for _, opt := range opts {
+		opt(options)
+	}
+
 	dataRows := []string{"selector " + selector}
-	if err := sse.send(EventTypeRemove, dataRows); err != nil {
+	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleTime {
+		settleTime := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, "settle "+settleTime)
+	}
+	if options.UseViewTransitions != nil {
+		dataRows = append(dataRows, "useViewTransition "+strconv.FormatBool(*options.UseViewTransitions))
+	}
+
+	sendOptions := make([]SSEEventOption, 0, 2)
+	if options.EventID != "" {
+		sendOptions = append(sendOptions, WithSSEEventId(options.EventID))
+	}
+	if options.RetryDuration > 0 {
+		sendOptions = append(sendOptions, WithSSERetryDuration(options.RetryDuration))
+	}
+
+	if err := sse.send(EventTypeRemove, dataRows, sendOptions...); err != nil {
 		return fmt.Errorf("failed to send remove: %w", err)
 	}
 	return nil
@@ -77,12 +120,22 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 
 func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...RenderFragmentOption) error {
 	options := &RenderFragmentOptions{
+		EventID:        "",
+		RetryDuration:  DefaultSSERetryDuration,
 		Selector:       "",
 		MergeMode:      FragmentMergeModeMorph,
 		SettleDuration: DefaultSettleTime,
 	}
 	for _, opt := range opts {
 		opt(options)
+	}
+
+	sendOptions := make([]SSEEventOption, 0, 2)
+	if options.EventID != "" {
+		sendOptions = append(sendOptions, WithSSEEventId(options.EventID))
+	}
+	if options.RetryDuration > 0 {
+		sendOptions = append(sendOptions, WithSSERetryDuration(options.RetryDuration))
 	}
 
 	dataRows := make([]string, 0, 4)
@@ -109,7 +162,7 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 	if err := sse.send(
 		EventTypeFragment,
 		dataRows,
-		WithSSERetry(0),
+		sendOptions...,
 	); err != nil {
 		return fmt.Errorf("failed to send fragment: %w", err)
 	}

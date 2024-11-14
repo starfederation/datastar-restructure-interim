@@ -2,6 +2,7 @@ package site
 
 import (
 	"fmt"
+	"github.com/dustin/go-humanize"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"math"
 )
@@ -23,7 +24,7 @@ templ Home() {
 				</div>
 				<p>
 					A single
-					<span class="text-lg font-bold text-primary">{ datastar.VersionClientByteSizeGzipHuman }</span>
+					<span class="text-lg font-bold text-primary">{ humanize.IBytes( datastar.VersionClientByteSizeGzip) }</span>
 					CDN link gives you access to everything needed to rival a full-stack SPA framework; all in the language of your choice.
 					To give some perspective, the entire Datastar framework is over <span class="text-lg font-bold text-primary">{ fmt.Sprintf("%.0f", math.Floor(186*1024/float64(datastar.VersionClientByteSizeGzip))) }x</span> smaller than the rocket image above.
 				</p>
@@ -55,7 +56,7 @@ templ Home() {
 						<div class="flex items-center gap-4">
 							<button
 								class="btn btn-primary btn-ghost"
-								data-on-click={ fmt.Sprintf("$$clipboard('%s')", cdnText) }
+								data-on-click={ fmt.Sprintf("$clipboard('%s')", cdnText) }
 							>
 								@icon("material-symbols:content-copy")
 							</button>
@@ -83,7 +84,7 @@ templ Home() {
 					{ "Getting Started" }
 				</a>
 				<img class="w-full" src="/chart"/>
-				<div id="todosMVC" data-on-load="$$get('/api/todos')">
+				<div id="todosMVC" data-on-load="$get('/api/todos')">
 					<p>Todos Example</p>
 					<p>If you are seeing this message, please clear your cookies and refresh the page.</p>
 					<p>We recently updated the site and the old cookies are causing issues.</p>
@@ -178,7 +179,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 							<div
 								class="text-4xl"
 								id={ indicatorID }
-								data-show={ fmt.Sprintf("$$isFetching('#%s')", indicatorID) }
+								data-show={ fmt.Sprintf("$isFetching('#%s')", indicatorID) }
 							>
 								@icon("svg-spinners:blocks-shuffle-3")
 							</div>
@@ -186,10 +187,10 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<div class="tooltip" data-tip="toggle all todos">
 									<button
 										class="btn btn-lg"
-										data-on-click="$$post('/api/todos/-1/toggle')"
+										data-on-click="$post('/api/todos/-1/toggle')"
 										data-testid="toggle_all_todos"
 										data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
-										data-show={ fmt.Sprintf("!$$isFetching('#%s')", indicatorID) }
+										data-show={ fmt.Sprintf("!$isFetching('#%s')", indicatorID) }
 									>
 										@icon("material-symbols:checklist")
 									</button>
@@ -226,7 +227,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 									} else {
 										<button
 											class="btn btn-xs join-item"
-											data-on-click={ fmt.Sprintf("$$put('/api/todos/mode/%d')", i) }
+											data-on-click={ fmt.Sprintf("$put('/api/todos/mode/%d')", i) }
 											data-testid={ TodoViewModeStrings[i] + "_mode" }
 										>
 											{ TodoViewModeStrings[i] }
@@ -239,7 +240,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 									<div class="tooltip" data-tip={ fmt.Sprintf("clear %d completed todos", completed) }>
 										<button
 											class="btn btn-error btn-xs join-item"
-											data-on-click="$$delete('/api/todos/-1')"
+											data-on-click="$delete('/api/todos/-1')"
 											data-testid="clear_todos"
 										>
 											@icon("material-symbols:delete")
@@ -249,7 +250,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<div class="tooltip" data-tip="Reset list">
 									<button
 										class="btn btn-warning btn-xs join-item"
-										data-on-click="$$put('/api/todos/reset')"
+										data-on-click="$put('/api/todos/reset')"
 										data-testid="reset_todos"
 									>
 										@icon("material-symbols:delete-sweep")
@@ -276,7 +277,7 @@ templ TodoInput(i int) {
 		data-model="input"
 		data-on-keypress={ fmt.Sprintf(`
 			if (event.key === 'Enter' && $input.trim().length) {
-				$$put('/api/todos/%d/edit');
+				$put('/api/todos/%d/edit');
 				$input = '';
 			}
 		`, i) }
@@ -324,7 +325,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				data-on-click={ datastar.DELETE("/api/todos/%d", i) }
 				data-testid={ fmt.Sprintf("delete_todo%d", i) }
 				data-fetch-indicator={ fmt.Sprintf("'#%s'", indicatorID) }
-				data-show={ fmt.Sprintf("!$$isFetching('#%s')", indicatorID) }
+				data-show={ fmt.Sprintf("!$isFetching('#%s')", indicatorID) }
 			>
 				@icon("material-symbols:close")
 			</button>

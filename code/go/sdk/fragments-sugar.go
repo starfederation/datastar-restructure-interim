@@ -16,7 +16,7 @@ var ValidFragmentMergeTypes = []FragmentMergeMode{
 	FragmentMergeModeAppend,
 	FragmentMergeModeBefore,
 	FragmentMergeModeAfter,
-	FragmentMergeModeUpsert,
+	FragmentMergeModeUpsertAttributes,
 }
 
 func FragmentMergeTypeFromString(s string) (FragmentMergeMode, error) {
@@ -49,7 +49,7 @@ func WithMergeAfter() RenderFragmentOption {
 }
 
 func WithMergeUpsertAttributes() RenderFragmentOption {
-	return WithMergeMode(FragmentMergeModeUpsert)
+	return WithMergeMode(FragmentMergeModeUpsertAttributes)
 }
 
 func WithQuerySelectorID(id string) RenderFragmentOption {
@@ -96,18 +96,18 @@ func (sse *ServerSentEventGenerator) RenderFragmentGostar(child elements.Element
 	return nil
 }
 
-func GET(urlFormat string, args ...any) string {
-	return fmt.Sprintf(`$$get('%s')`, fmt.Sprintf(urlFormat, args...))
+func GetSSE(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$get('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func POST(urlFormat string, args ...any) string {
-	return fmt.Sprintf(`$$post('%s')`, fmt.Sprintf(urlFormat, args...))
+func PostSSE(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$post('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func PUT(urlFormat string, args ...any) string {
-	return fmt.Sprintf(`$$put('%s')`, fmt.Sprintf(urlFormat, args...))
+func PutSSE(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$put('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func PATCH(urlFormat string, args ...any) string {
-	return fmt.Sprintf(`$$patch('%s')`, fmt.Sprintf(urlFormat, args...))
+func PatchSSE(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$patch('%s')`, fmt.Sprintf(urlFormat, args...))
 }
-func DELETE(urlFormat string, args ...any) string {
-	return fmt.Sprintf(`$$delete('%s')`, fmt.Sprintf(urlFormat, args...))
+func DeleteSSE(urlFormat string, args ...any) string {
+	return fmt.Sprintf(`$delete('%s')`, fmt.Sprintf(urlFormat, args...))
 }

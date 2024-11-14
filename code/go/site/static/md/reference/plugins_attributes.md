@@ -35,10 +35,10 @@ Sets the text content of an element to the value of the signal. This is useful f
 ### On
 
 ```html
-<button data-on-click="$$fn('foo','bar',1234)">Click Me</button>
+<button data-on-click="$fn('foo','bar',1234)">Click Me</button>
 ```
 
-Sets up an event listener on an element. The event listener will trigger the action specified in the expression. The expression can be any valid expression in the system. For example, `data-on-click="$$fn('foo','bar',1234)"` would trigger the action `fn` with the arguments `'foo','bar',1234` when the button is clicked.
+Sets up an event listener on an element. The event listener will trigger the action specified in the expression. The expression can be any valid expression in the system. For example, `data-on-click="$fn('foo','bar',1234)"` would trigger the action `fn` with the arguments `'foo','bar',1234` when the button is clicked.
 
 If any signal in the expression changes, the event listener will be updated to reflect the new value of the signal automatically.
 

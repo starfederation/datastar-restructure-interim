@@ -1,5 +1,5 @@
 // Authors: Delaney Gillilan
-// Icon: material-symbols:photo-camera
+// Icon: mdi:cursor-pointer
 // Slug: Create a reference to an element
 // Description: This attribute creates a reference to an element that can be used in other expressions.
 
@@ -7,7 +7,7 @@ import { AttributePlugin } from "../../../engine";
 import { elemToSelector } from "../../../utils/dom";
 
 // Sets the value of the element
-export const Ref: AttributePlugin = {
+export const RefAttribute: AttributePlugin = {
     pluginType: "attribute",
     prefix: "ref",
     mustHaveEmptyKey: true,

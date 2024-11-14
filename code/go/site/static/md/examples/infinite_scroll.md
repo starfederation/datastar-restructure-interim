@@ -10,7 +10,7 @@ Let’s focus on the final row (or the last element of your content):
 
 ```html
 <div
-  data-intersects="$offset=0;$limit=10;$$get('/examples/infinite_scroll/data')"
+  data-intersects="$offset=0;$limit=10;$get('/examples/infinite_scroll/data')"
   id="more_btn"
 >
   <div>Loading...</div>
@@ -24,7 +24,7 @@ event: datastar-fragment
 data: selector #more_btn
 data: merge morph
 data: settle 500
-data: fragment <div data-intersects="$offset=10;$limit=10;$$get('/examples/infinite_scroll/data')" id="more_btn"><div>Loading...</div></div>
+data: fragment <div data-intersects="$offset=10;$limit=10;$get('/examples/infinite_scroll/data')" id="more_btn"><div>Loading...</div></div>
 
 event: datastar-fragment
 data: selector #click_to_load_rows
@@ -42,7 +42,7 @@ Don't scroll too far, there are consequences
 <div>
 <div
     id="infinite_scroll"
-    data-on-load="$$get('/examples/infinite_scroll/data')"
+    data-on-load="$get('/examples/infinite_scroll/data')"
 >
 </div>
 <div id="more_btn"></div>

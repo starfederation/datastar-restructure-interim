@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 )
 
 var (
@@ -12,10 +13,24 @@ var (
 )
 
 type PatchStoreOptions struct {
+	EventID       string
+	RetryDuration time.Duration
 	OnlyIfMissing bool
 }
 
 type PatchStoreOption func(*PatchStoreOptions)
+
+func WithPatchStoreEventID(id string) PatchStoreOption {
+	return func(o *PatchStoreOptions) {
+		o.EventID = id
+	}
+}
+
+func WithPatchStoreRetryDuration(retryDuration time.Duration) PatchStoreOption {
+	return func(o *PatchStoreOptions) {
+		o.RetryDuration = retryDuration
+	}
+}
 
 func WithOnlyIfMissing(onlyIfMissing bool) PatchStoreOption {
 	return func(o *PatchStoreOptions) {
@@ -25,6 +40,8 @@ func WithOnlyIfMissing(onlyIfMissing bool) PatchStoreOption {
 
 func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...PatchStoreOption) error {
 	options := &PatchStoreOptions{
+		EventID:       "",
+		RetryDuration: DefaultSSERetryDuration,
 		OnlyIfMissing: false,
 	}
 	for _, opt := range opts {
@@ -40,9 +57,18 @@ func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...Pa
 		dataRows = append(dataRows, "store "+string(line))
 	}
 
+	sendOptions := make([]SSEEventOption, 0, 2)
+	if options.EventID != "" {
+		sendOptions = append(sendOptions, WithSSEEventId(options.EventID))
+	}
+	if options.RetryDuration != DefaultSSERetryDuration {
+		sendOptions = append(sendOptions, WithSSERetryDuration(options.RetryDuration))
+	}
+
 	if err := sse.send(
 		EventTypeSignal,
 		dataRows,
+		sendOptions...,
 	); err != nil {
 		return fmt.Errorf("failed to send patch store: %w", err)
 	}
