@@ -140,13 +140,7 @@ Replaces the URL in the browser without reloading the page. The value can be a r
 
 ```html
 <div
-  data-replace-url="`/page1`">
-</div>
-```
-
-```html
-<div
-  data-replace-url="`/p{$page}`">
+  data-replace-url="`/page{$page}`">
 </div>
 ```
 
