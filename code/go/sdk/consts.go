@@ -3,9 +3,9 @@ package datastar
 import "time"
 
 const (
-    Version                   = "0.20.0-beta"
-    VersionClientByteSize     = 43808
-    VersionClientByteSizeGzip = 14870
+    Version                   = "0.20.0"
+    VersionClientByteSize     = 43803
+    VersionClientByteSizeGzip = 14866
     DatastarKey               = "datastar"
     DefaultSettleDuration     = 300 * time.Millisecond
     DefaultSSERetryDuration   = 1000 * time.Millisecond
