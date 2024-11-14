@@ -4806,6 +4806,10 @@ html:has(.drawer-toggle:checked) {
   gap: 1rem;
 }
 
+.gap-7 {
+  gap: 1.75rem;
+}
+
 .gap-8 {
   gap: 2rem;
 }
@@ -5439,10 +5443,6 @@ html:has(.drawer-toggle:checked) {
 }
 
 @media (min-width: 768px) {
-  .md\:w-72 {
-    width: 18rem;
-  }
-
   .md\:max-w-3xl {
     max-width: 48rem;
   }
@@ -5462,6 +5462,11 @@ html:has(.drawer-toggle:checked) {
   .md\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
+  }
+
+  .md\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
   }
 
   .md\:text-6xl {

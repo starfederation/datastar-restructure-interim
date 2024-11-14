@@ -1,21 +1,22 @@
 # Getting Started
 
-Datastar brings libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, in one cohesive solution. It's a tiny (extensible) framework that allows you to:
+Datastar brings libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, in one cohesive solution. It's a tiny, extensible framework that allows you to:
 
 1. Manage state and build reactivity into your frontend using HTML attributes.
-2. Modify the DOM and state by sending HTML fragments from your backend.
+2. Modify the DOM and state by sending events from your backend.
 
 With Datastar, you can build any UI that a full-stack framework like React, Vue.js or Svelte can, using a much simpler, hypermedia-driven approach.
 
 <div class="alert alert-info">
-    <p>
-        We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case for a web app that Datastar _cannot_ realistically be used to build!
-    </p> 
+    <iconify-icon icon="ion:rocket"></iconify-icon>
+    <div>
+        We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case for a web app that Datastar <em>cannot</em> realistically be used to build!
+    </div>
 </div>
 
 ## Installation
 
-### Script Tag
+### Using a Script Tag
 
 The quickest way to use Datastar is to include it in your HTML using a script tag hosted on a CDN.
 
@@ -23,7 +24,7 @@ The quickest way to use Datastar is to include it in your HTML using a script ta
 <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
 
-If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) the file or create your own custom bundle using the [bundler](/bundler), then include it from the appropriate path:
+If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) it or create your own [custom bundle](/bundler), then include it from the appropriate path.
     
 ```html
 <script type="module" defer src="/path/to/datastar.min.js"></script>
@@ -31,7 +32,7 @@ If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm
 
 If you want a version with source maps, download and include the [unminified file](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js) and the [source map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js.map).
 
-### NPM
+### Using NPM
 
 You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
 
@@ -41,23 +42,23 @@ npm install @sudodevnull/datastar
 
 ## Handling State
 
-Let's start with how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
+Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
 <div data-store="{title: ''}"></div>
 ```
 
-This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). The value must be written as a JavaScript object literal _or_ using JSON syntax.
+This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). 
 
-Store values are nestable, which can be useful for namespacing values.
+Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
 
 ```html
-<div data-store="{primary: {title: ''}, secondary: {title: '' }}"</div>
+<div data-store="{primary: {title: ''}, secondary: {title: '' }}"></div>
 ```
 
 ## Adding Reactivity
 
-Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be place on any form field (`input`, `textarea`, `select`, `checkbox` and `radio` elements).
+Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be placed on `input`, `textarea`, `select`, `checkbox` and `radio` elements.
 
 ```html
 <input data-model="title" type="text" placeholder="Type here!">
@@ -80,28 +81,30 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 ```
 
 <div data-store="{title1: ''}" class="alert flex flex-col items-start p-8">
-    <div>
-        Title:
-        <span data-text="$title1.toUpperCase()"></span>
-    </div>
     <input data-model="title1" placeholder="Enter a title" class="input input-bordered">
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title1.toUpperCase()"></div>
+    </div>
 </div>
 
 Another common attribute is `data-show`, which can be used to show or hide an element based on whether a JavaScript expression evaluates to `true` or `false`.
 
 ```html
-<input data-show="$title != ''" type="submit" value="Save">
+<button data-show="$title != ''">Save</button>
 ```
 
 This results in the submit button being visible only when the title is _not_ an empty string.
 
 <div data-store="{title2: ''}" class="alert flex flex-col items-start p-8">
-    <div>
-        Title:
-        <span data-text="$title2.toUpperCase()"></span>
-    </div>
     <input data-model="title2" placeholder="Enter a title" class="input input-bordered">
-    <button data-show="$title2 != ''">Save</button>
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title2.toUpperCase()"></div>
+    </div>
+    <button data-show="$title2 != ''" class="btn btn-primary">
+        Save
+    </button>
 </div>
 
 ## Events
@@ -117,35 +120,42 @@ The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to exec
 This results in the `title` store value being set to `New title` when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
 
 <div data-store="{title3: ''}" class="alert flex flex-col items-start p-8">
-    <div>
-        Title:
-        <span data-text="$title3.toUpperCase()"></span>
-    </div>
     <input data-model="title3" placeholder="Enter a title" class="input input-bordered">
-    <button data-on-click="$title3 = 'New title'">Reset</button>
+    <div class="flex gap-2">
+        Title:
+        <div data-text="$title3.toUpperCase()"></div>
+    </div>
+    <button data-on-click="$title3 = 'New title'" class="btn btn-secondary">
+        Reset
+    </button>
 </div>
 
 So what else can we do with these expressions? Well anything we want, really:. 
 
 ```html
-<button data-on-click="$prompt = prompt('Enter a value', $prompt); confirm('Are you sure?') && console.log($prompt)">
-    Click me to log a prompt value
-</button>
+
+<div data-store="{prompt: ''}">
+    <button data-on-click="$prompt = prompt('Enter a prompt', $prompt)">
+        Click me to input a prompt
+    </button>
+    <div data-text="$prompt"></div>
+</div>
 ```
 
-<div data-store="{prompt: ''}" class="alert flex flex-col items-start p-8">
-    <button data-on-click="$prompt = prompt('Enter a value', $prompt); confirm('Are you sure?') && console.log($prompt)">
-        Click me to log a prompt value
+<div data-store="{prompt: ''}" class="alert flex items-center gap-8 p-8">
+    <button data-on-click="$prompt = prompt('Enter a prompt', $prompt)" class="btn btn-primary">
+        Click me to input a prompt
     </button>
+    <div data-text="$prompt"></div>
 </div>
 
-We've only scratched the surface of frontend reactivity, but let's now take a look at how the backend can come into play.
+We've just scratched the surface of frontend reactivity, but let's take a look at how we can bring the backend into play.
 
 ## Backend Setup
 
-Datastar uses [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) or SSE. There's no special backend plumbing required to use SSE, just some special syntax. Fortunately, SSE is straightforward and [provides us with many advantages](/essays/event_streams_all_the_way_down).
+Datastar uses [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) or SSE. There's no special backend plumbing required to use SSE, just some special syntax. Fortunately, SSE is straightforward and [provides us with some advantages](/essays/event_streams_all_the_way_down).
 
-First, set up your backend in the language of your choice. Using one of the helper SDKs (Go, PHP, TypeScript, .NET) will help you get up and running faster. We're going to use the SDKs in the examples below, which set the appropriate headers and format the events for us, but this is optional.
+First, set up your backend in the language of your choice. Using one of the helper SDKs (available for Go, PHP, TypeScript and .NET) will help you get up and running faster. We're going to use the SDKs in the examples below, which set the appropriate headers and format the events for us, but this is optional.
 
 The following code would exist in a controller action endpoint in your backend.
 
@@ -158,13 +168,13 @@ $sseGenerator = new ServerSentEventGenerator();
 // Updates the `title` store value.
 $sseGenerator->patchStore(['title' => 'Greetings']);
 
-// Swaps out an existing fragment in the DOM.
+// Renders a fragment in the DOM.
 $sseGenerator->renderFragment('<div id="greeting">Hello, world!</div>');
 ```
 
 The `patchStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
 
-The `renderFragment()` method sends an event to the client with the HTML fragment, which replaces the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
+The `renderFragment()` method renders the HTML fragment in the DOM, replacing the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
 
 With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
 
@@ -178,9 +188,9 @@ With our backend in place, we can now use a `data-on-click` on a button to send 
 </div>
 ```
 
-Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend – neato!
+Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend – neat!
 
-We're not limited to just `GET` requests. We can also send `POST`, `PUT`, `PATCH` and `DELETE` requests, using `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
+We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`, `PATCH` and `DELETE` requests, using `get()`, `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
 
 ```html
 <button data-on-click="$post('/actions/greeting')">
