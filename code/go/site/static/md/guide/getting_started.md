@@ -1,6 +1,6 @@
 # Getting Started
 
-Datastar brings libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, in one cohesive solution. It's a tiny, extensible framework that allows you to:
+Datastar brings the functionality provided by libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, in one cohesive solution. It's a tiny, extensible framework that allows you to:
 
 1. Manage state and build reactivity into your frontend using HTML attributes.
 2. Modify the DOM and state by sending events from your backend.
@@ -8,7 +8,7 @@ Datastar brings libraries like [AlpineJs](https://alpinejs.dev/) (frontend react
 With Datastar, you can build any UI that a full-stack framework like React, Vue.js or Svelte can, using a much simpler, hypermedia-driven approach.
 
 <div class="alert alert-info">
-    <iconify-icon icon="ion:rocket"></iconify-icon>
+    <iconify-icon icon="simple-icons:rocket"></iconify-icon>
     <div>
         We're so confident that Datastar can be used as a JavaScript framework replacement that we challenge anyone to find a use-case for a web app that Datastar <em>cannot</em> realistically be used to build!
     </div>
