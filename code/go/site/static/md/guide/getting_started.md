@@ -20,13 +20,13 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 The quickest way to use Datastar is to include it in your HTML using a script tag hosted on a CDN.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar" type="module" defer></script>
+<script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
 
 If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) the file or create your own custom bundle using the [bundler](/bundler), then include it from the appropriate path:
     
 ```html
-<script src="/path/to/datastar.min.js" type="module" defer></script>
+<script type="module" defer src="/path/to/datastar.min.js"></script>
 ```
 
 If you want a version with source maps, download and include the [unminified file](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js) and the [source map](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.js.map).
