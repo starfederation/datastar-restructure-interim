@@ -4,37 +4,105 @@ namespace StarFederation.Datastar
 
 open System
 
-type FragmentMergeMode = | Morph | Inner | Outer | Prepend | Append | Before | After | UpsertAttributes
+type FragmentMergeMode =
+/// Morphs the fragment into the existing element using idiomorph.
+| Morph
+/// Replaces the inner HTML of the existing element.
+| Inner
+/// Replaces the outer HTML of the existing element.
+| Outer
+/// Prepends the fragment to the existing element.
+| Prepend
+/// Appends the fragment to the existing element.
+| Append
+/// Inserts the fragment before the existing element.
+| Before
+/// Inserts the fragment after the existing element.
+| After
+/// Upserts the attributes of the existing element.
+| UpsertAttributes
 
-type EventType = | Fragment | Signal | Remove | Redirect | Console
+type EventType =
+/// An event dealing with HTML fragments.
+| Fragment
+/// An event dealing with fine grain signals.
+| Signal
+/// An event dealing with removing elements or signals.
+| Remove
+/// An event dealing with redirecting the browser.
+| Redirect
+/// An event dealing with console messages.
+| Console
 
-type ConsoleMode = | Assert | Clear | Count | CountReset | Debug | Dir | Dirxml | Error | Group | GroupCollapsed | GroupEnd | Info | Log | Table | Time | TimeEnd | TimeLog | Trace | Warn
+type ConsoleMode =
+/// Writes an error message to the console if the assertion is false. If the assertion is true, nothing happens.
+| Assert
+/// Clears the console if the console allows it. A graphical console, like those running on browsers, will allow it; a console displaying on the terminal, like the one running on Node, will not support it, and will have no effect (and no error).
+| Clear
+/// Logs the number of times that this particular call to count() has been called.
+| Count
+/// Resets counter used with console.count().
+| CountReset
+/// Outputs a message to the console at the &#39;debug&#39; log level. The message is only displayed to the user if the console is configured to display debug output. In most cases, the log level is configured within the console UI. This log level might correspond to the Debug or Verbose log level.
+| Debug
+/// Displays a list of the properties of the specified JavaScript object. In browser consoles, the output is presented as a hierarchical listing with disclosure triangles that let you see the contents of child objects. Unlike other logging methods, console.dir() does not attempt to pretty-print the object. For example, if you pass a DOM element to console.dir(), it will not be displayed like in the element inspector, but will instead show a list of properties.
+| Dir
+/// Displays an interactive tree of the descendant elements of the specified XML/HTML element. If it is not possible to display as an element the JavaScript Object view is shown instead. The output is presented as a hierarchical listing of expandable nodes that let you see the contents of child nodes.
+| Dirxml
+/// Outputs a message to the console at the &#39;error&#39; log level.
+| Error
+/// Creates a new inline group in the Web console log, causing any subsequent console messages to be indented by an additional level, until console.groupEnd() is called.
+| Group
+/// Creates a new inline group in the console. Unlike console.group(), however, the new group is created collapsed. The user will need to use the disclosure button next to it to expand it, revealing the entries created in the group. Call console.groupEnd() to back out to the parent group.
+| GroupCollapsed
+/// Exits the current inline group in the console.
+| GroupEnd
+/// Outputs a message to the console at the &#39;info&#39; log level.
+| Info
+/// Outputs a message to the console.
+| Log
+/// Displays tabular data as a table.
+| Table
+/// Starts a timer you can use to track how long an operation takes. You give each timer a unique name, and may have up to 10,000 timers running on a given page. When you call console.timeEnd() with the same name, the browser will output the time, in milliseconds, that elapsed since the timer was started.
+| Time
+/// The console.timeEnd() static method stops a timer that was previously started by calling console.time().
+| TimeEnd
+/// Logs the current value of a timer that was previously started by calling console.time().
+| TimeLog
+/// Outputs a stack trace to the console.
+| Trace
+/// Outputs a warning message to the console at the &#39;warning&#39; log level.
+| Warn
 
 
 module Consts =
-
-    let [<Literal>] DatastarKey = "datastar"
+    let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
     let [<Literal>] VersionClientByteSize     = 43926
     let [<Literal>] VersionClientByteSizeGzip = 14902
 
-    let DefaultSettleDuration     = TimeSpan.FromMilliseconds 300
-    let DefaultSSERetryDuration   = TimeSpan.FromMilliseconds 1000
+    /// Default: TimeSpan.FromMilliseconds 300
+    let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
+    /// Default: TimeSpan.FromMilliseconds 1000
+    let DefaultSSERetryDuration = TimeSpan.FromMilliseconds 1000
+    /// Default: morph - Morphs the fragment into the existing element using idiomorph.
+    let DefaultFragmentMergeMode = Morph
+
     let [<Literal>] DefaultUseViewTransitions = false
     let [<Literal>] DefaultOnlyIfMissing = false
 
-    let [<Literal>] datastarDatalineSelector = "selector "
-    let [<Literal>] datastarDatalineMergeMode = "mergeMode "
-    let [<Literal>] datastarDatalineSettleDuration = "settleDuration "
-    let [<Literal>] datastarDatalineFragment = "fragment "
-    let [<Literal>] datastarDatalineUseViewTransition = "useViewTransition "
-    let [<Literal>] datastarDatalineStore = "store "
-    let [<Literal>] datastarDatalineOnlyIfMissing = "onlyIfMissing "
-    let [<Literal>] datastarDatalineUrl = "url "
-    let [<Literal>] datastarDatalinePaths = "paths "
+    let [<Literal>] DatastarDatalineSelector = "selector"
+    let [<Literal>] DatastarDatalineMergeMode = "mergeMode"
+    let [<Literal>] DatastarDatalineSettleDuration = "settleDuration"
+    let [<Literal>] DatastarDatalineFragment = "fragment"
+    let [<Literal>] DatastarDatalineUseViewTransition = "useViewTransition"
+    let [<Literal>] DatastarDatalineStore = "store"
+    let [<Literal>] DatastarDatalineOnlyIfMissing = "onlyIfMissing"
+    let [<Literal>] DatastarDatalineUrl = "url"
+    let [<Literal>] DatastarDatalinePaths = "paths"
 
     module FragmentMergeMode =
-        let toString (this.FragmentMergeMode) =
+        let toString this =
             match this with
                 | FragmentMergeMode.Morph -> "morph"
                 | FragmentMergeMode.Inner -> "inner"
@@ -46,7 +114,7 @@ module Consts =
                 | FragmentMergeMode.UpsertAttributes -> "upsertAttributes"
 
     module EventType =
-        let toString (this.EventType) =
+        let toString this =
             match this with
                 | EventType.Fragment -> "datastar-fragment"
                 | EventType.Signal -> "datastar-signal"
@@ -55,7 +123,7 @@ module Consts =
                 | EventType.Console -> "datastar-console"
 
     module ConsoleMode =
-        let toString (this.ConsoleMode) =
+        let toString this =
             match this with
                 | ConsoleMode.Assert -> "assert"
                 | ConsoleMode.Clear -> "clear"
