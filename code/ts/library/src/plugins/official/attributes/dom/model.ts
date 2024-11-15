@@ -3,14 +3,14 @@
 // Slug: Enable two-way data binding
 // Description: This attribute plugin enables two-way data binding for input elements.
 
-import { AttributePlugin, RegexpGroups } from "../../../engine";
+import { AttributePlugin, RegexpGroups } from "../../../../engine";
 
 const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;
 const updateModelEvents = ["change", "input", "keydown"];
 
 export const Model: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "model",
+    name: "model",
     mustHaveEmptyKey: true,
     preprocessors: {
         post: [

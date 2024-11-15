@@ -3,11 +3,11 @@
 // Slug: Set the text content of an element
 // Description: This attribute sets the text content of an element to the result of the expression.
 
-import { AttributePlugin } from "../../../engine";
+import { AttributePlugin } from "../../../../engine";
 
 export const Text: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "text",
+    name: "text",
     mustHaveEmptyKey: true,
 
     onLoad: (ctx) => {

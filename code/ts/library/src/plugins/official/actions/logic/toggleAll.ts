@@ -2,7 +2,7 @@
 // Icon: material-symbols:toggle-off
 // Slug: Toggle all signals that match a regular expression
 
-import { ActionPlugin } from "../../../engine";
+import { ActionPlugin } from "../../../../engine";
 
 export const ToggleAll: ActionPlugin = {
     pluginType: "action",

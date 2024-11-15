@@ -78,8 +78,8 @@ type ConsoleMode =
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
-    let [<Literal>] VersionClientByteSize     = 43926
-    let [<Literal>] VersionClientByteSizeGzip = 14902
+    let [<Literal>] VersionClientByteSize     = 43920
+    let [<Literal>] VersionClientByteSizeGzip = 14899
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
