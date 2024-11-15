@@ -18,12 +18,12 @@ module Consts =
     let [<Literal>] VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
 
     /// Default: TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSettleDuration) %}
-    let DefaultSettleDuration     = TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSettleDuration) %}
+    let DefaultSettleDuration = TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSettleDuration) %}
     /// Default: TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSSERetryDuration) %}
-    let DefaultSSERetryDuration   = TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSSERetryDuration) %}
+    let DefaultSSERetryDuration = TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSSERetryDuration) %}
     {%- for _, enum := range data.Enums -%}{%- if enum.DefaultIndex > -1 -%}
     /// Default: {%s enum.Default.Value %} - {%s enum.Default.Description %}
-    let Default{%s enum.Name.Pascal %} = {%s enum.DefaultValue.Pascal %}{% endif %}{% endfor %}
+    let Default{%s enum.Name.Pascal %} = {%s enum.Default.Name.Pascal %}{% endif %}{% endfor %}
 
     let [<Literal>] DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
     let [<Literal>] DefaultOnlyIfMissing = {%v data.DefaultOnlyIfMissing %}

@@ -82,9 +82,9 @@ module Consts =
     let [<Literal>] VersionClientByteSizeGzip = 14866
 
     /// Default: TimeSpan.FromMilliseconds 300
-    let DefaultSettleDuration     = TimeSpan.FromMilliseconds 300
+    let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
     /// Default: TimeSpan.FromMilliseconds 1000
-    let DefaultSSERetryDuration   = TimeSpan.FromMilliseconds 1000
+    let DefaultSSERetryDuration = TimeSpan.FromMilliseconds 1000
     /// Default: morph - Morphs the fragment into the existing element using idiomorph.
     let DefaultFragmentMergeMode = Morph
 

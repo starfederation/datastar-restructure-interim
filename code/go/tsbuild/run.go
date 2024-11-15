@@ -127,7 +127,6 @@ func writeOutConsts(version string) error {
 		}
 		if enum.DefaultIndex >= 0 {
 			enum.Default = enum.Values[enum.DefaultIndex]
-			enum.DefaultValue = toolbelt.ToCasedString(enum.Values[enum.DefaultIndex].Value)
 		}
 	}
 

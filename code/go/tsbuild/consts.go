@@ -17,7 +17,6 @@ type EnumDefinition struct {
 	Values       []*EnumValueDefinition
 	DefaultIndex int
 	Default      *EnumValueDefinition
-	DefaultValue toolbelt.CasedString
 }
 
 type ConstTemplateData struct {
