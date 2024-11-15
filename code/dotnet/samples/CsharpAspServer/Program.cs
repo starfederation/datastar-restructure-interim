@@ -73,10 +73,10 @@ public static class Program
             }
             finally
             {
-                try { acc.HttpContext.Connection.RequestClose(); } catch { }
+                try { acc?.HttpContext?.Connection.RequestClose(); } catch { }
             }
         });
-        app.MapGet("/removeTarget", (IServerSentEventGenerator sse) => sse.RemoveFragment("#target"));
+        app.MapGet("/removeTarget", (IServerSentEventGenerator sse) => sse.RemoveFragments("#target"));
         app.MapGet("/clickRocket", (IServerSentEventGenerator sse) => sse.Console(ConsoleMode.Info, "You clicked the rocket!"));
         app.MapGet("/redirect", (IServerSentEventGenerator sse) => sse.Redirect("https://data-star.dev"));
 

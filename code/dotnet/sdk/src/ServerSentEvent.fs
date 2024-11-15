@@ -29,8 +29,8 @@ type MergeFragmentOptions =
 module MergeFragmentOptions =
     let defaults = { Selector = ValueNone; MergeMode = Consts.DefaultFragmentMergeMode; SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransitions }
 
-type RemoveFragmentOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
-module RemoveFragmentOptions =
+type RemoveFragmentsOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
+module RemoveFragmentsOptions =
     let defaults = { SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransitions }
 
 type EventOptions = { EventId: string voption; Retry: TimeSpan }
@@ -79,7 +79,7 @@ module ServerSentEvent =
             |] }
         |> send env
 
-    let removeFragment env eventOptions options selector =
+    let removeFragments env eventOptions options selector =
         { EventType = Remove
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
