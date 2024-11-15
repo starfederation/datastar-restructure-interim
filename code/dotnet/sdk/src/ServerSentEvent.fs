@@ -27,11 +27,11 @@ type RenderFragmentOptions =
       SettleDuration: TimeSpan
       UseViewTransition: bool }
 module RenderFragmentOptions =
-    let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleTime; UseViewTransition = Consts.DefaultUseViewTransition }
+    let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransition }
 
 type RemoveFragmentOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
 module RemoveFragmentOptions =
-    let defaults = { SettleDuration = Consts.DefaultSettleTime; UseViewTransition = Consts.DefaultUseViewTransition }
+    let defaults = { SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransition }
 
 type EventOptions = { EventId: string voption; Retry: TimeSpan }
 module EventOptions =
@@ -73,7 +73,7 @@ module ServerSentEvent =
           DataLines = [|
             if options.Selector |> ValueOption.isSome then $"{Consts.dataSelector} {options.Selector |> ValueOption.get |> Selector.value}"
             $"{Consts.dataMerge} {options.MergeMode |> Consts.FragmentMergeMode.toString}"
-            if (options.SettleDuration <> Consts.DefaultSettleTime) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
+            if (options.SettleDuration <> Consts.DefaultSettleDuration) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
             if (options.UseViewTransition <> Consts.DefaultUseViewTransition) then $"{Consts.dataUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
             yield! (fragmentLines |> Seq.map (fun fragmentLine -> $"{Consts.dataFragment} %s{fragmentLine}"))
             |] }
@@ -85,7 +85,7 @@ module ServerSentEvent =
           Retry = eventOptions.Retry
           DataLines = [|
             $"{Consts.dataSelector} {selector |> Selector.value}"
-            if (options.SettleDuration <> Consts.DefaultSettleTime) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
+            if (options.SettleDuration <> Consts.DefaultSettleDuration) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
             if (options.UseViewTransition <> Consts.DefaultUseViewTransition) then $"{Consts.dataUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
             |] }
         |> send env
