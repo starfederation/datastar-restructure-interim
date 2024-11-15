@@ -13,7 +13,7 @@ import { remoteSignals } from "../../../../utils/signals";
 
 export const Persist: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "persist",
+    name: "persist",
     allowedModifiers: new Set(["local", "session", "remote"]),
 
     onLoad: (ctx) => {

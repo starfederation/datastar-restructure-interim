@@ -13,7 +13,7 @@ import { storeFromPossibleContents } from "../../../../utils/signals";
 // Setup the global store
 export const Store: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "store",
+    name: "store",
     removeNewLines: true,
     preprocessors: {
         pre: [

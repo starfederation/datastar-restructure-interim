@@ -9,7 +9,7 @@ import { elemToSelector } from "../../../../utils/dom";
 // Sets the value of the element
 export const RefAttribute: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "ref",
+    name: "ref",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
     bypassExpressionFunctionCreation: () => true,

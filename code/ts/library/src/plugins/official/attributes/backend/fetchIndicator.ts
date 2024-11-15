@@ -11,7 +11,7 @@ export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
 // Sets the fetch indicator selector
 export const FetchIndicator: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "fetchIndicator",
+    name: "fetchIndicator",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
     onGlobalInit: () => {

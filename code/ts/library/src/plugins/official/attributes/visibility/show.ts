@@ -17,7 +17,7 @@ const SHOW_DURATION_TRANSITION_STYLE = `${DATASTAR}-show-duration-transition`;
 
 export const Show: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "show",
+    name: "show",
     "allowedModifiers": new Set([IMPORTANT, DURATION]),
 
     onLoad: (ctx) => {

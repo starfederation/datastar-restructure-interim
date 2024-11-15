@@ -9,7 +9,7 @@ import { scrollIntoView } from "../../../../utils/dom";
 // Scrolls the element into view
 export const ScrollIntoView: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "scrollIntoView",
+    name: "scrollIntoView",
     mustHaveEmptyKey: true,
     mustHaveEmptyExpression: true,
     allowedModifiers: new Set([

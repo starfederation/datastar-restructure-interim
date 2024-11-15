@@ -8,7 +8,7 @@ import { supportsViewTransitions } from "../../../../utils/view-transitions";
 
 export const ViewTransition: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "viewTransition",
+    name: "viewTransition",
     onGlobalInit() {
         let hasViewTransitionMeta = false;
         document.head.childNodes.forEach((node) => {

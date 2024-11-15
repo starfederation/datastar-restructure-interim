@@ -14,7 +14,7 @@ const teleportParentErr = new Error(
 // Teleports the element to another element
 export const Teleport: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "teleport",
+    name: "teleport",
     allowedModifiers: new Set([PREPEND, APPEND]),
     allowedTagRegexps: new Set(["template"]),
     bypassExpressionFunctionCreation: () => true,

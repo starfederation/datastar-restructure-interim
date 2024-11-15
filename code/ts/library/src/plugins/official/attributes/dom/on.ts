@@ -25,7 +25,7 @@ let lastStoreMarshalled = "";
 // Sets the event listener of the element
 export const On: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "on",
+    name: "on",
     mustNotEmptyKey: true,
     mustNotEmptyExpression: true,
     argumentNames: ["evt"],

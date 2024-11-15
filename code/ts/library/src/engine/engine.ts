@@ -5,23 +5,36 @@ import { computed, effect, Signal, signal } from "../vendored/preact-core";
 import { apply } from "../vendored/ts-merge-patch";
 import { DATASTAR_EVENT } from "./const";
 import {
+    ActionPlugin,
     ActionPlugins,
     AttributeContext,
     AttributePlugin,
     DatastarEvent,
     DatastarPlugin,
+    EffectPlugin,
     ExpressionFunction,
+    InitContext,
     OnRemovalFn,
     PreprocessorPlugin,
     Reactivity,
 } from "./types";
 import { VERSION } from "./version";
 
+const isPreprocessorPlugin = (p: DatastarPlugin): p is PreprocessorPlugin =>
+    p.pluginType === "preprocessor";
+const isEffectPlugin = (p: DatastarPlugin): p is EffectPlugin =>
+    p.pluginType === "effect";
+const isAttributePlugin = (p: DatastarPlugin): p is AttributePlugin =>
+    p.pluginType === "attribute";
+const isActionPlugin = (p: DatastarPlugin): p is ActionPlugin =>
+    p.pluginType === "action";
+
 export class Engine {
     plugins: AttributePlugin[] = [];
     store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
     preprocessors = new Array<PreprocessorPlugin>();
     actions: ActionPlugins = {};
+    sideEffects = new Array<EffectPlugin>();
     refs: Record<string, HTMLElement> = {};
     reactivity: Reactivity = {
         signal,
@@ -63,79 +76,70 @@ export class Engine {
     }
 
     load(...pluginsToLoad: DatastarPlugin[]) {
+        const allLoadedPlugins = new Set<DatastarPlugin>(this.plugins);
+
         pluginsToLoad.forEach((plugin) => {
-            switch (plugin.pluginType) {
-                case "preprocessor":
+            if (plugin.requiredPlugins) {
+                for (
+                    const requiredPluginType of plugin
+                        .requiredPlugins
+                ) {
                     if (
-                        this.plugins.find(
-                            (p) => p.prefix === plugin.name,
-                        )
+                        !allLoadedPlugins.has(requiredPluginType)
                     ) {
                         throw new Error(
-                            `Preprocessor ${plugin.name} already exists`,
+                            `Plugin '${plugin.name}' requires plugin '${requiredPluginType}' to be loaded`,
                         );
                     }
-                    this.preprocessors.push(plugin);
-                    break;
-
-                case "action":
-                    const alreadyExistsLocally = this.actions[plugin.name];
-                    if (alreadyExistsLocally) {
-                        throw new Error(
-                            `Action ${plugin.name} already exists`,
-                        );
-                    }
-
-                    const alreadyExistsGlobally = (window as any)[plugin.name];
-                    if (alreadyExistsGlobally) {
-                        throw new Error(
-                            `Action ${plugin.name} already exists globally`,
-                        );
-                    }
-
-                    this.actions[plugin.name] = plugin;
-                    break;
-
-                case "attribute":
-                    const allPluginPrefixes = new Set<string>(
-                        this.plugins.map((p) => p.prefix),
-                    );
-                    if (plugin.requiredPluginPrefixes) {
-                        for (
-                            const requiredPluginType of plugin
-                                .requiredPluginPrefixes
-                        ) {
-                            if (
-                                !allPluginPrefixes.has(requiredPluginType)
-                            ) {
-                                throw new Error(
-                                    `${plugin.prefix} requires ${requiredPluginType}`,
-                                );
-                            }
-                        }
-                    }
-
-                    this.plugins.push(plugin);
-                    allPluginPrefixes.add(plugin.prefix);
-
-                    if (plugin.onGlobalInit) {
-                        plugin.onGlobalInit({
-                            actions: this.actions,
-                            reactivity: this.reactivity,
-                            mergeStore: this.mergeStore.bind(this),
-                            store: this.store,
-                        });
-                        this.sendDatastarEvent(
-                            "core",
-                            "plugins",
-                            "registration",
-                            "BODY",
-                            `On prefix ${plugin.prefix}`,
-                        );
-                    }
-
-                    break;
+                }
             }
+
+            let globalInitializer: ((ctx: InitContext) => void) | undefined;
+            if (isPreprocessorPlugin(plugin)) {
+                if (this.preprocessors.includes(plugin)) {
+                    throw new Error(
+                        `Preprocessor ${plugin.name} already exists`,
+                    );
+                }
+                this.preprocessors.push(plugin);
+            } else if (isEffectPlugin(plugin)) {
+            } else if (isActionPlugin(plugin)) {
+                if (!!this.actions[plugin.name]) {
+                    throw new Error(
+                        `Action ${plugin.name} already exists`,
+                    );
+                }
+                this.actions[plugin.name] = plugin;
+            } else if (isAttributePlugin(plugin)) {
+                if (this.plugins.includes(plugin)) {
+                    throw new Error(
+                        `Attribute ${plugin.name} already exists`,
+                    );
+                }
+                this.plugins.push(plugin);
+                globalInitializer = plugin.onGlobalInit;
+            } else {
+                throw new Error(`Unknown plugin type: ${plugin}`);
+            }
+
+            if (globalInitializer) {
+                globalInitializer({
+                    actions: this.actions,
+                    reactivity: this.reactivity,
+                    mergeStore: this.mergeStore.bind(this),
+                    store: this.store,
+                });
+            }
+
+            this.sendDatastarEvent(
+                "core",
+                "plugins",
+                "registration",
+                "BODY",
+                `On prefix ${plugin.name}`,
+            );
+
+            allLoadedPlugins.add(plugin);
         });
 
         this.applyPlugins(document.body);
@@ -252,7 +256,7 @@ export class Engine {
                     const rawExpression = `${el.dataset[rawKey]}` || "";
                     let expression = rawExpression;
 
-                    if (!rawKey.startsWith(p.prefix)) continue;
+                    if (!rawKey.startsWith(p.name)) continue;
 
                     if (el.id.length === 0) {
                         el.id = `ds-${this.parentID}-${this.missingIDNext++}`;
@@ -279,7 +283,7 @@ export class Engine {
                         // console.log(`Tag '${el.tagName}' is allowed for plugin '${dsKey}'`)
                     }
 
-                    let keyRaw = rawKey.slice(p.prefix.length);
+                    let keyRaw = rawKey.slice(p.name.length);
                     let [key, ...modifiersWithArgsArr] = keyRaw.split(".");
                     if (p.mustHaveEmptyKey && key.length > 0) {
                         throw new Error(`'${rawKey}' must have empty key`);

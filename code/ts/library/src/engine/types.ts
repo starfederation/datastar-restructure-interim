@@ -29,15 +29,6 @@ export type AttributeContext = {
   sendDatastarEvent: SendDatastarEvent;
 };
 
-export type SendDatastarEvent = (
-  category: "core" | "plugin",
-  subcategory: string,
-  type: string,
-  target: Element | Document | Window | string,
-  message: string,
-  opts?: CustomEventInit,
-) => void;
-
 export type InitContext = {
   store: any;
   mergeStore: (store: DeepState) => void;
@@ -47,10 +38,15 @@ export type InitContext = {
 
 export type OnRemovalFn = () => void;
 
-export type AttributePlugin = {
+export interface DatastarPlugin {
+  pluginType: "preprocessor" | "attribute" | "effect" | "action"; // The type of plugin
+  name: string; // The name of the plugin
+  requiredPlugins?: Set<DatastarPlugin>; // If not provided, no plugins are required
+}
+
+// A plugin accesible via a `data-${name}` attribute on an element
+export interface AttributePlugin extends DatastarPlugin {
   pluginType: "attribute";
-  prefix: string; // The prefix of the `data-${prefix}` attribute
-  requiredPluginPrefixes?: Iterable<string>; // If not provided, no plugins are required
   onGlobalInit?: (ctx: InitContext) => void; // Called once on registration of the plugin
   onLoad: (ctx: AttributeContext) => OnRemovalFn | void; // Return a function to be called on removal
   allowedModifiers?: Set<string>; // If not provided, all modifiers are allowed
@@ -67,33 +63,42 @@ export type AttributePlugin = {
   removeNewLines?: boolean; // If true, the expression is not split by commas
   bypassExpressionFunctionCreation?: (ctx: AttributeContext) => boolean; // If true, the expression function is not created
   argumentNames?: Readonly<string[]>; // The names of the arguments passed to the expression function
-};
+}
 
 export type RegexpGroups = Record<string, string>;
 
-export type PreprocessorPlugin = {
+// A plugin that runs on the global scope that can effect the contents of a Datastar expression
+export interface PreprocessorPlugin extends DatastarPlugin {
   pluginType: "preprocessor";
-  name: string;
   regexp: RegExp;
   replacer: (groups: RegexpGroups) => string;
-};
+}
 
 export type PreprocessorPlugins = Record<string, PreprocessorPlugin>;
 
 export type ActionMethod = (ctx: AttributeContext, ...args: any[]) => any;
 
-export type ActionPlugin = {
+export interface ActionPlugin extends DatastarPlugin {
   pluginType: "action";
-  name: string;
   method: ActionMethod;
-};
+}
 
 export type ActionPlugins = Record<string, ActionPlugin>;
 
-export type DatastarPlugin =
-  | AttributePlugin
-  | ActionPlugin
-  | PreprocessorPlugin;
+// A plugin that runs on the global scope of the DastaStar instance
+export interface EffectPlugin extends DatastarPlugin {
+  pluginType: "effect";
+  onGlobalInit?: (ctx: InitContext) => void;
+}
+
+export type SendDatastarEvent = (
+  category: "core" | "plugin",
+  subcategory: string,
+  type: string,
+  target: Element | Document | Window | string,
+  message: string,
+  opts?: CustomEventInit,
+) => void;
 
 export interface DatastarEvent {
   time: Date;

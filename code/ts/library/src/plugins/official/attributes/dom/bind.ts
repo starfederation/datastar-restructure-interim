@@ -8,7 +8,7 @@ import { kebabize } from "../../../../utils/text";
 
 export const Bind: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "bind",
+    name: "bind",
     mustNotEmptyKey: true,
     mustNotEmptyExpression: true,
 
