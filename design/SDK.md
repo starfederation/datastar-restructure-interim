@@ -168,10 +168,10 @@ ServerSentEventGenerator.RemoveFragments(
 4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
 
-### `ServerSentEventGenerator.PatchStore`
+### `ServerSentEventGenerator.MergeStore`
 
 ```
-ServerSentEventGenerator.PatchStore(
+ServerSentEventGenerator.MergeStore(
     data: string,
     options ?: {
         onlyIfMissing?: boolean,
@@ -181,7 +181,7 @@ ServerSentEventGenerator.PatchStore(
  )
 ```
 
-`PatchStore` is a helper function to send a signal to the browser to update the data-store.
+`MergeStore` is a helper function to send a signal to the browser to update the data-store.
 
 #### Args
 
@@ -195,7 +195,7 @@ Data is a JS or JSON object that will be sent to the browser to update the data-
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-signal` event type.
 
 1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
-2. The function ***must*** include the store patches in the event data, with each line prefixed with `store `.  This ***should*** be output after all other event data.
+2. The function ***must*** include the store merges in the event data, with each line prefixed with `store `.  This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveFromStore`
 

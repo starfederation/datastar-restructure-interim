@@ -22,7 +22,7 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
 
     member this.MergeFragment = ServerSentEvent.mergeFragment this.Context EventOptions.defaults
     member this.RemoveFragment = ServerSentEvent.removeFragment this.Context EventOptions.defaults
-    member this.PatchStore = ServerSentEvent.patchStore this.Context EventOptions.defaults
+    member this.MergeStore = ServerSentEvent.mergeStore this.Context EventOptions.defaults
     member this.RemoveFromStore = ServerSentEvent.removeFromStore this.Context EventOptions.defaults
     member this.Redirect = ServerSentEvent.redirect this.Context EventOptions.defaults
     member this.Console = ServerSentEvent.console this.Context EventOptions.defaults
@@ -67,10 +67,10 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
         member this.RemoveFragment(selector) = ServerSentEvent.removeFragment this.Context EventOptions.defaults RemoveFragmentOptions.defaults selector
         member this.RemoveFragment(selector, options) = ServerSentEvent.removeFragment this.Context EventOptions.defaults options.AsOptions selector
         member this.RemoveFragment(selector, options, eventOptions) = ServerSentEvent.removeFragment this.Context eventOptions.AsOptions { SettleDuration = options.SettleDuration; UseViewTransition = options.UseViewTransition } selector
-        member this.PatchStore(dataStorePatch) = ServerSentEvent.patchStore this.Context EventOptions.defaults false dataStorePatch
-        member this.PatchStore(dataStorePatch:string, eventOptions:ServerSentEventOpts) = ServerSentEvent.patchStore this.Context eventOptions.AsOptions false dataStorePatch
-        member this.PatchStore(dataStorePatch:string, onlyIfMissing:bool) = ServerSentEvent.patchStore this.Context EventOptions.defaults onlyIfMissing dataStorePatch
-        member this.PatchStore(dataStorePatch:string, onlyIfMissing:bool, eventOptions:ServerSentEventOpts) = ServerSentEvent.patchStore this.Context eventOptions.AsOptions onlyIfMissing dataStorePatch
+        member this.MergeStore(dataStoreMerge) = ServerSentEvent.mergeStore this.Context EventOptions.defaults false dataStoreMerge
+        member this.MergeStore(dataStoreMerge:string, eventOptions:ServerSentEventOpts) = ServerSentEvent.mergeStore this.Context eventOptions.AsOptions false dataStoreMerge
+        member this.MergeStore(dataStoreMerge:string, onlyIfMissing:bool) = ServerSentEvent.mergeStore this.Context EventOptions.defaults onlyIfMissing dataStoreMerge
+        member this.MergeStore(dataStoreMerge:string, onlyIfMissing:bool, eventOptions:ServerSentEventOpts) = ServerSentEvent.mergeStore this.Context eventOptions.AsOptions onlyIfMissing dataStoreMerge
         member this.RemoveFromStore(dataStorePaths) = ServerSentEvent.removeFromStore this.Context EventOptions.defaults dataStorePaths
         member this.RemoveFromStore(dataStorePaths, eventOptions) = ServerSentEvent.removeFromStore this.Context eventOptions.AsOptions dataStorePaths
         member this.Redirect(uri) = ServerSentEvent.redirect this.Context EventOptions.defaults uri
@@ -108,10 +108,10 @@ and IServerSentEventGenerator =
     abstract member RemoveFragment: selector:Selector -> Task
     abstract member RemoveFragment: selector:Selector * options:RemoveFragmentOpts -> Task
     abstract member RemoveFragment: selector:Selector * options:RemoveFragmentOpts * eventOptions:ServerSentEventOpts -> Task
-    abstract member PatchStore: dataStore:string -> Task
-    abstract member PatchStore: dataStore:string * eventOptions:ServerSentEventOpts -> Task
-    abstract member PatchStore: dataStore:string * onlyIfMissing:bool -> Task
-    abstract member PatchStore: dataStore:string * onlyIfMissing:bool * eventOptions:ServerSentEventOpts -> Task
+    abstract member MergeStore: dataStore:string -> Task
+    abstract member MergeStore: dataStore:string * eventOptions:ServerSentEventOpts -> Task
+    abstract member MergeStore: dataStore:string * onlyIfMissing:bool -> Task
+    abstract member MergeStore: dataStore:string * onlyIfMissing:bool * eventOptions:ServerSentEventOpts -> Task
     abstract member RemoveFromStore: paths:DataStorePath seq -> Task
     abstract member RemoveFromStore: paths:DataStorePath seq * eventOptions:ServerSentEventOpts -> Task
     abstract member Redirect: url:string -> Task

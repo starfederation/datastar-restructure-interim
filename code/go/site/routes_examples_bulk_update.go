@@ -109,7 +109,7 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 			for k := range store.Selections {
 				store.Selections[k] = false
 			}
-			sse.MarshalAndPatchStore(store)
+			sse.MarshalAndMergeStore(store)
 		}
 
 		dataRouter.Put("/activate", func(w http.ResponseWriter, r *http.Request) {

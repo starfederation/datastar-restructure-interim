@@ -192,7 +192,7 @@ $sseGenerator->mergeStore(['title' => 'Greetings']);
 $sseGenerator->mergeFragment('<div id="greeting">Hello, world!</div>');
 ```
 
-The `patchStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
+The `mergeStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
 
 The `mergeFragment()` method renders the HTML fragment in the DOM, replacing the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
 
@@ -221,8 +221,8 @@ We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`,
 One of the advantages of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
 ```php
-$sseGenerator->patchStore(['title' => 'Greetings']);
-$sseGenerator->patchStore(['subtitle' => 'Earthlings']);
+$sseGenerator->mergeStore(['title' => 'Greetings']);
+$sseGenerator->mergeStore(['subtitle' => 'Earthlings']);
 $sseGenerator->mergeFragment('<div id="greeting-world">Hello, world!</div>');
 $sseGenerator->mergeFragment('<div id="greeting-universe">Hello, universe!</div>');
 ```

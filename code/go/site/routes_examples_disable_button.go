@@ -17,7 +17,7 @@ func setupExamplesDisableButton(examplesRouter chi.Router) error {
 		sse.MergeFragment(fragment, datastar.WithMergeAppend())
 
 		time.Sleep(1 * time.Second)
-		sse.MarshalAndPatchStore(map[string]any{
+		sse.MarshalAndMergeStore(map[string]any{
 			"shouldDisable": false,
 		})
 	})

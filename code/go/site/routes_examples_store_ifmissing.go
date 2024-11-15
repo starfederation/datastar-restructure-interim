@@ -30,7 +30,7 @@ func setupExamplesStoreIfMissing(examplesRouter chi.Router) error {
 					fragment := fmt.Sprintf(`<div id="placeholder" data-store.ifmissing="%s" data-text="$id"></div>`, store)
 					sse.MergeFragment(fragment, datastar.WithMergeUpsertAttributes())
 				case 1:
-					sse.MarshalAndPatchStoreIfMissing(store)
+					sse.MarshalAndMergeStoreIfMissing(store)
 				}
 				i++
 			}

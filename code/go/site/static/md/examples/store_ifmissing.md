@@ -26,7 +26,7 @@
 </div>
 ```
 
-The `data-store` attribute is used to set the initial state of the store. You can check your browser's Network Devtools to see the `updates` endpoint alternates between sending fragments and direct signal patches like the following:
+The `data-store` attribute is used to set the initial state of the store. You can check your browser's Network Devtools to see the `updates` endpoint alternates between sending fragments and direct signal merges like the following:
 
 ```md
 ...

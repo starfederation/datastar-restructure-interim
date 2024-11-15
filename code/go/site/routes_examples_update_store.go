@@ -24,7 +24,7 @@ func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 				randKey := fmt.Sprintf("%d", rand.Intn(2<<16))
 				store[randKey] = time.Now().Format(time.RFC3339Nano)
 
-				datastar.NewSSE(w, r).MarshalAndPatchStore(store)
+				datastar.NewSSE(w, r).MarshalAndMergeStore(store)
 			})
 
 			patchRouter.Delete("/", func(w http.ResponseWriter, r *http.Request) {

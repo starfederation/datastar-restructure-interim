@@ -55,7 +55,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			update := gabs.New()
 			updateGlobal(update)
 
-			datastar.NewSSE(w, r).MarshalAndPatchStore(update)
+			datastar.NewSSE(w, r).MarshalAndMergeStore(update)
 		})
 
 		incrementRouter.Post("/user", func(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +74,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			updateGlobal(update)
 			update.Set(val, "user")
 
-			datastar.NewSSE(w, r).MarshalAndPatchStore(update)
+			datastar.NewSSE(w, r).MarshalAndMergeStore(update)
 		})
 	})
 

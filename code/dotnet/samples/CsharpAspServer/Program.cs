@@ -52,8 +52,8 @@ public static class Program
         app.MapGet("/patch", async (IServerSentEventGenerator sse, IDatastarStore dsStore) =>
         {
             DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
-            DataStore patchStore = new() { Output = $"Patched Output: {store.Input}" };
-            await sse.PatchStore(patchStore.SerializeToJson());
+            DataStore mergeStore = new() { Output = $"Patched Output: {store.Input}" };
+            await sse.MergeStore(mergeStore.SerializeToJson());
         });
         app.MapGet("/target", async (IServerSentEventGenerator sse) =>
         {

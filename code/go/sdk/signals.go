@@ -13,34 +13,34 @@ var (
 	ErrNoPathsProvided = errors.New("no paths provided")
 )
 
-type PatchStoreOptions struct {
+type MergeStoreOptions struct {
 	EventID       string
 	RetryDuration time.Duration
 	OnlyIfMissing bool
 }
 
-type PatchStoreOption func(*PatchStoreOptions)
+type MergeStoreOption func(*MergeStoreOptions)
 
-func WithPatchStoreEventID(id string) PatchStoreOption {
-	return func(o *PatchStoreOptions) {
+func WithMergeStoreEventID(id string) MergeStoreOption {
+	return func(o *MergeStoreOptions) {
 		o.EventID = id
 	}
 }
 
-func WithPatchStoreRetryDuration(retryDuration time.Duration) PatchStoreOption {
-	return func(o *PatchStoreOptions) {
+func WithMergeStoreRetryDuration(retryDuration time.Duration) MergeStoreOption {
+	return func(o *MergeStoreOptions) {
 		o.RetryDuration = retryDuration
 	}
 }
 
-func WithOnlyIfMissing(onlyIfMissing bool) PatchStoreOption {
-	return func(o *PatchStoreOptions) {
+func WithOnlyIfMissing(onlyIfMissing bool) MergeStoreOption {
+	return func(o *MergeStoreOptions) {
 		o.OnlyIfMissing = onlyIfMissing
 	}
 }
 
-func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...PatchStoreOption) error {
-	options := &PatchStoreOptions{
+func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...MergeStoreOption) error {
+	options := &MergeStoreOptions{
 		EventID:       "",
 		RetryDuration: DefaultSSERetryDuration,
 		OnlyIfMissing: false,
@@ -71,7 +71,7 @@ func (sse *ServerSentEventGenerator) PatchStore(storeContents []byte, opts ...Pa
 		dataRows,
 		sendOptions...,
 	); err != nil {
-		return fmt.Errorf("failed to send patch store: %w", err)
+		return fmt.Errorf("failed to send merge store: %w", err)
 	}
 	return nil
 }

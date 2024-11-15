@@ -182,11 +182,11 @@ export class Engine {
     }
 
     lastMarshalledStore = "";
-    private mergeStore<T extends object>(patchStore: T) {
+    private mergeStore<T extends object>(mergeStore: T) {
         this.mergeRemovals.forEach((removal) => removal());
         this.mergeRemovals = this.mergeRemovals.slice(0);
 
-        const revisedStore = apply(this.store.value, patchStore) as DeepState;
+        const revisedStore = apply(this.store.value, mergeStore) as DeepState;
         this.store = deepSignal(revisedStore);
 
         const marshalledStore = JSON.stringify(this.store.value);
