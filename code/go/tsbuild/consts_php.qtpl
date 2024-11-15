@@ -1,0 +1,96 @@
+{%- func phpConstants(data *ConstTemplateData) -%}
+<?php
+
+namespace starfederation\datastar;
+
+use starfederation\datastar\enums\FragmentMergeMode;
+
+/**
+ * This class is auto-generated, do not modify.
+ */
+class Constants
+{
+    public const DatastarKey = '{%s data.DatastarKey %}';
+    public const Version = '{%s data.Version %}';
+    public const VersionClientByteSize = {%d data.VersionClientByteSize %};
+    public const VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %};
+    public const DefaultSettleDuration = {%d durationToMs(data.DefaultSettleDuration) %};
+    public const DefaultSSERetryDuration = {%d durationToMs(data.DefaultSSERetryDuration) %};
+    public const DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %};
+    public const DefaultOnlyIfMissing = {%v data.DefaultOnlyIfMissing %};
+    {%- for _, enum := range data.Enums -%}
+        {%- if enum.Default != nil -%}
+    public const Default{%s enum.Name.Pascal %} = {%s enum.Name.Pascal %}::{%s enum.Default.Name.Pascal %};
+        {%- endif -%}
+    {%- endfor -%}
+    {%- for _, literal := range data.DatalineLiterals -%}
+    public const {%s literal.Pascal %}DatalineLiteral = '{%s literal.Camel %} ';
+    {%- endfor -%}
+}
+{%- endfunc -%}
+
+{%- func phpEventType(data *ConstTemplateData) -%}
+<?php
+
+namespace starfederation\datastar\enums;
+
+/**
+ * This class is auto-generated, do not modify.
+ */
+enum EventType: string
+{
+{%- for _, enum := range data.Enums -%}
+    {%- if enum.Name.Pascal == "EventType" -%}
+        {%- for _, entry := range enum.Values -%}
+    // {%s entry.Description %}
+    case {%s entry.Name.Pascal %} = '{%s entry.Value %}';
+
+        {%- endfor -%}
+    {%- endif -%}
+{%- endfor -%}
+}
+{%- endfunc -%}
+
+{%- func phpFragmentMergeMode(data *ConstTemplateData) -%}
+<?php
+
+namespace starfederation\datastar\enums;
+
+/**
+ * This class is auto-generated, do not modify.
+ */
+enum FragmentMergeMode: string
+{
+{%- for _, enum := range data.Enums -%}
+    {%- if enum.Name.Pascal == "FragmentMergeMode" -%}
+        {%- for _, entry := range enum.Values -%}
+    // {%s entry.Description %}
+    case {%s entry.Name.Pascal %} = '{%s entry.Value %}';
+
+        {%- endfor -%}
+    {%- endif -%}
+{%- endfor -%}
+}
+{%- endfunc -%}
+
+{%- func phpConsoleMode(data *ConstTemplateData) -%}
+<?php
+
+namespace starfederation\datastar\enums;
+
+/**
+ * This class is auto-generated, do not modify.
+ */
+enum ConsoleMode: string
+{
+{%- for _, enum := range data.Enums -%}
+    {%- if enum.Name.Pascal == "ConsoleMode" -%}
+        {%- for _, entry := range enum.Values -%}
+    // {%s entry.Description %}
+    case {%s entry.Name.Pascal %} = '{%s entry.Value %}';
+
+        {%- endfor -%}
+    {%- endif -%}
+{%- endfor -%}
+}
+{%- endfunc -%}

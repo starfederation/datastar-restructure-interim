@@ -118,7 +118,7 @@ func writeOutConsts(version string) error {
 	ConstsData.VersionClientByteSizeGzip = buf.Len()
 
 	var zeroCased toolbelt.CasedString
-	// Make sure all enum are stepu
+	// Make sure all enums are set up.
 	for _, enum := range ConstsData.Enums {
 		for _, value := range enum.Values {
 			if value.Name == zeroCased {
@@ -131,8 +131,12 @@ func writeOutConsts(version string) error {
 	}
 
 	templates := map[string]func(data *ConstTemplateData) string{
-		"code/go/sdk/consts.go":         goConsts,
-		"code/dotnet/sdk/src/Consts.fs": dotnetConsts,
+		"code/go/sdk/consts.go":                        goConsts,
+		"code/dotnet/sdk/src/Consts.fs":                dotnetConsts,
+		"code/php/sdk/src/Constants.php":               phpConstants,
+		"code/php/sdk/src/enums/EventType.php":         phpEventType,
+		"code/php/sdk/src/enums/FragmentMergeMode.php": phpFragmentMergeMode,
+		"code/php/sdk/src/enums/ConsoleMode.php":       phpConsoleMode,
 	}
 
 	for path, tmplFn := range templates {
@@ -145,22 +149,6 @@ func writeOutConsts(version string) error {
 
 	return nil
 }
-
-// `,
-// 	"code/php/sdk/src/Defaults.php": `
-// <?php
-// namespace starfederation\datastar;
-
-// use starfederation\datastar\enums\FragmentMergeMode;
-
-// class Defaults
-// {
-//     public const DEFAULT_SETTLE_DURATION = {{defaultSettleTimeMs}};
-//     public const DEFAULT_SSE_SEND_RETRY = {{defaultSSESendRetryMs}};
-//     public const DEFAULT_FRAGMENT_MERGE_MODE = FragmentMergeMode::Morph;
-// }
-// `,
-// }
 
 func durationToMs(d time.Duration) int {
 	return int(d.Milliseconds())

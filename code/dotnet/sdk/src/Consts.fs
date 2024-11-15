@@ -23,7 +23,7 @@ module Consts =
     let [<Literal>] DefaultOnlyIfMissing = false
 
     let [<Literal>] datastarDatalineSelector = "selector "
-    let [<Literal>] datastarDatalineMerge = "merge "
+    let [<Literal>] datastarDatalineMergeMode = "mergeMode "
     let [<Literal>] datastarDatalineSettleDuration = "settleDuration "
     let [<Literal>] datastarDatalineFragment = "fragment "
     let [<Literal>] datastarDatalineUseViewTransition = "useViewTransition "

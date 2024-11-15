@@ -40,7 +40,7 @@ var ConstsData = &ConstTemplateData{
 	DatastarKey:               "datastar",
 	DatalineLiterals: []toolbelt.CasedString{
 		toolbelt.ToCasedString("selector"),
-		toolbelt.ToCasedString("merge"),
+		toolbelt.ToCasedString("mergeMode"),
 		toolbelt.ToCasedString("settleDuration"),
 		toolbelt.ToCasedString("fragment"),
 		toolbelt.ToCasedString("useViewTransition"),
@@ -96,27 +96,27 @@ var ConstsData = &ConstTemplateData{
 				{
 					Name:        toolbelt.ToCasedString("Fragment"),
 					Value:       "datastar-fragment",
-					Description: "An event dealing with HTML fragments",
+					Description: "An event dealing with HTML fragments.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("Signal"),
 					Value:       "datastar-signal",
-					Description: "An event dealing with fine grain signals",
+					Description: "An event dealing with fine grain signals.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("Remove"),
 					Value:       "datastar-remove",
-					Description: "An event dealing with removing elements or signals",
+					Description: "An event dealing with removing elements or signals.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("Redirect"),
 					Value:       "datastar-redirect",
-					Description: "An event dealing with redirecting the browser",
+					Description: "An event dealing with redirecting the browser.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("Console"),
 					Value:       "datastar-console",
-					Description: "An event dealing with console messages",
+					Description: "An event dealing with console messages.",
 				},
 			},
 		},

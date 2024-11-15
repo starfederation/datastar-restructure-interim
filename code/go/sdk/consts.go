@@ -57,19 +57,19 @@ const (
 type EventType string
 
 const (
-    // An event dealing with HTML fragments
+    // An event dealing with HTML fragments.
     EventTypeFragment EventType = "datastar-fragment"
 
-    // An event dealing with fine grain signals
+    // An event dealing with fine grain signals.
     EventTypeSignal EventType = "datastar-signal"
 
-    // An event dealing with removing elements or signals
+    // An event dealing with removing elements or signals.
     EventTypeRemove EventType = "datastar-remove"
 
-    // An event dealing with redirecting the browser
+    // An event dealing with redirecting the browser.
     EventTypeRedirect EventType = "datastar-redirect"
 
-    // An event dealing with console messages
+    // An event dealing with console messages.
     EventTypeConsole EventType = "datastar-console"
 
 )
