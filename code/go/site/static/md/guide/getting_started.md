@@ -162,19 +162,19 @@ So what else can we do with these expressions? Anything we want, really.
 See if you can guess what the following code does _before_ trying the demo below.
 
 ```html
-<div data-store="{prompt: ''}">
-    <button data-on-click="$prompt = prompt()">
+<div data-store="{answer: ''}">
+    <button data-on-click="$answer = prompt()">
         Click me
     </button>
-    <div data-text="$prompt"></div>
+    <div data-text="$answer"></div>
 </div>
 ```
 
-<div data-store="{prompt: ''}" class="alert flex items-center gap-4 p-8">
-    <button data-on-click="$prompt = prompt()" class="btn btn-primary">
+<div data-store="{answer: ''}" class="alert flex items-center gap-4 p-8">
+    <button data-on-click="$answer = prompt()" class="btn btn-primary">
         Click me
     </button>
-    <div data-text="$prompt"></div>
+    <div data-text="$answer"></div>
 </div>
 
 We've just scratched the surface of frontend reactivity, but let's take a look at how we can bring the backend into play.
