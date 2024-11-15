@@ -1,5 +1,5 @@
-import { PreprocessorPlugin, RegexpGroups } from "../../../engine";
-import { wholePrefixSuffix } from "../../../utils/regex";
+import { PreprocessorPlugin, RegexpGroups } from "../../../../engine";
+import { wholePrefixSuffix } from "../../../../utils/regex";
 
 // Replacing $action(args) with ctx.actions.action(ctx, args)
 export const ActionsProcessor: PreprocessorPlugin = {

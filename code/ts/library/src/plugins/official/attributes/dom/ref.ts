@@ -3,8 +3,8 @@
 // Slug: Create a reference to an element
 // Description: This attribute creates a reference to an element that can be used in other expressions.
 
-import { AttributePlugin } from "../../../engine";
-import { elemToSelector } from "../../../utils/dom";
+import { AttributePlugin } from "../../../../engine";
+import { elemToSelector } from "../../../../utils/dom";
 
 // Sets the value of the element
 export const RefAttribute: AttributePlugin = {

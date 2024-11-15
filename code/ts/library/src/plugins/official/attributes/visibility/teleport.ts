@@ -3,8 +3,8 @@
 // Slug: Teleport an element to another element
 // Description: This attribute teleports an element to another element in the DOM.
 
-import { AttributePlugin } from "../../../engine";
-import { nodeHTMLorSVGElement } from "../../../utils/dom";
+import { AttributePlugin } from "../../../../engine";
+import { nodeHTMLorSVGElement } from "../../../../utils/dom";
 
 const PREPEND = "prepend";
 const APPEND = "append";

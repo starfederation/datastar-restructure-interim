@@ -1,5 +1,5 @@
-import { PreprocessorPlugin, RegexpGroups } from "../../../engine";
-import { wholePrefixSuffix } from "../../../utils/regex";
+import { PreprocessorPlugin, RegexpGroups } from "../../../../engine";
+import { wholePrefixSuffix } from "../../../../utils/regex";
 
 // Replacing $signal with ctx.store.signal.value`
 export const SignalsProcessor: PreprocessorPlugin = {

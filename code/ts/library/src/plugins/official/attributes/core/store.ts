@@ -7,8 +7,8 @@ import {
     AttributeContext,
     AttributePlugin,
     RegexpGroups,
-} from "../../../engine";
-import { storeFromPossibleContents } from "../../../utils/signals";
+} from "../../../../engine";
+import { storeFromPossibleContents } from "../../../../utils/signals";
 
 // Setup the global store
 export const Store: AttributePlugin = {

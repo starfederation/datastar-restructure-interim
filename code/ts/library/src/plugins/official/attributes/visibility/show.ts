@@ -3,8 +3,8 @@
 // Slug: Show or hide an element
 // Description: This attribute shows or hides an element based on the value of the expression. If the expression is true, the element is shown. If the expression is false, the element is hidden. The element is hidden by setting the display property to none. If the duration modifier is provided, the element is shown or hidden with a fade effect. The duration modifier specifies the duration of the fade effect in milliseconds. The important modifier can be used to set the priority of the style property.
 
-import { AttributePlugin, DATASTAR } from "../../../engine";
-import { argsToMs } from "../../../utils/arguments";
+import { AttributePlugin, DATASTAR } from "../../../../engine";
+import { argsToMs } from "../../../../utils/arguments";
 
 const DISPLAY = "display";
 const NONE = "none";

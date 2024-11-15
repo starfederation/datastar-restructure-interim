@@ -3,8 +3,8 @@
 // Slug: Scroll an element into view
 // Description: This attribute scrolls the element into view.
 
-import { AttributeContext, AttributePlugin } from "../../../engine";
-import { scrollIntoView } from "../../../utils/dom";
+import { AttributeContext, AttributePlugin } from "../../../../engine";
+import { scrollIntoView } from "../../../../utils/dom";
 
 // Scrolls the element into view
 export const ScrollIntoView: AttributePlugin = {

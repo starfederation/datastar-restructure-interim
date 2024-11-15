@@ -3,11 +3,11 @@
 // Slug: Add an event listener to an element
 // Description: This action adds an event listener to an element. The event listener can be triggered by a variety of events, such as clicks, keypresses, and more. The event listener can also be set to trigger only once, or to be passive or capture. The event listener can also be debounced or throttled. The event listener can also be set to trigger only when the event target is outside the element.
 
-import { AttributePlugin } from "../../../engine";
-import { argsHas, argsToMs } from "../../../utils/arguments";
-import { remoteSignals } from "../../../utils/signals";
-import { kebabize } from "../../../utils/text";
-import { debounce, throttle } from "../../../utils/timing";
+import { AttributePlugin } from "../../../../engine";
+import { argsHas, argsToMs } from "../../../../utils/arguments";
+import { remoteSignals } from "../../../../utils/signals";
+import { kebabize } from "../../../../utils/text";
+import { debounce, throttle } from "../../../../utils/timing";
 
 const knownOnModifiers = new Set([
     "window",

@@ -3,7 +3,7 @@
 // Slug: Use a selector to show a loading indicator when fetching data from the server
 // Description: This plugin allows you to use a selector to show a loading indicator when fetching data from the server.  Once you add this attribute the indicator will be hidden by default and shown when the fetch is in progress.
 
-import { AttributePlugin, DATASTAR } from "../../../engine";
+import { AttributePlugin, DATASTAR } from "../../../../engine";
 
 export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
 export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;

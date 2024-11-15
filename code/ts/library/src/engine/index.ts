@@ -1,6 +1,6 @@
-import { Store } from "../plugins/attributes/core/store";
-import { ActionsProcessor } from "../plugins/preprocessors/core/actions";
-import { SignalsProcessor } from "../plugins/preprocessors/core/signals";
+import { Store } from "../plugins/official/attributes/core/store";
+import { ActionsProcessor } from "../plugins/official/preprocessors/core/actions";
+import { SignalsProcessor } from "../plugins/official/preprocessors/core/signals";
 import { Engine } from "./engine";
 
 export * from "./const";

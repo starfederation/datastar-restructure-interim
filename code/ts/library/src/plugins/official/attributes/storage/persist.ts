@@ -8,8 +8,8 @@ import {
     DATASTAR,
     DATASTAR_EVENT,
     DatastarEvent,
-} from "../../../engine";
-import { remoteSignals } from "../../../utils/signals";
+} from "../../../../engine";
+import { remoteSignals } from "../../../../utils/signals";
 
 export const Persist: AttributePlugin = {
     pluginType: "attribute",

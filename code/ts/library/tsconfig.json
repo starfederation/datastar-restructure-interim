@@ -19,8 +19,9 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "ts",
     "paths": {
-      "@starfederation/datastar": ["engine/index"]
+      "@starfederation/datastar": ["src/engine/index"],
+      "@": ["src"]
     }
   },
-  "include": ["ts"]
+  "include": ["src/**/*.ts"]
 }

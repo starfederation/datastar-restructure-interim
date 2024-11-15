@@ -3,21 +3,21 @@ import {
     AttributeContext,
     DATASTAR,
     ExpressionFunction,
-} from "../../../engine";
+} from "../../../../engine";
 import {
     remoteSignals,
     storeFromPossibleContents,
-} from "../../../utils/signals";
+} from "../../../../utils/signals";
 import {
     docWithViewTransitionAPI,
     supportsViewTransitions,
-} from "../../../utils/view-transitions";
+} from "../../../../utils/view-transitions";
 import {
     fetchEventSource,
     FetchEventSourceInit,
-} from "../../../vendored/fetch-event-source";
-import { idiomorph } from "../../../vendored/idiomorph";
-import { Signal } from "../../../vendored/preact-core";
+} from "../../../../vendored/fetch-event-source";
+import { idiomorph } from "../../../../vendored/idiomorph";
+import { Signal } from "../../../../vendored/preact-core";
 import {
     INDICATOR_CLASS,
     INDICATOR_LOADING_CLASS,

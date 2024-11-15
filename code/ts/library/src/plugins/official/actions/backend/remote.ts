@@ -3,8 +3,8 @@
 // Slug: Filter to only signals that should be sent to the server
 // Description: This is a nested action that filters out signals that should not be sent to the server.
 
-import { ActionPlugin } from "../../../engine";
-import { remoteSignals } from "../../../utils/signals";
+import { ActionPlugin } from "../../../../engine";
+import { remoteSignals } from "../../../../utils/signals";
 
 export const RemoteSignals: ActionPlugin = {
     pluginType: "action",
