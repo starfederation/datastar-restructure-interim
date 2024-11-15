@@ -3,7 +3,7 @@
 // Slug: Run expression when element intersects with viewport
 // Description: An attribute that runs an expression when the element intersects with the viewport.
 
-import { AttributePlugin } from "../../../engine";
+import { AttributePlugin } from "../../../../engine";
 
 const ONCE = "once";
 const HALF = "half";
@@ -12,7 +12,7 @@ const FULL = "full";
 // Run expression when element intersects with viewport
 export const Intersection: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "intersects",
+    name: "intersects",
     allowedModifiers: new Set([ONCE, HALF, FULL]),
     mustHaveEmptyKey: true,
     onLoad: (ctx) => {
