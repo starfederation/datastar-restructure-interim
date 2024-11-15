@@ -143,7 +143,7 @@ func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...Ren
 		dataRows = append(dataRows, SelectorDatalineLiteral+options.Selector)
 	}
 	if options.MergeMode != FragmentMergeModeMorph {
-		dataRows = append(dataRows, MergeDatalineLiteral+string(options.MergeMode))
+		dataRows = append(dataRows, MergeModeDatalineLiteral+string(options.MergeMode))
 	}
 	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
 		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))

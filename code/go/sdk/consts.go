@@ -12,7 +12,7 @@ const (
     DefaultUseViewTransitions = false
     DefaultOnlyIfMissing      = false
     SelectorDatalineLiteral = "selector "
-    MergeDatalineLiteral = "merge "
+    MergeModeDatalineLiteral = "mergeMode "
     SettleDurationDatalineLiteral = "settleDuration "
     FragmentDatalineLiteral = "fragment "
     UseViewTransitionDatalineLiteral = "useViewTransition "
