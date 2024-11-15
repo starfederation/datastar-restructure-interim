@@ -200,9 +200,9 @@ $sseGenerator->mergeStore(['title' => 'Greetings']);
 $sseGenerator->mergeFragment('<div id="greeting">Hello, world!</div>');
 ```
 
-The `mergeStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
+The `mergeStore()` method merges one or more store values in the frontend store, or creates them if they don't already exist.
 
-The `mergeFragment()` method renders the HTML fragment in the DOM, replacing the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
+The `mergeFragment()` method merges the HTML fragment into the DOM, replacing the element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
 
 With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
 
@@ -216,9 +216,9 @@ With our backend in place, we can now use a `data-on-click` on a button to send 
 </div>
 ```
 
-Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend – neat!
+Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend!
 
-We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`, `PATCH` and `DELETE` requests, using `get()`, `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
+We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`, `PATCH` and `DELETE` requests, using `$get()`, `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
 
 ```html
 <button data-on-click="$post('/actions/greeting')">
