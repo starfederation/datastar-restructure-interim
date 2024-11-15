@@ -46,6 +46,7 @@ tasks:
     sources:
       - "**/*.templ"
       - "**/*.md"
+      - "**/*.go"
     generates:
       - "static/css/site.css"
 
