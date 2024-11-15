@@ -51,7 +51,7 @@ tasks:
       - "static/css/site.css"
 
     cmds:
-      - ./twcli build -o static/css/site.css
+      - ./twcli build -i site.css -o static/css/site.css
 
   templ:
     env:

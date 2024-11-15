@@ -80,10 +80,14 @@ func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string,
 						}
 						buf := bytebufferpool.Get()
 						defer bytebufferpool.Put(buf)
-						buf.WriteString(`<a class="pl-1" href="#`)
-						buf.WriteString(n.HeadingID)
-						buf.WriteString(`">#</a></h`)
-						buf.WriteString(strconv.Itoa(n.Level))
+						level := strconv.Itoa(n.Level)
+						if level != "1" {
+                            buf.WriteString(`<a href="#`)
+                            buf.WriteString(n.HeadingID)
+                            buf.WriteString(`">#</a>`)
+                        }
+						buf.WriteString(`</h`)
+						buf.WriteString(level)
 						buf.WriteString(`>`)
 						buf.WriteTo(w)
 						skipDefaultRenderer = true
