@@ -6,7 +6,7 @@ namespace starfederation\datastar;
 use starfederation\datastar\enums\FragmentMergeMode;
 
 /**
- * This class is auto-generated, do not modify.
+ * {%s data.DoNotEdit %}
  */
 class Constants
 {
@@ -35,7 +35,7 @@ class Constants
 namespace starfederation\datastar\enums;
 
 /**
- * This class is auto-generated, do not modify.
+ * {%s data.DoNotEdit %}
  */
 enum EventType: string
 {
@@ -57,7 +57,7 @@ enum EventType: string
 namespace starfederation\datastar\enums;
 
 /**
- * This class is auto-generated, do not modify.
+ * {%s data.DoNotEdit %}
  */
 enum FragmentMergeMode: string
 {
@@ -79,7 +79,7 @@ enum FragmentMergeMode: string
 namespace starfederation\datastar\enums;
 
 /**
- * This class is auto-generated, do not modify.
+ * {%s data.DoNotEdit %}
  */
 enum ConsoleMode: string
 {

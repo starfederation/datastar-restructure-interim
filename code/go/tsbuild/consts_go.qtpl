@@ -1,4 +1,6 @@
 {%- func goConsts(data *ConstTemplateData) -%}
+// {%s data.DoNotEdit %}
+
 package datastar
 
 import "time"
