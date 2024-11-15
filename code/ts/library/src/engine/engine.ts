@@ -7,12 +7,12 @@ import { DATASTAR_EVENT } from "./const";
 import {
     ActionPlugin,
     ActionPlugins,
+    AttribtueExpressionFunction,
     AttributeContext,
     AttributePlugin,
     DatastarEvent,
     DatastarPlugin,
     EffectPlugin,
-    ExpressionFunction,
     InitContext,
     OnRemovalFn,
     PreprocessorPlugin,
@@ -128,6 +128,11 @@ export class Engine {
                     reactivity: this.reactivity,
                     mergeStore: this.mergeStore.bind(this),
                     store: this.store,
+                    applyPlugins: this.applyPlugins.bind(this),
+                    cleanupElementRemovals: this.cleanupElementRemovals.bind(
+                        this,
+                    ),
+                    sendDatastarEvent: this.sendDatastarEvent.bind(this),
                 });
             }
 
@@ -442,7 +447,7 @@ export class Engine {
                                 "ctx",
                                 ...argumentNames,
                                 fnContent,
-                            ) as ExpressionFunction;
+                            ) as AttribtueExpressionFunction;
                             ctx.expressionFn = fn;
                         } catch (e) {
                             const err = new Error(

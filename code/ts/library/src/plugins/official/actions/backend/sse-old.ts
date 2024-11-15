@@ -1,8 +1,8 @@
 import {
     ActionMethod,
+    AttribtueExpressionFunction,
     AttributeContext,
     DATASTAR,
-    ExpressionFunction,
 } from "../../../../engine";
 import {
     remoteSignals,
@@ -251,7 +251,7 @@ async function fetcher(
                         const fn = new Function(
                             "ctx",
                             fnContents,
-                        ) as ExpressionFunction;
+                        ) as AttribtueExpressionFunction;
                         const possibleMergeStore = fn(ctx);
                         const actualMergeStore = storeFromPossibleContents(
                             ctx.store(),

@@ -15,8 +15,8 @@ module Consts =
 
     let [<Literal>] DatastarKey = "datastar"
     let [<Literal>] Version                   = "0.20.0"
-    let [<Literal>] VersionClientByteSize     = 43926
-    let [<Literal>] VersionClientByteSizeGzip = 14902
+    let [<Literal>] VersionClientByteSize     = 44082
+    let [<Literal>] VersionClientByteSizeGzip = 14919
 
     let DefaultSettleDuration     = TimeSpan.FromMilliseconds 300
     let DefaultSSERetryDuration   = TimeSpan.FromMilliseconds 1000

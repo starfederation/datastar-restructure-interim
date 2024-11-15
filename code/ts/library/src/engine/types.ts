@@ -2,31 +2,18 @@ import { HTMLorSVGElement } from "../utils/types";
 import { DeepState } from "../vendored/deepsignal";
 import { ReadonlySignal, Signal } from "../vendored/preact-core";
 
-export type ExpressionFunction = (ctx: AttributeContext, ...args: any) => any;
+export type InitExpressionFunction = (
+  ctx: InitContext,
+  ...args: any
+) => any;
+export type AttribtueExpressionFunction = (
+  ctx: AttributeContext,
+  ...args: any
+) => any;
 export type Reactivity = {
   signal: <T>(value: T) => Signal<T>;
   computed: <T>(fn: () => T) => ReadonlySignal<T>;
   effect: (cb: () => void) => OnRemovalFn;
-};
-
-export type AttributeContext = {
-  store: () => any;
-  mergeStore: (store: DeepState) => void;
-  upsertIfMissingFromStore: (path: string, value: any) => void;
-  removeFromStore: (...paths: string[]) => void;
-  applyPlugins: (target: Element) => void;
-  walkSignals: (cb: (name: string, signal: Signal<any>) => void) => void;
-  cleanupElementRemovals: (el: Element) => void;
-  actions: Readonly<ActionPlugins>;
-  reactivity: Reactivity;
-  el: Readonly<HTMLorSVGElement>;
-  key: Readonly<string>;
-  rawKey: Readonly<string>;
-  rawExpression: Readonly<string>;
-  expression: Readonly<string>;
-  expressionFn: ExpressionFunction;
-  modifiers: Map<string, string[]>;
-  sendDatastarEvent: SendDatastarEvent;
 };
 
 export type InitContext = {
@@ -34,6 +21,22 @@ export type InitContext = {
   mergeStore: (store: DeepState) => void;
   actions: Readonly<ActionPlugins>;
   reactivity: Reactivity;
+  applyPlugins: (target: Element) => void;
+  cleanupElementRemovals: (el: Element) => void;
+  sendDatastarEvent: SendDatastarEvent;
+};
+
+export type AttributeContext = InitContext & {
+  upsertIfMissingFromStore: (path: string, value: any) => void;
+  removeFromStore: (...paths: string[]) => void;
+  walkSignals: (cb: (name: string, signal: Signal<any>) => void) => void;
+  el: Readonly<HTMLorSVGElement>;
+  key: Readonly<string>;
+  rawKey: Readonly<string>;
+  rawExpression: Readonly<string>;
+  expression: Readonly<string>;
+  expressionFn: AttribtueExpressionFunction;
+  modifiers: Map<string, string[]>;
 };
 
 export type OnRemovalFn = () => void;

@@ -3,7 +3,7 @@
 // Slug: Check if a fetch request is currently in progress
 // Description: This action checks if a fetch request is currently in progress. This is useful for showing loading indicators or disabling buttons while a fetch request is in progress.
 
-import { ActionPlugin } from "../../../engine";
+import { ActionPlugin } from "../../../../engine";
 export type IndicatorReference = { el: HTMLElement; count: number };
 
 export const IsFetching: ActionPlugin = {
