@@ -14,7 +14,7 @@ import (
 func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 	examplesRouter.Get("/merge_options/reset", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(mergeOptionsView())
+		sse.MergeFragmentTempl(mergeOptionsView())
 	})
 
 	brewerColorsBG := []string{
@@ -75,7 +75,7 @@ func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 			now := time.Now().UTC().Format(time.RFC3339)
 			h := fmt.Sprint(xxh3.HashString(now))
 			frag := mergeOptionsViewUpdate(brewerColorsBG[idx], brewrColorsFG[idx], h)
-			sse.RenderFragmentTempl(frag, datastar.WithMergeMode(mergeMode))
+			sse.MergeFragmentTempl(frag, datastar.WithMergeMode(mergeMode))
 		}
 	})
 

@@ -22,20 +22,20 @@ func setupExamplesInfiniteScroll(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 
 		if store.Offset == 0 {
-			sse.RenderFragmentTempl(infiniteScrollAgents(store))
+			sse.MergeFragmentTempl(infiniteScrollAgents(store))
 		} else {
 			if store.Offset < 100 {
-				sse.RenderFragmentTempl(infiniteScrollMore(store))
+				sse.MergeFragmentTempl(infiniteScrollMore(store))
 				for i := 0; i < store.Limit; i++ {
 
-					sse.RenderFragmentTempl(
+					sse.MergeFragmentTempl(
 						infiniteScrollAgent(store.Offset+i),
 						datastar.WithQuerySelectorID("click_to_load_rows"),
 						datastar.WithMergeAppend(),
 					)
 				}
 			} else {
-				sse.RenderFragmentTempl(infiniteScrollRickroll())
+				sse.MergeFragmentTempl(infiniteScrollRickroll())
 			}
 		}
 	})

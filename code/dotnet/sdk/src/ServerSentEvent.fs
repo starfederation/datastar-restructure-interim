@@ -21,12 +21,12 @@ module Selector =
         | true -> ValueSome (create selector)
         | false -> ValueNone
 
-type RenderFragmentOptions =
+type MergeFragmentOptions =
     { Selector: Selector voption
       MergeMode: FragmentMergeMode
       SettleDuration: TimeSpan
       UseViewTransition: bool }
-module RenderFragmentOptions =
+module MergeFragmentOptions =
     let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransition }
 
 type RemoveFragmentOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
@@ -65,7 +65,7 @@ module ServerSentEvent =
         let sendEvent (env:ISendEvent) (event:string) = env.SendEvent(event)
         sendEvent env serializedEvent
 
-    let renderFragment env eventOptions options (fragment:string) =
+    let mergeFragment env eventOptions options (fragment:string) =
         let fragmentLines = fragment.Split( [| "\r\n"; "\n"; "\r" |], StringSplitOptions.None)
         { EventType = Fragment
           Id = eventOptions.EventId

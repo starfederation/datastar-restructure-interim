@@ -14,7 +14,7 @@ func setupExamplesTitleUpdateBackend(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 		updateTitle := func() {
 			frag := fmt.Sprintf(`<title>%s from server</title>`, time.Now().Format(time.TimeOnly))
-			sse.RenderFragment(frag, datastar.WithSelector("title"))
+			sse.MergeFragment(frag, datastar.WithSelector("title"))
 		}
 
 		updateTitle()

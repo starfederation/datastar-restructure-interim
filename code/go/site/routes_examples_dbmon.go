@@ -24,7 +24,7 @@ func setupExamplesDbmon(examplesRouter chi.Router) error {
 		mu.RLock()
 		c := pageDBmon(dbs.databases, mutationRate, 0)
 		mu.RUnlock()
-		sse.RenderFragmentTempl(c)
+		sse.MergeFragmentTempl(c)
 	})
 
 	examplesRouter.Post("/dbmon/inputs", func(w http.ResponseWriter, r *http.Request) {
@@ -72,14 +72,14 @@ func setupExamplesDbmon(examplesRouter chi.Router) error {
 					mu.Unlock()
 
 					now := time.Now()
-					sse.RenderFragmentTempl(dbmonApp(dbs.databases))
+					sse.MergeFragmentTempl(dbmonApp(dbs.databases))
 					renderTime += time.Since(now)
 					renderCount++
 				case <-renderTimer.C:
 					avg := renderTime / renderCount
 					renderTime = 0
 					renderCount = 0
-					sse.RenderFragmentTempl(dbmonFPS(avg), noVT)
+					sse.MergeFragmentTempl(dbmonFPS(avg), noVT)
 				}
 			}
 		})

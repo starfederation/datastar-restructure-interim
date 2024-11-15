@@ -65,7 +65,7 @@ func setupExamplesActiveSearch(examplesRouter chi.Router) error {
 			return int(10000 * (scores[b.ID] - scores[a.ID]))
 		})
 
-		datastar.NewSSE(w, r).RenderFragmentTempl(ActiveSearchComponent(filteredUsers, scores, store))
+		datastar.NewSSE(w, r).MergeFragmentTempl(ActiveSearchComponent(filteredUsers, scores, store))
 	})
 
 	return nil

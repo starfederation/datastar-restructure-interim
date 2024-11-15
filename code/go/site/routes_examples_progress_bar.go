@@ -18,7 +18,7 @@ func setupExamplesProgressBar(examplesRouter chi.Router) error {
 
 		for progress < 100 {
 			progress = min(100, progress+rand.Intn(20)+1)
-			sse.RenderFragmentTempl(progressBarView(progress))
+			sse.MergeFragmentTempl(progressBarView(progress))
 			time.Sleep(250 * time.Millisecond)
 		}
 	})

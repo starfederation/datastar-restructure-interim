@@ -9,7 +9,7 @@ import (
 
 func setupExamplesMultilineFragments(examplesRouter chi.Router) error {
 	examplesRouter.Get("/multiline_fragments/data", func(w http.ResponseWriter, r *http.Request) {
-		datastar.NewSSE(w, r).RenderFragment(`
+		datastar.NewSSE(w, r).MergeFragment(`
 <div id="replaceMe">
 	<pre>
 This is a multiline fragment.

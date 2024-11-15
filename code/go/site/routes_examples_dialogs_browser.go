@@ -12,7 +12,7 @@ func setupExamplesDialogsBrowser(examplesRouter chi.Router) error {
 	examplesRouter.Get("/dialogs_browser/data", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 		store := &DialogBrowserStore{Prompt: "foo"}
-		sse.RenderFragmentTempl(DialogBrowserView(store))
+		sse.MergeFragmentTempl(DialogBrowserView(store))
 	})
 
 	examplesRouter.Get("/dialogs_browser/sure", func(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +22,7 @@ func setupExamplesDialogsBrowser(examplesRouter chi.Router) error {
 			return
 		}
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(DialogBrowserSure(store))
+		sse.MergeFragmentTempl(DialogBrowserSure(store))
 	})
 
 	return nil

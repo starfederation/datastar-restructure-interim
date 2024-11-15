@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type RenderFragmentOptions struct {
+type MergeFragmentOptions struct {
 	EventID            string
 	RetryDuration      time.Duration
 	Selector           string
@@ -16,33 +16,33 @@ type RenderFragmentOptions struct {
 	UseViewTransitions bool
 }
 
-type RenderFragmentOption func(*RenderFragmentOptions)
+type MergeFragmentOption func(*MergeFragmentOptions)
 
-func WithSelectorf(selectorFormat string, args ...any) RenderFragmentOption {
+func WithSelectorf(selectorFormat string, args ...any) MergeFragmentOption {
 	selector := fmt.Sprintf(selectorFormat, args...)
 	return WithSelector(selector)
 }
 
-func WithSelector(selector string) RenderFragmentOption {
-	return func(o *RenderFragmentOptions) {
+func WithSelector(selector string) MergeFragmentOption {
+	return func(o *MergeFragmentOptions) {
 		o.Selector = selector
 	}
 }
 
-func WithMergeMode(merge FragmentMergeMode) RenderFragmentOption {
-	return func(o *RenderFragmentOptions) {
+func WithMergeMode(merge FragmentMergeMode) MergeFragmentOption {
+	return func(o *MergeFragmentOptions) {
 		o.MergeMode = merge
 	}
 }
 
-func WithSettleDuration(d time.Duration) RenderFragmentOption {
-	return func(o *RenderFragmentOptions) {
+func WithSettleDuration(d time.Duration) MergeFragmentOption {
+	return func(o *MergeFragmentOptions) {
 		o.SettleDuration = d
 	}
 }
 
-func WithUseViewTransitions(useViewTransition bool) RenderFragmentOption {
-	return func(o *RenderFragmentOptions) {
+func WithUseViewTransitions(useViewTransition bool) MergeFragmentOption {
+	return func(o *MergeFragmentOptions) {
 		o.UseViewTransitions = useViewTransition
 	}
 }
@@ -118,8 +118,8 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 	return nil
 }
 
-func (sse *ServerSentEventGenerator) RenderFragment(fragment string, opts ...RenderFragmentOption) error {
-	options := &RenderFragmentOptions{
+func (sse *ServerSentEventGenerator) MergeFragment(fragment string, opts ...MergeFragmentOption) error {
+	options := &MergeFragmentOptions{
 		EventID:        "",
 		RetryDuration:  DefaultSSERetryDuration,
 		Selector:       "",

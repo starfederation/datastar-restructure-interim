@@ -186,15 +186,15 @@ use starfederation\datastar\ServerSentEventGenerator;
 $sseGenerator = new ServerSentEventGenerator();
 
 // Updates the `title` store value.
-$sseGenerator->patchStore(['title' => 'Greetings']);
+$sseGenerator->mergeStore(['title' => 'Greetings']);
 
-// Renders a fragment in the DOM.
-$sseGenerator->renderFragment('<div id="greeting">Hello, world!</div>');
+// Merges a fragment into the DOM.
+$sseGenerator->mergeFragment('<div id="greeting">Hello, world!</div>');
 ```
 
 The `patchStore()` method updates one or more store values in the frontend, or creates them if they don't already exist.
 
-The `renderFragment()` method renders the HTML fragment in the DOM, replacing the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
+The `mergeFragment()` method renders the HTML fragment in the DOM, replacing the target element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
 
 With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
 
@@ -223,8 +223,8 @@ One of the advantages of using SSE is that we can send multiple events (HTML fra
 ```php
 $sseGenerator->patchStore(['title' => 'Greetings']);
 $sseGenerator->patchStore(['subtitle' => 'Earthlings']);
-$sseGenerator->renderFragment('<div id="greeting-world">Hello, world!</div>');
-$sseGenerator->renderFragment('<div id="greeting-universe">Hello, universe!</div>');
+$sseGenerator->mergeFragment('<div id="greeting-world">Hello, world!</div>');
+$sseGenerator->mergeFragment('<div id="greeting-universe">Hello, universe!</div>');
 ```
 
 ## An Overview of What's Possible

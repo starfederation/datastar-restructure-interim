@@ -43,14 +43,14 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 	examplesRouter.Get("/edit_row/reset", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 		contacts = starterEditContacts()
-		sse.RenderFragmentTempl(EditRowContacts(contacts, emptyStore))
+		sse.MergeFragmentTempl(EditRowContacts(contacts, emptyStore))
 	})
 
 	examplesRouter.Route("/edit_row/data", func(dataRouter chi.Router) {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(EditRowContacts(contacts, emptyStore))
+			sse.MergeFragmentTempl(EditRowContacts(contacts, emptyStore))
 		})
 
 		dataRouter.Get("/{index}", func(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +67,7 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 				Email:        contacts[i].Email,
 			}
 
-			sse.RenderFragmentTempl(EditRowContacts(contacts, store))
+			sse.MergeFragmentTempl(EditRowContacts(contacts, store))
 		})
 	})
 
@@ -92,7 +92,7 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 			}
 
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(EditRowContacts(contacts, store))
+			sse.MergeFragmentTempl(EditRowContacts(contacts, store))
 		})
 
 		editRouter.Patch("/", func(w http.ResponseWriter, r *http.Request) {
@@ -112,7 +112,7 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 			c.Email = store.Email
 
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(EditRowContacts(contacts, emptyStore))
+			sse.MergeFragmentTempl(EditRowContacts(contacts, emptyStore))
 		})
 	})
 

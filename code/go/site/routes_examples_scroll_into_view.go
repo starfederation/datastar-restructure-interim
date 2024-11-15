@@ -33,7 +33,7 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 				Inline:   "hcenter",
 			}
 
-			sse.RenderFragmentTempl(scrollIntoViewView(paragraphs, opts, store))
+			sse.MergeFragmentTempl(scrollIntoViewView(paragraphs, opts, store))
 		})
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +57,7 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 			}
 
 			updated := fmt.Sprintf(`<p id="p%d" data-%s></p>`, paragraphCount/2, attr)
-			sse.RenderFragment(updated, datastar.WithMergeUpsertAttributes())
+			sse.MergeFragment(updated, datastar.WithMergeUpsertAttributes())
 		})
 	})
 

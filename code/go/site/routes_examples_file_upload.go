@@ -23,7 +23,7 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 			FileNames:   []string{},
 		}
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(FileUploadView(store))
+		sse.MergeFragmentTempl(FileUploadView(store))
 	})
 
 	examplesRouter.Post("/file_upload/upload", func(w http.ResponseWriter, r *http.Request) {
@@ -37,14 +37,14 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 
 		if len(data) >= maxBytesSize {
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(FileUpdateAlert(err))
+			sse.MergeFragmentTempl(FileUpdateAlert(err))
 			return
 		}
 
 		store := &FileUploadStore{}
 		sse := datastar.NewSSE(w, r)
 		if err := json.Unmarshal(data, store); err != nil {
-			sse.RenderFragmentTempl(FileUpdateAlert(err))
+			sse.MergeFragmentTempl(FileUpdateAlert(err))
 			return
 		}
 
@@ -66,7 +66,7 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 			humainzeByteCount[i] = humanize.Bytes(uint64(len(file)))
 		}
 
-		sse.RenderFragmentTempl(FileUploadResults(store, humainzeByteCount, humanizedHashes))
+		sse.MergeFragmentTempl(FileUploadResults(store, humainzeByteCount, humanizedHashes))
 	})
 
 	return nil

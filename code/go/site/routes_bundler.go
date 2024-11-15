@@ -230,7 +230,7 @@ func setupBundler(router chi.Router) error {
 			}
 
 			c := bundlerResultsFragment(*bundleContents)
-			sse.RenderFragmentTempl(c)
+			sse.MergeFragmentTempl(c)
 		})
 
 		bundlerRouter.Get("/download/{filename}", func(w http.ResponseWriter, r *http.Request) {

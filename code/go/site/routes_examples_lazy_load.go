@@ -11,12 +11,12 @@ import (
 func setupExamplesLazyLoad(examplesRouter chi.Router) error {
 	examplesRouter.Get("/lazy_load/data", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(lazyLoadLoader())
+		sse.MergeFragmentTempl(lazyLoadLoader())
 	})
 
 	examplesRouter.Get("/lazy_load/graph", func(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(2 * time.Second)
-		datastar.NewSSE(w, r).RenderFragmentTempl(
+		datastar.NewSSE(w, r).MergeFragmentTempl(
 			lazyLoadGraph(),
 			datastar.WithSettleDuration(1*time.Second),
 		)

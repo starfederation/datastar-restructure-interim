@@ -20,7 +20,7 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
 
     member private _.Context = context
 
-    member this.RenderFragment = ServerSentEvent.renderFragment this.Context EventOptions.defaults
+    member this.MergeFragment = ServerSentEvent.mergeFragment this.Context EventOptions.defaults
     member this.RemoveFragment = ServerSentEvent.removeFragment this.Context EventOptions.defaults
     member this.PatchStore = ServerSentEvent.patchStore this.Context EventOptions.defaults
     member this.RemoveFromStore = ServerSentEvent.removeFromStore this.Context EventOptions.defaults
@@ -61,9 +61,9 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
 
     with
     interface IServerSentEventGenerator with
-        member this.RenderFragment(fragment) = ServerSentEvent.renderFragment this.Context EventOptions.defaults RenderFragmentOptions.defaults fragment
-        member this.RenderFragment(fragment, options) = ServerSentEvent.renderFragment this.Context EventOptions.defaults options.AsOptions fragment
-        member this.RenderFragment(fragment, options, eventOptions) = ServerSentEvent.renderFragment this.Context eventOptions.AsOptions options.AsOptions fragment
+        member this.MergeFragment(fragment) = ServerSentEvent.mergeFragment this.Context EventOptions.defaults MergeFragmentOptions.defaults fragment
+        member this.MergeFragment(fragment, options) = ServerSentEvent.mergeFragment this.Context EventOptions.defaults options.AsOptions fragment
+        member this.MergeFragment(fragment, options, eventOptions) = ServerSentEvent.mergeFragment this.Context eventOptions.AsOptions options.AsOptions fragment
         member this.RemoveFragment(selector) = ServerSentEvent.removeFragment this.Context EventOptions.defaults RemoveFragmentOptions.defaults selector
         member this.RemoveFragment(selector, options) = ServerSentEvent.removeFragment this.Context EventOptions.defaults options.AsOptions selector
         member this.RemoveFragment(selector, options, eventOptions) = ServerSentEvent.removeFragment this.Context eventOptions.AsOptions { SettleDuration = options.SettleDuration; UseViewTransition = options.UseViewTransition } selector
@@ -102,9 +102,9 @@ and ServerSentEventHttpContext(httpContext:HttpContext) =
             this.Context.Response.BodyWriter.WriteAsync(bytes).AsTask()
 
 and IServerSentEventGenerator =
-    abstract member RenderFragment: fragment:string -> Task
-    abstract member RenderFragment: fragment:string * options:RenderFragmentOpts -> Task
-    abstract member RenderFragment: fragment:string * options:RenderFragmentOpts * eventOptions:ServerSentEventOpts -> Task
+    abstract member MergeFragment: fragment:string -> Task
+    abstract member MergeFragment: fragment:string * options:MergeFragmentOpts -> Task
+    abstract member MergeFragment: fragment:string * options:MergeFragmentOpts * eventOptions:ServerSentEventOpts -> Task
     abstract member RemoveFragment: selector:Selector -> Task
     abstract member RemoveFragment: selector:Selector * options:RemoveFragmentOpts -> Task
     abstract member RemoveFragment: selector:Selector * options:RemoveFragmentOpts * eventOptions:ServerSentEventOpts -> Task
@@ -119,11 +119,11 @@ and IServerSentEventGenerator =
     abstract member Console: consoleMode:ConsoleMode * message:string -> Task
     abstract member Console: consoleMode:ConsoleMode * eventOptions:ServerSentEventOpts * message:string -> Task
 
-and RenderFragmentOpts() =
-    member val MergeMode = RenderFragmentOptions.defaults.MergeMode with get, set
+and MergeFragmentOpts() =
+    member val MergeMode = MergeFragmentOptions.defaults.MergeMode with get, set
     member val Selector = null with get, set
-    member val SettleDuration = RenderFragmentOptions.defaults.SettleDuration with get, set
-    member val UseViewTransition = RenderFragmentOptions.defaults.UseViewTransition with get, set
+    member val SettleDuration = MergeFragmentOptions.defaults.SettleDuration with get, set
+    member val UseViewTransition = MergeFragmentOptions.defaults.UseViewTransition with get, set
     member this.AsOptions =
         { MergeMode = this.MergeMode
           Selector = Utility.ValueOption.fromNullable this.Selector
@@ -131,8 +131,8 @@ and RenderFragmentOpts() =
           UseViewTransition = this.UseViewTransition }
 
 and RemoveFragmentOpts() =
-    member val SettleDuration = RenderFragmentOptions.defaults.SettleDuration with get, set
-    member val UseViewTransition = RenderFragmentOptions.defaults.UseViewTransition with get, set
+    member val SettleDuration = MergeFragmentOptions.defaults.SettleDuration with get, set
+    member val UseViewTransition = MergeFragmentOptions.defaults.UseViewTransition with get, set
     member this.AsOptions =
         { SettleDuration = this.SettleDuration
           UseViewTransition = this.UseViewTransition }

@@ -17,7 +17,7 @@ func setupExamplesRedirects(examplesRouter chi.Router) error {
 				RedirectTo: "/essays/grugs_around_fire",
 			}
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(redirectsView(store))
+			sse.MergeFragmentTempl(redirectsView(store))
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +29,7 @@ func setupExamplesRedirects(examplesRouter chi.Router) error {
 
 			sse := datastar.NewSSE(w, r)
 			for i := 5; i > 0; i-- {
-				sse.RenderFragmentf(`<div id="update">Redirecting in %d...</div>`, i)
+				sse.MergeFragmentf(`<div id="update">Redirecting in %d...</div>`, i)
 				time.Sleep(500 * time.Millisecond)
 			}
 			sse.Redirect(store.RedirectTo)

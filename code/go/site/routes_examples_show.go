@@ -15,7 +15,7 @@ func setupExamplesShow(examplesRouter chi.Router) error {
 			BindBool: false,
 		}
 
-		sse.RenderFragmentTempl(ShowView(store))
+		sse.MergeFragmentTempl(ShowView(store))
 	})
 
 	return nil

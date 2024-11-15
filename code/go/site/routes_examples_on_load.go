@@ -24,7 +24,7 @@ func setupExamplesOnLoad(examplesRouter chi.Router, store sessions.Store) error 
 
 		// You can comment out the below block and still persist the session
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(onLoadView(sessionKey, session.Values))
+		sse.MergeFragmentTempl(onLoadView(sessionKey, session.Values))
 	})
 
 	return nil

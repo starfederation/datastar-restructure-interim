@@ -28,70 +28,70 @@ func FragmentMergeTypeFromString(s string) (FragmentMergeMode, error) {
 	return "", fmt.Errorf("invalid fragment merge type: %s", s)
 }
 
-func WithMergeMorph() RenderFragmentOption {
+func WithMergeMorph() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModeMorph)
 }
 
-func WithMergePrepend() RenderFragmentOption {
+func WithMergePrepend() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModePrepend)
 }
 
-func WithMergeAppend() RenderFragmentOption {
+func WithMergeAppend() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModeAppend)
 }
 
-func WithMergeBefore() RenderFragmentOption {
+func WithMergeBefore() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModeBefore)
 }
 
-func WithMergeAfter() RenderFragmentOption {
+func WithMergeAfter() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModeAfter)
 }
 
-func WithMergeUpsertAttributes() RenderFragmentOption {
+func WithMergeUpsertAttributes() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModeUpsertAttributes)
 }
 
-func WithQuerySelectorID(id string) RenderFragmentOption {
+func WithQuerySelectorID(id string) MergeFragmentOption {
 	return WithSelectorf("#%s", id)
 }
 
-func WithViewTransitions() RenderFragmentOption {
-	return func(o *RenderFragmentOptions) {
+func WithViewTransitions() MergeFragmentOption {
+	return func(o *MergeFragmentOptions) {
 		o.UseViewTransitions = false
 	}
 }
 
-func WithoutViewTransitions() RenderFragmentOption {
-	return func(o *RenderFragmentOptions) {
+func WithoutViewTransitions() MergeFragmentOption {
+	return func(o *MergeFragmentOptions) {
 		o.UseViewTransitions = true
 	}
 }
 
-func (sse *ServerSentEventGenerator) RenderFragmentf(format string, args ...any) error {
-	return sse.RenderFragment(fmt.Sprintf(format, args...))
+func (sse *ServerSentEventGenerator) MergeFragmentf(format string, args ...any) error {
+	return sse.MergeFragment(fmt.Sprintf(format, args...))
 }
 
-func (sse *ServerSentEventGenerator) RenderFragmentTempl(c templ.Component, opts ...RenderFragmentOption) error {
+func (sse *ServerSentEventGenerator) MergeFragmentTempl(c templ.Component, opts ...MergeFragmentOption) error {
 	buf := bytebufferpool.Get()
 	defer bytebufferpool.Put(buf)
 	if err := c.Render(sse.Context(), buf); err != nil {
-		return fmt.Errorf("failed to render fragment: %w", err)
+		return fmt.Errorf("failed to merge fragment: %w", err)
 	}
-	if err := sse.RenderFragment(buf.String(), opts...); err != nil {
-		return fmt.Errorf("failed to render fragment: %w", err)
+	if err := sse.MergeFragment(buf.String(), opts...); err != nil {
+		return fmt.Errorf("failed to merge fragment: %w", err)
 	}
 	return nil
 }
 
-func (sse *ServerSentEventGenerator) RenderFragmentGostar(child elements.ElementRenderer, opts ...RenderFragmentOption) error {
+func (sse *ServerSentEventGenerator) MergeFragmentGostar(child elements.ElementRenderer, opts ...MergeFragmentOption) error {
 	buf := bytebufferpool.Get()
 	defer bytebufferpool.Put(buf)
 	if err := child.Render(buf); err != nil {
 		return fmt.Errorf("failed to render: %w", err)
 	}
-	if err := sse.RenderFragment(buf.String(), opts...); err != nil {
-		return fmt.Errorf("failed to render fragment: %w", err)
+	if err := sse.MergeFragment(buf.String(), opts...); err != nil {
+		return fmt.Errorf("failed to merge fragment: %w", err)
 	}
 	return nil
 }

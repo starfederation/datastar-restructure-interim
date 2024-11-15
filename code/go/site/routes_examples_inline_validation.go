@@ -27,7 +27,7 @@ func setupExampleInlineValidation(examplesRouter chi.Router) error {
 			}
 			sse := datastar.NewSSE(w, r)
 			isEmailValid, isFirstNameValid, isLastNameValid, isValid := userValidation(u)
-			sse.RenderFragmentTempl(inlineValidationUserComponent(u, isEmailValid, isFirstNameValid, isLastNameValid, isValid))
+			sse.MergeFragmentTempl(inlineValidationUserComponent(u, isEmailValid, isFirstNameValid, isLastNameValid, isValid))
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func setupExampleInlineValidation(examplesRouter chi.Router) error {
 				node = inlineValidationThankYou()
 			}
 
-			sse.RenderFragmentTempl(node)
+			sse.MergeFragmentTempl(node)
 		})
 	})
 

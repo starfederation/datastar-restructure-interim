@@ -19,14 +19,14 @@ func setupExamplesCSRF(examplesRouter chi.Router) error {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			token := csrf.Token(r)
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(CSRFDemo(token))
+			sse.MergeFragmentTempl(CSRFDemo(token))
 		})
 
 		r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			token := csrf.Token(r)
 
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(CSRFDemoResponse(
+			sse.MergeFragmentTempl(CSRFDemoResponse(
 				fmt.Sprintf("POST request received with token: %s", token),
 			),
 				datastar.WithQuerySelectorID("responses"),

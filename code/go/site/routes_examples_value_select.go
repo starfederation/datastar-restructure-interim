@@ -101,7 +101,7 @@ func setupExamplesValueSelect(examplesRouter chi.Router) error {
 			make, model, isValid := storeValidation(store)
 
 			c := valueSelectView(cars, store, make, model, isValid)
-			datastar.NewSSE(w, r).RenderFragmentTempl(c)
+			datastar.NewSSE(w, r).MergeFragmentTempl(c)
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -137,7 +137,7 @@ func setupExamplesValueSelect(examplesRouter chi.Router) error {
 				return
 			}
 
-			sse.RenderFragmentTempl(valueSelectResults(make, model))
+			sse.MergeFragmentTempl(valueSelectResults(make, model))
 		})
 	})
 

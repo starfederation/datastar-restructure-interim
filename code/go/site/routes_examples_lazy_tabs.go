@@ -22,7 +22,7 @@ func setupExamplesLazyTabs(examplesRouter chi.Router) error {
 		}
 		sse := datastar.NewSSE(w, r)
 		component := setupExamplesLazyTabsComponent(len(tabs), tabs[store.TabID], store)
-		sse.RenderFragmentTempl(component)
+		sse.MergeFragmentTempl(component)
 	})
 
 	return nil

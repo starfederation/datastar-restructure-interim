@@ -91,10 +91,10 @@ When called the function ***must*** write to the response buffer the following i
 5. ***Must*** write a `\n\n` to complete the event per the SSE spec.
 6. Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
 
-### `ServerSentEventGenerator.RenderFragment`
+### `ServerSentEventGenerator.MergeFragment`
 
 ```
-ServerSentEventGenerator.RenderFragment(
+ServerSentEventGenerator.MergeFragment(
     data: string,
     options?: {
         selector?: string,
@@ -107,7 +107,7 @@ ServerSentEventGenerator.RenderFragment(
  )
 ```
 
-`RenderFragment` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
+`MergeFragment` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
 
 #### Args
 

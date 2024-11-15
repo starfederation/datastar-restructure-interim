@@ -21,7 +21,7 @@ func setupExamplesDeleteRow(examplesRouter chi.Router) error {
 			sse := datastar.NewSSE(w, r)
 			mu.RLock()
 			defer mu.RUnlock()
-			sse.RenderFragmentTempl(deleteRowContacts(contacts))
+			sse.MergeFragmentTempl(deleteRowContacts(contacts))
 		})
 
 		dataRouter.Get("/reset", func(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +29,7 @@ func setupExamplesDeleteRow(examplesRouter chi.Router) error {
 			mu.Lock()
 			defer mu.Unlock()
 			contacts = starterActiveContacts()
-			sse.RenderFragmentTempl(deleteRowContacts(contacts))
+			sse.MergeFragmentTempl(deleteRowContacts(contacts))
 		})
 
 		dataRouter.Delete("/{id}", func(w http.ResponseWriter, r *http.Request) {

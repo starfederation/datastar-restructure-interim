@@ -112,7 +112,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 				return
 			}
 
-			sse.RenderFragmentTempl(MouseMouseUI(id, collection))
+			sse.MergeFragmentTempl(MouseMouseUI(id, collection))
 
 			watcher, err := kv.Watch(ctx, key)
 			if err != nil {
@@ -135,7 +135,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 						return
 					}
 
-					sse.RenderFragmentTempl(cursorSVG(collection.Positions))
+					sse.MergeFragmentTempl(cursorSVG(collection.Positions))
 				}
 			}
 

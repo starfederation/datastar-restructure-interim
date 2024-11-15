@@ -70,7 +70,7 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 	examplesRouter.Route("/bulk_update/data", func(dataRouter chi.Router) {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(bulkUpdateContacts(defaultSelectionStore(), contacts))
+			sse.MergeFragmentTempl(bulkUpdateContacts(defaultSelectionStore(), contacts))
 		})
 
 		setActivation := func(w http.ResponseWriter, r *http.Request, isActive bool) {
@@ -99,7 +99,7 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 						}
 					}
 
-					sse.RenderFragmentTempl(
+					sse.MergeFragmentTempl(
 						bulkUpdateContact(i, c, wasChanged && wasSelected),
 						// datastar.WithSettleDuration(5*time.Second),
 					)

@@ -43,7 +43,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 		}
 
 		c := templCounterExampleInitialContents(store)
-		datastar.NewSSE(w, r).RenderFragmentTempl(c)
+		datastar.NewSSE(w, r).MergeFragmentTempl(c)
 	})
 
 	updateGlobal := func(store *gabs.Container) {

@@ -26,12 +26,12 @@ func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 
 		if store.Offset == 0 {
-			sse.RenderFragmentTempl(ClickToEditAgentsTable(store))
+			sse.MergeFragmentTempl(ClickToEditAgentsTable(store))
 		} else {
-			sse.RenderFragmentTempl(ClickToLoadMoreButton(store))
+			sse.MergeFragmentTempl(ClickToLoadMoreButton(store))
 			for i := 0; i < store.Limit; i++ {
 				// log.Printf("ClickToLoadAgentRow: %d", store.Offset+i)
-				sse.RenderFragmentTempl(
+				sse.MergeFragmentTempl(
 					ClickToLoadAgentRow(store.Offset+i),
 					datastar.WithQuerySelectorID("click_to_load_rows"),
 					datastar.WithMergeAppend(),

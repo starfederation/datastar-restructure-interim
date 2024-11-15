@@ -12,9 +12,9 @@ func setupExamplesFetchIndicator(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/fetch_indicator/greet", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(fetchIndicatorEmpty())
+		sse.MergeFragmentTempl(fetchIndicatorEmpty())
 		time.Sleep(2 * time.Second)
-		sse.RenderFragmentTempl(fetchIndicatorGreeting())
+		sse.MergeFragmentTempl(fetchIndicatorGreeting())
 	})
 
 	return nil

@@ -38,12 +38,12 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
 
-			sse.RenderFragmentTempl(animationsFadeOutSwap(false))
-			sse.RenderFragmentTempl(animationsFadeMeIn(true))
-			sse.RenderFragmentTempl(animationsRequestInFlight())
+			sse.MergeFragmentTempl(animationsFadeOutSwap(false))
+			sse.MergeFragmentTempl(animationsFadeMeIn(true))
+			sse.MergeFragmentTempl(animationsRequestInFlight())
 
 			store := &AnimationsRestoreStore{ShouldRestore: true}
-			sse.RenderFragmentTempl(animationsViewTransition(store))
+			sse.MergeFragmentTempl(animationsViewTransition(store))
 
 			colorThrobTicker := time.NewTicker(2 * time.Second)
 			for {
@@ -53,28 +53,28 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 				case <-colorThrobTicker.C:
 					fg := fgPal[rand.Intn(len(fgPal))]
 					bg := bgPal[rand.Intn(len(bgPal))]
-					sse.RenderFragmentTempl(animationsColorThrob(fg, bg))
+					sse.MergeFragmentTempl(animationsColorThrob(fg, bg))
 				}
 			}
 		})
 
 		dataRouter.Delete("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(animationsFadeOutSwap(true))
+			sse.MergeFragmentTempl(animationsFadeOutSwap(true))
 			time.Sleep(2 * time.Second)
 			sse.RemoveFragments("#fade_out_swap")
 		})
 
 		dataRouter.Get("/fade_me_in", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(animationsFadeMeIn(false))
+			sse.MergeFragmentTempl(animationsFadeMeIn(false))
 			time.Sleep(500 * time.Millisecond)
-			sse.RenderFragmentTempl(animationsFadeMeIn(true))
+			sse.MergeFragmentTempl(animationsFadeMeIn(true))
 		})
 
 		dataRouter.Post("/request_in_flight", func(w http.ResponseWriter, r *http.Request) {
 			time.Sleep(2 * time.Second)
-			datastar.NewSSE(w, r).RenderFragment(`<div id="request_in_flight">Submitted!</div>`)
+			datastar.NewSSE(w, r).MergeFragment(`<div id="request_in_flight">Submitted!</div>`)
 		})
 
 		dataRouter.Get("/view_transition", func(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +84,7 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 				return
 			}
 			store.ShouldRestore = !store.ShouldRestore
-			datastar.NewSSE(w, r).RenderFragmentTempl(animationsViewTransition(store))
+			datastar.NewSSE(w, r).MergeFragmentTempl(animationsViewTransition(store))
 		})
 	})
 

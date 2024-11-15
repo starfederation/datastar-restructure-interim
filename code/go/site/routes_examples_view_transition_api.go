@@ -20,14 +20,14 @@ func setupExamplesViewTransitionAPI(examplesRouter chi.Router) error {
 		}
 
 		sse := datastar.NewSSE(w, r)
-		sse.RenderFragmentTempl(viewTransitionAPIUpdate(store.UseSlide))
+		sse.MergeFragmentTempl(viewTransitionAPIUpdate(store.UseSlide))
 		t := time.NewTicker(time.Second)
 		for {
 			select {
 			case <-r.Context().Done():
 				return
 			case <-t.C:
-				sse.RenderFragmentTempl(viewTransitionAPIUpdate(store.UseSlide))
+				sse.MergeFragmentTempl(viewTransitionAPIUpdate(store.UseSlide))
 			}
 		}
 	})

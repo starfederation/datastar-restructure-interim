@@ -20,18 +20,18 @@ func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 	examplesRouter.Route("/click_to_edit/contact/{id}", func(contactRouter chi.Router) {
 		contactRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(setupExamplesClickToEditUserComponent(c1))
+			sse.MergeFragmentTempl(setupExamplesClickToEditUserComponent(c1))
 		})
 
 		contactRouter.Get("/edit", func(w http.ResponseWriter, r *http.Request) {
 			c := setupExamplesClickToEditUserEdit(c1)
-			datastar.NewSSE(w, r).RenderFragmentTempl(c)
+			datastar.NewSSE(w, r).MergeFragmentTempl(c)
 		})
 
 		contactRouter.Patch("/reset", func(w http.ResponseWriter, r *http.Request) {
 			resetContact()
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(setupExamplesClickToEditUserComponent(c1))
+			sse.MergeFragmentTempl(setupExamplesClickToEditUserComponent(c1))
 		})
 
 		contactRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 			}
 
 			c1 = c // update the contact
-			datastar.NewSSE(w, r).RenderFragmentTempl(setupExamplesClickToEditUserComponent(c1))
+			datastar.NewSSE(w, r).MergeFragmentTempl(setupExamplesClickToEditUserComponent(c1))
 		})
 	})
 

@@ -24,7 +24,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 			mu.RLock()
 			defer mu.RUnlock()
 			sse := datastar.NewSSE(w, r)
-			sse.RenderFragmentTempl(QuickPrimerGoView(store))
+			sse.MergeFragmentTempl(QuickPrimerGoView(store))
 		})
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +41,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 			store = reqStore
 			mu.Unlock()
 
-			datastar.NewSSE(w, r).RenderFragmentTempl(QuickPrimerGoPut(store))
+			datastar.NewSSE(w, r).MergeFragmentTempl(QuickPrimerGoPut(store))
 		})
 
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +55,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			sse.RenderFragmentTempl(
+			sse.MergeFragmentTempl(
 				QuickPrimerGoGet(string(b)),
 				datastar.WithSelector("main"),
 				datastar.WithMergePrepend(),
@@ -74,7 +74,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 				case <-ticker.C:
 					buf := make([]byte, 8)
 					binary.LittleEndian.PutUint64(buf, rand.Uint64())
-					sse.RenderFragmentTempl(QuickPrimerGoFeed(hex.EncodeToString(buf)))
+					sse.MergeFragmentTempl(QuickPrimerGoFeed(hex.EncodeToString(buf)))
 				}
 			}
 		})

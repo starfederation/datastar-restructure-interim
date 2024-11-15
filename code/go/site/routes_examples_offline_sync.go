@@ -42,7 +42,7 @@ func setupExamplesOfflineSync(examplesRouter chi.Router, store sessions.Store) e
 
 		lruCache.Add(sessionID, storeJSON)
 
-		datastar.NewSSE(w, r).RenderFragment(fmt.Sprintf(`
+		datastar.NewSSE(w, r).MergeFragment(fmt.Sprintf(`
 <div id="results">
 	<p>Synchronized offline data!</p>
 	<p>at %s</p>

@@ -29,7 +29,7 @@ func setupExamplesStoreChanged(examplesRouter chi.Router, store sessions.Store) 
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		datastar.NewSSE(w, r).RenderFragmentf(
+		datastar.NewSSE(w, r).MergeFragmentf(
 			`<div id="from_server">Lifetime server updates %d</div>`,
 			totalUpdates,
 		)

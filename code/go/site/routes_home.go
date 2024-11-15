@@ -178,7 +178,7 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 							http.Error(w, err.Error(), http.StatusInternalServerError)
 							return
 						}
-						sse.RenderFragmentTempl(TodosMVCView(mvc))
+						sse.MergeFragmentTempl(TodosMVCView(mvc))
 					}
 				}
 			})
