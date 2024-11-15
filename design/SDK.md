@@ -17,7 +17,7 @@ Provide an SDK in a language agnostic way, to that end
 - [x] Provide a [reference implementation](../code/go/sdk) in Go
 - [ ] Provide SDKs for
   - [ ] JS/TS
-  - [ ] PHP
+  - [x] PHP
   - [ ] .NET
   - [ ] Python
   - [ ] Java
@@ -29,11 +29,8 @@ Provide an SDK in a language agnostic way, to that end
 
 The core mechanics of Datastar's SSE support is
 
-1. Data gets send to browser as SSE events
-2. Data comes in via JSON from browser under a `datastar` namespace
-
-### Constraints
-
+1. Data gets send to browser as SSE events.
+2. Data comes in via JSON from browser under a `datastar` namespace.
 
 # Library
 
