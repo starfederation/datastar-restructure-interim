@@ -4959,10 +4959,6 @@ html:has(.drawer-toggle:checked) {
   padding-bottom: 2rem;
 }
 
-.pl-1 {
-  padding-left: 0.25rem;
-}
-
 .pl-2 {
   padding-left: 0.5rem;
 }
@@ -5168,6 +5164,24 @@ html:has(.drawer-toggle:checked) {
 
 .duration-1000 {
   transition-duration: 1000ms;
+}
+
+h2 a, h3 a, h4 a, h5 a, h6 a {
+  padding-left: 0.5rem !important;
+  text-decoration-line: none !important;
+}
+
+h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+  opacity: 0.8 !important;
+}
+
+h2 a, h3 a, h4 a, h5 a, h6 a {
+  color: var(--tw-prose-headings) !important;
+}
+
+pre code {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
 }
 
 .prose-a\:link-primary :is(:where(a):not(:where([class~="not-prose"],[class~="not-prose"] *))) {

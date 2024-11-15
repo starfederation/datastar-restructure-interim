@@ -11,8 +11,8 @@ class Constants
 {
     public const DatastarKey = 'datastar';
     public const Version = '0.20.0';
-    public const VersionClientByteSize = 44082;
-    public const VersionClientByteSizeGzip = 14919;
+    public const VersionClientByteSize = 44076;
+    public const VersionClientByteSizeGzip = 14916;
     public const DefaultSettleDuration = 300;
     public const DefaultSSERetryDuration = 1000;
     public const DefaultUseViewTransitions = false;

@@ -3,7 +3,7 @@
 // Slug: Reference an element
 // Description: This action references an element that can be used in other expressions.
 
-import { ActionPlugin } from "../../../engine";
+import { ActionPlugin } from "../../../../engine";
 
 export const RefAction: ActionPlugin = {
     pluginType: "action",

@@ -3,7 +3,7 @@
 // Slug: Linearly fit a value to a new range
 // Description: This action linearly fits a value to a new range. The value is first scaled to the new range.  Note it is not clamped to the new range.
 
-import { ActionPlugin, AttributeContext } from "../../../engine";
+import { ActionPlugin, AttributeContext } from "../../../../engine";
 
 export const Fit: ActionPlugin = {
     pluginType: "action",

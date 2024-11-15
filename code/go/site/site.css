@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h2 a, h3 a, h4 a, h5 a, h6 a {
+    @apply pl-2 no-underline hover:opacity-80 !important;
+    color: var(--tw-prose-headings) !important;
+}
+
+pre code {
+    @apply text-base !important;
+}
