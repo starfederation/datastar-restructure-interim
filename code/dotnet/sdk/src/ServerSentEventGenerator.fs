@@ -32,7 +32,7 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
             match httpRequest.Method with
             | System.Net.WebRequestMethods.Http.Get ->
                 Task.FromResult <|
-                    match httpRequest.Query.TryGetValue(Consts.datastarQueryKey) with
+                    match httpRequest.Query.TryGetValue(Consts.DatastarKey) with
                     | true, json when json.Count > 0 -> ValueSome (json[0])
                     | _ -> ValueNone
             | System.Net.WebRequestMethods.Http.Post ->
@@ -139,7 +139,7 @@ and RemoveFragmentOpts() =
 
 and ServerSentEventOpts() =
     member val EventId = null with get, set
-    member val Retry = Consts.DefaultSseSendRetry with get, set
+    member val Retry = Consts.DefaultSSERetryDuration with get, set
     member this.AsOptions =
         { EventId = Utility.ValueOption.fromNullable this.EventId
           Retry = this.Retry }

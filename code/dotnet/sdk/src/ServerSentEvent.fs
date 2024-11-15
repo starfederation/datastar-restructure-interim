@@ -27,32 +27,32 @@ type MergeFragmentOptions =
       SettleDuration: TimeSpan
       UseViewTransition: bool }
 module MergeFragmentOptions =
-    let defaults = { Selector = ValueNone; MergeMode = Default; SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransition }
+    let defaults = { Selector = ValueNone; MergeMode = Consts.DefaultFragmentMergeMode; SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransitions }
 
 type RemoveFragmentOptions = { SettleDuration: TimeSpan; UseViewTransition: bool }
 module RemoveFragmentOptions =
-    let defaults = { SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransition }
+    let defaults = { SettleDuration = Consts.DefaultSettleDuration; UseViewTransition = Consts.DefaultUseViewTransitions }
 
 type EventOptions = { EventId: string voption; Retry: TimeSpan }
 module EventOptions =
-    let defaults = { EventId = ValueNone; Retry = Consts.DefaultSseSendRetry }
+    let defaults = { EventId = ValueNone; Retry = Consts.DefaultSSERetryDuration }
 
 type ISendEvent = abstract member SendEvent: string -> Task
 
 type ServerSentEvent =
-    { EventType: ServerSentEventType
+    { EventType: EventType
       Id: string voption
       Retry: TimeSpan
       DataLines: string[] }
 module ServerSentEvent =
     let serializeEvent sseEvent =
         seq {
-            $"event: {sseEvent.EventType |> Consts.ServerSentEventType.toString}"
+            $"event: {sseEvent.EventType |> Consts.EventType.toString}"
 
             if sseEvent.Id |> ValueOption.isSome
             then $"id: {sseEvent.Id |> ValueOption.get}"
 
-            if (sseEvent.Retry <> Consts.DefaultSseSendRetry)
+            if (sseEvent.Retry <> Consts.DefaultSSERetryDuration)
             then $"retry: {sseEvent.Retry.Milliseconds}"
 
             yield! sseEvent.DataLines |> Array.map (fun dataLine -> $"data: {dataLine}")
@@ -71,11 +71,11 @@ module ServerSentEvent =
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
           DataLines = [|
-            if options.Selector |> ValueOption.isSome then $"{Consts.dataSelector} {options.Selector |> ValueOption.get |> Selector.value}"
-            $"{Consts.dataMerge} {options.MergeMode |> Consts.FragmentMergeMode.toString}"
-            if (options.SettleDuration <> Consts.DefaultSettleDuration) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
-            if (options.UseViewTransition <> Consts.DefaultUseViewTransition) then $"{Consts.dataUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
-            yield! (fragmentLines |> Seq.map (fun fragmentLine -> $"{Consts.dataFragment} %s{fragmentLine}"))
+            if options.Selector |> ValueOption.isSome then $"{Consts.DatastarDatalineSelector} {options.Selector |> ValueOption.get |> Selector.value}"
+            $"{Consts.DatastarDatalineMergeMode} {options.MergeMode |> Consts.FragmentMergeMode.toString}"
+            if (options.SettleDuration <> Consts.DefaultSettleDuration) then $"{Consts.DatastarDatalineSettleDuration} {options.SettleDuration.Milliseconds}"
+            if (options.UseViewTransition <> Consts.DefaultUseViewTransitions) then $"{Consts.DatastarDatalineUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
+            yield! (fragmentLines |> Seq.map (fun fragmentLine -> $"{Consts.DatastarDatalineFragment} %s{fragmentLine}"))
             |] }
         |> send env
 
@@ -84,9 +84,9 @@ module ServerSentEvent =
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
           DataLines = [|
-            $"{Consts.dataSelector} {selector |> Selector.value}"
-            if (options.SettleDuration <> Consts.DefaultSettleDuration) then $"{Consts.dataSettleDuration} {options.SettleDuration.Milliseconds}"
-            if (options.UseViewTransition <> Consts.DefaultUseViewTransition) then $"{Consts.dataUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
+            $"{Consts.DatastarDatalineSelector} {selector |> Selector.value}"
+            if (options.SettleDuration <> Consts.DefaultSettleDuration) then $"{Consts.DatastarDatalineSettleDuration} {options.SettleDuration.Milliseconds}"
+            if (options.UseViewTransition <> Consts.DefaultUseViewTransitions) then $"{Consts.DatastarDatalineUseViewTransition} {options.UseViewTransition |> Utility.toLower}"
             |] }
         |> send env
 
@@ -96,8 +96,8 @@ module ServerSentEvent =
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
           DataLines = [|
-            if onlyIfMissing <> Consts.DefaultOnlyIfMissing then $"{Consts.dataOnlyIfMissing} {onlyIfMissing |> Utility.toLower}"
-            yield! (dataLines |> Seq.map (fun dataLine -> $"{Consts.dataStore} %s{dataLine}"))
+            if onlyIfMissing <> Consts.DefaultOnlyIfMissing then $"{Consts.DefaultOnlyIfMissing} {onlyIfMissing |> Utility.toLower}"
+            yield! (dataLines |> Seq.map (fun dataLine -> $"{Consts.DatastarDatalineStore} %s{dataLine}"))
             |] }
         |> send env
 
@@ -106,18 +106,18 @@ module ServerSentEvent =
         { EventType = Remove
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
-          DataLines = [| $"{Consts.dataSelector} {paths'}" |] }
+          DataLines = [| $"{Consts.DatastarDatalineSelector} {paths'}" |] }
         |> send env
 
     let redirect env eventOptions url =
         { EventType = Redirect
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
-          DataLines = [| $"{Consts.dataUrl} %s{url}" |] }
+          DataLines = [| $"{Consts.DatastarDatalineUrl} %s{url}" |] }
         |> send env
 
     let console env eventOptions mode message =
-        { EventType = ServerSentEventType.Console
+        { EventType = EventType.Console
           Id = eventOptions.EventId
           Retry = eventOptions.Retry
           DataLines = [| $"{mode |> Consts.ConsoleMode.toString} %s{message}" |] }
