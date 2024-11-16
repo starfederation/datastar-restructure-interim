@@ -4,10 +4,10 @@
 // Description: Remember, SSE is just a regular SSE request but with the ability to send 0-inf messages to the client.
 
 import { ActionPlugin } from "../../../../engine";
-import { fetcherActionMethod } from "./sse-old";
+import { sendSSERequest } from "./sseShared";
 
 export const PutSSE: ActionPlugin = {
     pluginType: "action",
     name: "put",
-    method: fetcherActionMethod("PUT"),
+    method: sendSSERequest("PUT"),
 };

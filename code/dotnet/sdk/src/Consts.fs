@@ -24,15 +24,19 @@ type FragmentMergeMode =
 
 type EventType =
 /// An event dealing with HTML fragments.
-| Fragment
+| MergeFragments
 /// An event dealing with fine grain signals.
-| Signal
-/// An event dealing with removing elements or signals.
-| Remove
+| MergeStore
+/// An event dealing with removing elements from the DOM
+| RemoveFragments
+/// An event dealing with removing signals from the store.
+| RemoveFromStore
 /// An event dealing with redirecting the browser.
 | Redirect
 /// An event dealing with console messages.
 | Console
+/// An event dealing to call functions in the browser.
+| Call
 
 type ConsoleMode =
 /// Writes an error message to the console if the assertion is false. If the assertion is true, nothing happens.
@@ -78,8 +82,8 @@ type ConsoleMode =
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
-    let [<Literal>] VersionClientByteSize     = 44070
-    let [<Literal>] VersionClientByteSizeGzip = 14910
+    let [<Literal>] VersionClientByteSize     = 44087
+    let [<Literal>] VersionClientByteSizeGzip = 14810
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -116,11 +120,13 @@ module Consts =
     module EventType =
         let toString this =
             match this with
-                | EventType.Fragment -> "datastar-fragment"
-                | EventType.Signal -> "datastar-signal"
-                | EventType.Remove -> "datastar-remove"
+                | EventType.MergeFragments -> "datastar-merge-fragments"
+                | EventType.MergeStore -> "datastar-merge-store"
+                | EventType.RemoveFragments -> "datastar-remove-fragments"
+                | EventType.RemoveFromStore -> "datastar-remove-from-store"
                 | EventType.Redirect -> "datastar-redirect"
                 | EventType.Console -> "datastar-console"
+                | EventType.Call -> "datastar-call"
 
     module ConsoleMode =
         let toString this =

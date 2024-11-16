@@ -8,7 +8,7 @@ func (sse *ServerSentEventGenerator) Redirectf(format string, args ...any) error
 }
 
 func (sse *ServerSentEventGenerator) Redirect(url string, opts ...SSEEventOption) error {
-	if err := sse.send(
+	if err := sse.Send(
 		EventTypeRedirect,
 		[]string{UrlDatalineLiteral + url},
 		opts...,

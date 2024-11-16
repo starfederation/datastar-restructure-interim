@@ -47,78 +47,7 @@ func WithUseViewTransitions(useViewTransition bool) MergeFragmentOption {
 	}
 }
 
-type RemoveFragmentOptions struct {
-	EventID            string
-	RetryDuration      time.Duration
-	SettleDuration     time.Duration
-	UseViewTransitions *bool
-}
-
-type RemoveFragmentOption func(*RemoveFragmentOptions)
-
-func WithRemoveEventID(id string) RemoveFragmentOption {
-	return func(o *RemoveFragmentOptions) {
-		o.EventID = id
-	}
-}
-
-func WithRemoveRetryDuration(d time.Duration) RemoveFragmentOption {
-	return func(o *RemoveFragmentOptions) {
-		o.RetryDuration = d
-	}
-}
-
-func WithRemoveSettleDuration(d time.Duration) RemoveFragmentOption {
-	return func(o *RemoveFragmentOptions) {
-		o.SettleDuration = d
-	}
-}
-
-func WithRemoveUseViewTransitions(useViewTransition bool) RemoveFragmentOption {
-	return func(o *RemoveFragmentOptions) {
-		o.UseViewTransitions = &useViewTransition
-	}
-}
-
-func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...RemoveFragmentOption) error {
-	if selector == "" {
-		panic("missing " + SelectorDatalineLiteral)
-	}
-
-	options := &RemoveFragmentOptions{
-		EventID:            "",
-		RetryDuration:      DefaultSSERetryDuration,
-		SettleDuration:     DefaultSettleDuration,
-		UseViewTransitions: nil,
-	}
-	for _, opt := range opts {
-		opt(options)
-	}
-
-	dataRows := []string{SelectorDatalineLiteral + selector}
-	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
-		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
-		dataRows = append(dataRows, SettleDurationDatalineLiteral+settleDuration)
-	}
-	if options.UseViewTransitions != nil {
-		dataRows = append(dataRows, UseViewTransitionDatalineLiteral+strconv.FormatBool(*options.UseViewTransitions))
-	}
-
-	sendOptions := make([]SSEEventOption, 0, 2)
-	if options.EventID != "" {
-		sendOptions = append(sendOptions, WithSSEEventId(options.EventID))
-	}
-	if options.RetryDuration > 0 {
-		sendOptions = append(sendOptions, WithSSERetryDuration(options.RetryDuration))
-	}
-
-	if err := sse.send(EventTypeRemove, dataRows, sendOptions...); err != nil {
-		return fmt.Errorf("failed to send remove: %w", err)
-	}
-	return nil
-}
-
-func (sse *ServerSentEventGenerator) MergeFragment(fragment string, opts ...MergeFragmentOption) error {
+func (sse *ServerSentEventGenerator) MergeFragments(fragment string, opts ...MergeFragmentOption) error {
 	options := &MergeFragmentOptions{
 		EventID:        "",
 		RetryDuration:  DefaultSSERetryDuration,
@@ -160,13 +89,84 @@ func (sse *ServerSentEventGenerator) MergeFragment(fragment string, opts ...Merg
 		}
 	}
 
-	if err := sse.send(
-		EventTypeFragment,
+	if err := sse.Send(
+		EventTypeMergeFragments,
 		dataRows,
 		sendOptions...,
 	); err != nil {
 		return fmt.Errorf("failed to send fragment: %w", err)
 	}
 
+	return nil
+}
+
+type RemoveFragmentsOptions struct {
+	EventID            string
+	RetryDuration      time.Duration
+	SettleDuration     time.Duration
+	UseViewTransitions *bool
+}
+
+type RemoveFragmentsOption func(*RemoveFragmentsOptions)
+
+func WithRemoveEventID(id string) RemoveFragmentsOption {
+	return func(o *RemoveFragmentsOptions) {
+		o.EventID = id
+	}
+}
+
+func WithRemoveRetryDuration(d time.Duration) RemoveFragmentsOption {
+	return func(o *RemoveFragmentsOptions) {
+		o.RetryDuration = d
+	}
+}
+
+func WithRemoveSettleDuration(d time.Duration) RemoveFragmentsOption {
+	return func(o *RemoveFragmentsOptions) {
+		o.SettleDuration = d
+	}
+}
+
+func WithRemoveUseViewTransitions(useViewTransition bool) RemoveFragmentsOption {
+	return func(o *RemoveFragmentsOptions) {
+		o.UseViewTransitions = &useViewTransition
+	}
+}
+
+func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...RemoveFragmentsOption) error {
+	if selector == "" {
+		panic("missing " + SelectorDatalineLiteral)
+	}
+
+	options := &RemoveFragmentsOptions{
+		EventID:            "",
+		RetryDuration:      DefaultSSERetryDuration,
+		SettleDuration:     DefaultSettleDuration,
+		UseViewTransitions: nil,
+	}
+	for _, opt := range opts {
+		opt(options)
+	}
+
+	dataRows := []string{SelectorDatalineLiteral + selector}
+	if options.SettleDuration > 0 && options.SettleDuration != DefaultSettleDuration {
+		settleDuration := strconv.Itoa(int(options.SettleDuration.Milliseconds()))
+		dataRows = append(dataRows, SettleDurationDatalineLiteral+settleDuration)
+	}
+	if options.UseViewTransitions != nil {
+		dataRows = append(dataRows, UseViewTransitionDatalineLiteral+strconv.FormatBool(*options.UseViewTransitions))
+	}
+
+	sendOptions := make([]SSEEventOption, 0, 2)
+	if options.EventID != "" {
+		sendOptions = append(sendOptions, WithSSEEventId(options.EventID))
+	}
+	if options.RetryDuration > 0 {
+		sendOptions = append(sendOptions, WithSSERetryDuration(options.RetryDuration))
+	}
+
+	if err := sse.Send(EventTypeRemoveFragments, dataRows, sendOptions...); err != nil {
+		return fmt.Errorf("failed to send remove: %w", err)
+	}
 	return nil
 }

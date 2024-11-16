@@ -18,7 +18,9 @@ export type Reactivity = {
 
 export type InitContext = {
   store: any;
+  upsertIfMissingFromStore: (path: string, value: any) => void;
   mergeStore: (store: DeepState) => void;
+  removeFromStore: (...paths: string[]) => void;
   actions: Readonly<ActionPlugins>;
   reactivity: Reactivity;
   applyPlugins: (target: Element) => void;
@@ -27,16 +29,14 @@ export type InitContext = {
 };
 
 export type AttributeContext = InitContext & {
-  upsertIfMissingFromStore: (path: string, value: any) => void;
-  removeFromStore: (...paths: string[]) => void;
   walkSignals: (cb: (name: string, signal: Signal<any>) => void) => void;
-  el: Readonly<HTMLorSVGElement>;
-  key: Readonly<string>;
-  rawKey: Readonly<string>;
-  rawExpression: Readonly<string>;
-  expression: Readonly<string>;
-  expressionFn: AttribtueExpressionFunction;
-  modifiers: Map<string, string[]>;
+  el: Readonly<HTMLorSVGElement>; // The element the attribute is on
+  key: Readonly<string>; // data-* key without the prefix or modifiers
+  rawKey: Readonly<string>; // raw data-* key
+  rawExpression: Readonly<string>; // before any preprocessor run, what the user wrote
+  expression: Readonly<string>; // what the user wrote after any preprocessor run
+  expressionFn: AttribtueExpressionFunction; // the function constructed from the expression
+  modifiers: Map<string, string[]>; // the modifiers and their arguments
 };
 
 export type OnRemovalFn = () => void;

@@ -8,7 +8,7 @@ func (sse *ServerSentEventGenerator) Consolef(mode ConsoleMode, messageFormat st
 }
 
 func (sse *ServerSentEventGenerator) Console(mode ConsoleMode, message string, opts ...SSEEventOption) error {
-	return sse.send(
+	return sse.Send(
 		EventTypeConsole,
 		[]string{string(mode) + " " + message},
 		opts...,

@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/valyala/bytebufferpool"
 )
 
 type ServerSentEventGenerator struct {
@@ -81,7 +83,7 @@ func writeJustError(w io.Writer, b []byte) (err error) {
 	return err
 }
 
-func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []string, opts ...SSEEventOption) error {
+func (sse *ServerSentEventGenerator) Send(eventType EventType, dataLines []string, opts ...SSEEventOption) error {
 	sse.mu.Lock()
 	defer sse.mu.Unlock()
 
@@ -97,11 +99,14 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 		opt(&evt)
 	}
 
+	buf := bytebufferpool.Get()
+	defer bytebufferpool.Put(buf)
+
 	// write event type
 	if err := errors.Join(
-		writeJustError(sse.w, eventLinePrefix),
-		writeJustError(sse.w, []byte(evt.Type)),
-		writeJustError(sse.w, newLineBuf),
+		writeJustError(buf, eventLinePrefix),
+		writeJustError(buf, []byte(evt.Type)),
+		writeJustError(buf, newLineBuf),
 	); err != nil {
 		return fmt.Errorf("failed to write event type: %w", err)
 	}
@@ -109,9 +114,9 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 	// write id if needed
 	if evt.EventID != "" {
 		if err := errors.Join(
-			writeJustError(sse.w, idLinePrefix),
-			writeJustError(sse.w, []byte(evt.EventID)),
-			writeJustError(sse.w, newLineBuf),
+			writeJustError(buf, idLinePrefix),
+			writeJustError(buf, []byte(evt.EventID)),
+			writeJustError(buf, newLineBuf),
 		); err != nil {
 			return fmt.Errorf("failed to write id: %w", err)
 		}
@@ -122,9 +127,9 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 		retry := int(evt.RetryDuration.Milliseconds())
 		retryStr := strconv.Itoa(retry)
 		if err := errors.Join(
-			writeJustError(sse.w, retryLinePrefix),
-			writeJustError(sse.w, []byte(retryStr)),
-			writeJustError(sse.w, newLineBuf),
+			writeJustError(buf, retryLinePrefix),
+			writeJustError(buf, []byte(retryStr)),
+			writeJustError(buf, newLineBuf),
 		); err != nil {
 			return fmt.Errorf("failed to write retry: %w", err)
 		}
@@ -133,21 +138,28 @@ func (sse *ServerSentEventGenerator) send(eventType EventType, dataLines []strin
 	// write data lines
 	for _, d := range evt.Data {
 		if err := errors.Join(
-			writeJustError(sse.w, dataLinePrefix),
-			writeJustError(sse.w, []byte(d)),
-			writeJustError(sse.w, newLineBuf),
+			writeJustError(buf, dataLinePrefix),
+			writeJustError(buf, []byte(d)),
+			writeJustError(buf, newLineBuf),
 		); err != nil {
 			return fmt.Errorf("failed to write data: %w", err)
 		}
 	}
 
 	// write double newlines to separate events
-	if err := writeJustError(sse.w, doubleNewLineBuf); err != nil {
+	if err := writeJustError(buf, doubleNewLineBuf); err != nil {
 		return fmt.Errorf("failed to write newline: %w", err)
+	}
+
+	// copy the buffer to the response writer
+	if _, err := buf.WriteTo(sse.w); err != nil {
+		return fmt.Errorf("failed to write to response writer: %w", err)
 	}
 
 	// flush the buffer to the client
 	sse.flusher.Flush()
+
+	// log.Print("\n" + buf.String())
 
 	return nil
 }

@@ -1,6 +1,6 @@
 # Attribute Plugins
 
-[Source](https://github.com/starfederation/datastar/blob/main/packages/library/src/lib/plugins/attributes.ts)
+[Source](https://github.com/starfederation/datastar/blob/main/packages/library/src/lib/plugins/official/attributes.ts)
 
 Primarily used to help hook up the store and the DOM.
 

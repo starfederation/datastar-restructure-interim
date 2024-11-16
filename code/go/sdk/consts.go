@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 44070
-    VersionClientByteSizeGzip = 14910
+    VersionClientByteSize     = 44087
+    VersionClientByteSizeGzip = 14810
     DefaultSettleDuration     = 300 * time.Millisecond
     DefaultSSERetryDuration   = 1000 * time.Millisecond
     DefaultUseViewTransitions = false
@@ -60,19 +60,25 @@ type EventType string
 
 const (
     // An event dealing with HTML fragments.
-    EventTypeFragment EventType = "datastar-fragment"
+    EventTypeMergeFragments EventType = "datastar-merge-fragments"
 
     // An event dealing with fine grain signals.
-    EventTypeSignal EventType = "datastar-signal"
+    EventTypeMergeStore EventType = "datastar-merge-store"
 
-    // An event dealing with removing elements or signals.
-    EventTypeRemove EventType = "datastar-remove"
+    // An event dealing with removing elements from the DOM
+    EventTypeRemoveFragments EventType = "datastar-remove-fragments"
+
+    // An event dealing with removing signals from the store.
+    EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
 
     // An event dealing with redirecting the browser.
     EventTypeRedirect EventType = "datastar-redirect"
 
     // An event dealing with console messages.
     EventTypeConsole EventType = "datastar-console"
+
+    // An event dealing to call functions in the browser.
+    EventTypeCall EventType = "datastar-call"
 
 )
 

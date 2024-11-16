@@ -96,19 +96,24 @@ var ConstsData = &ConstTemplateData{
 			DefaultIndex: -1,
 			Values: []*EnumValueDefinition{
 				{
-					Name:        toolbelt.ToCasedString("Fragment"),
-					Value:       "datastar-fragment",
+					Name:        toolbelt.ToCasedString("MergeFragments"),
+					Value:       "datastar-merge-fragments",
 					Description: "An event dealing with HTML fragments.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("Signal"),
-					Value:       "datastar-signal",
+					Name:        toolbelt.ToCasedString("MergeStore"),
+					Value:       "datastar-merge-store",
 					Description: "An event dealing with fine grain signals.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("Remove"),
-					Value:       "datastar-remove",
-					Description: "An event dealing with removing elements or signals.",
+					Name:        toolbelt.ToCasedString("RemoveFragments"),
+					Value:       "datastar-remove-fragments",
+					Description: "An event dealing with removing elements from the DOM",
+				},
+				{
+					Name:        toolbelt.ToCasedString("RemoveFromStore"),
+					Value:       "datastar-remove-from-store",
+					Description: "An event dealing with removing signals from the store.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("Redirect"),
@@ -119,6 +124,11 @@ var ConstsData = &ConstTemplateData{
 					Name:        toolbelt.ToCasedString("Console"),
 					Value:       "datastar-console",
 					Description: "An event dealing with console messages.",
+				},
+				{
+					Name:        toolbelt.ToCasedString("Call"),
+					Value:       "datastar-call",
+					Description: "An event dealing to call functions in the browser.",
 				},
 			},
 		},
