@@ -21,6 +21,8 @@ RUN set -eux; \
     && \
     go install github.com/a-h/templ/cmd/templ@latest \
     && \
-    go install github.com/valyala/quicktemplate/qtc@latest
+    go install github.com/valyala/quicktemplate/qtc@latest \
+    && \
+    git config --global --add safe.directory /app
 
 ENTRYPOINT ["/bin/sh"]
