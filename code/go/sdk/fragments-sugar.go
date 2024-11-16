@@ -69,7 +69,7 @@ func WithoutViewTransitions() MergeFragmentOption {
 }
 
 func (sse *ServerSentEventGenerator) MergeFragmentf(format string, args ...any) error {
-	return sse.MergeFragment(fmt.Sprintf(format, args...))
+	return sse.MergeFragments(fmt.Sprintf(format, args...))
 }
 
 func (sse *ServerSentEventGenerator) MergeFragmentTempl(c templ.Component, opts ...MergeFragmentOption) error {
@@ -78,7 +78,7 @@ func (sse *ServerSentEventGenerator) MergeFragmentTempl(c templ.Component, opts 
 	if err := c.Render(sse.Context(), buf); err != nil {
 		return fmt.Errorf("failed to merge fragment: %w", err)
 	}
-	if err := sse.MergeFragment(buf.String(), opts...); err != nil {
+	if err := sse.MergeFragments(buf.String(), opts...); err != nil {
 		return fmt.Errorf("failed to merge fragment: %w", err)
 	}
 	return nil
@@ -90,7 +90,7 @@ func (sse *ServerSentEventGenerator) MergeFragmentGostar(child elements.ElementR
 	if err := child.Render(buf); err != nil {
 		return fmt.Errorf("failed to render: %w", err)
 	}
-	if err := sse.MergeFragment(buf.String(), opts...); err != nil {
+	if err := sse.MergeFragments(buf.String(), opts...); err != nil {
 		return fmt.Errorf("failed to merge fragment: %w", err)
 	}
 	return nil

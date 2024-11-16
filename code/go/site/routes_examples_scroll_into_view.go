@@ -57,7 +57,7 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 			}
 
 			updated := fmt.Sprintf(`<p id="p%d" data-%s></p>`, paragraphCount/2, attr)
-			sse.MergeFragment(updated, datastar.WithMergeUpsertAttributes())
+			sse.MergeFragments(updated, datastar.WithMergeUpsertAttributes())
 		})
 	})
 

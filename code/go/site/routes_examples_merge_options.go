@@ -62,7 +62,7 @@ func setupExamplesMergeOptions(examplesRouter chi.Router) error {
 		default:
 			mergeMode, err := datastar.FragmentMergeTypeFromString(mergeModeRaw)
 			if err != nil {
-				sse.ConsoleErr(err)
+				sse.ConsoleError(err)
 				return
 			}
 

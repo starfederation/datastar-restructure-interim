@@ -1,6 +1,6 @@
 # Core Plugins
 
-[Source](https://github.com/starfederation/datastar/blob/main/packages/library/src/lib/plugins/core.ts)
+[Source](https://github.com/starfederation/datastar/blob/main/packages/library/src/lib/plugins/official/core.ts)
 
 These are the only plugins that are required in order to have a working system. In the default build all (including core) plugins are included as they cover the most common use cases.
 
@@ -17,7 +17,7 @@ Takes the contents of the attribute and runs a BigInt aware JSON parse on it. It
 <div class="alert alert-info">
     <div>
         Note that `value` and `peek` are reserved words (imposed by the signals library) and cannot be used as store names.
-    </div> 
+    </div>
 </div>
 
 #### Modifiers

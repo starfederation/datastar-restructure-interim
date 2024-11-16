@@ -108,7 +108,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 			ctx := r.Context()
 			collection, _, err := cursors(ctx)
 			if err != nil {
-				sse.ConsoleErr(err)
+				sse.ConsoleError(err)
 				return
 			}
 
@@ -116,7 +116,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 
 			watcher, err := kv.Watch(ctx, key)
 			if err != nil {
-				sse.ConsoleErr(err)
+				sse.ConsoleError(err)
 				return
 			}
 			defer watcher.Stop()
@@ -131,7 +131,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 					}
 					collection, err := decodeCursors(entry)
 					if err != nil {
-						sse.ConsoleErr(err)
+						sse.ConsoleError(err)
 						return
 					}
 
@@ -149,7 +149,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 			}
 			form := &Form{}
 			if err := datastar.ParseIncoming(r, form); err != nil {
-				datastar.NewSSE(w, r).ConsoleErr(err)
+				datastar.NewSSE(w, r).ConsoleError(err)
 				return
 			}
 
