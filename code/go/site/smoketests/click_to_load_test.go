@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/playwright-community/playwright-go"
+	playwright "github.com/playwright-community/playwright-go"
 )
 
 func clickToLoadExampleTest(ctx context.Context, page playwright.Page) error {

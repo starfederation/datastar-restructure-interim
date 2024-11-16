@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/delaneyj/toolbelt"
-	"github.com/playwright-community/playwright-go"
+	playwright "github.com/playwright-community/playwright-go"
 	"github.com/starfederation/datastar/code/go/site"
 )
 

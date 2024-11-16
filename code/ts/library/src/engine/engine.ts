@@ -12,17 +12,17 @@ import {
     AttributePlugin,
     DatastarEvent,
     DatastarPlugin,
-    EffectPlugin,
     InitContext,
     OnRemovalFn,
     PreprocessorPlugin,
     Reactivity,
+    WatcherPlugin,
 } from "./types";
 import { VERSION } from "./version";
 
 const isPreprocessorPlugin = (p: DatastarPlugin): p is PreprocessorPlugin =>
     p.pluginType === "preprocessor";
-const isEffectPlugin = (p: DatastarPlugin): p is EffectPlugin =>
+const isEffectPlugin = (p: DatastarPlugin): p is WatcherPlugin =>
     p.pluginType === "effect";
 const isAttributePlugin = (p: DatastarPlugin): p is AttributePlugin =>
     p.pluginType === "attribute";
@@ -34,7 +34,7 @@ export class Engine {
     store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
     preprocessors = new Array<PreprocessorPlugin>();
     actions: ActionPlugins = {};
-    sideEffects = new Array<EffectPlugin>();
+    watchers = new Array<WatcherPlugin>();
     refs: Record<string, HTMLElement> = {};
     reactivity: Reactivity = {
         signal,
@@ -103,12 +103,12 @@ export class Engine {
                 }
                 this.preprocessors.push(plugin);
             } else if (isEffectPlugin(plugin)) {
-                if (this.sideEffects.includes(plugin)) {
+                if (this.watchers.includes(plugin)) {
                     throw new Error(
-                        `Effect ${plugin.name} already exists`,
+                        `Watcher ${plugin.name} already exists`,
                     );
                 }
-                this.sideEffects.push(plugin);
+                this.watchers.push(plugin);
                 globalInitializer = plugin.onGlobalInit;
             } else if (isActionPlugin(plugin)) {
                 if (!!this.actions[plugin.name]) {

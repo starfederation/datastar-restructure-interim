@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/playwright-community/playwright-go"
+	playwright "github.com/playwright-community/playwright-go"
 )
 
 func valueSelectExampleTest(ctx context.Context, page playwright.Page) error {

@@ -3,7 +3,7 @@
 // Slug: Merge fine grain signals store data from a server using the Datastar SDK interface
 // Description: Merge store data from a server using the Datastar SDK interface
 
-import { EffectPlugin } from "../../../../engine";
+import { WatcherPlugin } from "../../../../engine";
 import {
     docWithViewTransitionAPI,
     supportsViewTransitions,
@@ -15,7 +15,7 @@ import {
 } from "./sseShared";
 
 const name = "removeFragments";
-export const RemoveFragments: EffectPlugin = {
+export const RemoveFragments: WatcherPlugin = {
     pluginType: "effect",
     name,
     onGlobalInit: async (ctx) => {

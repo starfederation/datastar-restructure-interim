@@ -3,12 +3,12 @@
 // Slug: Merge fine grain signals store data from a server using the Datastar SDK interface
 // Description: Merge store data from a server using the Datastar SDK interface
 
-import { EffectPlugin, InitExpressionFunction } from "../../../../engine";
+import { InitExpressionFunction, WatcherPlugin } from "../../../../engine";
 import { storeFromPossibleContents } from "../../../../utils/signals";
 import { datastarSSEEventWatcher } from "./sseShared";
 
 const name = "mergeStore";
-export const MergeStore: EffectPlugin = {
+export const MergeStore: WatcherPlugin = {
     pluginType: "effect",
     name,
     onGlobalInit: async (ctx) => {

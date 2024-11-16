@@ -89,7 +89,7 @@ export interface ActionPlugin extends DatastarPlugin {
 export type ActionPlugins = Record<string, ActionPlugin>;
 
 // A plugin that runs on the global scope of the DastaStar instance
-export interface EffectPlugin extends DatastarPlugin {
+export interface WatcherPlugin extends DatastarPlugin {
   pluginType: "effect";
   onGlobalInit?: (ctx: InitContext) => void;
 }

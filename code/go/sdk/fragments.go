@@ -50,7 +50,7 @@ func WithUseViewTransitions(useViewTransition bool) MergeFragmentOption {
 func (sse *ServerSentEventGenerator) MergeFragments(fragment string, opts ...MergeFragmentOption) error {
 	options := &MergeFragmentOptions{
 		EventID:        "",
-		RetryDuration:  DefaultSSERetryDuration,
+		RetryDuration:  DefaultSseRetryDuration,
 		Selector:       "",
 		MergeMode:      FragmentMergeModeMorph,
 		SettleDuration: DefaultSettleDuration,
@@ -140,7 +140,7 @@ func (sse *ServerSentEventGenerator) RemoveFragments(selector string, opts ...Re
 
 	options := &RemoveFragmentsOptions{
 		EventID:            "",
-		RetryDuration:      DefaultSSERetryDuration,
+		RetryDuration:      DefaultSseRetryDuration,
 		SettleDuration:     DefaultSettleDuration,
 		UseViewTransitions: nil,
 	}

@@ -3,7 +3,7 @@
 // Slug: Use Server-Sent Events to fetch data from a server using the Datastar SDK interface
 // Description: Remember, SSE is just a regular SSE request but with the ability to send 0-inf messages to the client.
 
-import { EffectPlugin, InitContext } from "../../../../engine";
+import { InitContext, WatcherPlugin } from "../../../../engine";
 import {
     docWithViewTransitionAPI,
     supportsViewTransitions,
@@ -33,7 +33,7 @@ export type FragmentMergeMode =
     (typeof FragmentMergeModes)[keyof typeof FragmentMergeModes];
 
 const name = "mergeFragments";
-export const MergeFragments: EffectPlugin = {
+export const MergeFragments: WatcherPlugin = {
     pluginType: "effect",
     name: name,
     onGlobalInit: async (ctx) => {

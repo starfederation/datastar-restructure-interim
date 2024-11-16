@@ -91,7 +91,7 @@ func (sse *ServerSentEventGenerator) Send(eventType EventType, dataLines []strin
 	evt := ServerSentEventData{
 		Type:          eventType,
 		Data:          dataLines,
-		RetryDuration: DefaultSSERetryDuration,
+		RetryDuration: DefaultSseRetryDuration,
 	}
 
 	// apply options

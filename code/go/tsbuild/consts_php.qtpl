@@ -14,10 +14,15 @@ class Constants
     public const Version = '{%s data.Version %}';
     public const VersionClientByteSize = {%d data.VersionClientByteSize %};
     public const VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %};
-    public const DefaultSettleDuration = {%d durationToMs(data.DefaultSettleDuration) %};
-    public const DefaultSSERetryDuration = {%d durationToMs(data.DefaultSSERetryDuration) %};
-    public const DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %};
-    public const DefaultOnlyIfMissing = {%v data.DefaultOnlyIfMissing %};
+    {%- for _, d := range data.DefaultDurations -%}
+    public const Default{%s d.Name.Pascal %} = {%d durationToMs(d.Duration) %};
+    {%- endfor -%}
+    {%- for _, b := range data.DefaultBools -%}
+    public const Default{%s b.Name.Pascal %} = {%v b.Value %};
+    {%- endfor -%}
+    {%- for _, s := range data.DefaultStrings -%}
+    public const Default{%s s.Name.Pascal %} = '{%s s.Value %}';
+    {%- endfor -%}
     {%- for _, enum := range data.Enums -%}
         {%- if enum.Default != nil -%}
     public const Default{%s enum.Name.Pascal %} = {%s enum.Name.Pascal %}::{%s enum.Default.Name.Pascal %};

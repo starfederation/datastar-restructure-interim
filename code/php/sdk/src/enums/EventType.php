@@ -22,10 +22,10 @@ enum EventType: string
     // An event dealing with redirecting the browser.
     case Redirect = 'datastar-redirect';
 
-    // An event dealing to call functions in the browser.
-    case Call = 'datastar-call';
+    // An event dealing to execute functions in the browser.
+    case ExecuteJs = 'datastar-execute-js';
 
     // An event dealing with custom events.
-    case CustomEvent = 'datastar-custom-event';
+    case DispatchCustomEvent = 'datastar-dispatch-custom-event';
 
 }

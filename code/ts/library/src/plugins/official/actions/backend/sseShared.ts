@@ -13,7 +13,7 @@ import {
     DATASTAR_SSE_EVENT,
     DatastarSSEEvent,
     DEFAULT_SETTLE_DURATION_RAW,
-} from "../../effects/backend/sseShared";
+} from "../../watchers/backend/sseShared";
 
 export type IndicatorReference = { el: HTMLElement; count: number };
 
