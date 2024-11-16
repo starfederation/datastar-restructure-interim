@@ -31,7 +31,7 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 		r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytesSize))
 		data, err := io.ReadAll(r.Body)
 		if err != nil {
-			datastar.NewSSE(w, r).ConsoleErrorf("error reading body: %v", err)
+			datastar.NewSSE(w, r).ConsoleError(fmt.Errorf("error reading body: %w", err))
 			return
 		}
 

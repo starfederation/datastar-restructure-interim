@@ -3,11 +3,11 @@
 // Slug: Add headers to fetch requests
 // Description: This plugin allows you to add headers to fetch requests.  Once you add this attribute the headers will be added to the fetch request.
 
-import { AttributePlugin } from "../../../engine";
+import { AttributePlugin } from "../../../../engine";
 
 export const Header: AttributePlugin = {
     pluginType: "attribute",
-    prefix: "header",
+    name: "header",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
 

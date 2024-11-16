@@ -7,22 +7,22 @@ import { DATASTAR_EVENT } from "./const";
 import {
     ActionPlugin,
     ActionPlugins,
+    AttribtueExpressionFunction,
     AttributeContext,
     AttributePlugin,
     DatastarEvent,
     DatastarPlugin,
-    EffectPlugin,
-    ExpressionFunction,
     InitContext,
     OnRemovalFn,
     PreprocessorPlugin,
     Reactivity,
+    WatcherPlugin,
 } from "./types";
 import { VERSION } from "./version";
 
 const isPreprocessorPlugin = (p: DatastarPlugin): p is PreprocessorPlugin =>
     p.pluginType === "preprocessor";
-const isEffectPlugin = (p: DatastarPlugin): p is EffectPlugin =>
+const isEffectPlugin = (p: DatastarPlugin): p is WatcherPlugin =>
     p.pluginType === "effect";
 const isAttributePlugin = (p: DatastarPlugin): p is AttributePlugin =>
     p.pluginType === "attribute";
@@ -34,7 +34,7 @@ export class Engine {
     store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
     preprocessors = new Array<PreprocessorPlugin>();
     actions: ActionPlugins = {};
-    sideEffects = new Array<EffectPlugin>();
+    watchers = new Array<WatcherPlugin>();
     refs: Record<string, HTMLElement> = {};
     reactivity: Reactivity = {
         signal,
@@ -103,6 +103,13 @@ export class Engine {
                 }
                 this.preprocessors.push(plugin);
             } else if (isEffectPlugin(plugin)) {
+                if (this.watchers.includes(plugin)) {
+                    throw new Error(
+                        `Watcher ${plugin.name} already exists`,
+                    );
+                }
+                this.watchers.push(plugin);
+                globalInitializer = plugin.onGlobalInit;
             } else if (isActionPlugin(plugin)) {
                 if (!!this.actions[plugin.name]) {
                     throw new Error(
@@ -124,10 +131,18 @@ export class Engine {
 
             if (globalInitializer) {
                 globalInitializer({
+                    store: this.store,
+                    upsertIfMissingFromStore: this.upsertIfMissingFromStore
+                        .bind(this),
+                    mergeStore: this.mergeStore.bind(this),
+                    removeFromStore: this.removeFromStore.bind(this),
                     actions: this.actions,
                     reactivity: this.reactivity,
-                    mergeStore: this.mergeStore.bind(this),
-                    store: this.store,
+                    applyPlugins: this.applyPlugins.bind(this),
+                    cleanupElementRemovals: this.cleanupElementRemovals.bind(
+                        this,
+                    ),
+                    sendDatastarEvent: this.sendDatastarEvent.bind(this),
                 });
             }
 
@@ -280,7 +295,6 @@ export class Engine {
                                 }`,
                             );
                         }
-                        // console.log(`Tag '${el.tagName}' is allowed for plugin '${dsKey}'`)
                     }
 
                     let keyRaw = rawKey.slice(p.name.length);
@@ -442,7 +456,7 @@ export class Engine {
                                 "ctx",
                                 ...argumentNames,
                                 fnContent,
-                            ) as ExpressionFunction;
+                            ) as AttribtueExpressionFunction;
                             ctx.expressionFn = fn;
                         } catch (e) {
                             const err = new Error(

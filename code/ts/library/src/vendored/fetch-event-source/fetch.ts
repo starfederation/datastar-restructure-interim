@@ -51,6 +51,15 @@ export interface FetchEventSourceInit extends RequestInit {
 
     /** The Fetch function to use. Defaults to window.fetch */
     fetch?: typeof fetch;
+
+    /** The scaler for the retry interval. Defaults to 2 */
+    retryScaler?: number;
+
+    /** The maximum retry interval in milliseconds. Defaults to 30_000 */
+    retryMaxWaitMs?: number;
+
+    /** The maximum number of retries before giving up. Defaults to 10 */
+    retryMaxCount?: number;
 }
 
 export function fetchEventSource(input: RequestInfo, {
@@ -62,9 +71,14 @@ export function fetchEventSource(input: RequestInfo, {
     onerror,
     openWhenHidden,
     fetch: inputFetch,
+    retryScaler = 2,
+    retryMaxWaitMs = 30_000,
+    retryMaxCount = 10,
     ...rest
 }: FetchEventSourceInit) {
     return new Promise<void>((resolve, reject) => {
+        let retries = 0;
+
         // make a copy of the input headers since we may modify it below:
         const headers = { ...inputHeaders };
         if (!headers.accept) {
@@ -139,6 +153,22 @@ export function fetchEventSource(input: RequestInfo, {
                         const interval: any = onerror?.(err) ?? retryInterval;
                         window.clearTimeout(retryTimer);
                         retryTimer = window.setTimeout(create, interval);
+                        retryInterval *= retryScaler; // exponential backoff
+                        retryInterval = Math.min(retryInterval, retryMaxWaitMs);
+                        retries++;
+                        if (retries >= retryMaxCount) {
+                            // we should not retry anymore:
+                            dispose();
+                            reject(
+                                new Error(
+                                    `Max retries hit, check your server or network connection.`,
+                                ),
+                            );
+                        } else {
+                            console.error(
+                                `Error fetching event source, retrying in ${interval}ms`,
+                            );
+                        }
                     } catch (innerErr) {
                         // we should not retry anymore:
                         dispose();

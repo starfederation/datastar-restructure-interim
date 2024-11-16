@@ -17,16 +17,22 @@ module Consts =
     let [<Literal>] VersionClientByteSize     = {%d data.VersionClientByteSize %}
     let [<Literal>] VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
 
-    /// Default: TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSettleDuration) %}
-    let DefaultSettleDuration = TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSettleDuration) %}
-    /// Default: TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSSERetryDuration) %}
-    let DefaultSSERetryDuration = TimeSpan.FromMilliseconds {%d durationToMs(data.DefaultSSERetryDuration) %}
+    {%- for _, d := range data.DefaultDurations -%}
+    /// Default: TimeSpan.FromMilliseconds {%d durationToMs(d.Duration) %}
+    let Default{%s d.Name.Pascal %} = TimeSpan.FromMilliseconds {%d durationToMs(d.Duration) %}
+    {%- endfor %}
+
     {%- for _, enum := range data.Enums -%}{%- if enum.DefaultIndex > -1 -%}
     /// Default: {%s enum.Default.Value %} - {%s enum.Default.Description %}
     let Default{%s enum.Name.Pascal %} = {%s enum.Default.Name.Pascal %}{% endif %}{% endfor %}
 
-    let [<Literal>] DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
-    let [<Literal>] DefaultOnlyIfMissing = {%v data.DefaultOnlyIfMissing %}
+    {%- for _, b := range data.DefaultBools -%}
+    let [<Literal>] Default{%s b.Name.Pascal %} = {%v b.Value %}
+    {%- endfor -%}
+
+    {%- for _, s := range data.DefaultStrings -%}
+    let [<Literal>] Default{%s s.Name.Pascal %} = "{%s s.Value %}"
+    {%- endfor -%}
 
     {%- for _, literal := range data.DatalineLiterals -%}
     let [<Literal>] DatastarDataline{%s literal.Pascal %} = "{%s literal.Camel %}"

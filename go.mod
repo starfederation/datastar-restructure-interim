@@ -1,16 +1,16 @@
 module github.com/starfederation/datastar
 
-go 1.23.2
+go 1.23.3
 
 require (
 	github.com/CAFxX/httpcompression v0.0.9
 	github.com/Jeffail/gabs/v2 v2.7.0
-	github.com/TwiN/go-away v1.6.13
+	github.com/TwiN/go-away v1.6.14
 	github.com/a-h/templ v0.2.793
 	github.com/alecthomas/chroma v0.10.0
 	github.com/benbjohnson/hashfs v0.2.2
-	github.com/delaneyj/gostar v0.7.3
-	github.com/delaneyj/toolbelt v0.3.7
+	github.com/delaneyj/gostar v0.8.0
+	github.com/delaneyj/toolbelt v0.3.10
 	github.com/drhodes/golorem v0.0.0-20220328165741-da82e5b29246
 	github.com/dustin/go-humanize v1.0.1
 	github.com/evanw/esbuild v0.24.0
@@ -26,7 +26,7 @@ require (
 	github.com/klauspost/compress v1.17.11
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/nats-io/nats.go v1.37.0
-	github.com/playwright-community/playwright-go v0.4702.0
+	github.com/playwright-community/playwright-go v0.4802.0
 	github.com/samber/lo v1.47.0
 	github.com/segmentio/encoding v0.4.0
 	github.com/valyala/bytebufferpool v1.0.0
@@ -41,7 +41,7 @@ require (
 	github.com/chewxy/math32 v1.11.1 // indirect
 	github.com/deckarep/golang-set/v2 v2.6.0 // indirect
 	github.com/denisbrodbeck/machineid v1.0.1 // indirect
-	github.com/dlclark/regexp2 v1.4.0 // indirect
+	github.com/dlclark/regexp2 v1.11.4 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.3 // indirect
 	github.com/go-rod/rod v0.116.2 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
@@ -50,7 +50,7 @@ require (
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/igrmk/treemap/v2 v2.0.1 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/minio/highwayhash v1.0.3 // indirect
 	github.com/nats-io/jwt/v2 v2.7.2 // indirect
@@ -67,18 +67,17 @@ require (
 	github.com/ysmood/got v0.40.0 // indirect
 	github.com/ysmood/gson v0.7.3 // indirect
 	github.com/ysmood/leakless v0.9.0 // indirect
-	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.28.0 // indirect
-	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
-	golang.org/x/image v0.21.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
-	golang.org/x/time v0.7.0 // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
+	golang.org/x/crypto v0.29.0 // indirect
+	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f // indirect
+	golang.org/x/image v0.22.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/time v0.8.0 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 	modernc.org/libc v1.61.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.33.1 // indirect
+	modernc.org/sqlite v1.34.1 // indirect
 	zombiezen.com/go/sqlite v1.4.0 // indirect
 )

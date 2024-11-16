@@ -42,7 +42,7 @@ func WithOnlyIfMissing(onlyIfMissing bool) MergeStoreOption {
 func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...MergeStoreOption) error {
 	options := &MergeStoreOptions{
 		EventID:       "",
-		RetryDuration: DefaultSSERetryDuration,
+		RetryDuration: DefaultSseRetryDuration,
 		OnlyIfMissing: false,
 	}
 	for _, opt := range opts {
@@ -62,12 +62,12 @@ func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...Me
 	if options.EventID != "" {
 		sendOptions = append(sendOptions, WithSSEEventId(options.EventID))
 	}
-	if options.RetryDuration != DefaultSSERetryDuration {
+	if options.RetryDuration != DefaultSseRetryDuration {
 		sendOptions = append(sendOptions, WithSSERetryDuration(options.RetryDuration))
 	}
 
-	if err := sse.send(
-		EventTypeSignal,
+	if err := sse.Send(
+		EventTypeMergeStore,
 		dataRows,
 		sendOptions...,
 	); err != nil {
@@ -81,8 +81,8 @@ func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
 		return ErrNoPathsProvided
 	}
 
-	if err := sse.send(
-		EventTypeRemove,
+	if err := sse.Send(
+		EventTypeRemoveFromStore,
 		[]string{PathsDatalineLiteral + strings.Join(paths, " ")},
 	); err != nil {
 		return fmt.Errorf("failed to send delete from store: %w", err)

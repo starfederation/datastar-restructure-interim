@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/playwright-community/playwright-go"
+	playwright "github.com/playwright-community/playwright-go"
 )
 
 func rafUpdateExampleTest(ctx context.Context, page playwright.Page) error {

@@ -10,12 +10,20 @@ const (
     Version                   = "{%s data.Version %}"
     VersionClientByteSize     = {%d data.VersionClientByteSize %}
     VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
-    DefaultSettleDuration     = {%d durationToMs(data.DefaultSettleDuration) %} * time.Millisecond
-    DefaultSSERetryDuration   = {%d durationToMs(data.DefaultSSERetryDuration) %} * time.Millisecond
-    DefaultUseViewTransitions = {%v data.DefaultUseViewTransitions %}
-    DefaultOnlyIfMissing      = {%v data.DefaultOnlyIfMissing %}
+    {%- for _, d := range data.DefaultDurations -%}
+    Default{%s d.Name.Pascal %} = {%d durationToMs(d.Duration) %} * time.Millisecond
+    {%- endfor -%}
+    {%- for _, s := range data.DefaultStrings -%}
+    Default{%s s.Name.Pascal %} = "{%s s.Value %}"
+    {%- endfor -%}
     {%- for _, literal := range data.DatalineLiterals -%}
     {%s literal.Pascal %}DatalineLiteral = "{%s literal.Camel %} "
+    {%- endfor -%}
+)
+
+var (
+    {%- for _, b := range data.DefaultBools -%}
+    Default{%s b.Name.Pascal %} = {%v b.Value %}
     {%- endfor -%}
 )
 
