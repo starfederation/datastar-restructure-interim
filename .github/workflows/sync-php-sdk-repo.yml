@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      
+
     steps:
       - name: Checkout monorepo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Git
         run: |
@@ -22,6 +22,6 @@ jobs:
 
       - name: Push subtree to external repo
         run: |
-          git subtree push --prefix=code/php/sdk git@github.com:starfederation/datastar-php.git main
+          git subtree push --prefix=code/php/sdk https://github.com/starfederation/datastar-php.git main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
