@@ -215,7 +215,7 @@ See if you can follow the code below _before_ trying the demo.
      data-computed-correct="$response.toLowerCase() == $answer"
 >
     <button data-on-click="$response = prompt('What do you put in a toaster?')">
-        Ask me a question
+        Quiz me
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
@@ -228,7 +228,7 @@ See if you can follow the code below _before_ trying the demo.
 
 <div data-store="{response: '', answer: 'bread'}" data-computed-correct="$response.toLowerCase() == $answer" class="alert flex items-center gap-4 p-8">
     <button data-on-click="$response = prompt('What do you put in a toaster?')" class="btn btn-primary">
-        Ask me a question
+        Quiz me
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”. 
