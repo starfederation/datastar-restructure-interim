@@ -33,10 +33,10 @@ type EventType =
 | RemoveFromStore
 /// An event dealing with redirecting the browser.
 | Redirect
-/// An event dealing with console messages.
-| Console
 /// An event dealing to call functions in the browser.
 | Call
+/// An event dealing with custom events.
+| CustomEvent
 
 type ConsoleMode =
 /// Writes an error message to the console if the assertion is false. If the assertion is true, nothing happens.
@@ -125,8 +125,8 @@ module Consts =
                 | EventType.RemoveFragments -> "datastar-remove-fragments"
                 | EventType.RemoveFromStore -> "datastar-remove-from-store"
                 | EventType.Redirect -> "datastar-redirect"
-                | EventType.Console -> "datastar-console"
                 | EventType.Call -> "datastar-call"
+                | EventType.CustomEvent -> "datastar-custom-event"
 
     module ConsoleMode =
         let toString this =

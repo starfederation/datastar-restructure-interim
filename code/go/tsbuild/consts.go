@@ -121,14 +121,14 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event dealing with redirecting the browser.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("Console"),
-					Value:       "datastar-console",
-					Description: "An event dealing with console messages.",
-				},
-				{
 					Name:        toolbelt.ToCasedString("Call"),
 					Value:       "datastar-call",
 					Description: "An event dealing to call functions in the browser.",
+				},
+				{
+					Name:        toolbelt.ToCasedString("CustomEvent"),
+					Value:       "datastar-custom-event",
+					Description: "An event dealing with custom events.",
 				},
 			},
 		},

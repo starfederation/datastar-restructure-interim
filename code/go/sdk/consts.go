@@ -74,11 +74,11 @@ const (
     // An event dealing with redirecting the browser.
     EventTypeRedirect EventType = "datastar-redirect"
 
-    // An event dealing with console messages.
-    EventTypeConsole EventType = "datastar-console"
-
     // An event dealing to call functions in the browser.
     EventTypeCall EventType = "datastar-call"
+
+    // An event dealing with custom events.
+    EventTypeCustomEvent EventType = "datastar-custom-event"
 
 )
 
