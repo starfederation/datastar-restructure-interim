@@ -61,7 +61,7 @@ Store values are nestable, which can be useful for namespacing values. The value
 Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be placed on `input`, `textarea`, `select`, `checkbox` and `radio` elements.
 
 ```html
-<input data-model="variable" type="text" placeholder="Type here!">
+<input data-model="variable" type="text">
 ```
 
 This binds the input field's value to the store value of the same name (`variable`). If either is changed, the other will automatically update. 
@@ -72,14 +72,16 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
 <div data-text="$variable"></div>
 ```
 
-<div data-store="{variable1: ''}" class="alert flex flex-col items-start p-8">
-    <div class="flex gap-2">
-        Input:
-        <input data-model="variable1" class="input input-bordered">
-    </div>
-    <div class="flex gap-2">
-        Output:
-        <div data-text="$variable1"></div>
+<div data-store="{variable1: ''}" class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="variable1" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$variable1"></div>
+        </div>
     </div>
 </div>
 
@@ -91,14 +93,40 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 <div data-text="$variable.toUpperCase()"></div>
 ```
 
-<div data-store="{variable2: ''}" class="alert flex flex-col items-start p-8">
-    <div class="flex gap-2">
-        Input:
-        <input data-model="variable2" class="input input-bordered">
+<div data-store="{variable2: ''}" class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="variable2" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$variable2.toUpperCase()"></div>
+        </div>
     </div>
-    <div class="flex gap-2">
-        Output:
-        <div data-text="$variable2.toUpperCase()"></div>
+</div>
+
+The `data-computed-*` attribute creates a new store value that is computed based on an expression. The computed store value is read-only, and its value is automatically updated when any store values in the expression are updated.
+
+```html
+<div data-store="{variable: ''}"
+     data-computed-repeated="$variable.repeat(2)"
+>
+    <input data-model="variable" type="text">
+    <div data-text="$repeated"></div>
+</div> 
+```
+
+<div data-store="{variable3: ''}" data-computed-repeated="$variable3.repeat(2)" class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="variable3" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$repeated"></div>
+        </div>
     </div>
 </div>
 
@@ -110,16 +138,18 @@ Another useful attribute is `data-show`, which can be used to show or hide an el
 
 This results in the button being visible only when the variable is _not_ empty.
 
-<div data-store="{variable3: ''}" class="alert flex flex-col items-start p-8">
-    <div class="flex gap-2">
-        Input:
-        <input data-model="variable3" class="input input-bordered">
+<div data-store="{variable4: ''}" class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="variable4" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$variable4"></div>
+        </div>
     </div>
-    <div class="flex gap-2">
-        Output:
-        <div data-text="$variable3"></div>
-    </div>
-    <button data-show="$variable3 != ''" class="btn btn-primary">
+    <button data-show="$variable4 != ''" class="btn btn-primary">
         Save
     </button>
 </div>
@@ -132,23 +162,25 @@ The `data-bind-*` attribute can be used to bind a JavaScript expression to any v
 
 This results in the button being given the `disabled` attribute whenever the variable _is_ empty.
 
-<div data-store="{variable4: ''}" class="alert flex flex-col items-start p-8">
-    <div class="flex gap-2">
-        Input:
-        <input data-model="variable4" class="input input-bordered">
+<div data-store="{variable5: ''}" class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="variable5" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$variable5"></div>
+        </div>
     </div>
-    <div class="flex gap-2">
-        Output:
-        <div data-text="$variable4"></div>
-    </div>
-    <button data-bind-disabled="$variable4 == ''" class="btn btn-primary">
+    <button data-bind-disabled="$variable5 == ''" class="btn btn-primary">
         Save
     </button>
 </div>
 
 ## Events
 
-The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
+The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
 
 ```html
 <button data-on-click="$variable = ''">
@@ -158,56 +190,51 @@ The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to exec
 
 This results in the `variable` store value being set to an empty string when the button element is clicked. If the `variable` store value is used elsewhere, its value will automatically update.
 
-<div data-store="{variable5: 'Some input'}" class="alert flex flex-col items-start p-8">
-    <div class="flex gap-2">
-        Input:
-        <input data-model="variable5" class="input input-bordered">
+<div data-store="{variable6: 'Some input'}" class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="variable6" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$variable6"></div>
+        </div>
     </div>
-    <div class="flex gap-2">
-        Output:
-        <div data-text="$variable5"></div>
-    </div>
-    <button data-on-click="$variable5 = ''" class="btn btn-secondary">
+    <button data-on-click="$variable6 = ''" class="btn btn-secondary">
         Reset
     </button>
 </div>
 
 So what else can we do with these expressions? Anything we want, really. 
 
-Here's how we might set a store value using a confirmation dialog.
+See if you can follow the code below _before_ trying the demo.
 
 ```html
-<div data-store="{confirmed: false}">
-    <button data-on-click="$confirmed = confirm('Are you sure?)">
-        Confirm an action
+<div data-store="{response: '', answer: 'bread'}" 
+     data-computed-correct="$response.toLowerCase() == $answer"
+>
+    <button data-on-click="$response = prompt('What do you put in a toaster?')">
+        Ask me a question
     </button>
+    <div data-show="$response != ''">
+        You answered “<span data-text="$response"></span>”.
+        That is 
+        <span data-show="$correct">CORRECT :)</span>
+        <span data-show="!$correct">incorrect :(</span>
+    </div>
 </div>
 ```
 
-Now you try! See if you can figure out how you'd code the demo below _before_ you reveal the solution.
-
-<div data-store="{answer: ''}" class="alert flex items-center gap-4 p-8">
-    <button data-on-click="$answer = prompt()" class="btn btn-primary">
-        Prompt for some input
+<div data-store="{response: '', answer: 'bread'}" data-computed-correct="$response.toLowerCase() == $answer" class="alert flex items-center gap-4 p-8">
+    <button data-on-click="$response = prompt('What do you put in a toaster?')" class="btn btn-primary">
+        Ask me a question
     </button>
-    <div data-show="$answer != ''">
-        <span data-text="$answer"></span>
-    </div>
-</div>
-
-<div data-store="{reveal: false}">
-    <button data-on-click="$reveal = true" class="btn btn-primary">
-        Reveal solution
-    </button>
-    <div data-show="$reveal">
-        ```html
-        <div data-store="{answer: ''}">
-            <button data-on-click="$answer = prompt()">
-                Click me
-            </button>
-            <div data-text="$answer"></div>
-        </div>
-        ```
+    <div data-show="$response != ''">
+        You answered “<span data-text="$response"></span>”. 
+        That is
+        <span data-show="$correct">CORRECT :)</span>
+        <span data-show="!$correct">incorrect :(</span>
     </div>
 </div>
 
