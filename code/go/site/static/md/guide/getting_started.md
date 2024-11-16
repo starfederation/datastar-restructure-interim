@@ -45,7 +45,7 @@ npm install @sudodevnull/datastar
 Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
-<div data-store="{title: ''}"></div>
+<div data-store="{variable: ''}"></div>
 ```
 
 This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). 
@@ -53,7 +53,7 @@ This is a global store. If you add `data-store` to multiple elements, the values
 Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
 
 ```html
-<div data-store="{primary: {title: ''}, secondary: {title: '' }}"></div>
+<div data-store="{primary: {variable: ''}, secondary: {variable: '' }}"></div>
 ```
 
 ## Adding Reactivity
@@ -61,56 +61,65 @@ Store values are nestable, which can be useful for namespacing values. The value
 Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be placed on `input`, `textarea`, `select`, `checkbox` and `radio` elements.
 
 ```html
-<input data-model="title" type="text" placeholder="Type here!">
+<input data-model="variable" type="text" placeholder="Type here!">
 ```
 
-This binds the input field's value to the store value of the same name (`title`). If either is changed, the other will automatically update. 
+This binds the input field's value to the store value of the same name (`variable`). If either is changed, the other will automatically update. 
 
 To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
 ```html
-<div data-text="$title"></div>
+<div data-text="$variable"></div>
 ```
 
-<div data-store="{title1: ''}" class="alert flex flex-col items-start p-8">
-    <input data-model="title1" placeholder="Enter a title" class="input input-bordered">
+<div data-store="{variable1: ''}" class="alert flex flex-col items-start p-8">
     <div class="flex gap-2">
-        Title:
-        <div data-text="$title1"></div>
+        Input:
+        <input data-model="variable1" class="input input-bordered">
+    </div>
+    <div class="flex gap-2">
+        Output:
+        <div data-text="$variable1"></div>
     </div>
 </div>
 
-This sets the text content of an element to the store value with the name `title`. The `$` in `data-text="$title"` is required because `$title` is a store value.
+This sets the text content of an element to the store value with the name `variable`. The `$` in `data-text="$variable"` is required because `$variable` is a store value.
 
 The value of the `data-text` attribute is an expression that is evaluated, meaning that we can include JavaScript in it.
 
 ```html
-<div data-text="$title.toUpperCase()"></div>
+<div data-text="$variable.toUpperCase()"></div>
 ```
 
-<div data-store="{title2: ''}" class="alert flex flex-col items-start p-8">
-    <input data-model="title2" placeholder="Enter a title" class="input input-bordered">
+<div data-store="{variable2: ''}" class="alert flex flex-col items-start p-8">
     <div class="flex gap-2">
-        Title:
-        <div data-text="$title2.toUpperCase()"></div>
+        Input:
+        <input data-model="variable2" class="input input-bordered">
+    </div>
+    <div class="flex gap-2">
+        Output:
+        <div data-text="$variable2.toUpperCase()"></div>
     </div>
 </div>
 
 Another useful attribute is `data-show`, which can be used to show or hide an element based on whether a JavaScript expression evaluates to `true` or `false`.
 
 ```html
-<button data-show="$title != ''">Save</button>
+<button data-show="$variable != ''">Save</button>
 ```
 
-This results in the button being visible only when the title is _not_ empty.
+This results in the button being visible only when the variable is _not_ empty.
 
-<div data-store="{title3: ''}" class="alert flex flex-col items-start p-8">
-    <input data-model="title3" placeholder="Enter a title" class="input input-bordered">
+<div data-store="{variable3: ''}" class="alert flex flex-col items-start p-8">
     <div class="flex gap-2">
-        Title:
-        <div data-text="$title3"></div>
+        Input:
+        <input data-model="variable3" class="input input-bordered">
     </div>
-    <button data-show="$title3 != ''" class="btn btn-primary">
+    <div class="flex gap-2">
+        Output:
+        <div data-text="$variable3"></div>
+    </div>
+    <button data-show="$variable3 != ''" class="btn btn-primary">
         Save
     </button>
 </div>
@@ -118,18 +127,21 @@ This results in the button being visible only when the title is _not_ empty.
 The `data-bind-*` attribute can be used to bind a JavaScript expression to any valid HTML attribute.
 
 ```html
-<button data-bind-disabled="$title == ''">Save</button>
+<button data-bind-disabled="$variable == ''">Save</button>
 ```
 
-This results in the button being given the `disabled` attribute whenever the title _is_ empty.
+This results in the button being given the `disabled` attribute whenever the variable _is_ empty.
 
-<div data-store="{title4: ''}" class="alert flex flex-col items-start p-8">
-    <input data-model="title4" placeholder="Enter a title" class="input input-bordered">
+<div data-store="{variable4: ''}" class="alert flex flex-col items-start p-8">
     <div class="flex gap-2">
-        Title:
-        <div data-text="$title4"></div>
+        Input:
+        <input data-model="variable4" class="input input-bordered">
     </div>
-    <button data-bind-disabled="$title4 == ''" class="btn btn-primary">
+    <div class="flex gap-2">
+        Output:
+        <div data-text="$variable4"></div>
+    </div>
+    <button data-bind-disabled="$variable4 == ''" class="btn btn-primary">
         Save
     </button>
 </div>
@@ -139,45 +151,67 @@ This results in the button being given the `disabled` attribute whenever the tit
 The [`data-on-*](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
 
 ```html
-<button data-on-click="$title = ''">
+<button data-on-click="$variable = ''">
     Reset
 </button>
 ```
 
-This results in the `title` store value being set to an empty string when the button element is clicked. If the `title` store value is used elsewhere, its value will automatically update.
+This results in the `variable` store value being set to an empty string when the button element is clicked. If the `variable` store value is used elsewhere, its value will automatically update.
 
-<div data-store="{title5: ''}" class="alert flex flex-col items-start p-8">
-    <input data-model="title5" placeholder="Enter a title" class="input input-bordered">
+<div data-store="{variable5: 'Some input'}" class="alert flex flex-col items-start p-8">
     <div class="flex gap-2">
-        Title:
-        <div data-text="$title5"></div>
+        Input:
+        <input data-model="variable5" class="input input-bordered">
     </div>
-    <button data-on-click="$title5 = ''" class="btn btn-secondary">
+    <div class="flex gap-2">
+        Output:
+        <div data-text="$variable5"></div>
+    </div>
+    <button data-on-click="$variable5 = ''" class="btn btn-secondary">
         Reset
     </button>
 </div>
 
 So what else can we do with these expressions? Anything we want, really. 
 
-See if you can guess what the following code does _before_ trying the demo below.
+Here's how we might set a store value using a confirmation dialog.
 
 ```html
-<div data-store="{answer: ''}">
-    <button data-on-click="$answer = prompt()">
-        Click me
+<div data-store="{confirmed: false}">
+    <button data-on-click="$confirmed = confirm('Are you sure?)">
+        Confirm an action
     </button>
-    <div data-text="$answer"></div>
 </div>
 ```
 
+Now you try! See if you can figure out how you'd code the demo below _before_ you reveal the solution.
+
 <div data-store="{answer: ''}" class="alert flex items-center gap-4 p-8">
     <button data-on-click="$answer = prompt()" class="btn btn-primary">
-        Click me
+        Prompt for some input
     </button>
-    <div data-text="$answer"></div>
+    <div data-show="$answer != ''">
+        <span data-text="$answer"></span>
+    </div>
 </div>
 
-We've just scratched the surface of frontend reactivity, but let's take a look at how we can bring the backend into play.
+<div data-store="{reveal: false}">
+    <button data-on-click="$reveal = true" class="btn btn-primary">
+        Reveal solution
+    </button>
+    <div data-show="$reveal">
+        ```html
+        <div data-store="{answer: ''}">
+            <button data-on-click="$answer = prompt()">
+                Click me
+            </button>
+            <div data-text="$answer"></div>
+        </div>
+        ```
+    </div>
+</div>
+
+We've just scratched the surface of frontend reactivity. Now let's take a look at how we can bring the backend into play.
 
 ## Backend Setup
 
@@ -230,14 +264,14 @@ One of the advantages of using SSE is that we can send multiple events (HTML fra
 
 ```php
 $sseGenerator->mergeStore(['title' => 'Greetings']);
-$sseGenerator->mergeStore(['subtitle' => 'Earthlings']);
 $sseGenerator->mergeFragment('<div id="greeting-world">Hello, world!</div>');
+$sseGenerator->mergeStore(['subtitle' => 'Earthlings']);
 $sseGenerator->mergeFragment('<div id="greeting-universe">Hello, universe!</div>');
 ```
 
-## An Overview of What's Possible
+## An Overview of Datastar
 
-You can think of Datastar as an extension to HTML's [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes). Using `data-*` attributes (hence the name), you can introduce state to your frontend and access it anywhere in the DOM or from your backend. You can set up events that trigger requests to endpoints that respond with HTML fragments and store updates.
+Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backed endpoints that respond with HTML fragments and store updates.
 
 - Declare global state: `data-store="{foo: ''}"`
 - Bind element values to store values: `data-model="foo"`
