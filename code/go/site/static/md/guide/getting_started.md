@@ -73,7 +73,7 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
 ```
 
 <div data-store="{variable1: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="variable1" class="input input-bordered">
@@ -94,7 +94,7 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 ```
 
 <div data-store="{variable2: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="variable2" class="input input-bordered">
@@ -118,7 +118,7 @@ The `data-computed-*` attribute creates a new store value that is computed based
 ```
 
 <div data-store="{variable3: ''}" data-computed-repeated="$variable3.repeat(2)" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="variable3" class="input input-bordered">
@@ -139,7 +139,7 @@ Another useful attribute is `data-show`, which can be used to show or hide an el
 This results in the button being visible only when the variable is _not_ empty.
 
 <div data-store="{variable4: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="variable4" class="input input-bordered">
@@ -163,7 +163,7 @@ The `data-bind-*` attribute can be used to bind a JavaScript expression to any v
 This results in the button being given the `disabled` attribute whenever the variable _is_ empty.
 
 <div data-store="{variable5: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="variable5" class="input input-bordered">
@@ -191,7 +191,7 @@ The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to exe
 This results in the `variable` store value being set to an empty string when the button element is clicked. If the `variable` store value is used elsewhere, its value will automatically update.
 
 <div data-store="{variable6: 'Some input'}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="variable6" class="input input-bordered">
