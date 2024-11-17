@@ -45,7 +45,7 @@ npm install @sudodevnull/datastar
 Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
-<div data-store="{variable: ''}"></div>
+<div data-store="{input: ''}"></div>
 ```
 
 This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). 
@@ -53,7 +53,7 @@ This is a global store. If you add `data-store` to multiple elements, the values
 Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
 
 ```html
-<div data-store="{primary: {variable: ''}, secondary: {variable: '' }}"></div>
+<div data-store="{primary: {input: ''}, secondary: {input: '' }}"></div>
 ```
 
 ## Adding Reactivity
@@ -61,47 +61,47 @@ Store values are nestable, which can be useful for namespacing values. The value
 Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be placed on `input`, `textarea`, `select`, `checkbox` and `radio` elements.
 
 ```html
-<input data-model="variable" type="text">
+<input data-model="input" type="text">
 ```
 
-This binds the input field's value to the store value of the same name (`variable`). If either is changed, the other will automatically update. 
+This binds the element's value to the store value of the same name (`input`). If either is changed, the other will automatically update. 
 
 To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
 ```html
-<div data-text="$variable"></div>
+<div data-text="$input"></div>
 ```
 
-<div data-store="{variable1: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input1: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
-            <input data-model="variable1" class="input input-bordered">
+            <input data-model="input1" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$variable1"></div>
+            <div data-text="$input1"></div>
         </div>
     </div>
 </div>
 
-This sets the text content of an element to the store value with the name `variable`. The `$` in `data-text="$variable"` is required because `$variable` is a store value.
+This sets the text content of an element to the store value with the name `input`. The `$` in `data-text="$input"` is required because `$input` is a store value.
 
 The value of the `data-text` attribute is an expression that is evaluated, meaning that we can include JavaScript in it.
 
 ```html
-<div data-text="$variable.toUpperCase()"></div>
+<div data-text="$input.toUpperCase()"></div>
 ```
 
-<div data-store="{variable2: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input2: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
-            <input data-model="variable2" class="input input-bordered">
+            <input data-model="input2" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$variable2.toUpperCase()"></div>
+            <div data-text="$input2.toUpperCase()"></div>
         </div>
     </div>
 </div>
@@ -109,19 +109,19 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 The `data-computed-*` attribute creates a new store value that is computed based on an expression. The computed store value is read-only, and its value is automatically updated when any store values in the expression are updated.
 
 ```html
-<div data-store="{variable: ''}"
-     data-computed-repeated="$variable.repeat(2)"
+<div data-store="{input: ''}"
+     data-computed-repeated="$input.repeat(2)"
 >
-    <input data-model="variable" type="text">
+    <input data-model="input" type="text">
     <div data-text="$repeated"></div>
 </div> 
 ```
 
-<div data-store="{variable3: ''}" data-computed-repeated="$variable3.repeat(2)" class="alert flex justify-between items-start p-8">
+<div data-store="{input3: ''}" data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
-            <input data-model="variable3" class="input input-bordered">
+            <input data-model="input3" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
@@ -133,23 +133,23 @@ The `data-computed-*` attribute creates a new store value that is computed based
 Another useful attribute is `data-show`, which can be used to show or hide an element based on whether a JavaScript expression evaluates to `true` or `false`.
 
 ```html
-<button data-show="$variable != ''">Save</button>
+<button data-show="$input != ''">Save</button>
 ```
 
-This results in the button being visible only when the variable is _not_ empty.
+This results in the button being visible only when the input is _not_ empty.
 
-<div data-store="{variable4: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input4: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
-            <input data-model="variable4" class="input input-bordered">
+            <input data-model="input4" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$variable4"></div>
+            <div data-text="$input4"></div>
         </div>
     </div>
-    <button data-show="$variable4 != ''" class="btn btn-primary">
+    <button data-show="$input4 != ''" class="btn btn-primary">
         Save
     </button>
 </div>
@@ -157,23 +157,23 @@ This results in the button being visible only when the variable is _not_ empty.
 The `data-bind-*` attribute can be used to bind a JavaScript expression to any valid HTML attribute.
 
 ```html
-<button data-bind-disabled="$variable == ''">Save</button>
+<button data-bind-disabled="$input == ''">Save</button>
 ```
 
-This results in the button being given the `disabled` attribute whenever the variable _is_ empty.
+This results in the button being given the `disabled` attribute whenever the input _is_ empty.
 
-<div data-store="{variable5: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input5: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
-            <input data-model="variable5" class="input input-bordered">
+            <input data-model="input5" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$variable5"></div>
+            <div data-text="$input5"></div>
         </div>
     </div>
-    <button data-bind-disabled="$variable5 == ''" class="btn btn-primary">
+    <button data-bind-disabled="$input5 == ''" class="btn btn-primary">
         Save
     </button>
 </div>
@@ -183,25 +183,25 @@ This results in the button being given the `disabled` attribute whenever the var
 The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
 
 ```html
-<button data-on-click="$variable = ''">
+<button data-on-click="$input = ''">
     Reset
 </button>
 ```
 
-This results in the `variable` store value being set to an empty string when the button element is clicked. If the `variable` store value is used elsewhere, its value will automatically update.
+This results in the `input` store value being set to an empty string when the button element is clicked. If the `input` store value is used elsewhere, its value will automatically update.
 
-<div data-store="{variable6: 'Some input'}" class="alert flex justify-between items-start p-8">
+<div data-store="{input6: 'Some input'}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
-            <input data-model="variable6" class="input input-bordered">
+            <input data-model="input6" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$variable6"></div>
+            <div data-text="$input6"></div>
         </div>
     </div>
-    <button data-on-click="$variable6 = ''" class="btn btn-secondary">
+    <button data-on-click="$input6 = ''" class="btn btn-secondary">
         Reset
     </button>
 </div>
@@ -262,16 +262,18 @@ use starfederation\datastar\ServerSentEventGenerator;
 // Creates a new `ServerSentEventGenerator` instance.
 $sseGenerator = new ServerSentEventGenerator();
 
-// Merges the HTML fragment into the DOM using the element ID `question`.
-$sseGenerator->mergeFragments('<div id="question">What do you put in a toaster?</div>');
+// Merges the HTML fragment into the DOM.
+$sseGenerator->mergeFragments(
+    '<div id="question">What do you put in a toaster?</div>'
+);
 
 // Merges the `answer` value into the store.
 $sseGenerator->mergeStore(['answer' => 'bread']);
 ```
 
-The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with the ID `question`. An element with the ID `question` must already exist in the DOM.
+The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with `id="question"`. An element with the ID `question` must already exist in the DOM.
 
-The `mergeStore()` method merges the `answer` store value in the frontend store.
+The `mergeStore()` method merges the `answer` store value into the frontend store.
 
 With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 
@@ -312,24 +314,22 @@ Now when the `Fetch a question` button is clicked, the server will respond with 
             <span data-show="!$correct2">incorrect 👎</span>
         </div>
     </div>
-    <div class="space-y-3">
-        <button data-show="$answer2 != ''" data-on-click="$response2 = prompt('Answer:')" class="btn btn-primary">
-            BUZZ
-        </button>
-    </div>
+    <button data-show="$answer2 != ''" data-on-click="$response2 = prompt('Answer:')" class="btn btn-primary">
+        BUZZ
+    </button>
 </div>
 
 We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`, `PATCH` and `DELETE` requests, using `$get()`, `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
 
-Here's how we could send an answer to the server using a `POST` request.
+Here's how we could send an answer to the server for processing, using a `POST` request.
 
 ```html
 <button data-on-click="$post('/actions/quiz')">
-    Send answer
+    Submit answer
 </button>
 ```    
 
-One of the advantages of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
+One of the benefits of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
 ```php
 $sseGenerator->mergeFragments('<div id="question">...</div>');
