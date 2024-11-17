@@ -1,30 +1,36 @@
+![Version](https://img.shields.io/npm/v/@sudodevnull/datastar)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40sudodevnull%2Fdatastar)
+
+<p align="center"><img width="256" src="https://media.githubusercontent.com/media/starfederation/datastar/refs/heads/main/code/go/site/static/images/rocket.gif"></p>
+
 # Datastar
 
-Real-time Hypermedia first Library and Framework
+### A real-time hypermedia framework.
 
-# How to include on page
-```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar/bundles/datastar.js"></script>
-```
+Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
 
-If you just want the core and add your own plugins
-
-
-but how do I add my own plugins?
+Here’s what it looks like.
 
 ```html
-<script type="importmap">
-{
-    "imports": {
-      "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar/datastar/bundles/datastar-core.js"
-    }
-}
-</script>
-<script type="module">
-import {Datastar} from 'datastar'
-
-Datastar.load(
-    // all my preprocessor, action and attribute plugins!
-)
-</script>
+<div data-store="{input: ''}">
+    <input data-model="input" type="text">
+    <div data-text="$input.toUpperCase()"></div>
+    <button data-on-click="$post('/endpoint')">Save</button>
+</div> 
 ```
+Include Datastar with a single 14 KiB file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (available for Go, PHP, TypeScript and .NET) to get up and running even faster.
+
+```html
+<script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
+```
+
+Read the [getting started guide »](https://data-star.dev/guide/getting_started)  
+Visit the [Datastar website »](https://data-star.dev/)
+
+## Contributing
+
+Read the guide on [Contributing to Datastar »](CONTRIBUTING.md.)
+
+## Development
+
+Read the guide on [Developing for Datastar »](DEVELOPMENT.md.)
