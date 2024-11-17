@@ -340,7 +340,7 @@ $sseGenerator->mergeStore(['prize' => '...']);
 
 ## A Quick Overview
 
-Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backed endpoints that respond with HTML fragments and store updates.
+Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragments and store updates.
 
 - Declare global state: `data-store="{foo: ''}"`
 - Bind element values to store values: `data-model="foo"`
