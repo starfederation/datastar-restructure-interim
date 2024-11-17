@@ -19,7 +19,7 @@ document.addEventListener('example-event-from-server', (e) => {
     const container = document.getElementById('container');
     container.innerHTML = JSON.stringify(e.detail, null,2);
 });
-		`, datastar.WithExecuteJSAutoRemoveScript(false))
+		`, datastar.WithExecuteJSAutoRemove(false))
 
 		type ExampleEventDetails struct {
 			Name          string `faker:"name"`

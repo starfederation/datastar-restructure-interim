@@ -26,7 +26,7 @@ func setupExamplesExecuteJS(examplesRouter chi.Router) error {
 
 		for i := 0; i < maxCount; i++ {
 			err := fmt.Errorf("this is error message %d/%d", i+1, maxCount)
-			sse.ConsoleError(err, datastar.WithExecuteJSAutoRemoveScript(false))
+			sse.ConsoleError(err, datastar.WithExecuteJSAutoRemove(false))
 			time.Sleep(1 * time.Second)
 		}
 	})

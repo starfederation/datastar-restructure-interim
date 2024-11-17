@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 44432
-    VersionClientByteSizeGzip = 14930
+    VersionClientByteSize     = 44426
+    VersionClientByteSizeGzip = 14929
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
     DefaultExecuteJsType = "module"
@@ -24,7 +24,7 @@ const (
     PathsDatalineLiteral = "paths "
     ScriptDatalineLiteral = "script "
     TypeDatalineLiteral = "type "
-    AutoRemoveScriptDatalineLiteral = "autoRemoveScript "
+    AutoRemoveDatalineLiteral = "autoRemove "
 )
 
 var (

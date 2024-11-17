@@ -11,8 +11,8 @@ class Constants
 {
     public const DatastarKey = 'datastar';
     public const Version = '0.20.0';
-    public const VersionClientByteSize = 44432;
-    public const VersionClientByteSizeGzip = 14930;
+    public const VersionClientByteSize = 44426;
+    public const VersionClientByteSizeGzip = 14929;
     public const DefaultSettleDuration = 300;
     public const DefaultSseRetryDuration = 1000;
     public const DefaultMergeFragmentsUseViewTransitions = false;
@@ -35,5 +35,5 @@ class Constants
     public const PathsDatalineLiteral = 'paths ';
     public const ScriptDatalineLiteral = 'script ';
     public const TypeDatalineLiteral = 'type ';
-    public const AutoRemoveScriptDatalineLiteral = 'autoRemoveScript ';
+    public const AutoRemoveDatalineLiteral = 'autoRemove ';
 }

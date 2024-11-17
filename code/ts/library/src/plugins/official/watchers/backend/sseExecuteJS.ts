@@ -15,11 +15,11 @@ export const ExecuteJS: WatcherPlugin = {
             ctx,
             name,
             ({
-                autoRemoveScript: autoRemoveScriptRaw = "true",
+                autoRemove: autoRemoveRaw = "true",
                 type = "module",
                 script,
             }) => {
-                const autoRemoveScript = autoRemoveScriptRaw.trim() === "true";
+                const autoRemove = autoRemoveRaw.trim() === "true";
                 if (!script?.length) {
                     throw new Error("No script provided");
                 }
@@ -28,7 +28,7 @@ export const ExecuteJS: WatcherPlugin = {
                 scriptEl.type = type.trim();
                 scriptEl.text = script;
                 document.head.appendChild(scriptEl);
-                if (autoRemoveScript) {
+                if (autoRemove) {
                     scriptEl.remove();
                 }
             },

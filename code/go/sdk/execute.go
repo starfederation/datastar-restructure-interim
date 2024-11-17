@@ -33,7 +33,7 @@ func WithExecuteJSType(t string) ExecuteJSOption {
 	}
 }
 
-func WithExecuteJSAutoRemoveScript(autoremove bool) ExecuteJSOption {
+func WithExecuteJSAutoRemove(autoremove bool) ExecuteJSOption {
 	return func(o *ExecuteJSOptions) {
 		o.AutoRemove = &autoremove
 	}
@@ -60,7 +60,7 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 	dataLines := make([]string, 0, 64)
 
 	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJsAutoRemove {
-		dataLines = append(dataLines, AutoRemoveScriptDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
+		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
 
 	if options.Type != DefaultExecuteJsType {

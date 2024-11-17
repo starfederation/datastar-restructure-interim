@@ -120,7 +120,7 @@ var ConstsData = &ConstTemplateData{
 		// ExecuteJS
 		toolbelt.ToCasedString("script"),
 		toolbelt.ToCasedString("type"),
-		toolbelt.ToCasedString("autoRemoveScript"),
+		toolbelt.ToCasedString("autoRemove"),
 	},
 	Enums: []*EnumDefinition{
 		{
