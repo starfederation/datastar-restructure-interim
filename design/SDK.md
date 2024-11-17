@@ -74,7 +74,7 @@ Currently valid values are
 |------------------------------|------------------------------------------------|
 | datastar-merge-fragments     | Merges one or more HTML fragments into the DOM |
 | datastar-merge-store-values  | Merges one or more values into the store       |
-| datastar-remove-fragment     | Removes a HTML fragment from the DOM           |
+| datastar-remove-fragments    | Removes one or more HTML fragment from the DOM |
 | datastar-remove-store-values | Removes one or more values from the store      |
 | datastar-execute-js          | Executes JavaScript in the browser             |
 
