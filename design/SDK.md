@@ -29,7 +29,7 @@ Provide an SDK in a language agnostic way, to that end
 
 The core mechanics of Datastar's SSE support is
 
-1. Data gets send to browser as SSE events.
+1. Data gets sent to browser as SSE events.
 2. Data comes in via JSON from browser under a `datastar` namespace.
 
 # Library
@@ -67,16 +67,16 @@ All top level `ServerSentEventGenerator` ***should*** use a unified sending func
 ####  Args
 
 ##### EventType
-An enum of Datastar supported events.  Will be a string over the wire
+An enum of Datastar supported events.  Will be a string over the wire.
 Currently valid values are
 
-| Event             | Description                                    |
-|-------------------|------------------------------------------------|
-| datastar-fragment | A fragment of HTML to be inserted into the DOM |
-| datastar-signal   | Effect the data-store in some way              |
-| datastar-remove   | Remove something from the DOM or data-store    |
-| datastar-redirect | Redirect the browser to a new URL              |
-| datastar-console  | Send a message to the browser console          |
+| Event                        | Description                                    |
+|------------------------------|------------------------------------------------|
+| datastar-merge-fragments     | Merges one or more HTML fragments into the DOM |
+| datastar-merge-store-values  | Merges one or more values into the store       |
+| datastar-remove-fragment     | Removes a HTML fragment from the DOM           |
+| datastar-remove-store-values | Removes one or more values from the store      |
+| datastar-execute-js          | Executes JavaScript in the browser             |
 
 ##### Options
 * `eventId` (string) Each event ***may*** include an `eventId`.  This can be used by the backend to replay events.  This is part of the SSE spec and is used to tell the browser how to handle the event.  For more details see https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#id
@@ -86,15 +86,15 @@ Currently valid values are
 When called the function ***must*** write to the response buffer the following in specified order.  If any part of this process fails you ***must*** return/throw an error depending on language norms.
 1. ***Must*** write `event: EVENT_TYPE\n` where `EVENT_TYPE` is [EventType](#EventType)
 2. If a user defined event ID is provided, the function ***must*** write `id: EVENT_ID\n` where `EVENT_ID` is the event ID.
-3. ***Must*** write `retry: RETRY_DURATION\n` where `RETRY_DURATION` is the provided retry duration or the default value of `1000` milliseconds, if none is provided.
+3. ***Must*** write `retry: RETRY_DURATION\n` where `RETRY_DURATION` is the provided retry duration, ***unless*** the retry duration is the default of `1000` milliseconds.
 4. For each string in the provided `dataLines`, you ***must*** write `data: DATA\n` where `DATA` is the provided string.
 5. ***Must*** write a `\n\n` to complete the event per the SSE spec.
 6. Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
 
-### `ServerSentEventGenerator.MergeFragment`
+### `ServerSentEventGenerator.MergeFragments`
 
 ```
-ServerSentEventGenerator.MergeFragment(
+ServerSentEventGenerator.MergeFragments(
     data: string,
     options?: {
         selector?: string,
@@ -107,7 +107,7 @@ ServerSentEventGenerator.MergeFragment(
  )
 ```
 
-`MergeFragment` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
+`MergeFragments` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
 
 #### Args
 
@@ -130,15 +130,15 @@ Valid values should match the [FragmentMergeMode](#FragmentMergeMode) and curren
 ##### Options
 * `selector` (string) The CSS selector to use to insert the fragment.  If not provided the fragment ***must*** be inserted at the end of the body.  If the selector is not found, Datastar **will** default to using the `id` attribute of the fragment.
 * `mergeMode` (FragmentMergeMode) The mode to use when merging the fragment into the DOM.  If not provided the Datastar client side ***will*** default to `morph`.
-* `settleDuration` is used to control the amount of time that a fragment should take before removing any CSS related to settling.  It is used to allow for animations in the browser via the Datastar client.  If provided the value ***must*** be a positive integer of the number of milliseconds to allow for settling.  If none is provided, the default value of `300 milliseconds` will be used.
-* If `useViewTransition` is provided, the SDK ***should*** use the provided view transition, if not provided the Datastar client side ***will*** default to `false`.
+* `settleDuration` is used to control the amount of time that a fragment should take before removing any CSS related to settling.  It is used to allow for animations in the browser via the Datastar client.  If provided the value ***must*** be a positive integer of the number of milliseconds to allow for settling.  If none is provided, the default value of `300` milliseconds will be used.
+* `useViewTransition` Whether to use view transitions, if not provided the Datastar client side ***will*** default to `false`.
 
 #### Logic
-When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-fragment` event type.
-1. If `selector` is provided, the function ***must*** include the selector in the event data in the format `selector SELECTOR`, unless the selector is the id of the fragment
-2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE`, unless the merge mode is the default of `morph`.
-3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, unless the settle duration is the default of `300 milliseconds`.
-4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-fragment` event type.
+1. If `selector` is provided, the function ***must*** include the selector in the event data in the format `selector SELECTOR`, ***unless*** the selector is empty.
+2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE`, ***unless*** the merge mode is the default of `morph`.
+3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration: DURATION`, ***unless*** the settle duration is the default of `300` milliseconds.
+4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, ***unless*** the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
 5. The function ***must*** include the fragment content in the event data, with each line prefixed with `fragment `. This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveFragments`
@@ -161,17 +161,22 @@ ServerSentEventGenerator.RemoveFragments(
 
 `selector` is a CSS selector that represents the fragment to be removed from the DOM.  The selector ***must*** be a valid CSS selector.  The Datastar client side will use this selector to remove the fragment from the DOM.
 
+##### Options
+
+* `settleDuration` is used to control the amount of time that a fragment should take before removing any CSS related to settling.  It is used to allow for animations in the browser via the Datastar client.  If provided the value ***must*** be a positive integer of the number of milliseconds to allow for settling.  If none is provided, the default value of `300` milliseconds will be used.
+* `useViewTransition` Whether to use view transitions, if not provided the Datastar client side ***will*** default to `false`.
+
 #### Logic
-1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove` event type.
+1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove-fragments` event type.
 2. The function ***must*** include the selector in the event data in the format `selector SELECTOR`.
-3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration DURATION`, unless the settle duration is the default of `300 milliseconds`.  `DURATION` should be the provided duration in milliseconds.
-4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
+3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration DURATION`, ***unless*** the settle duration is the default of `300` milliseconds.  `DURATION` should be the provided duration in milliseconds.
+4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, ***unless*** the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
 
 
-### `ServerSentEventGenerator.MergeStore`
+### `ServerSentEventGenerator.MergeStoreValues`
 
 ```
-ServerSentEventGenerator.MergeStore(
+ServerSentEventGenerator.MergeStoreValues(
     data: string,
     options ?: {
         onlyIfMissing?: boolean,
@@ -181,7 +186,7 @@ ServerSentEventGenerator.MergeStore(
  )
 ```
 
-`MergeStore` is a helper function to send a signal to the browser to update the data-store.
+`MergeStoreValues` is a helper function to send a signal to the browser to update the data-store.
 
 #### Args
 
@@ -189,18 +194,18 @@ Data is a JS or JSON object that will be sent to the browser to update the data-
 
 ##### Options
 
-* `onlyIfMissing` (boolean) If true the SDK ***should*** only send the signal if the data is not already in the data-store.  If not provided the Datastar client side ***will*** default to `false` which will cause the data to be merged into the data-store.
+* `onlyIfMissing` (boolean) If `true`, the SDK ***should*** send the signal only if the data is not already in the store.  If not provided, the Datastar client side ***will*** default to `false`, which will cause the data to be merged into the store.
 
 #### Logic
-When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-signal` event type.
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-store-values` event type.
 
-1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
+1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, ***unless*** the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` (string), depending on the value of the `onlyIfMissing` option.
 2. The function ***must*** include the store merges in the event data, with each line prefixed with `store `.  This ***should*** be output after all other event data.
 
-### `ServerSentEventGenerator.RemoveFromStore`
+### `ServerSentEventGenerator.RemoveStoreValues`
 
 ```html
-ServerSentEventGenerator.RemoveFromStore(
+ServerSentEventGenerator.RemoveStoreValues(
     paths: string[],
     options?: {
         eventId?: string,
@@ -209,24 +214,24 @@ ServerSentEventGenerator.RemoveFromStore(
 )
 ```
 
-`RemoveFromStore` is a helper function to send a signal to the browser to remove data from the data-store.
+`RemoveStoreValues` is a helper function to send a signal to the browser to remove data from the data-store.
 
 #### Args
 
 `paths` is a list of strings that represent the path to the data to be removed from the data-store.  The paths ***must*** be valid `.` delimited paths within the store.  The Datastar client side will use these paths to remove the data from the data-store.
 
 #### Logic
-When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove` event type.
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove-store-values` event type.
 
 1. The function ***must*** include the paths in the event data in the format `paths PATHS` where `PATHS` is a space separated list of the provided paths.
 
-
-### `ServerSentEventGenerator.Redirect`
+### `ServerSentEventGenerator.ExecuteJS`
 
 ```
-ServerSentEventGenerator.Redirect(
-    url: string,
+ServerSentEventGenerator.ExecuteJS(
+    script: string,
     options?: {
+        autoRemoveScript?: boolean,
         eventId?: string,
         retryDuration?: durationInMilliseconds
     }
@@ -235,53 +240,16 @@ ServerSentEventGenerator.Redirect(
 
 #### Args
 
-`url` is a string that represents the URL to redirect the browser to.  The URL ***must*** be a valid URL.  The Datastar client side will use this URL to redirect the browser.
+`script` is a string that represents the JavaScript to be executed by the browser.
+
+##### Options
+
+* `autoRemoveScript` Whether to remove the script after execution, if not provided the Datastar client side ***will*** default to `true`.
 
 #### Logic
-1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-redirect` event type.
-2. The function ***must*** include the URL in the event data in the format `url URL` where `URL` is the provided URL.
-
-### `ServerSentEventGenerator.Console`
-
-```
-ServerSentEventGenerator.Console(
-    mode: ConsoleMode,
-    message: string,
-    options?: {
-        eventId?: string,
-        retryDuration?: durationInMilliseconds
-    }
-)
-```
-
-`Console` allows developers to send messages directly to a browser console
-
-#### Args
-
-##### ConsoleMode
-
-An enum of Datastar supported console modes.  Will be a string over the wire
-Valid values should match the [ConsoleAPI](https://developer.mozilla.org/en-US/docs/Web/API/console) methods and currently include
-
-* assert
-* clear
-* count
-* countReset
-* debug
-* dir
-* dirxml
-* error
-* group
-* groupCollapsed
-* groupEnd
-* info
-* log
-* table
-* time
-* timeEnd
-* timeLog
-* trace
-* warn
+1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-execute-js` event type.
+2. If `autoRemoveScript` is provided, the function ***must*** include the auto remove script value in the event data in the format `autoRemoveScript AUTO_REMOVE_SCRIPT`, ***unless*** the auto remove script value is the default of `true`.  `AUTO_REMOVE_SCRIPT` should be `true` or `false` (string), depending on the value of the `autoRemoveScript` option.
+3. The function ***must*** include the script in the event data in the format `script SCRIPT`.
 
 ## `ParseIncoming(r *http.Request, store any) error`
 
