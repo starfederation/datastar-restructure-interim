@@ -19,10 +19,12 @@ RUN set -eux; \
     # Clean out directories that don't need to be part of the image
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && \
+    # Install needed Go tooling
     go install github.com/a-h/templ/cmd/templ@latest \
     && \
     go install github.com/valyala/quicktemplate/qtc@latest \
     && \
+    # Make this a safe .git directory
     git config --global --add safe.directory /app
 
 ENTRYPOINT ["/bin/sh"]
