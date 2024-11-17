@@ -1,11 +1,11 @@
 # Getting Started
 
-Datastar brings the functionality provided by libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, into one cohesive solution. It's a tiny, extensible framework that allows you to:
+Datastar brings the functionality provided by libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, into one cohesive solution. It's a lightweight, extensible framework that allows you to:
 
 1. Manage state and build reactivity into your frontend using HTML attributes.
 2. Modify the DOM and state by sending events from your backend.
 
-With Datastar, you can build any UI that a full-stack framework like React, Vue.js or Svelte can, using a much simpler, hypermedia-driven approach.
+With Datastar, you can build any UI that a full-stack framework like React, Vue.js or Svelte can, but with a much simpler, hypermedia-driven approach.
 
 <div class="alert alert-info">
     <iconify-icon icon="simple-icons:rocket"></iconify-icon>
@@ -220,8 +220,8 @@ See if you can follow the code below _before_ trying the demo.
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
         That is 
-        <span data-show="$correct">CORRECT :)</span>
-        <span data-show="!$correct">incorrect :(</span>
+        <span data-show="$correct">correct 👍</span>
+        <span data-show="!$correct">incorrect 👎</span>
     </div>
 </div>
 ```
@@ -233,8 +233,8 @@ See if you can follow the code below _before_ trying the demo.
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”. 
         That is
-        <span data-show="$correct">CORRECT :)</span>
-        <span data-show="!$correct">incorrect :(</span>
+        <span data-show="$correct">correct 👍</span>
+        <span data-show="!$correct">incorrect 👎</span>
     </div>
 </div>
 
