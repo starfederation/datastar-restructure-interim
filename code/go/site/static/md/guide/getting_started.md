@@ -214,8 +214,11 @@ See if you can follow the code below _before_ trying the demo.
 <div data-store="{response: '', answer: 'bread'}" 
      data-computed-correct="$response.toLowerCase() == $answer"
 >
-    <button data-on-click="$response = prompt('What do you put in a toaster?')">
-        Quiz me
+    <div id="question">
+        What do you put in a toaster?
+    </div>
+    <button data-on-click="$response = prompt('Answer:')">
+        BUZZ
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
@@ -226,16 +229,21 @@ See if you can follow the code below _before_ trying the demo.
 </div>
 ```
 
-<div data-store="{response: '', answer: 'bread'}" data-computed-correct="$response.toLowerCase() == $answer" class="alert flex items-center gap-4 p-8">
-    <button data-on-click="$response = prompt('What do you put in a toaster?')" class="btn btn-primary">
-        Quiz me
-    </button>
-    <div data-show="$response != ''">
-        You answered “<span data-text="$response"></span>”. 
-        That is
-        <span data-show="$correct">correct 👍</span>
-        <span data-show="!$correct">incorrect 👎</span>
+<div data-store="{response1: '', answer1: 'bread'}" data-computed-correct1="$response1.toLowerCase() == $answer1" class="alert flex justify-between items-start gap-4 p-8">
+    <div class="space-y-3">
+        <div id="question1">
+            What do you put in a toaster?
+        </div>
+        <div data-show="$response1 != ''">
+            You answered “<span data-text="$response1 ?? ''"></span>”. 
+            That is
+            <span data-show="$correct1">correct 👍</span>
+            <span data-show="!$correct1">incorrect 👎</span>
+        </div>
     </div>
+    <button data-on-click="$response1 = prompt('Answer:')" class="btn btn-primary">
+        BUZZ
+    </button>
 </div>
 
 We've just scratched the surface of frontend reactivity. Now let's take a look at how we can bring the backend into play.
@@ -254,49 +262,83 @@ use starfederation\datastar\ServerSentEventGenerator;
 // Creates a new `ServerSentEventGenerator` instance.
 $sseGenerator = new ServerSentEventGenerator();
 
-// Updates the `title` store value.
-$sseGenerator->mergeStore(['title' => 'Greetings']);
+// Merges the HTML fragment into the DOM using the element ID `question`.
+$sseGenerator->mergeFragments('<div id="question">What do you put in a toaster?</div>');
 
-// Merges a fragment into the DOM.
-$sseGenerator->mergeFragment('<div id="greeting">Hello, world!</div>');
+// Merges the `answer` value into the store.
+$sseGenerator->mergeStore(['answer' => 'bread']);
 ```
 
-The `mergeStore()` method merges one or more store values in the frontend store, or creates them if they don't already exist.
+The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with the ID `question`. An element with the ID `question` must already exist in the DOM.
 
-The `mergeFragment()` method merges the HTML fragment into the DOM, replacing the element with the ID `greeting`. An element with the ID `greeting` must already exist in the DOM.
+The `mergeStore()` method merges the `answer` store value in the frontend store.
 
-With our backend in place, we can now use a `data-on-click` on a button to send a `GET` request to the `/actions/greeting` endpoint on the server.
+With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 
 ```html
-<div data-store="{title: ''}"></div>
-    <h1 data-text="$title"></h1>
-    <div id="greeting"></div>
-    <button data-on-click="$get('/actions/greeting')">
-        Request a greeting
+<div data-store="{response: '', answer: ''}" 
+     data-computed-correct="$response.toLowerCase() == $answer"
+>
+    <button data-on-click="$get('/actions/quiz')">
+        Fetch a question
     </button>
+    <div id="question"></div>
+    <button data-show="$answer != ''" 
+            data-on-click="$response = prompt('Answer:')"
+    >
+        BUZZ
+    </button>
+    <div data-show="$response != ''">
+        You answered “<span data-text="$response"></span>”.
+        That is 
+        <span data-show="$correct">correct 👍</span>
+        <span data-show="!$correct">incorrect 👎</span>
+    </div>
 </div>
 ```
 
-Now when the button is clicked, the server will respond with a new greeting, updating the `title` store value and the `greeting` element in the DOM. We're driving state from the backend!
+Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify `answer` store value. We're driving state from the backend!
+
+<div data-store="{response2: '', answer2: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex items-center gap-4 p-8">
+    <div class="space-y-3">
+        <button data-on-click="$get('/examples/quiz/data')" class="btn btn-secondary">
+            Fetch a question
+        </button>
+        <div id="question2"></div>
+        <div data-show="$response2 != ''">
+            You answered “<span data-text="$response2 ?? ''"></span>”. 
+            That is
+            <span data-show="$correct2">correct 👍</span>
+            <span data-show="!$correct2">incorrect 👎</span>
+        </div>
+    </div>
+    <div class="space-y-3">
+        <button data-show="$answer2 != ''" data-on-click="$response2 = prompt('Answer:')" class="btn btn-primary">
+            BUZZ
+        </button>
+    </div>
+</div>
 
 We're not limited to just `GET` requests. We can also send `GET`, `POST`, `PUT`, `PATCH` and `DELETE` requests, using `$get()`, `$post()`, `$put()`, `$patch()` and `$delete()` respectively.
 
+Here's how we could send an answer to the server using a `POST` request.
+
 ```html
-<button data-on-click="$post('/actions/greeting')">
-    Send a greeting
+<button data-on-click="$post('/actions/quiz')">
+    Send answer
 </button>
 ```    
 
 One of the advantages of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
 ```php
-$sseGenerator->mergeStore(['title' => 'Greetings']);
-$sseGenerator->mergeFragment('<div id="greeting-world">Hello, world!</div>');
-$sseGenerator->mergeStore(['subtitle' => 'Earthlings']);
-$sseGenerator->mergeFragment('<div id="greeting-universe">Hello, universe!</div>');
+$sseGenerator->mergeFragments('<div id="question">...</div>');
+$sseGenerator->mergeFragments('<div id="instructions">...</div>');
+$sseGenerator->mergeStore(['answer' => '...']);
+$sseGenerator->mergeStore(['prize' => '...']);
 ```
 
-## An Overview of Datastar
+## A Quick Overview
 
 Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backed endpoints that respond with HTML fragments and store updates.
 
