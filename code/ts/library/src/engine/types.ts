@@ -2,38 +2,41 @@ import { HTMLorSVGElement } from "../utils/types";
 import { DeepState } from "../vendored/deepsignal";
 import { ReadonlySignal, Signal } from "../vendored/preact-core";
 
-export type ExpressionFunction = (ctx: AttributeContext, ...args: any) => any;
+export type InitExpressionFunction = (
+  ctx: InitContext,
+  ...args: any
+) => any;
+export type AttribtueExpressionFunction = (
+  ctx: AttributeContext,
+  ...args: any
+) => any;
 export type Reactivity = {
   signal: <T>(value: T) => Signal<T>;
   computed: <T>(fn: () => T) => ReadonlySignal<T>;
   effect: (cb: () => void) => OnRemovalFn;
 };
 
-export type AttributeContext = {
-  store: () => any;
-  mergeStore: (store: DeepState) => void;
+export type InitContext = {
+  store: any;
   upsertIfMissingFromStore: (path: string, value: any) => void;
+  mergeStore: (store: DeepState) => void;
   removeFromStore: (...paths: string[]) => void;
-  applyPlugins: (target: Element) => void;
-  walkSignals: (cb: (name: string, signal: Signal<any>) => void) => void;
-  cleanupElementRemovals: (el: Element) => void;
   actions: Readonly<ActionPlugins>;
   reactivity: Reactivity;
-  el: Readonly<HTMLorSVGElement>;
-  key: Readonly<string>;
-  rawKey: Readonly<string>;
-  rawExpression: Readonly<string>;
-  expression: Readonly<string>;
-  expressionFn: ExpressionFunction;
-  modifiers: Map<string, string[]>;
+  applyPlugins: (target: Element) => void;
+  cleanupElementRemovals: (el: Element) => void;
   sendDatastarEvent: SendDatastarEvent;
 };
 
-export type InitContext = {
-  store: any;
-  mergeStore: (store: DeepState) => void;
-  actions: Readonly<ActionPlugins>;
-  reactivity: Reactivity;
+export type AttributeContext = InitContext & {
+  walkSignals: (cb: (name: string, signal: Signal<any>) => void) => void;
+  el: Readonly<HTMLorSVGElement>; // The element the attribute is on
+  key: Readonly<string>; // data-* key without the prefix or modifiers
+  rawKey: Readonly<string>; // raw data-* key
+  rawExpression: Readonly<string>; // before any preprocessor run, what the user wrote
+  expression: Readonly<string>; // what the user wrote after any preprocessor run
+  expressionFn: AttribtueExpressionFunction; // the function constructed from the expression
+  modifiers: Map<string, string[]>; // the modifiers and their arguments
 };
 
 export type OnRemovalFn = () => void;
@@ -86,7 +89,7 @@ export interface ActionPlugin extends DatastarPlugin {
 export type ActionPlugins = Record<string, ActionPlugin>;
 
 // A plugin that runs on the global scope of the DastaStar instance
-export interface EffectPlugin extends DatastarPlugin {
+export interface WatcherPlugin extends DatastarPlugin {
   pluginType: "effect";
   onGlobalInit?: (ctx: InitContext) => void;
 }

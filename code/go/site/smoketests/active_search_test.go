@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/playwright-community/playwright-go"
+	playwright "github.com/playwright-community/playwright-go"
 )
 
 func activeSearchExampleTest(ctx context.Context, page playwright.Page) error {

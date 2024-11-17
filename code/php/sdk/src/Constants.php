@@ -11,12 +11,18 @@ class Constants
 {
     public const DatastarKey = 'datastar';
     public const Version = '0.20.0';
-    public const VersionClientByteSize = 43920;
-    public const VersionClientByteSizeGzip = 14899;
+    public const VersionClientByteSize = 44905;
+    public const VersionClientByteSizeGzip = 15065;
     public const DefaultSettleDuration = 300;
-    public const DefaultSSERetryDuration = 1000;
+    public const DefaultSseRetryDuration = 1000;
     public const DefaultUseViewTransitions = false;
     public const DefaultOnlyIfMissing = false;
+    public const DefaultAutoRemoveScript = true;
+    public const DefaultCustomEventCancelable = true;
+    public const DefaultCustomEventComposed = true;
+    public const DefaultCustomEventBubbles = true;
+    public const DefaultCustomEventSelector = 'document';
+    public const DefaultCustomEventDetailJson = '{}';
     public const DefaultFragmentMergeMode = FragmentMergeMode::Morph;
     public const SelectorDatalineLiteral = 'selector ';
     public const MergeModeDatalineLiteral = 'mergeMode ';
@@ -27,4 +33,11 @@ class Constants
     public const OnlyIfMissingDatalineLiteral = 'onlyIfMissing ';
     public const UrlDatalineLiteral = 'url ';
     public const PathsDatalineLiteral = 'paths ';
+    public const ScriptDatalineLiteral = 'script ';
+    public const AutoRemoveScriptDatalineLiteral = 'autoRemoveScript ';
+    public const EventNameDatalineLiteral = 'eventName ';
+    public const CancelableDatalineLiteral = 'cancelable ';
+    public const ComposedDatalineLiteral = 'composed ';
+    public const BubblesDatalineLiteral = 'bubbles ';
+    public const DetailJsonDatalineLiteral = 'detailJson ';
 }

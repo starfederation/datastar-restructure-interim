@@ -225,7 +225,7 @@ func setupBundler(router chi.Router) error {
 
 			bundleContents, err := bundlePlugins(tmpDir, revisedManifest)
 			if err != nil {
-				sse.ConsoleErr(err)
+				sse.ConsoleError(err)
 				return
 			}
 
