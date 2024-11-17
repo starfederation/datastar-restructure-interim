@@ -14,13 +14,18 @@ export const ExecuteJS: WatcherPlugin = {
         datastarSSEEventWatcher(
             ctx,
             name,
-            ({ autoRemoveScript: autoRemoveScriptRaw = "true", script }) => {
+            ({
+                autoRemoveScript: autoRemoveScriptRaw = "true",
+                type = "module",
+                script,
+            }) => {
                 const autoRemoveScript = autoRemoveScriptRaw.trim() === "true";
                 if (!script?.length) {
                     throw new Error("No script provided");
                 }
 
                 const scriptEl = document.createElement("script");
+                scriptEl.type = type.trim();
                 scriptEl.text = script;
                 document.head.appendChild(scriptEl);
                 if (autoRemoveScript) {

@@ -40,7 +40,7 @@ document.addEventListener('example-event-from-server', (e) => {
 					return
 				}
 
-				sse.DispatchCustomEventMarshal("example-event-from-server", detail)
+				sse.DispatchCustomEvent("example-event-from-server", detail)
 			}
 		}
 	})

@@ -7,9 +7,10 @@ import (
 )
 
 type ExecuteJSOptions struct {
-	EventID          string
-	RetryDuration    time.Duration
-	AutoRemoveScript *bool
+	EventID       string
+	RetryDuration time.Duration
+	Type          string
+	AutoRemove    *bool
 }
 
 type ExecuteJSOption func(*ExecuteJSOptions)
@@ -26,17 +27,22 @@ func WithExecuteJSRetryDuration(retryDuration time.Duration) ExecuteJSOption {
 	}
 }
 
+func WithExecuteJSType(t string) ExecuteJSOption {
+	return func(o *ExecuteJSOptions) {
+		o.Type = t
+	}
+}
+
 func WithExecuteJSAutoRemoveScript(autoremove bool) ExecuteJSOption {
 	return func(o *ExecuteJSOptions) {
-		o.AutoRemoveScript = &autoremove
+		o.AutoRemove = &autoremove
 	}
 }
 
 func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...ExecuteJSOption) error {
 	options := &ExecuteJSOptions{
-		EventID:          "",
-		RetryDuration:    DefaultSseRetryDuration,
-		AutoRemoveScript: nil,
+		RetryDuration: DefaultSseRetryDuration,
+		Type:          DefaultExecuteJsType,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -51,12 +57,17 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 		sendOpts = append(sendOpts, WithSSERetryDuration(options.RetryDuration))
 	}
 
-	dataLines := make([]string, 0, 2)
-	if options.AutoRemoveScript != nil && *options.AutoRemoveScript != DefaultAutoRemoveScript {
-		dataLines = append(dataLines, AutoRemoveScriptDatalineLiteral+strconv.FormatBool(*options.AutoRemoveScript))
+	dataLines := make([]string, 0, 64)
+
+	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJsAutoRemove {
+		dataLines = append(dataLines, AutoRemoveScriptDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
 
-	scriptLines := strings.Split(scriptContents, "\n")
+	if options.Type != DefaultExecuteJsType {
+		dataLines = append(dataLines, TypeDatalineLiteral, options.Type)
+	}
+
+	scriptLines := strings.Split(scriptContents, NewLine)
 	for _, line := range scriptLines {
 		dataLines = append(dataLines, ScriptDatalineLiteral+line)
 	}

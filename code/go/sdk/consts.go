@@ -7,10 +7,11 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 44905
-    VersionClientByteSizeGzip = 15065
+    VersionClientByteSize     = 44432
+    VersionClientByteSizeGzip = 14930
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
+    DefaultExecuteJsType = "module"
     DefaultCustomEventSelector = "document"
     DefaultCustomEventDetailJson = "{}"
     SelectorDatalineLiteral = "selector "
@@ -20,21 +21,16 @@ const (
     UseViewTransitionDatalineLiteral = "useViewTransition "
     StoreDatalineLiteral = "store "
     OnlyIfMissingDatalineLiteral = "onlyIfMissing "
-    UrlDatalineLiteral = "url "
     PathsDatalineLiteral = "paths "
     ScriptDatalineLiteral = "script "
+    TypeDatalineLiteral = "type "
     AutoRemoveScriptDatalineLiteral = "autoRemoveScript "
-    EventNameDatalineLiteral = "eventName "
-    CancelableDatalineLiteral = "cancelable "
-    ComposedDatalineLiteral = "composed "
-    BubblesDatalineLiteral = "bubbles "
-    DetailJsonDatalineLiteral = "detailJson "
 )
 
 var (
-    DefaultUseViewTransitions = false
-    DefaultOnlyIfMissing = false
-    DefaultAutoRemoveScript = true
+    DefaultMergeFragmentsUseViewTransitions = false
+    DefaultMergeStoreOnlyIfMissing = false
+    DefaultExecuteJsAutoRemove = true
     DefaultCustomEventCancelable = true
     DefaultCustomEventComposed = true
     DefaultCustomEventBubbles = true
@@ -87,13 +83,7 @@ const (
     // An event dealing with removing signals from the store.
     EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
 
-    // An event dealing with redirecting the browser.
-    EventTypeRedirect EventType = "datastar-redirect"
-
     // An event dealing to execute functions in the browser.
     EventTypeExecuteJs EventType = "datastar-execute-js"
-
-    // An event dealing with custom events.
-    EventTypeDispatchCustomEvent EventType = "datastar-dispatch-custom-event"
 
 )

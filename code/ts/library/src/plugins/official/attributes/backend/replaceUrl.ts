@@ -12,10 +12,12 @@ export const ReplaceUrl: AttributePlugin = {
     mustNotEmptyExpression: true,
 
     onLoad: (ctx) => {
-        const value = ctx.expressionFn(ctx);
-        const baseUrl = window.location.href;
-        const url = new URL(value, baseUrl).toString();
+        return ctx.reactivity.effect(() => {
+            const value = ctx.expressionFn(ctx);
+            const baseUrl = window.location.href;
+            const url = new URL(value, baseUrl).toString();
 
-        window.history.replaceState({}, "", url);
+            window.history.replaceState({}, "", url);
+        });
     },
 };

@@ -52,15 +52,15 @@ var ConstsData = &ConstTemplateData{
 	DatastarKey: "datastar",
 	DefaultBools: []*DefaultBool{
 		{
-			Name:  toolbelt.ToCasedString("useViewTransitions"),
+			Name:  toolbelt.ToCasedString("mergeFragmentsUseViewTransitions"),
 			Value: false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("onlyIfMissing"),
+			Name:  toolbelt.ToCasedString("mergeStoreOnlyIfMissing"),
 			Value: false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("autoRemoveScript"),
+			Name:  toolbelt.ToCasedString("executeJsAutoRemove"),
 			Value: true,
 		},
 		{
@@ -88,6 +88,10 @@ var ConstsData = &ConstTemplateData{
 	},
 	DefaultStrings: []*DefaultString{
 		{
+			Name:  toolbelt.ToCasedString("executeJsType"),
+			Value: "module",
+		},
+		{
 			Name:  toolbelt.ToCasedString("customEventSelector"),
 			Value: "document",
 		},
@@ -97,22 +101,26 @@ var ConstsData = &ConstTemplateData{
 		},
 	},
 	DatalineLiterals: []toolbelt.CasedString{
+		// Shared
 		toolbelt.ToCasedString("selector"),
+
+		// MergeFragments
 		toolbelt.ToCasedString("mergeMode"),
 		toolbelt.ToCasedString("settleDuration"),
 		toolbelt.ToCasedString("fragment"),
 		toolbelt.ToCasedString("useViewTransition"),
+
+		// MergeStore
 		toolbelt.ToCasedString("store"),
 		toolbelt.ToCasedString("onlyIfMissing"),
-		toolbelt.ToCasedString("url"),
+
+		// RemoveFromStore
 		toolbelt.ToCasedString("paths"),
+
+		// ExecuteJS
 		toolbelt.ToCasedString("script"),
+		toolbelt.ToCasedString("type"),
 		toolbelt.ToCasedString("autoRemoveScript"),
-		toolbelt.ToCasedString("eventName"),
-		toolbelt.ToCasedString("cancelable"),
-		toolbelt.ToCasedString("composed"),
-		toolbelt.ToCasedString("bubbles"),
-		toolbelt.ToCasedString("detailJSON"),
 	},
 	Enums: []*EnumDefinition{
 		{
@@ -179,19 +187,9 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event dealing with removing signals from the store.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("Redirect"),
-					Value:       "datastar-redirect",
-					Description: "An event dealing with redirecting the browser.",
-				},
-				{
 					Name:        toolbelt.ToCasedString("ExecuteJs"),
 					Value:       "datastar-execute-js",
 					Description: "An event dealing to execute functions in the browser.",
-				},
-				{
-					Name:        toolbelt.ToCasedString("DispatchCustomEvent"),
-					Value:       "datastar-dispatch-custom-event",
-					Description: "An event dealing with custom events.",
 				},
 			},
 		},

@@ -10,6 +10,8 @@
 - Added SDKs for Go, PHP, .NET  and TypeScript.
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
+- Added `replaceUrl` examples from both the backend and signals.
+- Added ExecuteJS to the SSE SDK
 
 ### Changed
 
@@ -23,3 +25,4 @@
 
 ### Removed
 - Removed the `local` and `session` modifiers from `data-store`. Use the `data-persist` attribute instead.
+- Removed redirect and console from the SDK spec.  The are covered by the new ExecuteJS event.
