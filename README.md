@@ -32,8 +32,8 @@ Visit the [Datastar website »](https://data-star.dev/)
 
 ## Contributing
 
-Read the guide on [Contributing to Datastar »](CONTRIBUTING.md.)
+Read the [Contribution Guidelines »](CONTRIBUTING.md)
 
 ## Development
 
-Read the guide on [Developing for Datastar »](DEVELOPMENT.md.)
+Read the [Development Guidelines »](DEVELOPMENT.md)
