@@ -189,7 +189,7 @@ var ConstsData = &ConstTemplateData{
 				{
 					Name:        toolbelt.ToCasedString("ExecuteJs"),
 					Value:       "datastar-execute-js",
-					Description: "An event dealing to execute functions in the browser.",
+					Description: "An event dealing with executing JavaScript in the browser.",
 				},
 			},
 		},
