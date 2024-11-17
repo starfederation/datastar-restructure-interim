@@ -7,12 +7,18 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 44905
-    VersionClientByteSizeGzip = 15065
+    VersionClientByteSize     = 42950
+    VersionClientByteSizeGzip = 14706
+
+    // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
+
+    // Default strings
     DefaultCustomEventSelector = "document"
     DefaultCustomEventDetailJson = "{}"
+
+    // Dataline literals
     SelectorDatalineLiteral = "selector "
     MergeModeDatalineLiteral = "mergeMode "
     SettleDurationDatalineLiteral = "settleDuration "
@@ -32,6 +38,7 @@ const (
 )
 
 var (
+    // Default booleans
     DefaultUseViewTransitions = false
     DefaultOnlyIfMissing = false
     DefaultAutoRemoveScript = true
@@ -40,6 +47,7 @@ var (
     DefaultCustomEventBubbles = true
 )
 
+// Enums
 type FragmentMergeMode string
 
 const (

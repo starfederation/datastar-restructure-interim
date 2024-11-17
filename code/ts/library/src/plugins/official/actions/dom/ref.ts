@@ -4,9 +4,10 @@
 // Description: This action references an element that can be used in other expressions.
 
 import { ActionPlugin } from "../../../../engine";
+import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
 
 export const RefAction: ActionPlugin = {
-    pluginType: "action",
+    pluginType: PLUGIN_ACTION,
     name: "ref",
     method: (ctx, text) => {
         const selectorSignal = ctx.store()?._dsPlugins?.refs?.[text];

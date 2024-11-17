@@ -4,10 +4,11 @@
 // Description: Remember, SSE is just a regular SSE request but with the ability to send 0-inf messages to the client.
 
 import { ActionPlugin } from "../../../../engine";
+import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
 import { sendSSERequest } from "./sseShared";
 
 export const DeleteSSE: ActionPlugin = {
-    pluginType: "action",
-    name: "delete",
+    pluginType: PLUGIN_ACTION,
+    name: "delet",
     method: sendSSERequest("DELETE"),
 };

@@ -4,6 +4,7 @@
 // Description: This attribute teleports an element to another element in the DOM.
 
 import { AttributePlugin } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { nodeHTMLorSVGElement } from "../../../../utils/dom";
 
 const PREPEND = "prepend";
@@ -13,7 +14,7 @@ const teleportParentErr = new Error(
 );
 // Teleports the element to another element
 export const Teleport: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "teleport",
     allowedModifiers: new Set([PREPEND, APPEND]),
     allowedTagRegexps: new Set(["template"]),
