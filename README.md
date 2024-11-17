@@ -1,7 +1,7 @@
 ![Version](https://img.shields.io/npm/v/@sudodevnull/datastar)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40sudodevnull%2Fdatastar)
 
-<p align="center"><img width="256" src="https://media.githubusercontent.com/media/starfederation/datastar/refs/heads/main/code/go/site/static/images/rocket.gif"></p>
+<p align="center"><img width="200" src="https://media.githubusercontent.com/media/starfederation/datastar/refs/heads/main/code/go/site/static/images/rocket.gif"></p>
 
 # Datastar
 
@@ -9,7 +9,7 @@
 
 Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
 
-Here’s what it looks like.
+Here’s what it looks like to get frontend reactivity using Datastar:
 
 ```html
 <div data-store="{input: ''}">
@@ -18,6 +18,7 @@ Here’s what it looks like.
     <button data-on-click="$post('/endpoint')">Save</button>
 </div> 
 ```
+
 Include Datastar with a single 14 KiB file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (available for Go, PHP, TypeScript and .NET) to get up and running even faster.
 
 ```html
