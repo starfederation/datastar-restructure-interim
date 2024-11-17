@@ -19,7 +19,7 @@ enum EventType: string
     // An event dealing with removing signals from the store.
     case RemoveFromStore = 'datastar-remove-from-store';
 
-    // An event dealing to execute functions in the browser.
+    // An event dealing with executing JavaScript in the browser.
     case ExecuteJs = 'datastar-execute-js';
 
 }

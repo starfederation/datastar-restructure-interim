@@ -1,3 +1,4 @@
+import { Star } from "../plugins/official/attributes/core/advice";
 import { Computed } from "../plugins/official/attributes/core/computed";
 import { Store } from "../plugins/official/attributes/core/store";
 import { ActionsProcessor } from "../plugins/official/preprocessors/core/actions";
@@ -13,6 +14,7 @@ ds.load(
     SignalsProcessor,
     Store,
     Computed,
+    Star,
 );
 
 export const Datastar = ds;
