@@ -1,4 +1,9 @@
-import { ActionMethod, DATASTAR } from "../../../../engine";
+import {
+    ActionMethod,
+    DATASTAR,
+    DATASTAR_REQUEST,
+    DefaultSettleDurationMs,
+} from "../../../../engine";
 import { remoteSignals } from "../../../../utils/signals";
 import {
     fetchEventSource,
@@ -12,12 +17,10 @@ import {
 import {
     DATASTAR_SSE_EVENT,
     DatastarSSEEvent,
-    DEFAULT_SETTLE_DURATION_RAW,
 } from "../../watchers/backend/sseShared";
 
 export type IndicatorReference = { el: HTMLElement; count: number };
 
-const DEFAULT_SETTLE_DURATION = parseInt(DEFAULT_SETTLE_DURATION_RAW);
 const isWrongContent = (err: any) =>
     `${err}`.includes(
         `Expected content-type to be text/event-stream`,
@@ -39,13 +42,13 @@ export function sendSSERequest(
         const storeJSON = JSON.stringify(store);
 
         const sendFromElement = ctx.el as HTMLElement;
-        ctx.sendDatastarEvent(
-            "plugin",
-            "backend",
-            "fetch_start",
-            sendFromElement,
-            JSON.stringify({ method, url, onlyRemotes, storeJSON }),
-        );
+        // ctx.sendDatastarEvent(
+        //     "plugin",
+        //     "backend",
+        //     "fetch_start",
+        //     sendFromElement,
+        //     JSON.stringify({ method, url, onlyRemotes, storeJSON }),
+        // );
 
         const indicatorElements: HTMLElement[] =
             store?._dsPlugins?.fetch?.indicatorElements
@@ -98,13 +101,13 @@ export function sendSSERequest(
             method,
             headers: {
                 ["Content-Type"]: "application/json",
-                [`${DATASTAR}-request`]: "true",
+                [DATASTAR_REQUEST]: "true",
             },
             onmessage: (evt) => {
                 if (!evt.event.startsWith(DATASTAR)) {
                     return;
                 }
-                const type = evt.event.slice(DATASTAR.length + 1);
+                const type = evt.event;
                 const argsRawLines: Record<string, string[]> = {};
 
                 const lines = evt.data.split("\n");
@@ -187,7 +190,7 @@ export function sendSSERequest(
                                             indicator.classList.add(
                                                 INDICATOR_CLASS,
                                             );
-                                        }, DEFAULT_SETTLE_DURATION)
+                                        }, DefaultSettleDurationMs)
                                     ),
                                 );
                                 delete indicatorsVisibleNew[
@@ -214,20 +217,20 @@ export function sendSSERequest(
                     console.error(e);
                     debugger;
                 } finally {
-                    ctx.sendDatastarEvent(
-                        "plugin",
-                        "backend",
-                        "fetch_end",
-                        sendFromElement,
-                        JSON.stringify({ method, url }),
-                    );
+                    // ctx.sendDatastarEvent(
+                    //     "plugin",
+                    //     "backend",
+                    //     "fetch_end",
+                    //     sendFromElement,
+                    //     JSON.stringify({ method, url }),
+                    // );
                 }
             },
         };
 
         if (method === "GET") {
             const queryParams = new URLSearchParams(urlInstance.search);
-            queryParams.append("datastar", storeJSON);
+            queryParams.append(DATASTAR, storeJSON);
             urlInstance.search = queryParams.toString();
         } else {
             req.body = storeJSON;

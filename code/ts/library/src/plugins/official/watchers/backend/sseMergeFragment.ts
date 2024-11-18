@@ -3,7 +3,17 @@
 // Slug: Use Server-Sent Events to fetch data from a server using the Datastar SDK interface
 // Description: Remember, SSE is just a regular SSE request but with the ability to send 0-inf messages to the client.
 
-import { InitContext, WatcherPlugin } from "../../../../engine";
+import {
+    DefaultFragmentMergeMode,
+    DefaultMergeFragmentsUseViewTransitions,
+    DefaultSettleDurationMs,
+    EventTypes,
+    FragmentMergeModes,
+    InitContext,
+    WatcherPlugin,
+} from "../../../../engine";
+import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
+import { isBoolString } from "../../../../utils/text";
 import {
     docWithViewTransitionAPI,
     supportsViewTransitions,
@@ -11,43 +21,25 @@ import {
 import { idiomorph } from "../../../../vendored/idiomorph";
 import {
     datastarSSEEventWatcher,
-    DEFAULT_SETTLE_DURATION_RAW,
     SETTLING_CLASS,
     SWAPPING_CLASS,
 } from "./sseShared";
 
-const DEFAULT_MERGE_MODE: FragmentMergeMode = "morph";
-const DEFAULT_USE_VIEW_TRANSITION = "false";
-
-const FragmentMergeModes = {
-    MorphElement: "morph",
-    InnerElement: "inner",
-    OuterElement: "outer",
-    PrependElement: "prepend",
-    AppendElement: "append",
-    BeforeElement: "before",
-    AfterElement: "after",
-    UpsertAttributes: "upsertAttributes",
-} as const;
-export type FragmentMergeMode =
-    (typeof FragmentMergeModes)[keyof typeof FragmentMergeModes];
-
-const name = "mergeFragments";
 export const MergeFragments: WatcherPlugin = {
-    pluginType: "effect",
-    name: name,
+    pluginType: PLUGIN_WATCHER,
+    name: EventTypes.MergeFragments,
     onGlobalInit: async (ctx) => {
         const fragmentContainer = document.createElement("template");
-        datastarSSEEventWatcher(ctx, name, ({
+        datastarSSEEventWatcher(EventTypes.MergeFragments, ({
             fragment = "<div></div>",
             selector = "",
-            mergeMode = DEFAULT_MERGE_MODE,
-            settleDuration: settleDurationRaw = DEFAULT_SETTLE_DURATION_RAW,
+            mergeMode = DefaultFragmentMergeMode,
+            settleDuration: settleDurationRaw = `${DefaultSettleDurationMs}`,
             useViewTransition: useViewTransitionRaw =
-                DEFAULT_USE_VIEW_TRANSITION,
+                `${DefaultMergeFragmentsUseViewTransitions}`,
         }) => {
             const settleDuration = parseInt(settleDurationRaw);
-            const useViewTransition = useViewTransitionRaw === "true";
+            const useViewTransition = isBoolString(useViewTransitionRaw);
 
             fragmentContainer.innerHTML = fragment.trim();
             const fragments = [...fragmentContainer.content.children];
@@ -101,7 +93,7 @@ function applyToTargets(
         const originalHTML = initialTarget.outerHTML;
         let modifiedTarget = initialTarget;
         switch (mergeMode) {
-            case FragmentMergeModes.MorphElement:
+            case FragmentMergeModes.Morph:
                 const result = idiomorph(
                     modifiedTarget,
                     fragment,
@@ -125,27 +117,27 @@ function applyToTargets(
                 const first = result[0] as Element;
                 modifiedTarget = first;
                 break;
-            case FragmentMergeModes.InnerElement:
+            case FragmentMergeModes.Inner:
                 // Replace the contents of the target element with the response
                 modifiedTarget.innerHTML = fragment.innerHTML;
                 break;
-            case FragmentMergeModes.OuterElement:
+            case FragmentMergeModes.Outer:
                 // Replace the entire target element with the response
                 modifiedTarget.replaceWith(fragment);
                 break;
-            case FragmentMergeModes.PrependElement:
+            case FragmentMergeModes.Prepend:
                 // Insert the response before the first child of the target element
                 modifiedTarget.prepend(fragment);
                 break;
-            case FragmentMergeModes.AppendElement:
+            case FragmentMergeModes.Append:
                 // Insert the response after the last child of the target element
                 modifiedTarget.append(fragment);
                 break;
-            case FragmentMergeModes.BeforeElement:
+            case FragmentMergeModes.Before:
                 // Insert the response before the target element
                 modifiedTarget.before(fragment);
                 break;
-            case FragmentMergeModes.AfterElement:
+            case FragmentMergeModes.After:
                 // Insert the response after the target element
                 modifiedTarget.after(fragment);
                 break;

@@ -8,17 +8,21 @@ import {
     AttributePlugin,
     RegexpGroups,
 } from "../../../../engine";
+import {
+    PLUGIN_ATTRIBUTE,
+    PLUGIN_PREPROCESSOR,
+} from "../../../../engine/client_only_consts";
 import { storeFromPossibleContents } from "../../../../utils/signals";
 
 // Setup the global store
 export const Store: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "store",
     removeNewLines: true,
     preprocessors: {
         pre: [
             {
-                pluginType: "preprocessor",
+                pluginType: PLUGIN_PREPROCESSOR,
                 name: "store",
                 regexp: /(?<whole>.+)/g,
                 replacer: (groups: RegexpGroups) => {

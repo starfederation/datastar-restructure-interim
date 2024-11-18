@@ -20,7 +20,7 @@ var (
 )
 
 func setupExamples(ctx context.Context, router chi.Router, store sessions.Store, ns *embeddednats.Server) (err error) {
-	mdElementRenderers, _, err := markdownRenders("examples")
+	mdElementRenderers, _, err := markdownRenders(ctx, "examples")
 	if err != nil {
 		return err
 	}
@@ -96,6 +96,8 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 				{ID: "persist"},
 				{ID: "execute_js"},
 				{ID: "dispatch_custom_event"},
+				{ID: "replace_url_from_backend"},
+				{ID: "replace_url_from_signals"},
 				// {ID: "snake"},
 			},
 		},
@@ -158,6 +160,7 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 		})
 
 		if err := errors.Join(
+			setupExamplesQuiz(examplesRouter),
 			setupExamplesClickToEdit(examplesRouter),
 			setupExamplesBulkUpdate(examplesRouter),
 			setupExamplesClickToLoad(examplesRouter),
@@ -186,6 +189,7 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 			setupExamplesMousemove(ctx, examplesRouter, ns),
 			setupExamplesExecuteJS(examplesRouter),
 			setupExamplesDispatchCustomEvent(examplesRouter),
+			setupExamplesReplaceURL(examplesRouter),
 			// setupExamplesSnake(examplesRouter),
 			//
 			// setupExamplesShoelaceKitchensink(examplesRouter),

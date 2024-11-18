@@ -1,16 +1,20 @@
-import { elemToSelector, nodeHTMLorSVGElement } from "../utils/dom";
+import { nodeHTMLorSVGElement } from "../utils/dom";
 import { HTMLorSVGElement } from "../utils/types";
 import { DeepSignal, deepSignal, DeepState } from "../vendored/deepsignal";
 import { computed, effect, Signal, signal } from "../vendored/preact-core";
 import { apply } from "../vendored/ts-merge-patch";
-import { DATASTAR_EVENT } from "./const";
+import {
+    PLUGIN_ACTION,
+    PLUGIN_ATTRIBUTE,
+    PLUGIN_PREPROCESSOR,
+    PLUGIN_WATCHER,
+} from "./client_only_consts";
 import {
     ActionPlugin,
     ActionPlugins,
     AttribtueExpressionFunction,
     AttributeContext,
     AttributePlugin,
-    DatastarEvent,
     DatastarPlugin,
     InitContext,
     OnRemovalFn,
@@ -21,14 +25,16 @@ import {
 import { VERSION } from "./version";
 
 const isPreprocessorPlugin = (p: DatastarPlugin): p is PreprocessorPlugin =>
-    p.pluginType === "preprocessor";
-const isEffectPlugin = (p: DatastarPlugin): p is WatcherPlugin =>
-    p.pluginType === "effect";
+    p.pluginType === PLUGIN_PREPROCESSOR;
+const isWatcherPlugin = (p: DatastarPlugin): p is WatcherPlugin =>
+    p.pluginType === PLUGIN_WATCHER;
 const isAttributePlugin = (p: DatastarPlugin): p is AttributePlugin =>
-    p.pluginType === "attribute";
+    p.pluginType === PLUGIN_ATTRIBUTE;
 const isActionPlugin = (p: DatastarPlugin): p is ActionPlugin =>
-    p.pluginType === "action";
+    p.pluginType === PLUGIN_ACTION;
 
+const alreadyExistsErr = (type: string, name: string) =>
+    new Error(`A ${type} named '${name}' already exists`);
 export class Engine {
     plugins: AttributePlugin[] = [];
     store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
@@ -47,28 +53,24 @@ export class Engine {
     mergeRemovals = new Array<OnRemovalFn>();
 
     constructor() {
-        // this.actions = Object.assign(this.actions, actions);
-        // plugins = [...CorePlugins, ...plugins];
-        // if (!plugins.length) throw new Error("No plugins provided");
-
-        const observer = new MutationObserver(
-            (_mutationList, _observer) => {
-                this.sendDatastarEvent(
-                    "core",
-                    "dom",
-                    "mutation",
-                    document.body,
-                    document.body.outerHTML,
-                );
-            },
-        );
+        // const observer = new MutationObserver(
+        //     (_mutationList, _observer) => {
+        //         this.sendDatastarEvent(
+        //             "core",
+        //             "dom",
+        //             "mutation",
+        //             document.body,
+        //             document.body.outerHTML,
+        //         );
+        //     },
+        // );
 
         // Start observing the target node for configured mutations
-        observer.observe(document.body, {
-            attributes: true,
-            childList: true,
-            subtree: true,
-        });
+        // observer.observe(document.body, {
+        //     attributes: true,
+        //     childList: true,
+        //     subtree: true,
+        // });
     }
 
     get version() {
@@ -97,31 +99,23 @@ export class Engine {
             let globalInitializer: ((ctx: InitContext) => void) | undefined;
             if (isPreprocessorPlugin(plugin)) {
                 if (this.preprocessors.includes(plugin)) {
-                    throw new Error(
-                        `Preprocessor ${plugin.name} already exists`,
-                    );
+                    throw alreadyExistsErr("Preprocessor", plugin.name);
                 }
                 this.preprocessors.push(plugin);
-            } else if (isEffectPlugin(plugin)) {
+            } else if (isWatcherPlugin(plugin)) {
                 if (this.watchers.includes(plugin)) {
-                    throw new Error(
-                        `Watcher ${plugin.name} already exists`,
-                    );
+                    throw alreadyExistsErr("Watcher", plugin.name);
                 }
                 this.watchers.push(plugin);
                 globalInitializer = plugin.onGlobalInit;
             } else if (isActionPlugin(plugin)) {
                 if (!!this.actions[plugin.name]) {
-                    throw new Error(
-                        `Action ${plugin.name} already exists`,
-                    );
+                    throw alreadyExistsErr("Action", plugin.name);
                 }
                 this.actions[plugin.name] = plugin;
             } else if (isAttributePlugin(plugin)) {
                 if (this.plugins.includes(plugin)) {
-                    throw new Error(
-                        `Attribute ${plugin.name} already exists`,
-                    );
+                    throw alreadyExistsErr("Attribute", plugin.name);
                 }
                 this.plugins.push(plugin);
                 globalInitializer = plugin.onGlobalInit;
@@ -142,17 +136,17 @@ export class Engine {
                     cleanupElementRemovals: this.cleanupElementRemovals.bind(
                         this,
                     ),
-                    sendDatastarEvent: this.sendDatastarEvent.bind(this),
+                    // sendDatastarEvent: this.sendDatastarEvent.bind(this),
                 });
             }
 
-            this.sendDatastarEvent(
-                "core",
-                "plugins",
-                "registration",
-                "BODY",
-                `On prefix ${plugin.name}`,
-            );
+            // this.sendDatastarEvent(
+            //     "core",
+            //     "plugins",
+            //     "registration",
+            //     "BODY",
+            //     `On prefix ${plugin.name}`,
+            // );
 
             allLoadedPlugins.add(plugin);
         });
@@ -160,35 +154,35 @@ export class Engine {
         this.applyPlugins(document.body);
     }
 
-    private sendDatastarEvent(
-        category: "core" | "plugin",
-        subcategory: string,
-        type: string,
-        target: Element | Document | Window | string,
-        message: string,
-        opts: CustomEventInit = {
-            bubbles: true,
-            cancelable: true,
-            composed: true,
-        },
-    ) {
-        const contents = Object.assign(
-            {
-                detail: {
-                    time: new Date(),
-                    category,
-                    subcategory,
-                    type,
-                    target: elemToSelector(target),
-                    message,
-                },
-            },
-            opts,
-        );
-        const evt = new CustomEvent<DatastarEvent>(DATASTAR_EVENT, contents);
-        // console.log("Sending Datastar event", evt);
-        window.dispatchEvent(evt);
-    }
+    // private sendDatastarEvent(
+    //     category: "core" | "plugin",
+    //     subcategory: string,
+    //     type: string,
+    //     target: Element | Document | Window | string,
+    //     message: string,
+    //     opts: CustomEventInit = {
+    //         bubbles: true,
+    //         cancelable: true,
+    //         composed: true,
+    //     },
+    // ) {
+    //     const contents = Object.assign(
+    //         {
+    //             detail: {
+    //                 time: new Date(),
+    //                 category,
+    //                 subcategory,
+    //                 type,
+    //                 target: elemToSelector(target),
+    //                 message,
+    //             },
+    //         },
+    //         opts,
+    //     );
+    //     const evt = new CustomEvent<DatastarEvent>(DATASTAR_EVENT, contents);
+    //     // console.log("Sending Datastar event", evt);
+    //     window.dispatchEvent(evt);
+    // }
 
     private cleanupElementRemovals(element: Element) {
         const removalSet = this.removals.get(element);
@@ -211,13 +205,13 @@ export class Engine {
         const marshalledStore = JSON.stringify(this.store.value);
         if (marshalledStore === this.lastMarshalledStore) return;
 
-        this.sendDatastarEvent(
-            "core",
-            "store",
-            "merged",
-            "STORE",
-            marshalledStore,
-        );
+        // this.sendDatastarEvent(
+        //     "core",
+        //     "store",
+        //     "merged",
+        //     "STORE",
+        //     marshalledStore,
+        // );
     }
 
     private removeFromStore(...keys: string[]) {
@@ -253,7 +247,7 @@ export class Engine {
         const last = parts[parts.length - 1];
         if (!!subStore[last]) return;
         subStore[last] = this.reactivity.signal(value);
-        this.sendDatastarEvent("core", "store", "upsert", path, value);
+        // this.sendDatastarEvent("core", "store", "upsert", path, value);
     }
 
     signalByName<T>(name: string) {
@@ -403,7 +397,7 @@ export class Engine {
                             throw new Error("Expression function not created");
                         },
                         modifiers,
-                        sendDatastarEvent: this.sendDatastarEvent.bind(this),
+                        // sendDatastarEvent: this.sendDatastarEvent.bind(this),
                     };
 
                     if (
@@ -426,7 +420,6 @@ export class Engine {
   ${joined}
     }
     const _datastarReturnVal = _datastarExpression()
-    ctx.sendDatastarEvent('core', 'attributes', 'expr_eval', ctx.el, '${rawKey} equals ' + JSON.stringify(_datastarReturnVal))
     return _datastarReturnVal
   } catch (e) {
    const msg = \`
@@ -437,7 +430,6 @@ export class Engine {
 
   Check if the expression is valid before raising an issue.
   \`.trim()
-   ctx.sendDatastarEvent('core', 'attributes', 'expr_eval_err', ctx.el, msg)
    console.error(msg)
    debugger
   }
@@ -462,13 +454,13 @@ export class Engine {
                             const err = new Error(
                                 `Error creating expression function for '${fnContent}', error: ${e}`,
                             );
-                            this.sendDatastarEvent(
-                                "core",
-                                "attributes",
-                                "expr_construction_err",
-                                ctx.el,
-                                String(err),
-                            );
+                            // this.sendDatastarEvent(
+                            //     "core",
+                            //     "attributes",
+                            //     "expr_construction_err",
+                            //     ctx.el,
+                            //     String(err),
+                            // );
                             console.error(err);
                             debugger;
                         }

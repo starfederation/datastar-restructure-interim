@@ -1,10 +1,11 @@
+import { Star } from "../plugins/official/attributes/core/advice";
 import { Computed } from "../plugins/official/attributes/core/computed";
 import { Store } from "../plugins/official/attributes/core/store";
 import { ActionsProcessor } from "../plugins/official/preprocessors/core/actions";
 import { SignalsProcessor } from "../plugins/official/preprocessors/core/signals";
 import { Engine } from "./engine";
 
-export * from "./const";
+export * from "./consts";
 export type * from "./types";
 
 const ds = new Engine();
@@ -13,6 +14,7 @@ ds.load(
     SignalsProcessor,
     Store,
     Computed,
+    Star,
 );
 
 export const Datastar = ds;

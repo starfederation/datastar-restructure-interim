@@ -4,47 +4,66 @@
 // Description: This attribute scrolls the element into view.
 
 import { AttributeContext, AttributePlugin } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { scrollIntoView } from "../../../../utils/dom";
+
+const SMOOTH = "smooth";
+const INSTANT = "instant";
+const AUTO = "auto";
+const HSTART = "hstart";
+const HCENTER = "hcenter";
+const HEND = "hend";
+const HNEAREST = "hnearest";
+const VSTART = "vstart";
+const VCENTER = "vcenter";
+const VEND = "vend";
+const VNEAREST = "vnearest";
+const FOCUS = "focus";
+
+const CENTER = "center";
+const START = "start";
+const END = "end";
+const NEAREST = "nearest";
 
 // Scrolls the element into view
 export const ScrollIntoView: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "scrollIntoView",
     mustHaveEmptyKey: true,
     mustHaveEmptyExpression: true,
     allowedModifiers: new Set([
-        "smooth",
-        "instant",
-        "auto",
-        "hstart",
-        "hcenter",
-        "hend",
-        "hnearest",
-        "vstart",
-        "vcenter",
-        "vend",
-        "vnearest",
-        "focus",
+        SMOOTH,
+        INSTANT,
+        AUTO,
+        HSTART,
+        HCENTER,
+        HEND,
+        HNEAREST,
+        VSTART,
+        VCENTER,
+        VEND,
+        VNEAREST,
+        FOCUS,
     ]),
 
     onLoad: ({ el, modifiers, rawKey }: AttributeContext) => {
         if (!el.tabIndex) el.setAttribute("tabindex", "0");
         const opts: ScrollIntoViewOptions = {
-            behavior: "smooth",
-            block: "center",
-            inline: "center",
+            behavior: SMOOTH,
+            block: CENTER,
+            inline: CENTER,
         };
-        if (modifiers.has("smooth")) opts.behavior = "smooth";
-        if (modifiers.has("instant")) opts.behavior = "instant";
-        if (modifiers.has("auto")) opts.behavior = "auto";
-        if (modifiers.has("hstart")) opts.inline = "start";
-        if (modifiers.has("hcenter")) opts.inline = "center";
-        if (modifiers.has("hend")) opts.inline = "end";
-        if (modifiers.has("hnearest")) opts.inline = "nearest";
-        if (modifiers.has("vstart")) opts.block = "start";
-        if (modifiers.has("vcenter")) opts.block = "center";
-        if (modifiers.has("vend")) opts.block = "end";
-        if (modifiers.has("vnearest")) opts.block = "nearest";
+        if (modifiers.has(SMOOTH)) opts.behavior = SMOOTH;
+        if (modifiers.has(INSTANT)) opts.behavior = INSTANT;
+        if (modifiers.has(AUTO)) opts.behavior = AUTO;
+        if (modifiers.has(HSTART)) opts.inline = START;
+        if (modifiers.has(HCENTER)) opts.inline = CENTER;
+        if (modifiers.has(HEND)) opts.inline = END;
+        if (modifiers.has(HNEAREST)) opts.inline = NEAREST;
+        if (modifiers.has(VSTART)) opts.block = START;
+        if (modifiers.has(VCENTER)) opts.block = CENTER;
+        if (modifiers.has(VEND)) opts.block = END;
+        if (modifiers.has(VNEAREST)) opts.block = NEAREST;
 
         scrollIntoView(el, opts, modifiers.has("focus"));
         delete el.dataset[rawKey];

@@ -4,10 +4,11 @@
 // Description: This action checks if a fetch request is currently in progress. This is useful for showing loading indicators or disabling buttons while a fetch request is in progress.
 
 import { ActionPlugin } from "../../../../engine";
+import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
 import { IndicatorReference } from "./sseShared";
 
 export const IsFetching: ActionPlugin = {
-    pluginType: "action",
+    pluginType: PLUGIN_ACTION,
     name: "isFetching",
     method: (ctx, selector: string) => {
         const indicators = [...document.querySelectorAll(selector)];
