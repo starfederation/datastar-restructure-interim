@@ -29,6 +29,11 @@ interface EventInterface
     public function getDataLines(): array;
 
     /**
+     * Returns a boolean as a string.
+     */
+    public function getBooleanAsString(bool $value): string;
+
+    /**
      * Returns a data line.
      */
     public function getDataLine(string $value): string;

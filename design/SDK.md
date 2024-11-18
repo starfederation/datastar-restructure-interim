@@ -70,13 +70,13 @@ All top level `ServerSentEventGenerator` ***should*** use a unified sending func
 An enum of Datastar supported events.  Will be a string over the wire.
 Currently valid values are
 
-| Event                        | Description                                    |
-|------------------------------|------------------------------------------------|
-| datastar-merge-fragments     | Merges one or more HTML fragments into the DOM |
-| datastar-merge-store-values  | Merges one or more values into the store       |
-| datastar-remove-fragments    | Removes one or more HTML fragment from the DOM |
-| datastar-remove-store-values | Removes one or more values from the store      |
-| datastar-execute-js          | Executes JavaScript in the browser             |
+| Event                     | Description                                    |
+|---------------------------|------------------------------------------------|
+| datastar-merge-fragments  | Merges one or more HTML fragments into the DOM |
+| datastar-merge-signals    | Merges one or more signals into the store      |
+| datastar-remove-fragments | Removes one or more HTML fragment from the DOM |
+| datastar-remove-signals   | Removes one or more signals from the store     |
+| datastar-execute-js       | Executes JavaScript in the browser             |
 
 ##### Options
 * `eventId` (string) Each event ***may*** include an `eventId`.  This can be used by the backend to replay events.  This is part of the SSE spec and is used to tell the browser how to handle the event.  For more details see https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#id
@@ -107,7 +107,7 @@ ServerSentEventGenerator.MergeFragments(
  )
 ```
 
-`MergeFragments` is a helper function to send a fragment of HTML to the browser to be inserted into the DOM.
+`MergeFragments` is a helper function to send a fragment of HTML to the browser to be merged into the DOM.
 
 #### Args
 
@@ -173,10 +173,10 @@ ServerSentEventGenerator.RemoveFragments(
 4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, ***unless*** the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
 
 
-### `ServerSentEventGenerator.MergeStoreValues`
+### `ServerSentEventGenerator.MergeSignals`
 
 ```
-ServerSentEventGenerator.MergeStoreValues(
+ServerSentEventGenerator.MergeSignals(
     data: string,
     options ?: {
         onlyIfMissing?: boolean,
@@ -186,26 +186,26 @@ ServerSentEventGenerator.MergeStoreValues(
  )
 ```
 
-`MergeStoreValues` is a helper function to send a signal to the browser to update the data-store.
+`MergeSignals` is a helper function to send one or more signals to the browser to be merged into the data-store.
 
 #### Args
 
-Data is a JS or JSON object that will be sent to the browser to update the data-store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to fine grain signals by the Datastar client side.
+Data is a JS or JSON object that will be sent to the browser to update the data-store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to signals by the Datastar client side.
 
 ##### Options
 
 * `onlyIfMissing` (boolean) If `true`, the SDK ***should*** send the signal only if the data is not already in the store.  If not provided, the Datastar client side ***will*** default to `false`, which will cause the data to be merged into the store.
 
 #### Logic
-When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-store-values` event type.
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-signals` event type.
 
 1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, ***unless*** the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` (string), depending on the value of the `onlyIfMissing` option.
 2. The function ***must*** include the store merges in the event data, with each line prefixed with `store `.  This ***should*** be output after all other event data.
 
-### `ServerSentEventGenerator.RemoveStoreValues`
+### `ServerSentEventGenerator.RemoveSignals`
 
 ```html
-ServerSentEventGenerator.RemoveStoreValues(
+ServerSentEventGenerator.RemoveSignals(
     paths: string[],
     options?: {
         eventId?: string,
@@ -214,14 +214,14 @@ ServerSentEventGenerator.RemoveStoreValues(
 )
 ```
 
-`RemoveStoreValues` is a helper function to send a signal to the browser to remove data from the data-store.
+`RemoveSignals` is a helper function to send signal paths to the browser to be removed from the data-store.
 
 #### Args
 
-`paths` is a list of strings that represent the path to the data to be removed from the data-store.  The paths ***must*** be valid `.` delimited paths within the store.  The Datastar client side will use these paths to remove the data from the data-store.
+`paths` is a list of strings that represent the path to the signals to be removed from the data-store.  The paths ***must*** be valid `.` delimited paths within the store.  The Datastar client side will use these paths to remove the data from the data-store.
 
 #### Logic
-When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove-store-values` event type.
+When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove-signals` event type.
 
 1. The function ***must*** include the paths in the event data in the format `paths PATHS` where `PATHS` is a space separated list of the provided paths.
 

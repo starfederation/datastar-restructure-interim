@@ -1,11 +1,11 @@
 <?php
 
-use starfederation\datastar\Constants;
-use starfederation\datastar\events\Remove;
+use starfederation\datastar\Consts;
+use starfederation\datastar\events\RemoveFragments;
 
 test('Options are correctly output for `selector`', function() {
     $content = 'body';
-    $event = new Remove($content, [
+    $event = new RemoveFragments($content, [
         'settleDuration' => 1000,
         'useViewTransition' => true,
     ]);
@@ -19,21 +19,12 @@ test('Options are correctly output for `selector`', function() {
 
 test('Default options are not output for `selector`', function() {
     $content = 'body';
-    $event = new Remove($content, [
-        'settleDuration' => Constants::DefaultSettleDuration,
+    $event = new RemoveFragments($content, [
+        'settleDuration' => Consts::DEFAULT_SETTLE_DURATION,
         'useViewTransition' => false,
     ]);
     expect($event->getDataLines())
         ->toBe([
             'data: selector body',
-        ]);
-});
-
-test('Event is correctly output for `paths`', function() {
-    $content = ['x', 'y', 'z'];
-    $event = new Remove(paths: $content);
-    expect($event->getDataLines())
-        ->toBe([
-            'data: paths x y z',
         ]);
 });

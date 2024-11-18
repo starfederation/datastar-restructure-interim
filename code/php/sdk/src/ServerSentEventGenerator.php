@@ -5,15 +5,14 @@
 
 namespace starfederation\datastar;
 
-use starfederation\datastar\enums\ConsoleMode;
 use starfederation\datastar\enums\EventType;
 use starfederation\datastar\enums\FragmentMergeMode;
-use starfederation\datastar\events\Console;
 use starfederation\datastar\events\EventInterface;
-use starfederation\datastar\events\Fragment;
-use starfederation\datastar\events\Redirect;
-use starfederation\datastar\events\Remove;
-use starfederation\datastar\events\Signal;
+use starfederation\datastar\events\ExecuteJs;
+use starfederation\datastar\events\MergeFragments;
+use starfederation\datastar\events\MergeSignals;
+use starfederation\datastar\events\RemoveFragments;
+use starfederation\datastar\events\RemoveSignals;
 
 class ServerSentEventGenerator
 {
@@ -36,7 +35,7 @@ class ServerSentEventGenerator
      */
     public function mergeFragment(string $data, array $options = []): void
     {
-        $this->sendEvent(new Fragment($data, $options));
+        $this->sendEvent(new MergeFragments($data, $options));
     }
 
     /**
@@ -49,7 +48,7 @@ class ServerSentEventGenerator
      */
     public function removeFragments(string $selector, array $options = []): void
     {
-        $this->sendEvent(new Remove($selector, $options));
+        $this->sendEvent(new RemoveFragments($selector, $options));
     }
 
     /**
@@ -57,7 +56,7 @@ class ServerSentEventGenerator
      */
     public function mergeStore(string $data, array $options = []): void
     {
-        $this->sendEvent(new Signal($data, $options));
+        $this->sendEvent(new MergeSignals($data, $options));
     }
 
     /**
@@ -65,23 +64,15 @@ class ServerSentEventGenerator
      */
     public function removeFromStore(array $paths): void
     {
-        $this->sendEvent(new Remove(paths: $paths));
+        $this->sendEvent(new RemoveSignals(paths: $paths));
     }
 
     /**
-     * Redirects the browser.
+     * Executes JavaScript in the browser.
      */
-    public function redirect(string $url): void
+    public function executeJS(string $script, array $options = []): void
     {
-        $this->sendEvent(new Redirect($url));
-    }
-
-    /**
-     * Sends a message to the browser console.
-     */
-    public function console(ConsoleMode $mode, string $message): void
-    {
-        $this->sendEvent(new Console($mode, $message));
+        $this->sendEvent(new ExecuteJs($script, $options));
     }
 
     /**

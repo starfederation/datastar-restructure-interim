@@ -1,4 +1,4 @@
-{%- func phpConstants(data *ConstTemplateData) -%}
+{%- func phpConsts(data *ConstTemplateData) -%}
 <?php
 
 namespace starfederation\datastar;
@@ -8,28 +8,28 @@ use starfederation\datastar\enums\FragmentMergeMode;
 /**
  * {%s data.DoNotEdit %}
  */
-class Constants
+class Consts
 {
-    public const DatastarKey = '{%s data.DatastarKey %}';
-    public const Version = '{%s data.Version %}';
-    public const VersionClientByteSize = {%d data.VersionClientByteSize %};
-    public const VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %};
+    public const DATASTAR_KEY = '{%s data.DatastarKey %}';
+    public const VERSION = '{%s data.Version %}';
+    public const VERSION_CLIENT_BYTE_SIZE = {%d data.VersionClientByteSize %};
+    public const VERSION_CLIENT_BYTE_SIZE_GZIP = {%d data.VersionClientByteSizeGzip %};
     {%- for _, d := range data.DefaultDurations -%}
-    public const Default{%s d.Name.Pascal %} = {%d durationToMs(d.Duration) %};
+    public const DEFAULT_{%s d.Name.ScreamingSnake %} = {%d durationToMs(d.Duration) %};
     {%- endfor -%}
     {%- for _, b := range data.DefaultBools -%}
-    public const Default{%s b.Name.Pascal %} = {%v b.Value %};
+    public const DEFAULT_{%s b.Name.ScreamingSnake %} = {%v b.Value %};
     {%- endfor -%}
     {%- for _, s := range data.DefaultStrings -%}
-    public const Default{%s s.Name.Pascal %} = '{%s s.Value %}';
+    public const DEFAULT_{%s s.Name.ScreamingSnake %} = '{%s s.Value %}';
     {%- endfor -%}
     {%- for _, enum := range data.Enums -%}
         {%- if enum.Default != nil -%}
-    public const Default{%s enum.Name.Pascal %} = {%s enum.Name.Pascal %}::{%s enum.Default.Name.Pascal %};
+    public const DEFAULT_{%s enum.Name.ScreamingSnake %} = {%s enum.Name.Pascal %}::{%s enum.Default.Name.Pascal %};
         {%- endif -%}
     {%- endfor -%}
     {%- for _, literal := range data.DatalineLiterals -%}
-    public const {%s literal.Pascal %}DatalineLiteral = '{%s literal.Camel %} ';
+    public const {%s literal.ScreamingSnake %}_DATALINE_LITERAL = '{%s literal.Camel %} ';
     {%- endfor -%}
 }
 {%- endfunc -%}

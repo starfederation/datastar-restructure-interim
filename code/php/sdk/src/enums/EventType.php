@@ -21,5 +21,4 @@ enum EventType: string
 
     // An event dealing with executing JavaScript in the browser.
     case ExecuteJs = 'datastar-execute-js';
-
 }
