@@ -82,10 +82,10 @@ func setupRoutes(ctx context.Context, router chi.Router) (cleanup func() error, 
 
 	if err := errors.Join(
 		setupHome(router, sessionStore, ns),
-		setupGuide(router),
-		setupReferenceRoutes(router),
+		setupGuide(ctx, router),
+		setupReferenceRoutes(ctx, router),
 		setupExamples(ctx, router, sessionStore, ns),
-		setupEssays(router),
+		setupEssays(ctx, router),
 		setupMemes(router),
 		setupBundler(router),
 	); err != nil {

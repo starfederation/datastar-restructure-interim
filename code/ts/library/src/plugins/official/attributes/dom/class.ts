@@ -13,9 +13,8 @@ export const Class: AttributePlugin = {
     mustNotEmptyExpression: true,
 
     onLoad: (ctx) => {
-        const classes: Object = ctx.expressionFn(ctx);
-
         return ctx.reactivity.effect(() => {
+            const classes: Object = ctx.expressionFn(ctx);
             for (const [k, v] of Object.entries(classes)) {
                 const clss = k.split(" ");
                 if (v) {

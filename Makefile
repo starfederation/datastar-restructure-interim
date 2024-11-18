@@ -4,6 +4,7 @@ DEV_PORT?=8080
 IMAGE_INFO=$(shell docker image inspect $(CONTAINER):$(TAG))
 IMAGE_NAME=${CONTAINER}:${TAG}
 DOCKER_RUN=docker container run --rm -it -v "${CURDIR}":/app -v go-modules:/go/pkg/mod
+ARCH=$(shell uname -m)
 
 .PHONY: build dev image-build image-check ssh
 
@@ -16,6 +17,9 @@ dev: --image-check
 # Build the Docker image & run npm install
 image-build:
 	docker build -f Dockerfile-dev . -t ${IMAGE_NAME} --build-arg TAG=${TAG} --no-cache
+ifeq ($(ARCH),arm64)
+	${DOCKER_RUN} --name ${CONTAINER}-$@ ${IMAGE_NAME} -c '	wget -O code/go/site/tailwindcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v1.7.21/tailwindcss-extra-linux-arm64'
+endif
 	${DOCKER_RUN} --name ${CONTAINER}-$@ ${IMAGE_NAME} -c 'git lfs fetch --all && git lfs pull && git lfs checkout'
 	${DOCKER_RUN} --name ${CONTAINER}-$@ ${IMAGE_NAME} -c 'task tools'
 # Run the passed in task command
