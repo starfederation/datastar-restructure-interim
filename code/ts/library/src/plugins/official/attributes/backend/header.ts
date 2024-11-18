@@ -4,9 +4,10 @@
 // Description: This plugin allows you to add headers to fetch requests.  Once you add this attribute the headers will be added to the fetch request.
 
 import { AttributePlugin } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 
 export const Header: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "header",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,

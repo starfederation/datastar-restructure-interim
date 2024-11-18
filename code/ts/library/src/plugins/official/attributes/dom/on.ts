@@ -4,6 +4,7 @@
 // Description: This action adds an event listener to an element. The event listener can be triggered by a variety of events, such as clicks, keypresses, and more. The event listener can also be set to trigger only once, or to be passive or capture. The event listener can also be debounced or throttled. The event listener can also be set to trigger only when the event target is outside the element.
 
 import { AttributePlugin } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { argsHas, argsToMs } from "../../../../utils/arguments";
 import { remoteSignals } from "../../../../utils/signals";
 import { kebabize } from "../../../../utils/text";
@@ -24,7 +25,7 @@ let lastStoreMarshalled = "";
 
 // Sets the event listener of the element
 export const On: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "on",
     mustNotEmptyKey: true,
     mustNotEmptyExpression: true,
@@ -38,7 +39,7 @@ export const On: AttributePlugin = {
         }
 
         let callback = (evt?: Event) => {
-            ctx.sendDatastarEvent("plugin", "event", key, target, "triggered");
+            // ctx.sendDatastarEvent("plugin", "event", key, target, "triggered");
             expressionFn(ctx, evt);
         };
 

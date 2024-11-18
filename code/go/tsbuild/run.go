@@ -131,6 +131,7 @@ func writeOutConsts(version string) error {
 	}
 
 	templates := map[string]func(data *ConstTemplateData) string{
+		"code/ts/library/src/engine/consts.ts":         datastarClienConsts,
 		"code/go/sdk/consts.go":                        goConsts,
 		"code/dotnet/sdk/src/Consts.fs":                dotnetConsts,
 		"code/php/sdk/src/Constants.php":               phpConstants,

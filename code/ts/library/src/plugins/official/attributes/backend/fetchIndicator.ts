@@ -4,28 +4,27 @@
 // Description: This plugin allows you to use a selector to show a loading indicator when fetching data from the server.  Once you add this attribute the indicator will be hidden by default and shown when the fetch is in progress.
 
 import { AttributePlugin, DATASTAR } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 
 export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
 export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
 
 // Sets the fetch indicator selector
 export const FetchIndicator: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "fetchIndicator",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
     onGlobalInit: () => {
         const style = document.createElement("style");
-        style.innerHTML = `
-  .${INDICATOR_CLASS}{
-   opacity:0;
-   transition: opacity 300ms ease-out;
-  }
-  .${INDICATOR_LOADING_CLASS} {
-   opacity:1;
-   transition: opacity 300ms ease-in;
-  }
-  `;
+        style.innerHTML = `.${INDICATOR_CLASS}{
+opacity:0;
+transition: opacity 300ms ease-out;
+}
+.${INDICATOR_LOADING_CLASS} {
+opacity:1;
+transition: opacity 300ms ease-in;
+}`;
         document.head.appendChild(style);
     },
     onLoad: (ctx) => {

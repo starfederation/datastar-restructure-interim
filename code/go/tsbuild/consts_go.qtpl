@@ -10,23 +10,31 @@ const (
     Version                   = "{%s data.Version %}"
     VersionClientByteSize     = {%d data.VersionClientByteSize %}
     VersionClientByteSizeGzip = {%d data.VersionClientByteSizeGzip %}
+
+    // Default durations
     {%- for _, d := range data.DefaultDurations -%}
     Default{%s d.Name.Pascal %} = {%d durationToMs(d.Duration) %} * time.Millisecond
     {%- endfor -%}
+
+    // Default strings
     {%- for _, s := range data.DefaultStrings -%}
     Default{%s s.Name.Pascal %} = "{%s s.Value %}"
     {%- endfor -%}
+
+    // Dataline literals
     {%- for _, literal := range data.DatalineLiterals -%}
     {%s literal.Pascal %}DatalineLiteral = "{%s literal.Camel %} "
     {%- endfor -%}
 )
 
 var (
+    // Default booleans
     {%- for _, b := range data.DefaultBools -%}
     Default{%s b.Name.Pascal %} = {%v b.Value %}
     {%- endfor -%}
 )
 
+// Enums
 {%- for _, enum := range data.Enums -%}
 type {%s enum.Name.Pascal %} string
 

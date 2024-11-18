@@ -4,17 +4,20 @@
 // Description: This attribute plugin sets up view transitions for the current view. This plugin requires the view transition API to be enabled in the browser. If the browser does not support view transitions, an error will be logged to the console.
 
 import { AttributePlugin } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { supportsViewTransitions } from "../../../../utils/view-transitions";
 
+const VIEW_TRANSITION = "view-transition";
+
 export const ViewTransition: AttributePlugin = {
-    pluginType: "attribute",
-    name: "viewTransition",
+    pluginType: PLUGIN_ATTRIBUTE,
+    name: VIEW_TRANSITION,
     onGlobalInit() {
         let hasViewTransitionMeta = false;
         document.head.childNodes.forEach((node) => {
             if (
                 node instanceof HTMLMetaElement &&
-                node.name === "view-transition"
+                node.name === VIEW_TRANSITION
             ) {
                 hasViewTransitionMeta = true;
             }
@@ -22,7 +25,7 @@ export const ViewTransition: AttributePlugin = {
 
         if (!hasViewTransitionMeta) {
             const meta = document.createElement("meta");
-            meta.name = "view-transition";
+            meta.name = VIEW_TRANSITION;
             meta.content = "same-origin";
             document.head.appendChild(meta);
         }

@@ -25,7 +25,7 @@ export type InitContext = {
   reactivity: Reactivity;
   applyPlugins: (target: Element) => void;
   cleanupElementRemovals: (el: Element) => void;
-  sendDatastarEvent: SendDatastarEvent;
+  // sendDatastarEvent: SendDatastarEvent;
 };
 
 export type AttributeContext = InitContext & {
@@ -42,7 +42,7 @@ export type AttributeContext = InitContext & {
 export type OnRemovalFn = () => void;
 
 export interface DatastarPlugin {
-  pluginType: "preprocessor" | "attribute" | "effect" | "action"; // The type of plugin
+  pluginType: "preprocessor" | "attribute" | "watcher" | "action"; // The type of plugin
   name: string; // The name of the plugin
   requiredPlugins?: Set<DatastarPlugin>; // If not provided, no plugins are required
 }
@@ -90,7 +90,7 @@ export type ActionPlugins = Record<string, ActionPlugin>;
 
 // A plugin that runs on the global scope of the DastaStar instance
 export interface WatcherPlugin extends DatastarPlugin {
-  pluginType: "effect";
+  pluginType: "watcher";
   onGlobalInit?: (ctx: InitContext) => void;
 }
 

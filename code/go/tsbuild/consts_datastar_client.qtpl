@@ -1,0 +1,40 @@
+{%- func datastarClienConsts(data *ConstTemplateData) -%}
+// {%s data.DoNotEdit %}
+
+export const DATASTAR = "{%s data.DatastarKey %}";
+export const DATASTAR_EVENT = "{%s data.DatastarKey %}-event";
+export const DATASTAR_REQUEST = "{%s data.DatastarKey %}-request";
+export const VERSION = "{%s data.Version %}";
+
+// Defaults
+
+// Default durations
+{%- for _, d := range data.DefaultDurations -%}
+export const Default{%s d.Name.Pascal %}Ms = {%d durationToMs(d.Duration) %};
+{%- endfor -%}
+
+// Default strings
+{%- for _, s := range data.DefaultStrings -%}
+export const Default{%s s.Name.Pascal %} = "{%s s.Value %}";
+{%- endfor -%}
+
+// Default booleans
+{%- for _, b := range data.DefaultBools -%}
+export const Default{%s b.Name.Pascal %} = {%v b.Value %};
+{%- endfor -%}
+
+{%- for _, enum := range data.Enums -%}
+export const {%s enum.Name.Pascal %}s = {
+{%- for _, entry := range enum.Values -%}
+    {%s entry.Name.Pascal %}: "{%s entry.Value %}", // {%s entry.Description %}
+{%- endfor -%}
+} as const;
+
+{%- if enum.Default != nil -%}
+// Default value for {%s enum.Name.Pascal %}
+export const Default{%s enum.Name.Pascal %} = {%s enum.Name.Pascal %}s.{%s enum.Default.Name.Pascal %};
+{%- endif -%}
+
+{%- endfor -%}
+
+{%- endfunc -%}

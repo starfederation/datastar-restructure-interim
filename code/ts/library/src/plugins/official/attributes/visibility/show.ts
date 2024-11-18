@@ -3,7 +3,12 @@
 // Slug: Show or hide an element
 // Description: This attribute shows or hides an element based on the value of the expression. If the expression is true, the element is shown. If the expression is false, the element is hidden. The element is hidden by setting the display property to none. If the duration modifier is provided, the element is shown or hidden with a fade effect. The duration modifier specifies the duration of the fade effect in milliseconds. The important modifier can be used to set the priority of the style property.
 
-import { AttributePlugin, DATASTAR } from "../../../../engine";
+import {
+    AttributePlugin,
+    DATASTAR,
+    DefaultSettleDurationMs,
+} from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { argsToMs } from "../../../../utils/arguments";
 
 const DISPLAY = "display";
@@ -15,8 +20,11 @@ const SHOW_CLASS = `${DATASTAR}-showing`;
 const HIDE_CLASS = `${DATASTAR}-hiding`;
 const SHOW_DURATION_TRANSITION_STYLE = `${DATASTAR}-show-duration-transition`;
 
+const TRANSITIONEND = "transitionend";
+const OPACITY = "opacity";
+
 export const Show: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "show",
     "allowedModifiers": new Set([IMPORTANT, DURATION]),
 
@@ -35,7 +43,8 @@ export const Show: AttributePlugin = {
                 style = document.createElement("style");
                 style.id = SHOW_DURATION_TRANSITION_STYLE;
                 document.head.appendChild(style);
-                const durationMs = argsToMs(durationArgs) || "300";
+                const durationMs = argsToMs(durationArgs) ||
+                    DefaultSettleDurationMs;
                 style.innerHTML = `
             .${SHOW_CLASS} {
               visibility: visible;
@@ -53,7 +62,7 @@ export const Show: AttributePlugin = {
                     if (event.target === el) {
                         el.classList.remove(classNameToRemove);
                         el.removeEventListener(
-                            "transitionend",
+                            TRANSITIONEND,
                             transitionEndHandler(classNameToRemove),
                         );
                     }
@@ -61,23 +70,23 @@ export const Show: AttributePlugin = {
 
             showFn = () => {
                 el.addEventListener(
-                    "transitionend",
+                    TRANSITIONEND,
                     transitionEndHandler(SHOW_CLASS),
                 );
                 el.classList.add(SHOW_CLASS);
                 requestAnimationFrame(() => {
-                    el.style.setProperty("opacity", "1", priority);
+                    el.style.setProperty(OPACITY, "1", priority);
                 });
             };
 
             hideFn = () => {
                 el.addEventListener(
-                    "transitionend",
+                    TRANSITIONEND,
                     transitionEndHandler(HIDE_CLASS),
                 );
                 el.classList.add(HIDE_CLASS);
                 requestAnimationFrame(() => {
-                    el.style.setProperty("opacity", "0", priority);
+                    el.style.setProperty(OPACITY, "0", priority);
                 });
             };
         } else {

@@ -1,8 +1,6 @@
-import { DATASTAR, InitContext } from "../../../../engine";
-import { kebabize } from "../../../../utils/text";
+import { DATASTAR } from "../../../../engine";
 
-export const DATASTAR_SSE_EVENT = "datastar-sse";
-export const DEFAULT_SETTLE_DURATION_RAW = "300";
+export const DATASTAR_SSE_EVENT = `${DATASTAR}-sse`;
 export const SETTLING_CLASS = `${DATASTAR}-settling`;
 export const SWAPPING_CLASS = `${DATASTAR}-swapping`;
 
@@ -28,25 +26,24 @@ declare global {
 }
 
 export function datastarSSEEventWatcher(
-    ctx: InitContext,
-    name: string,
+    // ctx: InitContext,
+    eventType: string,
     fn: (argsRaw: Record<string, string>) => void,
 ) {
-    const kebabName = kebabize(name);
     document.addEventListener(
         DATASTAR_SSE_EVENT,
         (event: CustomEvent<DatastarSSEEvent>) => {
-            if (event.detail.type != kebabName) return;
+            if (event.detail.type != eventType) return;
             const { argsRaw } = event.detail;
             fn(argsRaw);
 
-            ctx.sendDatastarEvent(
-                "plugin",
-                "backend",
-                "sse",
-                name,
-                JSON.stringify(argsRaw),
-            );
+            // ctx.sendDatastarEvent(
+            //     "plugin",
+            //     "backend",
+            //     "sse",
+            //     eventType,
+            //     JSON.stringify(argsRaw),
+            // );
         },
     );
 }

@@ -4,18 +4,22 @@
 // Description: This attribute plugin enables two-way data binding for input elements.
 
 import { AttributePlugin, RegexpGroups } from "../../../../engine";
+import {
+    PLUGIN_ATTRIBUTE,
+    PLUGIN_PREPROCESSOR,
+} from "../../../../engine/client_only_consts";
 
 const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;
 const updateModelEvents = ["change", "input", "keydown"];
 
 export const Model: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "model",
     mustHaveEmptyKey: true,
     preprocessors: {
         post: [
             {
-                pluginType: "preprocessor",
+                pluginType: PLUGIN_PREPROCESSOR,
                 name: "model",
                 regexp: /(?<whole>.+)/g,
                 replacer: (groups: RegexpGroups) => {
