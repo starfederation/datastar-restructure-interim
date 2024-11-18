@@ -12,7 +12,7 @@ class ParseIncoming
      */
     public static function getStore(): array
     {
-        $key = Constants::DatastarKey;
+        $key = Consts::DATASTAR_KEY;
         $store = [];
 
         if (isset($_GET[$key])) {

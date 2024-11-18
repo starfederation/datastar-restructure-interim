@@ -8,10 +8,10 @@ QA := getRandomQuestionAnswer()
 // Creates a new `ServerSentEventGenerator` instance.
 sse := datastar.NewSSE(w,r)
 
-// Merges the HTML fragment into the DOM.
+// Merges HTML fragments into the DOM.
 sse.MergeFragments(
     fmt.Sprintf(`<div id="question">%s</div>`, QA.question)
 )
 
-// Merges the `answer` signal into the store.
-sse.MergeSignals(fmt.Sprintf(`{answer: '%s'}`, QA.answer))
+// Merges signals into the store.
+sse.MergeSignals(fmt.Sprintf(`{response: '', answer: '%s'}`, QA.answer))

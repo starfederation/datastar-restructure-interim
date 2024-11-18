@@ -7,19 +7,19 @@ namespace starfederation\datastar\enums;
  */
 enum EventType: string
 {
-    // An event dealing with HTML fragments.
+    // An event for merging HTML fragments into the DOM.
     case MergeFragments = 'datastar-merge-fragments';
 
-    // An event dealing with fine grain signals.
-    case MergeStore = 'datastar-merge-store';
+    // An event for merging signals into the store.
+    case MergeSignals = 'datastar-merge-signals';
 
-    // An event dealing with removing elements from the DOM
+    // An event for removing HTML fragments from the DOM.
     case RemoveFragments = 'datastar-remove-fragments';
 
-    // An event dealing with removing signals from the store.
-    case RemoveFromStore = 'datastar-remove-from-store';
+    // An event for removing signals from the store.
+    case RemoveSignals = 'datastar-remove-signals';
 
-    // An event dealing with executing JavaScript in the browser.
+    // An event for executing JavaScript in the browser.
     case ExecuteJs = 'datastar-execute-js';
 
 }

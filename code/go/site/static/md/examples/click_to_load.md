@@ -27,7 +27,7 @@ This button respond with a set of fragments in a text/event-stream with the next
 
 ```html
 <!-- Removed styling for brevity -->
-event: datastar-fragment id: 129804115990544446 data: mergeMode morph data:
+event: datastar-merge-fragments id: 129804115990544446 data: mergeMode morph data:
 settleDuration 500 data: fragment
 <button
   id="more_btn"
@@ -35,7 +35,7 @@ settleDuration 500 data: fragment
 >
   Load More
 </button>
-backend.ts:201 Received event block: event: datastar-fragment id:
+backend.ts:201 Received event block: event: datastar-merge-fragments id:
 129804153571508286 data: selector #click_to_load_rows data: mergeMode append
 data: settleDuration 500 data: fragment
 <tr id="agent_10">
@@ -43,7 +43,7 @@ data: settleDuration 500 data: fragment
   <td>void11@null.org</td>
   <td class="uppercase">50698444ed39c832</td>
 </tr>
-backend.ts:201 Received event block: event: datastar-fragment id:
+backend.ts:201 Received event block: event: datastar-merge-fragments id:
 129804153571512382 data: selector #click_to_load_rows data: mergeMode append
 data: settleDuration 500 data: fragment
 <tr id="agent_11">

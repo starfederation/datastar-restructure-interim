@@ -134,10 +134,9 @@ func writeOutConsts(version string) error {
 		"code/ts/library/src/engine/consts.ts":         datastarClienConsts,
 		"code/go/sdk/consts.go":                        goConsts,
 		"code/dotnet/sdk/src/Consts.fs":                dotnetConsts,
-		"code/php/sdk/src/Constants.php":               phpConstants,
+		"code/php/sdk/src/Consts.php":                  phpConsts,
 		"code/php/sdk/src/enums/EventType.php":         phpEventType,
 		"code/php/sdk/src/enums/FragmentMergeMode.php": phpFragmentMergeMode,
-		"code/php/sdk/src/enums/ConsoleMode.php":       phpConsoleMode,
 	}
 
 	for path, tmplFn := range templates {

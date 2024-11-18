@@ -31,23 +31,23 @@ The `data-store` attribute is used to set the initial state of the store. You ca
 ```md
 ...
 
-event: datastar-signal
+event: datastar-merge-signals
 data: ifmissing true
 data: store {id:73}
 
-event: datastar-fragment
+event: datastar-merge-fragments
 data: mergeMode upsertAttributes
 data: fragment <div id="demo" data-store.ifmissing="{id:74}"></div>
 
-event: datastar-signal
+event: datastar-merge-signals
 data: ifmissing true
 data: store {id:75}
 
-event: datastar-fragment
+event: datastar-merge-fragments
 data: mergeMode upsertAttributes
 data: fragment <div id="demo" data-store.ifmissing="{id:76}"></div>
 
-event: datastar-signal
+event: datastar-merge-signals
 data: ifmissing true
 data: store {id:77}
 

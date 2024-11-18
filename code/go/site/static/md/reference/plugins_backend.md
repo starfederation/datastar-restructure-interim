@@ -25,7 +25,7 @@ Every request will be sent with a `{datastar: *}` object containing the current 
 An example of a minimal valid response would be:
 
 ```go
-event: datastar-fragment
+event: datastar-merge-fragments
 data: fragment <div id="foo">Hello!</div>
 ```
 
@@ -40,12 +40,12 @@ Additional `data` lines can be added to the response to override the default beh
   </p>
 </div>
 
-### datastar-fragment
+### datastar-merge-fragments
 
-| Key                            | Description                                                                                                             |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| `data: selector #foo`          | Selects the target element of the `merge` process using a CSS selector.                                                 |
-| `data: selector self`          | Selects the initiating element as the target.                                                                           |
+| Key                                | Description                                                                                                             |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `data: selector #foo`              | Selects the target element of the `merge` process using a CSS selector.                                                 |
+| `data: selector self`              | Selects the initiating element as the target.                                                                           |
 | `data: mergeMode morph`            | Merges the fragment using [Idiomorph](https://github.com/bigskysoftware/idiomorph). This is the default merge strategy. |
 | `data: mergeMode inner`            | Replaces the target's innerHTML with the fragment.                                                                      |
 | `data: mergeMode outer`            | Replaces the target's outerHTML with the fragment.                                                                      |
@@ -54,62 +54,46 @@ Additional `data` lines can be added to the response to override the default beh
 | `data: mergeMode before`           | Inserts the fragment before the target as a sibling.                                                                    |
 | `data: mergeMode after`            | Inserts the fragment after the target as a sibling.                                                                     |
 | `data: mergeMode upsertAttributes` | Merges attributes from the fragment into the target – useful for updating a store.                                      |
-| `data: settleDuration 1000`            | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
-| `data: useViewTransition true` | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
-| `data: fragment`               | The HTML fragment to merge into the DOM.                                                                                |
+| `data: settleDuration 1000`        | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
+| `data: useViewTransition true`     | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
+| `data: fragment`                   | The HTML fragment to merge into the DOM.                                                                                |
 
-**Note:** `script` tags are not executed by the browser when merged into the DOM in this way. You should use signals and event listeners to instead.
-
-### datastar-signal
+### datastar-merge-signals
 
 ```go
-event: datastar-signal
+event: datastar-merge-signals
 data: onlyIfMissing false
 data: store {foo: 1234}
 ```
 
-The `datastar-signal` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `store` line should be a valid `data-store` attribute. This will get merged into the store.
+The `datastar-merge-signals` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `store` line should be a valid `data-store` attribute. This will get merged into the store.
 
-### datastar-delete
+### datastar-remove-fragments
 
 ```go
-event: datastar-delete
+event: datastar-remove-fragments
 data: selector #foo
 ```
 
-The `datastar-delete` event is used to delete all elements that match the provided selector.
+The `datastar-remove-fragments` event is used to remove HTML fragments that match the provided selector from the DOM.
 
 ```go
-event: datastar-delete
+event: datastar-remove-signals
 data: paths foo.bar 1234 abc
 ```
 
-Using `paths` you are able to delete from the store directly.  If you have fragments relying on these signals you should delete them first.
+The `datastar-remove-signals` event is used to remove signals that match the provided paths from the store.
 
-### datastar-redirect
-
-```go
-event: datastar-redirect
-data: url /foo
-```
-
-The `datastar-redirect` event is used to redirect the page to the provided URI.
-
-### datastar-console
+### datastar-execute-js
 
 ```go
-event: datastar-console
-data: log This message will be logged to the browser console.
+event: datastar-execute-js
+data: autoRemove true
+data: type module
+data: script console.log('Hello, world!')
 ```
 
-The `datastar-console` event is used to output a message to the browser console. The available console modes are:
-- `debug`
-- `error`
-- `info`
-- `group`
-- `groupEnd`
-- `log`
-- `warn`
+The `datastar-execute-js` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. The `type` line determines which type attribute to give the script element. 
 
 ## Attribute Plugins
 

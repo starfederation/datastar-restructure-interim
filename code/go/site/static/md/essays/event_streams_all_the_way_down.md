@@ -9,7 +9,7 @@
 This means every data fragment is an OOB in HTMX terms.
 
 ```html
-event: datastar-fragment 
+event: datastar-merge-fragments 
 id: 92680296792588350 
 data: mergeMode morph 
 data: settleDuration 0 

@@ -5,7 +5,7 @@
 
 namespace starfederation\datastar\events;
 
-use starfederation\datastar\Constants;
+use starfederation\datastar\Consts;
 
 trait EventTrait
 {
@@ -23,11 +23,19 @@ trait EventTrait
             $options['eventId'] = $this->eventId;
         }
 
-        if (!empty($this->retryDuration) && $this->retryDuration != Constants::DefaultSSERetryDuration) {
+        if (!empty($this->retryDuration) && $this->retryDuration != Consts::DEFAULT_SSE_RETRY_DURATION) {
             $options['retryDuration'] = $this->retryDuration;
         }
 
         return $options;
+    }
+
+    /**
+     * @inerhitdoc
+     */
+    public function getBooleanAsString(bool $value): string
+    {
+        return $value ? 'true' : 'false';
     }
 
     /**

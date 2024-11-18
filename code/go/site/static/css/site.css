@@ -5001,6 +5001,10 @@ html:has(.drawer-toggle:checked) {
   padding-bottom: 2rem;
 }
 
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
+
 .pb-8 {
   padding-bottom: 2rem;
 }

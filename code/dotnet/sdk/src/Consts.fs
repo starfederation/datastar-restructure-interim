@@ -23,23 +23,23 @@ type FragmentMergeMode =
 | UpsertAttributes
 
 type EventType =
-/// An event dealing with HTML fragments.
+/// An event for merging HTML fragments into the DOM.
 | MergeFragments
-/// An event dealing with fine grain signals.
-| MergeStore
-/// An event dealing with removing elements from the DOM
+/// An event for merging signals into the store.
+| MergeSignals
+/// An event for removing HTML fragments from the DOM.
 | RemoveFragments
-/// An event dealing with removing signals from the store.
-| RemoveFromStore
-/// An event dealing with executing JavaScript in the browser.
+/// An event for removing signals from the store.
+| RemoveSignals
+/// An event for executing JavaScript in the browser.
 | ExecuteJs
 
 
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
-    let [<Literal>] VersionClientByteSize     = 42821
-    let [<Literal>] VersionClientByteSizeGzip = 14683
+    let [<Literal>] VersionClientByteSize     = 42824
+    let [<Literal>] VersionClientByteSizeGzip = 14677
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -50,14 +50,14 @@ module Consts =
     /// Default: morph - Morphs the fragment into the existing element using idiomorph.
     let DefaultFragmentMergeMode = Morph
 
-    let [<Literal>] DefaultMergeFragmentsUseViewTransitions = false
-    let [<Literal>] DefaultMergeStoreOnlyIfMissing = false
-    let [<Literal>] DefaultExecuteJsAutoRemove = true
+    let [<Literal>] DefaultFragmentsUseViewTransitions = false
+    let [<Literal>] DefaultMergeSignalsOnlyIfMissing = false
+    let [<Literal>] DefaultExecuteJsautoRemove = true
     let [<Literal>] DefaultCustomEventCancelable = true
     let [<Literal>] DefaultCustomEventComposed = true
     let [<Literal>] DefaultCustomEventBubbles = true
 
-    let [<Literal>] DefaultExecuteJsType = "module"
+    let [<Literal>] DefaultExecuteJstype = "module"
     let [<Literal>] DefaultCustomEventSelector = "document"
     let [<Literal>] DefaultCustomEventDetailJson = "{}"
 
@@ -89,7 +89,7 @@ module Consts =
         let toString this =
             match this with
                 | EventType.MergeFragments -> "datastar-merge-fragments"
-                | EventType.MergeStore -> "datastar-merge-store"
+                | EventType.MergeSignals -> "datastar-merge-signals"
                 | EventType.RemoveFragments -> "datastar-remove-fragments"
-                | EventType.RemoveFromStore -> "datastar-remove-from-store"
+                | EventType.RemoveSignals -> "datastar-remove-signals"
                 | EventType.ExecuteJs -> "datastar-execute-js"

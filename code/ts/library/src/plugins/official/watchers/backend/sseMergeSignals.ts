@@ -4,7 +4,7 @@
 // Description: Merge store data from a server using the Datastar SDK interface
 
 import {
-    DefaultMergeStoreOnlyIfMissing,
+    DefaultMergeSignalsOnlyIfMissing,
     EventTypes,
     InitExpressionFunction,
     WatcherPlugin,
@@ -14,14 +14,14 @@ import { storeFromPossibleContents } from "../../../../utils/signals";
 import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
-export const MergeStore: WatcherPlugin = {
+export const MergeSignals: WatcherPlugin = {
     pluginType: PLUGIN_WATCHER,
-    name: EventTypes.MergeStore,
+    name: EventTypes.MergeSignals,
     onGlobalInit: async (ctx) => {
-        datastarSSEEventWatcher(EventTypes.MergeStore, ({
+        datastarSSEEventWatcher(EventTypes.MergeSignals, ({
             store = "{}",
             onlyIfMissing: onlyIfMissingRaw =
-                `${DefaultMergeStoreOnlyIfMissing}`,
+                `${DefaultMergeSignalsOnlyIfMissing}`,
         }) => {
             const onlyIfMissing = isBoolString(onlyIfMissingRaw);
             const fnContents =
@@ -31,13 +31,13 @@ export const MergeStore: WatcherPlugin = {
                     "ctx",
                     fnContents,
                 ) as InitExpressionFunction;
-                const possibleMergeStore = fn(ctx);
-                const actualMergeStore = storeFromPossibleContents(
+                const possibleMergeSignals = fn(ctx);
+                const actualMergeSignals = storeFromPossibleContents(
                     ctx.store(),
-                    possibleMergeStore,
+                    possibleMergeSignals,
                     onlyIfMissing,
                 );
-                ctx.mergeStore(actualMergeStore);
+                ctx.mergeSignals(actualMergeSignals);
                 ctx.applyPlugins(document.body);
             } catch (e) {
                 console.log(fnContents);

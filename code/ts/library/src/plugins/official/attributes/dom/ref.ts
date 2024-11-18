@@ -27,7 +27,7 @@ export const RefAttribute: AttributePlugin = {
                 },
             },
         };
-        ctx.mergeStore(revised);
+        ctx.mergeSignals(revised);
 
         return () => {
             const s = ctx.store();

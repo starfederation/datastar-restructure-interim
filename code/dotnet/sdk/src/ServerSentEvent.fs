@@ -90,7 +90,7 @@ module ServerSentEvent =
             |] }
         |> send env
 
-    let mergeStore env eventOptions onlyIfMissing (data:string) =
+    let mergeSignals env eventOptions onlyIfMissing (data:string) =
         let dataLines = data.Split( [| "\r\n"; "\n"; "\r" |], StringSplitOptions.None)
         { EventType = Signal
           Id = eventOptions.EventId
@@ -101,7 +101,7 @@ module ServerSentEvent =
             |] }
         |> send env
 
-    let removeFromStore env eventOptions paths =
+    let removeSignals env eventOptions paths =
         let paths' = paths |> Seq.map DataStorePath.value |> String.concat " "
         { EventType = Remove
           Id = eventOptions.EventId

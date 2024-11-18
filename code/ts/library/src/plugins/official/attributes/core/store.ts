@@ -34,13 +34,13 @@ export const Store: AttributePlugin = {
     },
     allowedModifiers: new Set(["ifmissing"]),
     onLoad: (ctx: AttributeContext) => {
-        const possibleMergeStore = ctx.expressionFn(ctx);
-        const actualMergeStore = storeFromPossibleContents(
+        const possibleMergeSignals = ctx.expressionFn(ctx);
+        const actualMergeSignals = storeFromPossibleContents(
             ctx.store(),
-            possibleMergeStore,
+            possibleMergeSignals,
             ctx.modifiers.has("ifmissing"),
         );
-        ctx.mergeStore(actualMergeStore);
+        ctx.mergeSignals(actualMergeSignals);
 
         delete ctx.el.dataset[ctx.rawKey];
     },

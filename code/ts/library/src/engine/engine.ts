@@ -128,8 +128,8 @@ export class Engine {
                     store: () => this.store,
                     upsertIfMissingFromStore: this.upsertIfMissingFromStore
                         .bind(this),
-                    mergeStore: this.mergeStore.bind(this),
-                    removeFromStore: this.removeFromStore.bind(this),
+                    mergeSignals: this.mergeSignals.bind(this),
+                    removeSignals: this.removeSignals.bind(this),
                     actions: this.actions,
                     reactivity: this.reactivity,
                     applyPlugins: this.applyPlugins.bind(this),
@@ -195,11 +195,11 @@ export class Engine {
     }
 
     lastMarshalledStore = "";
-    private mergeStore<T extends object>(mergeStore: T) {
+    private mergeSignals<T extends object>(mergeSignals: T) {
         this.mergeRemovals.forEach((removal) => removal());
         this.mergeRemovals = this.mergeRemovals.slice(0);
 
-        const revisedStore = apply(this.store.value, mergeStore) as DeepState;
+        const revisedStore = apply(this.store.value, mergeSignals) as DeepState;
         this.store = deepSignal(revisedStore);
 
         const marshalledStore = JSON.stringify(this.store.value);
@@ -214,7 +214,7 @@ export class Engine {
         // );
     }
 
-    private removeFromStore(...keys: string[]) {
+    private removeSignals(...keys: string[]) {
         const revisedStore = { ...this.store.value };
         for (const key of keys) {
             const parts = key.split(".");
@@ -378,10 +378,10 @@ export class Engine {
 
                     const ctx: AttributeContext = {
                         store: () => this.store,
-                        mergeStore: this.mergeStore.bind(this),
+                        mergeSignals: this.mergeSignals.bind(this),
                         upsertIfMissingFromStore: this.upsertIfMissingFromStore
                             .bind(this),
-                        removeFromStore: this.removeFromStore.bind(this),
+                        removeSignals: this.removeSignals.bind(this),
                         applyPlugins: this.applyPlugins.bind(this),
                         cleanupElementRemovals: this.cleanupElementRemovals
                             .bind(this),

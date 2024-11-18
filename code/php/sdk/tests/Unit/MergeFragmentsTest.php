@@ -1,12 +1,12 @@
 <?php
 
-use starfederation\datastar\Constants;
+use starfederation\datastar\Consts;
 use starfederation\datastar\enums\FragmentMergeMode;
-use starfederation\datastar\events\Fragment;
+use starfederation\datastar\events\MergeFragments;
 
 test('Options are correctly output', function() {
     $content = '<div>content</div>';
-    $event = new Fragment($content, [
+    $event = new MergeFragments($content, [
         'selector' => 'selector',
         'mergeMode' => FragmentMergeMode::Append,
         'settleDuration' => 1000,
@@ -24,10 +24,10 @@ test('Options are correctly output', function() {
 
 test('Default options are not output', function() {
     $content = '<div>content</div>';
-    $event = new Fragment($content, [
+    $event = new MergeFragments($content, [
         'selector' => '',
         'mergeMode' => FragmentMergeMode::Morph,
-        'settleDuration' => Constants::DefaultSettleDuration,
+        'settleDuration' => Consts::DEFAULT_SETTLE_DURATION,
         'useViewTransition' => false,
     ]);
     expect($event->getDataLines())
@@ -38,7 +38,7 @@ test('Default options are not output', function() {
 
 test('Multi-line content is correctly output', function() {
     $content = '<div>content</div>';
-    $event = new Fragment("\n" . $content . "\n" . $content . "\n");
+    $event = new MergeFragments("\n" . $content . "\n" . $content . "\n");
     expect($event->getDataLines())
         ->toBe([
             'data: fragment ' . $content,

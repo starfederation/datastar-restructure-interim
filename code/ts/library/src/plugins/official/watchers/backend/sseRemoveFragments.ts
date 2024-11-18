@@ -4,7 +4,7 @@
 // Description: Merge store data from a server using the Datastar SDK interface
 
 import {
-    DefaultMergeFragmentsUseViewTransitions,
+    DefaultFragmentsUseViewTransitions,
     DefaultSettleDurationMs,
     EventTypes,
     WatcherPlugin,
@@ -25,7 +25,7 @@ export const RemoveFragments: WatcherPlugin = {
             selector,
             settleDuration: settleDurationRaw = `${DefaultSettleDurationMs}`,
             useViewTransition: useViewTransitionRaw =
-                `${DefaultMergeFragmentsUseViewTransitions}`,
+                `${DefaultFragmentsUseViewTransitions}`,
         }) => {
             if (!!!selector.length) {
                 throw new Error(

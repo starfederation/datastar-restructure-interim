@@ -9,10 +9,10 @@ import { datastarSSEEventWatcher } from "./sseShared";
 
 export const ExecuteJS: WatcherPlugin = {
     pluginType: PLUGIN_WATCHER,
-    name: EventTypes.ExecuteJs,
+    name: EventTypes.ExecuteJS,
     onGlobalInit: async () => {
         datastarSSEEventWatcher(
-            EventTypes.ExecuteJs,
+            EventTypes.ExecuteJS,
             (
                 { autoRemove: autoRemoveRaw = "true", type = "module", script },
             ) => {
