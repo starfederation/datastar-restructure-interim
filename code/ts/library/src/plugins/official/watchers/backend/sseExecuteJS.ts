@@ -7,12 +7,12 @@ import { EventTypes, WatcherPlugin } from "../../../../engine";
 import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import { datastarSSEEventWatcher } from "./sseShared";
 
-export const ExecuteJs: WatcherPlugin = {
+export const ExecuteJS: WatcherPlugin = {
     pluginType: PLUGIN_WATCHER,
-    name: EventTypes.ExecuteJs,
+    name: EventTypes.ExecuteJS,
     onGlobalInit: async () => {
         datastarSSEEventWatcher(
-            EventTypes.ExecuteJs,
+            EventTypes.ExecuteJS,
             (
                 { autoRemove: autoRemoveRaw = "true", type = "module", script },
             ) => {

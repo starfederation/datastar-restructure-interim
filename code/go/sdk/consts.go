@@ -8,14 +8,14 @@ const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
     VersionClientByteSize     = 42824
-    VersionClientByteSizeGzip = 14676
+    VersionClientByteSizeGzip = 14677
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
 
     // Default strings
-    DefaultExecuteJsType = "module"
+    DefaultExecuteJstype = "module"
     DefaultCustomEventSelector = "document"
     DefaultCustomEventDetailJson = "{}"
 
@@ -35,9 +35,9 @@ const (
 
 var (
     // Default booleans
-    DefaultMergeFragmentsUseViewTransitions = false
+    DefaultFragmentsUseViewTransitions = false
     DefaultMergeSignalsOnlyIfMissing = false
-    DefaultExecuteJsAutoRemove = true
+    DefaultExecuteJsautoRemove = true
     DefaultCustomEventCancelable = true
     DefaultCustomEventComposed = true
     DefaultCustomEventBubbles = true

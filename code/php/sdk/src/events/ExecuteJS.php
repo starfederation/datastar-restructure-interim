@@ -8,7 +8,7 @@ namespace starfederation\datastar\events;
 use starfederation\datastar\Consts;
 use starfederation\datastar\enums\EventType;
 
-class ExecuteJs implements EventInterface
+class ExecuteJS implements EventInterface
 {
     use EventTrait;
 
@@ -30,7 +30,7 @@ class ExecuteJs implements EventInterface
      */
     public function getEventType(): EventType
     {
-        return EventType::ExecuteJs;
+        return EventType::ExecuteJS;
     }
 
     /**

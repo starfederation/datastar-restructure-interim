@@ -52,7 +52,7 @@ var ConstsData = &ConstTemplateData{
 	DatastarKey: "datastar",
 	DefaultBools: []*DefaultBool{
 		{
-			Name:  toolbelt.ToCasedString("mergeFragmentsUseViewTransitions"),
+			Name:  toolbelt.ToCasedString("fragmentsUseViewTransitions"),
 			Value: false,
 		},
 		{
@@ -60,7 +60,7 @@ var ConstsData = &ConstTemplateData{
 			Value: false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("executeJsAutoRemove"),
+			Name:  toolbelt.ToCasedString("ExecuteJSAutoRemove"),
 			Value: true,
 		},
 		{
@@ -88,7 +88,7 @@ var ConstsData = &ConstTemplateData{
 	},
 	DefaultStrings: []*DefaultString{
 		{
-			Name:  toolbelt.ToCasedString("executeJsType"),
+			Name:  toolbelt.ToCasedString("ExecuteJSType"),
 			Value: "module",
 		},
 		{
@@ -117,7 +117,7 @@ var ConstsData = &ConstTemplateData{
 		// RemoveSignals
 		toolbelt.ToCasedString("paths"),
 
-		// ExecuteJs
+		// ExecuteJS
 		toolbelt.ToCasedString("script"),
 		toolbelt.ToCasedString("type"),
 		toolbelt.ToCasedString("autoRemove"),
@@ -187,7 +187,7 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event for removing signals from the store.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("ExecuteJs"),
+					Name:        toolbelt.ToCasedString("ExecuteJS"),
 					Value:       "datastar-execute-js",
 					Description: "An event for executing JavaScript in the browser.",
 				},

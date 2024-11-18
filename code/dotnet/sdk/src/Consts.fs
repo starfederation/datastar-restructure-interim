@@ -39,7 +39,7 @@ module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
     let [<Literal>] VersionClientByteSize     = 42824
-    let [<Literal>] VersionClientByteSizeGzip = 14676
+    let [<Literal>] VersionClientByteSizeGzip = 14677
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -50,14 +50,14 @@ module Consts =
     /// Default: morph - Morphs the fragment into the existing element using idiomorph.
     let DefaultFragmentMergeMode = Morph
 
-    let [<Literal>] DefaultMergeFragmentsUseViewTransitions = false
+    let [<Literal>] DefaultFragmentsUseViewTransitions = false
     let [<Literal>] DefaultMergeSignalsOnlyIfMissing = false
-    let [<Literal>] DefaultExecuteJsAutoRemove = true
+    let [<Literal>] DefaultExecuteJsautoRemove = true
     let [<Literal>] DefaultCustomEventCancelable = true
     let [<Literal>] DefaultCustomEventComposed = true
     let [<Literal>] DefaultCustomEventBubbles = true
 
-    let [<Literal>] DefaultExecuteJsType = "module"
+    let [<Literal>] DefaultExecuteJstype = "module"
     let [<Literal>] DefaultCustomEventSelector = "document"
     let [<Literal>] DefaultCustomEventDetailJson = "{}"
 

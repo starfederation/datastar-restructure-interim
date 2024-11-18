@@ -12,14 +12,14 @@ export const DefaultSettleDurationMs = 300;
 export const DefaultSseRetryDurationMs = 1000;
 
 // Default strings
-export const DefaultExecuteJsType = "module";
+export const DefaultExecuteJstype = "module";
 export const DefaultCustomEventSelector = "document";
 export const DefaultCustomEventDetailJson = "{}";
 
 // Default booleans
-export const DefaultMergeFragmentsUseViewTransitions = false;
+export const DefaultFragmentsUseViewTransitions = false;
 export const DefaultMergeSignalsOnlyIfMissing = false;
-export const DefaultExecuteJsAutoRemove = true;
+export const DefaultExecuteJsautoRemove = true;
 export const DefaultCustomEventCancelable = true;
 export const DefaultCustomEventComposed = true;
 export const DefaultCustomEventBubbles = true;

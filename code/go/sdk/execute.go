@@ -6,43 +6,43 @@ import (
 	"time"
 )
 
-type ExecuteJsOptions struct {
+type ExecuteJSOptions struct {
 	EventID       string
 	RetryDuration time.Duration
 	Type          string
 	AutoRemove    *bool
 }
 
-type ExecuteJsOption func(*ExecuteJsOptions)
+type ExecuteJSOption func(*ExecuteJSOptions)
 
-func WithExecuteJsEventID(id string) ExecuteJsOption {
-	return func(o *ExecuteJsOptions) {
+func WithExecuteJSEventID(id string) ExecuteJSOption {
+	return func(o *ExecuteJSOptions) {
 		o.EventID = id
 	}
 }
 
-func WithExecuteJsRetryDuration(retryDuration time.Duration) ExecuteJsOption {
-	return func(o *ExecuteJsOptions) {
+func WithExecuteJSRetryDuration(retryDuration time.Duration) ExecuteJSOption {
+	return func(o *ExecuteJSOptions) {
 		o.RetryDuration = retryDuration
 	}
 }
 
-func WithExecuteJsType(t string) ExecuteJsOption {
-	return func(o *ExecuteJsOptions) {
+func WithExecuteJSType(t string) ExecuteJSOption {
+	return func(o *ExecuteJSOptions) {
 		o.Type = t
 	}
 }
 
-func WithExecuteJsAutoRemove(autoremove bool) ExecuteJsOption {
-	return func(o *ExecuteJsOptions) {
+func WithExecuteJSAutoRemove(autoremove bool) ExecuteJSOption {
+	return func(o *ExecuteJSOptions) {
 		o.AutoRemove = &autoremove
 	}
 }
 
-func (sse *ServerSentEventGenerator) ExecuteJs(scriptContents string, opts ...ExecuteJsOption) error {
-	options := &ExecuteJsOptions{
+func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...ExecuteJSOption) error {
+	options := &ExecuteJSOptions{
 		RetryDuration: DefaultSseRetryDuration,
-		Type:          DefaultExecuteJsType,
+		Type:          DefaultExecuteJSType,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -59,11 +59,11 @@ func (sse *ServerSentEventGenerator) ExecuteJs(scriptContents string, opts ...Ex
 
 	dataLines := make([]string, 0, 64)
 
-	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJsAutoRemove {
+	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJSAutoRemove {
 		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
 
-	if options.Type != DefaultExecuteJsType {
+	if options.Type != DefaultExecuteJSType {
 		dataLines = append(dataLines, TypeDatalineLiteral, options.Type)
 	}
 
@@ -73,7 +73,7 @@ func (sse *ServerSentEventGenerator) ExecuteJs(scriptContents string, opts ...Ex
 	}
 
 	return sse.Send(
-		EventTypeExecuteJs,
+		EventTypeExecuteJS,
 		dataLines,
 		sendOpts...,
 	)
