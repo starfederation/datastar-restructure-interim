@@ -16,6 +16,7 @@ require (
 	github.com/evanw/esbuild v0.24.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-faker/faker/v4 v4.5.0
+	github.com/go-rod/rod v0.116.2
 	github.com/go-sanitize/sanitize v1.1.0
 	github.com/goccy/go-json v0.10.3
 	github.com/gomarkdown/markdown v0.0.0-20241105142532-d03b89096d81
@@ -29,6 +30,7 @@ require (
 	github.com/playwright-community/playwright-go v0.4802.0
 	github.com/samber/lo v1.47.0
 	github.com/segmentio/encoding v0.4.0
+	github.com/stretchr/testify v1.8.4
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
@@ -39,11 +41,11 @@ require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/chewxy/math32 v1.11.1 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deckarep/golang-set/v2 v2.6.0 // indirect
 	github.com/denisbrodbeck/machineid v1.0.1 // indirect
 	github.com/dlclark/regexp2 v1.11.4 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.3 // indirect
-	github.com/go-rod/rod v0.116.2 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -58,6 +60,7 @@ require (
 	github.com/nats-io/nkeys v0.4.7 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rzajac/clock v0.2.0 // indirect
 	github.com/rzajac/zflake v0.8.0 // indirect
@@ -75,6 +78,7 @@ require (
 	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.61.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
