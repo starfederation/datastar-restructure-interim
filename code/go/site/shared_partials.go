@@ -5,6 +5,9 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"path/filepath"
+	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -13,6 +16,7 @@ import (
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
+	"github.com/delaneyj/toolbelt"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
 	mdhtml "github.com/gomarkdown/markdown/html"
@@ -21,9 +25,25 @@ import (
 	"github.com/valyala/bytebufferpool"
 )
 
-var mdRenderer func() *mdhtml.Renderer
+var (
+	mdRenderer    func() *mdhtml.Renderer
+	htmlHighlight func(w io.Writer, source, lang, defaultLang string) error
+)
 
-func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string, mdAnchors map[string][]string, err error) {
+type CodeSnippet struct {
+	Path               toolbelt.CasedString
+	Extension          string
+	Icon               string
+	Content            string
+	ContentHighlighted string
+}
+
+type CodeSnippetBlock struct {
+	BasePath toolbelt.CasedString
+	Snippets []CodeSnippet
+}
+
+func markdownRenders(ctx context.Context, staticMdPath string) (mdElementRenderers map[string]string, mdAnchors map[string][]string, err error) {
 	if mdRenderer == nil {
 		htmlFormatter := html.New(html.WithClasses(true), html.TabWidth(2))
 		if htmlFormatter == nil {
@@ -43,7 +63,7 @@ func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string,
 			return err
 		})
 		// based on https://github.com/alecthomas/chroma/blob/master/quick/quick.go
-		htmlHighlight := func(w io.Writer, source, lang, defaultLang string) error {
+		htmlHighlight = func(w io.Writer, source, lang, defaultLang string) error {
 			if lang == "" {
 				lang = defaultLang
 			}
@@ -82,10 +102,10 @@ func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string,
 						defer bytebufferpool.Put(buf)
 						level := strconv.Itoa(n.Level)
 						if level != "1" {
-                            buf.WriteString(`<a href="#`)
-                            buf.WriteString(n.HeadingID)
-                            buf.WriteString(`">#</a>`)
-                        }
+							buf.WriteString(`<a href="#`)
+							buf.WriteString(n.HeadingID)
+							buf.WriteString(`">#</a>`)
+						}
 						buf.WriteString(`</h`)
 						buf.WriteString(level)
 						buf.WriteString(`>`)
@@ -107,6 +127,19 @@ func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string,
 	// regExpImg := regexp.MustCompile(`(?P<whole>!\[[^\]]+]\((?P<path>[^)]+)\))`)
 	// prefix := []byte("/static/")
 
+	codeSnippets := regexp.MustCompile(`!!!CODE_SNIPPET:(?<basePath>[^!]*)!!!`)
+	// Icon or mascot from https://icones.js.org/collection/vscode-icons
+	codeSnippetsIcons := map[string]string{
+		"go":      "vscode-icons:file-type-go-gopher",
+		"fs":      "vscode-icons:file-type-fsharp",
+		"cs":      "vscode-icons:file-type-csharp2",
+		"php":     "vscode-icons:file-type-php2",
+		"ts":      "vscode-icons:file-type-typescript-official",
+		"js":      "vscode-icons:file-type-js-official",
+		"haskell": "vscode-icons:file-type-haskell",
+		"java":    "vscode-icons:file-type-java",
+	}
+
 	mdElementRenderers = map[string]string{}
 	mdAnchors = map[string][]string{}
 	for _, de := range docs {
@@ -119,6 +152,69 @@ func markdownRenders(staticMdPath string) (mdElementRenderers map[string]string,
 
 		// Package version
 		b = bytes.ReplaceAll(b, []byte("PACKAGE_VERSION"), []byte(datastar.Version))
+
+		// code snippets
+		for _, matches := range codeSnippets.FindAllSubmatch(b, -1) {
+			fullMatch := matches[0]
+			basePath := string(matches[1])
+			fullBasePath := "static/code_snippets/" + basePath
+			fullWithTestExtension := fullBasePath + ".txt"
+			baseDir := filepath.Dir(fullWithTestExtension)
+			fileEntries, err := staticFS.ReadDir(baseDir)
+			if err != nil {
+				return nil, nil, fmt.Errorf("error reading code snippet dir %s: %w", baseDir, err)
+			}
+			if len(fileEntries) == 0 {
+				return nil, nil, fmt.Errorf("no files found in code snippet dir %s", baseDir)
+			}
+
+			snippetBlock := CodeSnippetBlock{
+				BasePath: toolbelt.ToCasedString(basePath),
+				Snippets: make([]CodeSnippet, 0, len(fileEntries)),
+			}
+
+			// Find the file with the full base path prefix
+			for _, fileEntry := range fileEntries {
+				name := fileEntry.Name()
+				fileFullPath := filepath.Join(baseDir, name)
+				if !strings.HasPrefix(fileFullPath, fullBasePath) {
+					continue
+				}
+
+				ext := filepath.Ext(name)[1:] // remove the dot
+
+				codeSnippetRaw, err := staticFS.ReadFile(fileFullPath)
+				if err != nil {
+					return nil, nil, fmt.Errorf("error reading code snippet %s: %w", fileFullPath, err)
+				}
+				codeSnippet := string(codeSnippetRaw)
+
+				buf := bytebufferpool.Get()
+				defer bytebufferpool.Put(buf)
+
+				if err := htmlHighlight(buf, codeSnippet, ext, ""); err != nil {
+					return nil, nil, fmt.Errorf("error highlighting code snippet %s: %w", fileFullPath, err)
+				}
+
+				snippet := CodeSnippet{
+					Extension:          ext,
+					Icon:               codeSnippetsIcons[ext],
+					Content:            codeSnippet,
+					ContentHighlighted: buf.String(),
+				}
+				snippetBlock.Snippets = append(snippetBlock.Snippets, snippet)
+			}
+			slices.SortFunc(snippetBlock.Snippets, func(a, b CodeSnippet) int {
+				return strings.Compare(a.Extension, b.Extension)
+			})
+			buf := bytebufferpool.Get()
+			defer bytebufferpool.Put(buf)
+
+			c := codeSnippetFragment(snippetBlock)
+			c.Render(ctx, buf)
+
+			b = bytes.ReplaceAll(b, fullMatch, buf.Bytes())
+		}
 
 		// Get all anchors
 		anchors := []string{}

@@ -1,6 +1,7 @@
 package site
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -9,8 +10,8 @@ import (
 	"github.com/samber/lo"
 )
 
-func setupGuide(router chi.Router) error {
-	mdElementRenderers, _, err := markdownRenders("guide")
+func setupGuide(ctx context.Context, router chi.Router) error {
+	mdElementRenderers, _, err := markdownRenders(ctx, "guide")
 	if err != nil {
 		return err
 	}

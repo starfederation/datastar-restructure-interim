@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 44905
-    VersionClientByteSizeGzip = 15065
+    VersionClientByteSize     = 44896
+    VersionClientByteSizeGzip = 15062
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
     DefaultCustomEventSelector = "document"

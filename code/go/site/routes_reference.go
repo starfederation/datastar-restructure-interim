@@ -1,6 +1,7 @@
 package site
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -9,8 +10,8 @@ import (
 	"github.com/samber/lo"
 )
 
-func setupReferenceRoutes(router chi.Router) error {
-	mdElementRenderers, _, err := markdownRenders("reference")
+func setupReferenceRoutes(ctx context.Context, router chi.Router) error {
+	mdElementRenderers, _, err := markdownRenders(ctx, "reference")
 	if err != nil {
 		return err
 	}
