@@ -61,9 +61,9 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
 
     with
     interface IServerSentEventGenerator with
-        member this.MergeFragment(fragment) = ServerSentEvent.mergeFragment this.Context EventOptions.defaults MergeFragmentOptions.defaults fragment
-        member this.MergeFragment(fragment, options) = ServerSentEvent.mergeFragment this.Context EventOptions.defaults options.AsOptions fragment
-        member this.MergeFragment(fragment, options, eventOptions) = ServerSentEvent.mergeFragment this.Context eventOptions.AsOptions options.AsOptions fragment
+        member this.MergeFragments(fragment) = ServerSentEvent.mergeFragment this.Context EventOptions.defaults MergeFragmentOptions.defaults fragment
+        member this.MergeFragments(fragment, options) = ServerSentEvent.mergeFragment this.Context EventOptions.defaults options.AsOptions fragment
+        member this.MergeFragments(fragment, options, eventOptions) = ServerSentEvent.mergeFragment this.Context eventOptions.AsOptions options.AsOptions fragment
         member this.RemoveFragments(selector) = ServerSentEvent.removeFragments this.Context EventOptions.defaults RemoveFragmentsOptions.defaults selector
         member this.RemoveFragments(selector, options) = ServerSentEvent.removeFragments this.Context EventOptions.defaults options.AsOptions selector
         member this.RemoveFragments(selector, options, eventOptions) = ServerSentEvent.removeFragments this.Context eventOptions.AsOptions { SettleDuration = options.SettleDuration; UseViewTransition = options.UseViewTransition } selector
@@ -102,9 +102,9 @@ and ServerSentEventHttpContext(httpContext:HttpContext) =
             this.Context.Response.BodyWriter.WriteAsync(bytes).AsTask()
 
 and IServerSentEventGenerator =
-    abstract member MergeFragment: fragment:string -> Task
-    abstract member MergeFragment: fragment:string * options:MergeFragmentOpts -> Task
-    abstract member MergeFragment: fragment:string * options:MergeFragmentOpts * eventOptions:ServerSentEventOpts -> Task
+    abstract member MergeFragments: fragment:string -> Task
+    abstract member MergeFragments: fragment:string * options:MergeFragmentOpts -> Task
+    abstract member MergeFragments: fragment:string * options:MergeFragmentOpts * eventOptions:ServerSentEventOpts -> Task
     abstract member RemoveFragments: selector:Selector -> Task
     abstract member RemoveFragments: selector:Selector * options:RemoveFragmentsOpts -> Task
     abstract member RemoveFragments: selector:Selector * options:RemoveFragmentsOpts * eventOptions:ServerSentEventOpts -> Task
