@@ -10,7 +10,7 @@ require (
 	github.com/alecthomas/chroma v0.10.0
 	github.com/benbjohnson/hashfs v0.2.2
 	github.com/delaneyj/gostar v0.8.0
-	github.com/delaneyj/toolbelt v0.3.10
+	github.com/delaneyj/toolbelt v0.3.12
 	github.com/drhodes/golorem v0.0.0-20220328165741-da82e5b29246
 	github.com/dustin/go-humanize v1.0.1
 	github.com/evanw/esbuild v0.24.0
@@ -26,11 +26,12 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/klauspost/compress v1.17.11
 	github.com/lithammer/fuzzysearch v1.1.8
+	github.com/nats-io/nats-server/v2 v2.10.22
 	github.com/nats-io/nats.go v1.37.0
 	github.com/playwright-community/playwright-go v0.4802.0
 	github.com/samber/lo v1.47.0
 	github.com/segmentio/encoding v0.4.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/wcharczuk/go-chart/v2 v2.1.2
@@ -56,7 +57,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/minio/highwayhash v1.0.3 // indirect
 	github.com/nats-io/jwt/v2 v2.7.2 // indirect
-	github.com/nats-io/nats-server/v2 v2.10.22 // indirect
 	github.com/nats-io/nkeys v0.4.7 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
@@ -79,7 +79,7 @@ require (
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.61.0 // indirect
+	modernc.org/libc v1.61.1 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
 	modernc.org/sqlite v1.34.1 // indirect

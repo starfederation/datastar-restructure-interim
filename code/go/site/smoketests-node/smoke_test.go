@@ -30,7 +30,10 @@ func TestSite(t *testing.T) {
 
 	log.Printf("running site on port %d", port)
 	defer log.Print("closing site")
-	go site.RunBlocking(port)(ctx)
+
+	readyCh := make(chan struct{})
+	go site.RunBlocking(port, readyCh)(ctx)
+	<-readyCh
 
 	start = time.Now()
 	log.Printf("running smoke tests")

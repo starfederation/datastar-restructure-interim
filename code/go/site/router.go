@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/sessions"
+	natsserver "github.com/nats-io/nats-server/v2/server"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
@@ -30,7 +31,7 @@ func staticPath(path string) string {
 	return "/" + staticSys.HashName("static/"+path)
 }
 
-func RunBlocking(port int) toolbelt.CtxErrFunc {
+func RunBlocking(port int, readyCh chan struct{}) toolbelt.CtxErrFunc {
 	return func(ctx context.Context) error {
 
 		router := chi.NewRouter()
@@ -53,8 +54,10 @@ func RunBlocking(port int) toolbelt.CtxErrFunc {
 			srv.Shutdown(context.Background())
 		}()
 
+		if readyCh != nil {
+			close(readyCh)
+		}
 		return srv.ListenAndServe()
-
 	}
 }
 
@@ -65,7 +68,15 @@ func setupRoutes(ctx context.Context, router chi.Router) (cleanup func() error, 
 		<-r.Context().Done()
 	})
 
-	ns, err := embeddednats.New(ctx)
+	natsPort, err := toolbelt.FreePort()
+	if err != nil {
+		return nil, fmt.Errorf("error getting free port: %w", err)
+	}
+
+	ns, err := embeddednats.New(ctx, embeddednats.WithNATSServerOptions(&natsserver.Options{
+		JetStream: true,
+		Port:      natsPort,
+	}))
 	if err != nil {
 		return nil, fmt.Errorf("error creating embedded nats server: %w", err)
 	}

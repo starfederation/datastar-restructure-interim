@@ -1,15 +1,13 @@
 package smoketests
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func activeSearchExampleTest(t *testing.T, ctx context.Context) error {
-	page := pageFromURL(t, ctx, "examples/active_search")
-
+func TestExampleActiveSearch(t *testing.T) {
+	page := testExamplesPage(t, "active_search")
 	searchPlaceholder := page.MustElement(`[data-testid="search"]`)
 	assert.Equal(t, "Search...", searchPlaceholder.MustText())
 
@@ -64,5 +62,4 @@ func activeSearchExampleTest(t *testing.T, ctx context.Context) error {
 
 	// // scoreReg := regexp.MustCompile(`^\d+\.\d{2}$`)
 
-	return nil
 }
