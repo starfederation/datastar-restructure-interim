@@ -3,7 +3,7 @@
 ## 0.20.0 - Unreleased
 
 > [!WARNING]
-> This update contains breaking changes to attributes and SSE events.
+> This update contains breaking changes to attributes, actions and SSE events.
 
 ### Added
 
