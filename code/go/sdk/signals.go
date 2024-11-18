@@ -13,34 +13,34 @@ var (
 	ErrNoPathsProvided = errors.New("no paths provided")
 )
 
-type MergeStoreOptions struct {
+type MergeSignalsOptions struct {
 	EventID       string
 	RetryDuration time.Duration
 	OnlyIfMissing bool
 }
 
-type MergeStoreOption func(*MergeStoreOptions)
+type MergeSignalsOption func(*MergeSignalsOptions)
 
-func WithMergeStoreEventID(id string) MergeStoreOption {
-	return func(o *MergeStoreOptions) {
+func WithMergeSignalsEventID(id string) MergeSignalsOption {
+	return func(o *MergeSignalsOptions) {
 		o.EventID = id
 	}
 }
 
-func WithMergeStoreRetryDuration(retryDuration time.Duration) MergeStoreOption {
-	return func(o *MergeStoreOptions) {
+func WithMergeSignalsRetryDuration(retryDuration time.Duration) MergeSignalsOption {
+	return func(o *MergeSignalsOptions) {
 		o.RetryDuration = retryDuration
 	}
 }
 
-func WithOnlyIfMissing(onlyIfMissing bool) MergeStoreOption {
-	return func(o *MergeStoreOptions) {
+func WithOnlyIfMissing(onlyIfMissing bool) MergeSignalsOption {
+	return func(o *MergeSignalsOptions) {
 		o.OnlyIfMissing = onlyIfMissing
 	}
 }
 
-func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...MergeStoreOption) error {
-	options := &MergeStoreOptions{
+func (sse *ServerSentEventGenerator) MergeSignals(storeContents []byte, opts ...MergeSignalsOption) error {
+	options := &MergeSignalsOptions{
 		EventID:       "",
 		RetryDuration: DefaultSseRetryDuration,
 		OnlyIfMissing: false,
@@ -55,7 +55,7 @@ func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...Me
 	}
 	lines := bytes.Split(storeContents, newLineBuf)
 	for _, line := range lines {
-		dataRows = append(dataRows, StoreDatalineLiteral+string(line))
+		dataRows = append(dataRows, SignalsDatalineLiteral+string(line))
 	}
 
 	sendOptions := make([]SSEEventOption, 0, 2)
@@ -67,7 +67,7 @@ func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...Me
 	}
 
 	if err := sse.Send(
-		EventTypeMergeStore,
+		EventTypeMergeSignals,
 		dataRows,
 		sendOptions...,
 	); err != nil {
@@ -76,13 +76,13 @@ func (sse *ServerSentEventGenerator) MergeStore(storeContents []byte, opts ...Me
 	return nil
 }
 
-func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
+func (sse *ServerSentEventGenerator) RemoveSignals(paths ...string) error {
 	if len(paths) == 0 {
 		return ErrNoPathsProvided
 	}
 
 	if err := sse.Send(
-		EventTypeRemoveFromStore,
+		EventTypeRemoveSignals,
 		[]string{PathsDatalineLiteral + strings.Join(paths, " ")},
 	); err != nil {
 		return fmt.Errorf("failed to send delete from store: %w", err)

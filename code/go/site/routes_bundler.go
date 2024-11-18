@@ -31,8 +31,8 @@ var (
 	prefixRegexp          = regexp.MustCompile(`prefix: "(?P<name>.*)",`)
 )
 
-type BundlerStore struct {
-	IncludedPlugines map[string]bool `json:"includedPlugins"`
+type BundlerSignals struct {
+	IncludedPlugins map[string]bool `json:"includedPlugins"`
 }
 
 type PluginDetails struct {
@@ -194,18 +194,18 @@ func setupBundler(router chi.Router) error {
 
 	router.Route("/bundler", func(bundlerRouter chi.Router) {
 		bundlerRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			store := &BundlerStore{
-				IncludedPlugines: map[string]bool{},
+			signals := &BundlerSignals{
+				IncludedPlugins: map[string]bool{},
 			}
 			for _, plugin := range manifest.Plugins {
-				store.IncludedPlugines[plugin.Key] = true
+				signals.IncludedPlugins[plugin.Key] = true
 			}
-			PageBundler(r, manifest, store).Render(r.Context(), w)
+			PageBundler(r, manifest, signals).Render(r.Context(), w)
 		})
 
 		bundlerRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
-			store := &BundlerStore{}
-			if err := datastar.ParseIncoming(r, store); err != nil {
+			signals := &BundlerSignals{}
+			if err := datastar.ParseIncoming(r, signals); err != nil {
 				http.Error(w, "error parsing request: "+err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -216,7 +216,7 @@ func setupBundler(router chi.Router) error {
 				Version: manifest.Version,
 			}
 			for _, plugin := range manifest.Plugins {
-				if !store.IncludedPlugines[plugin.Key] {
+				if !signals.IncludedPlugins[plugin.Key] {
 					continue
 				}
 

@@ -24,7 +24,7 @@ export const Model: AttributePlugin = {
                 regexp: /(?<whole>.+)/g,
                 replacer: (groups: RegexpGroups) => {
                     const { whole } = groups;
-                    return `ctx.store().${whole}`;
+                    return `ctx.signals().${whole}`;
                 },
             },
         ],
@@ -35,7 +35,7 @@ export const Model: AttributePlugin = {
         const signal = ctx.expressionFn(ctx);
         const tnl = el.tagName.toLowerCase();
 
-        if (expression.startsWith("ctx.store().ctx.store()")) {
+        if (expression.startsWith("ctx.signals().ctx.signals()")) {
             throw new Error(
                 `Model attribute on #${el.id} must have a signal name, you probably prefixed with $ by accident`,
             );
@@ -49,7 +49,7 @@ export const Model: AttributePlugin = {
         const isRadio = tnl.includes("radio") || (isInput && type === "radio");
         const isFile = isInput && type === "file";
 
-        const signalName = expression.replaceAll("ctx.store().", "");
+        const signalName = expression.replaceAll("ctx.signals().", "");
         if (isRadio) {
             const name = el.getAttribute("name");
             if (!name?.length) {
@@ -132,7 +132,7 @@ export const Model: AttributePlugin = {
                 );
 
                 signal.value = allContents;
-                const s = ctx.store();
+                const s = ctx.signals();
                 const mimeName = `${signalName}Mimes`,
                     nameName = `${signalName}Names`;
                 if (mimeName in s) {

@@ -9,10 +9,10 @@ import { datastarSSEEventWatcher } from "./sseShared";
 
 export const RemoveSignals: WatcherPlugin = {
     pluginType: PLUGIN_WATCHER,
-    name: EventTypes.RemoveFromStore,
+    name: EventTypes.RemoveSignals,
     onGlobalInit: async (ctx) => {
         datastarSSEEventWatcher(
-            EventTypes.RemoveFromStore,
+            EventTypes.RemoveSignals,
             ({ paths: pathsRaw = "" }) => {
                 // replace all whitespace with a single space
                 pathsRaw = pathsRaw.replaceAll(/\s+/g, " ");
@@ -22,7 +22,7 @@ export const RemoveSignals: WatcherPlugin = {
                     );
                 }
                 const paths = pathsRaw.split(" ");
-                ctx.removeFromStore(...paths);
+                ctx.removeSignals(...paths);
             },
         );
     },

@@ -10,7 +10,7 @@ import (
 func setupExamplesInfiniteScroll(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/infinite_scroll/data", func(w http.ResponseWriter, r *http.Request) {
-		store := &infiniteScrollStore{}
+		store := &infiniteScrollSignals{}
 		if err := datastar.ParseIncoming(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

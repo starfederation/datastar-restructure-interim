@@ -11,7 +11,7 @@ func setupExamplesShow(examplesRouter chi.Router) error {
 	examplesRouter.Get("/show/data", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 
-		store := &ShowStore{
+		store := &ShowSignals{
 			BindBool: false,
 		}
 

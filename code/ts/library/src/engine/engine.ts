@@ -37,7 +37,7 @@ const alreadyExistsErr = (type: string, name: string) =>
     new Error(`A ${type} named '${name}' already exists`);
 export class Engine {
     plugins: AttributePlugin[] = [];
-    store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
+    signals: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
     preprocessors = new Array<PreprocessorPlugin>();
     actions: ActionPlugins = {};
     watchers = new Array<WatcherPlugin>();
@@ -125,11 +125,11 @@ export class Engine {
 
             if (globalInitializer) {
                 globalInitializer({
-                    store: this.store,
-                    upsertIfMissingFromStore: this.upsertIfMissingFromStore
+                    signals: () => this.signals,
+                    upsertIfMissingSignals: this.upsertIfMissingSignals
                         .bind(this),
-                    mergeStore: this.mergeStore.bind(this),
-                    removeFromStore: this.removeFromStore.bind(this),
+                    mergeSignals: this.MergeSignals.bind(this),
+                    removeSignals: this.removeSignals.bind(this),
                     actions: this.actions,
                     reactivity: this.reactivity,
                     applyPlugins: this.applyPlugins.bind(this),
@@ -194,64 +194,67 @@ export class Engine {
         }
     }
 
-    lastMarshalledStore = "";
-    private mergeStore<T extends object>(mergeStore: T) {
+    lastMarshalledSignals = "";
+    private MergeSignals<T extends object>(MergeSignals: T) {
         this.mergeRemovals.forEach((removal) => removal());
         this.mergeRemovals = this.mergeRemovals.slice(0);
 
-        const revisedStore = apply(this.store.value, mergeStore) as DeepState;
-        this.store = deepSignal(revisedStore);
+        const revisedSignals = apply(
+            this.signals.value,
+            MergeSignals,
+        ) as DeepState;
+        this.signals = deepSignal(revisedSignals);
 
-        const marshalledStore = JSON.stringify(this.store.value);
-        if (marshalledStore === this.lastMarshalledStore) return;
+        const marshalledSignals = JSON.stringify(this.signals.value);
+        if (marshalledSignals === this.lastMarshalledSignals) return;
 
         // this.sendDatastarEvent(
         //     "core",
         //     "store",
         //     "merged",
         //     "STORE",
-        //     marshalledStore,
+        //     marshalledSignals,
         // );
     }
 
-    private removeFromStore(...keys: string[]) {
-        const revisedStore = { ...this.store.value };
+    private removeSignals(...keys: string[]) {
+        const revisedSignals = { ...this.signals.value };
         for (const key of keys) {
             const parts = key.split(".");
             let currentID = parts[0];
-            let subStore = revisedStore;
+            let subSignals = revisedSignals;
             for (let i = 1; i < parts.length; i++) {
                 const part = parts[i];
-                if (!subStore[currentID]) {
-                    subStore[currentID] = {};
+                if (!subSignals[currentID]) {
+                    subSignals[currentID] = {};
                 }
-                subStore = subStore[currentID];
+                subSignals = subSignals[currentID];
                 currentID = part;
             }
-            delete subStore[currentID];
+            delete subSignals[currentID];
         }
-        this.store = deepSignal(revisedStore);
+        this.signals = deepSignal(revisedSignals);
         this.applyPlugins(document.body);
     }
 
-    private upsertIfMissingFromStore(path: string, value: any) {
+    private upsertIfMissingSignals(path: string, value: any) {
         const parts = path.split(".");
-        let subStore = this.store as any;
+        let subSignals = this.signals as any;
         for (let i = 0; i < parts.length - 1; i++) {
             const part = parts[i];
-            if (!subStore[part]) {
-                subStore[part] = {};
+            if (!subSignals[part]) {
+                subSignals[part] = {};
             }
-            subStore = subStore[part];
+            subSignals = subSignals[part];
         }
         const last = parts[parts.length - 1];
-        if (!!subStore[last]) return;
-        subStore[last] = this.reactivity.signal(value);
+        if (!!subSignals[last]) return;
+        subSignals[last] = this.reactivity.signal(value);
         // this.sendDatastarEvent("core", "store", "upsert", path, value);
     }
 
     signalByName<T>(name: string) {
-        return (this.store as any)[name] as Signal<T>;
+        return (this.signals as any)[name] as Signal<T>;
     }
 
     private applyPlugins(rootElement: Element) {
@@ -377,15 +380,15 @@ export class Engine {
                     }
 
                     const ctx: AttributeContext = {
-                        store: () => this.store,
-                        mergeStore: this.mergeStore.bind(this),
-                        upsertIfMissingFromStore: this.upsertIfMissingFromStore
+                        signals: () => this.signals,
+                        mergeSignals: this.MergeSignals.bind(this),
+                        upsertIfMissingSignals: this.upsertIfMissingSignals
                             .bind(this),
-                        removeFromStore: this.removeFromStore.bind(this),
+                        removeSignals: this.removeSignals.bind(this),
                         applyPlugins: this.applyPlugins.bind(this),
                         cleanupElementRemovals: this.cleanupElementRemovals
                             .bind(this),
-                        walkSignals: this.walkSignals.bind(this),
+                        walkSignals: this.walkMySignals.bind(this),
                         actions: this.actions,
                         reactivity: this.reactivity,
                         el,
@@ -420,7 +423,6 @@ export class Engine {
   ${joined}
     }
     const _datastarReturnVal = _datastarExpression()
-    ctx.sendDatastarEvent('core', 'attributes', 'expr_eval', ctx.el, '${rawKey} equals ' + JSON.stringify(_datastarReturnVal))
     return _datastarReturnVal
   } catch (e) {
    const msg = \`
@@ -431,7 +433,6 @@ export class Engine {
 
   Check if the expression is valid before raising an issue.
   \`.trim()
-   ctx.sendDatastarEvent('core', 'attributes', 'expr_eval_err', ctx.el, msg)
    console.error(msg)
    debugger
   }
@@ -483,14 +484,14 @@ export class Engine {
         });
     }
 
-    private walkSignalsStore(
-        store: any,
+    private walkSignals(
+        signals: any,
         callback: (name: string, signal: Signal<any>) => void,
     ) {
-        const keys = Object.keys(store);
+        const keys = Object.keys(signals);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-            const value = store[key];
+            const value = signals[key];
             const isSignal = value instanceof Signal;
             const hasChildren = typeof value === "object" &&
                 Object.keys(value).length > 0;
@@ -502,12 +503,14 @@ export class Engine {
 
             if (!hasChildren) continue;
 
-            this.walkSignalsStore(value, callback);
+            this.walkSignals(value, callback);
         }
     }
 
-    private walkSignals(callback: (name: string, signal: Signal<any>) => void) {
-        this.walkSignalsStore(this.store, callback);
+    private walkMySignals(
+        callback: (name: string, signal: Signal<any>) => void,
+    ) {
+        this.walkSignals(this.signals, callback);
     }
 
     private walkDownDOM(

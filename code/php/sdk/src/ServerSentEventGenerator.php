@@ -55,7 +55,7 @@ class ServerSentEventGenerator
     /**
      * Merges values into the store.
      */
-    public function mergeStore(string $data, array $options = []): void
+    public function MergeSignals(string $data, array $options = []): void
     {
         $this->sendEvent(new Signal($data, $options));
     }

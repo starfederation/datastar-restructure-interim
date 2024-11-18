@@ -1,9 +1,9 @@
-## Update Store directly
+## Update Signals directly
 
 ## Demo
 
 <div
-     data-store='{"stuffAlreadyInStore":"this is already in the store"}'
+     data-signals='{"stuffAlreadyInSignals":"this is already in the store"}'
 >
      <button
           class="btn btn-success"
@@ -20,7 +20,7 @@
 
      <pre
           class="border-2 border-accent bg-base-200 text-accent text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
-          data-text="JSON.stringify(ctx.store(),null,2)"
+          data-text="JSON.stringify(ctx.signals(),null,2)"
      >
           Stuff in store
      </pre>
@@ -32,14 +32,14 @@ This example demonstrates how to update the store directly from the frontend. Th
 
 ```text/event-stream
 event: datastar-signal,
-data: store { HYAAA4BK7IFQE: "2024-05-23T10:33:14.167189214-07:00", stuffAlreadyInStore: "this is already in the store"}
+data: store { HYAAA4BK7IFQE: "2024-05-23T10:33:14.167189214-07:00", stuffAlreadyInSignals: "this is already in the store"}
 ```
-It will accept anything that is also accepted by the `data-store` attribute.
+It will accept anything that is also accepted by the `data-signals` attribute.
 
 
 The deletion event looks like
 ```text/event-stream
 event: datastar-delete,
-data: paths 12768 stuffAlreadyInStore
+data: paths 12768 stuffAlreadyInSignals
 ```
-Where the paths are `.` delimited paths within the store.  For a nested store it might look like `foo.bar.baz`.  Using the Go helpers for example this looks like `datastar.DeleteFromStore(sse, keysToDelete...)`
+Where the paths are `.` delimited paths within the store.  For a nested store it might look like `foo.bar.baz`.  Using the Go helpers for example this looks like `datastar.RemoveSiganls(sse, keysToDelete...)`

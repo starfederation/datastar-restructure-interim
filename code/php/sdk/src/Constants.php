@@ -11,12 +11,12 @@ class Constants
 {
     public const DatastarKey = 'datastar';
     public const Version = '0.20.0';
-    public const VersionClientByteSize = 43016;
-    public const VersionClientByteSizeGzip = 14752;
+    public const VersionClientByteSize = 42878;
+    public const VersionClientByteSizeGzip = 14674;
     public const DefaultSettleDuration = 300;
     public const DefaultSseRetryDuration = 1000;
     public const DefaultMergeFragmentsUseViewTransitions = false;
-    public const DefaultMergeStoreOnlyIfMissing = false;
+    public const DefaultMergeSignalsOnlyIfMissing = false;
     public const DefaultExecuteJsAutoRemove = true;
     public const DefaultCustomEventCancelable = true;
     public const DefaultCustomEventComposed = true;
@@ -30,7 +30,7 @@ class Constants
     public const SettleDurationDatalineLiteral = 'settleDuration ';
     public const FragmentDatalineLiteral = 'fragment ';
     public const UseViewTransitionDatalineLiteral = 'useViewTransition ';
-    public const StoreDatalineLiteral = 'store ';
+    public const SignalsDatalineLiteral = 'signals ';
     public const OnlyIfMissingDatalineLiteral = 'onlyIfMissing ';
     public const PathsDatalineLiteral = 'paths ';
     public const ScriptDatalineLiteral = 'script ';

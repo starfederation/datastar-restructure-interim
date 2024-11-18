@@ -20,12 +20,12 @@ templ Home() {
 				</div>
 				<div class="text-center font-brand">
 					<div class="text-xl md:text-2xl">
-					    A real-time hypermedia framework
-                    </div>
+						A real-time hypermedia framework
+					</div>
 				</div>
 				<p class="md:text-xl">
-				    Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
-                </p>
+					Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
+				</p>
 				<a
 					class="flex items-center w-full gap-1 btn btn-accent btn-lg"
 					href={ templ.SafeURL("/guide") }
@@ -41,8 +41,8 @@ templ Home() {
 					{ "Show me some examples!" }
 					@icon("svg-spinners:bars-scale-middle")
 				</a>
-                <p>
-				    Include Datastar with a single
+				<p>
+					Include Datastar with a single
 					<span class="text-lg font-bold text-primary">{ humanize.IBytes( datastar.VersionClientByteSizeGzip) }</span>
 					file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (available for Go, PHP, TypeScript and .NET) to get up and running even faster.
 				</p>
@@ -146,7 +146,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 		<div class="card-body">
 			<div
 				class="flex flex-col w-full gap-4"
-				data-store={ fmt.Sprintf("{input:'%s'}", input) }
+				data-signals={ fmt.Sprintf("{input:'%s'}", input) }
 			>
 				<section class="flex flex-col gap-2">
 					<header class="flex flex-col gap-2">

@@ -300,17 +300,17 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 					})
 
 					editRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
-						type Store struct {
+						type Signals struct {
 							Input string `json:"input"`
 						}
-						store := &Store{}
+						signals := &Signals{}
 
-						if err := datastar.ParseIncoming(r, store); err != nil {
+						if err := datastar.ParseIncoming(r, signals); err != nil {
 							http.Error(w, err.Error(), http.StatusBadRequest)
 							return
 						}
 
-						if store.Input == "" {
+						if signals.Input == "" {
 							return
 						}
 
@@ -326,10 +326,10 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 						}
 
 						if i >= 0 {
-							mvc.Todos[i].Text = store.Input
+							mvc.Todos[i].Text = signals.Input
 						} else {
 							mvc.Todos = append(mvc.Todos, &Todo{
-								Text:      store.Input,
+								Text:      signals.Input,
 								Completed: false,
 							})
 						}

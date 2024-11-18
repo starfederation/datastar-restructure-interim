@@ -56,7 +56,7 @@ var ConstsData = &ConstTemplateData{
 			Value: false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("mergeStoreOnlyIfMissing"),
+			Name:  toolbelt.ToCasedString("mergeSignalsOnlyIfMissing"),
 			Value: false,
 		},
 		{
@@ -110,11 +110,11 @@ var ConstsData = &ConstTemplateData{
 		toolbelt.ToCasedString("fragment"),
 		toolbelt.ToCasedString("useViewTransition"),
 
-		// MergeStore
-		toolbelt.ToCasedString("store"),
+		// MergeSignals
+		toolbelt.ToCasedString("signals"),
 		toolbelt.ToCasedString("onlyIfMissing"),
 
-		// RemoveFromStore
+		// RemoveSignals
 		toolbelt.ToCasedString("paths"),
 
 		// ExecuteJS
@@ -172,8 +172,8 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event dealing with HTML fragments.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("MergeStore"),
-					Value:       "datastar-merge-store",
+					Name:        toolbelt.ToCasedString("MergeSignals"),
+					Value:       "datastar-merge-signals",
 					Description: "An event dealing with fine grain signals.",
 				},
 				{
@@ -182,9 +182,9 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event dealing with removing elements from the DOM",
 				},
 				{
-					Name:        toolbelt.ToCasedString("RemoveFromStore"),
-					Value:       "datastar-remove-from-store",
-					Description: "An event dealing with removing signals from the store.",
+					Name:        toolbelt.ToCasedString("RemoveSignals"),
+					Value:       "datastar-remove-signals",
+					Description: "An event dealing with removing signals",
 				},
 				{
 					Name:        toolbelt.ToCasedString("ExecuteJs"),

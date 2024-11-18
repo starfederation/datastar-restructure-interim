@@ -17,7 +17,7 @@ import (
 func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 	examplesRouter.Route("/quick_primer_go/data", func(dataRouter chi.Router) {
 
-		store := &QuickPrimerGoStore{"initial backend data", false}
+		store := &QuickPrimerGoSignals{"initial backend data", false}
 		mu := &sync.RWMutex{}
 
 		dataRouter.Get("/replace", func(w http.ResponseWriter, r *http.Request) {
@@ -28,17 +28,17 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 		})
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
-			reqStore := &QuickPrimerGoStore{}
-			if err := datastar.ParseIncoming(r, reqStore); err != nil {
+			reqSignals := &QuickPrimerGoSignals{}
+			if err := datastar.ParseIncoming(r, reqSignals); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			if err := sanitizer.Sanitize(reqStore); err != nil {
+			if err := sanitizer.Sanitize(reqSignals); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			mu.Lock()
-			store = reqStore
+			store = reqSignals
 			mu.Unlock()
 
 			datastar.NewSSE(w, r).MergeFragmentTempl(QuickPrimerGoPut(store))

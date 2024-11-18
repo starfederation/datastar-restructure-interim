@@ -9,4 +9,4 @@ $sseGenerator->mergeFragments(
 );
 
 // Merges the `answer` value into the store.
-$sseGenerator->mergeStore(['answer' => 'bread']);
+$sseGenerator->MergeSignals(['answer' => 'bread']);

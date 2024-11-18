@@ -6,10 +6,10 @@ These are the only plugins that are required in order to have a working system. 
 
 ## Attributes Plugins
 
-### Store
+### Signals
 
 ```html
-<div data-store="{foo:1234}"></div>
+<div data-signals="{foo:1234}"></div>
 ```
 
 Takes the contents of the attribute and runs a BigInt aware JSON parse on it. It then merges the contents into the store. This can be used anywhere as the store is a global singleton. All keys are converted into signals, works with nested objects.
@@ -44,7 +44,7 @@ Makes an element available in the `ctx._dsPlugins.refs` object. This is useful f
 
 ### SignalProcessor
 
-Takes a `$var` and converts into a `ctx.store().var.value`. Since all expressions are evaluated within an effect it setups of a reactive system.
+Takes a `$var` and converts into a `ctx.signals().var.value`. Since all expressions are evaluated within an effect it setups of a reactive system.
 
 ### ActionProcessor
 

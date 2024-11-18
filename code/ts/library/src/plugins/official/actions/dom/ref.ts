@@ -10,7 +10,7 @@ export const RefAction: ActionPlugin = {
     pluginType: PLUGIN_ACTION,
     name: "ref",
     method: (ctx, text) => {
-        const selectorSignal = ctx.store()?._dsPlugins?.refs?.[text];
+        const selectorSignal = ctx.signals()?._dsPlugins?.refs?.[text];
         if (!selectorSignal) {
             throw new Error(`Reference '${text}' not found`);
         }

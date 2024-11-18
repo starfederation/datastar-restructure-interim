@@ -15,7 +15,7 @@ using StarFederation.Datastar.DependencyInjection;
 
 // add as an ASP Service
 //  allows injection of IServerSentEventGenerator, to respond to a request with a Datastar friendly ServerSentEvent
-//                  and IDatastarStore, to read what is in the data-store of the client
+//                  and IDatastarStore, to read what is in the data-signals of the client
 builder.Services.AddDatastarGenerator<DataStore>();  // DataStore is a POCO with the IDatastarStore identifier interface
 ...
 
@@ -26,7 +26,7 @@ app.MapGet("/get", async (IServerSentEventGenerator sse, IDatastarStore dsStore)
     DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
     DataStore newDataStore = store with { Output = $"Your Input: {store.Input}" };
     await sse.MergeFragment(
-        $"<main class='container' id='main' data-store='{newDataStore.SerializeToJson()}'></main>",
+        $"<main class='container' id='main' data-signals='{newDataStore.SerializeToJson()}'></main>",
         new MergeFragmentOpts() { MergeMode = FragmentMergeMode.UpsertAttributes }
         );
 });
