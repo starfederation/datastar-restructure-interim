@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 44426
-    VersionClientByteSizeGzip = 14929
+    VersionClientByteSize     = 44532
+    VersionClientByteSizeGzip = 14991
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
     DefaultExecuteJsType = "module"
@@ -83,7 +83,7 @@ const (
     // An event dealing with removing signals from the store.
     EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
 
-    // An event dealing to execute functions in the browser.
+    // An event dealing with executing JavaScript in the browser.
     EventTypeExecuteJs EventType = "datastar-execute-js"
 
 )
