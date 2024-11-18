@@ -290,8 +290,7 @@ With our backend in place, we can now use the `data-on-click` attribute to send 
 Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify `answer` store value. We're driving state from the backend!
 
 <div data-store="{response2: '', answer2: '', lastQuestionId: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex justify-between items-start gap-4 p-8">
-<div data-text="$lastQuestionId"></div>
-    <div class="space-y-3">
+    <div class="space-y-3 pb-3">
         <div id="question2"></div>
         <div data-show="$response2 != ''">
             You answered “<span data-text="$response2"></span>”.
