@@ -3,21 +3,26 @@
 // Slug: Merge fine grain signals store data from a server using the Datastar SDK interface
 // Description: Merge store data from a server using the Datastar SDK interface
 
-import { InitExpressionFunction, WatcherPlugin } from "../../../../engine";
+import {
+    DefaultOnlyIfMissing,
+    EventTypes,
+    InitExpressionFunction,
+    WatcherPlugin,
+} from "../../../../engine";
+import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import { storeFromPossibleContents } from "../../../../utils/signals";
+import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
-const name = "mergeStore";
 export const MergeStore: WatcherPlugin = {
-    pluginType: "effect",
-    name,
+    pluginType: PLUGIN_WATCHER,
+    name: EventTypes.MergeStore,
     onGlobalInit: async (ctx) => {
-        datastarSSEEventWatcher(ctx, name, ({
+        datastarSSEEventWatcher(EventTypes.MergeStore, ({
             store = "{}",
-            onlyIfMissing: onlyIfMissingRaw = "false",
+            onlyIfMissing: onlyIfMissingRaw = `${DefaultOnlyIfMissing}`,
         }) => {
-            const onlyIfMissing = onlyIfMissingRaw.trim() === "true";
-
+            const onlyIfMissing = isBoolString(onlyIfMissingRaw);
             const fnContents =
                 ` return Object.assign({...ctx.store()}, ${store})`;
             try {

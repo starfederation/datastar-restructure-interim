@@ -4,9 +4,10 @@
 // Description: This action clamps a value to a new range. The value is first scaled to the new range, then clamped to the new range. This is useful for scaling a value to a new range, then clamping it to that range.
 
 import { ActionPlugin, AttributeContext } from "../../../../engine";
+import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
 
 export const ClampFit: ActionPlugin = {
-    pluginType: "action",
+    pluginType: PLUGIN_ACTION,
     name: "clampFit",
     method: (
         _: AttributeContext,

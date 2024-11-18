@@ -9,13 +9,18 @@ import {
     DATASTAR_EVENT,
     DatastarEvent,
 } from "../../../../engine";
+import {
+    LOCAL,
+    PLUGIN_ATTRIBUTE,
+    REMOTE,
+    SESSION,
+} from "../../../../engine/client_only_consts";
 import { remoteSignals } from "../../../../utils/signals";
 
 export const Persist: AttributePlugin = {
-    pluginType: "attribute",
+    pluginType: PLUGIN_ATTRIBUTE,
     name: "persist",
-    allowedModifiers: new Set(["local", "session", "remote"]),
-
+    allowedModifiers: new Set([LOCAL, SESSION, REMOTE]),
     onLoad: (ctx) => {
         const key = ctx.key || DATASTAR;
         const expression = ctx.expression;
@@ -30,8 +35,8 @@ export const Persist: AttributePlugin = {
         }
 
         let lastMarshalled = "";
-        const storageType = ctx.modifiers.has("session") ? "session" : "local";
-        const useRemote = ctx.modifiers.has("remote");
+        const storageType = ctx.modifiers.has(SESSION) ? SESSION : LOCAL;
+        const useRemote = ctx.modifiers.has(REMOTE);
 
         const storeUpdateHandler = ((_: CustomEvent<DatastarEvent>) => {
             let store = ctx.store();
@@ -65,7 +70,7 @@ export const Persist: AttributePlugin = {
                 return;
             }
 
-            if (storageType === "session") {
+            if (storageType === SESSION) {
                 window.sessionStorage.setItem(key, marshalledStore);
             } else {
                 window.localStorage.setItem(key, marshalledStore);
@@ -78,7 +83,7 @@ export const Persist: AttributePlugin = {
 
         let marshalledStore: string | null;
 
-        if (storageType === "session") {
+        if (storageType === SESSION) {
             marshalledStore = window.sessionStorage.getItem(key);
         } else {
             marshalledStore = window.localStorage.getItem(key);
