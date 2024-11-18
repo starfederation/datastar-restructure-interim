@@ -37,17 +37,17 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		signals := TemplCounterSignals{
+		store := TemplCounterStore{
 			Global: globalCounter.Load(),
 			User:   userVal,
 		}
 
-		c := templCounterExampleInitialContents(signals)
+		c := templCounterExampleInitialContents(store)
 		datastar.NewSSE(w, r).MergeFragmentTempl(c)
 	})
 
-	updateGlobal := func(signals *gabs.Container) {
-		signals.Set(globalCounter.Add(1), "global")
+	updateGlobal := func(store *gabs.Container) {
+		store.Set(globalCounter.Add(1), "global")
 	}
 
 	examplesRouter.Route("/templ_counter/increment", func(incrementRouter chi.Router) {
@@ -55,7 +55,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			update := gabs.New()
 			updateGlobal(update)
 
-			datastar.NewSSE(w, r).MarshalAndMergeSignals(update)
+			datastar.NewSSE(w, r).MarshalAndMergeStore(update)
 		})
 
 		incrementRouter.Post("/user", func(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +74,7 @@ func setupExamplesTemplCounter(examplesRouter chi.Router, sessionStore sessions.
 			updateGlobal(update)
 			update.Set(val, "user")
 
-			datastar.NewSSE(w, r).MarshalAndMergeSignals(update)
+			datastar.NewSSE(w, r).MarshalAndMergeStore(update)
 		})
 	})
 

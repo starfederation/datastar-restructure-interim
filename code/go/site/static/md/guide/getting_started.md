@@ -42,18 +42,18 @@ npm install @sudodevnull/datastar
 
 ## Handling State
 
-Let's take a look at how Datastar allows you to handle state using the [`data-signals`](/reference/plugins_core#store) attribute.
+Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
 ```html
-<div data-signals="{input: ''}"></div>
+<div data-store="{input: ''}"></div>
 ```
 
-This is a global store. If you add `data-signals` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier).
+This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier).
 
-Signal values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
+Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
 
 ```html
-<div data-signals="{primary: {input: ''}, secondary: {input: '' }}"></div>
+<div data-store="{primary: {input: ''}, secondary: {input: '' }}"></div>
 ```
 
 ## Adding Reactivity
@@ -72,7 +72,7 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
 <div data-text="$input"></div>
 ```
 
-<div data-signals="{input1: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input1: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -93,7 +93,7 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 <div data-text="$input.toUpperCase()"></div>
 ```
 
-<div data-signals="{input2: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input2: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -109,7 +109,7 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 The `data-computed-*` attribute creates a new store value that is computed based on an expression. The computed store value is read-only, and its value is automatically updated when any store values in the expression are updated.
 
 ```html
-<div data-signals="{input: ''}"
+<div data-store="{input: ''}"
      data-computed-repeated="$input.repeat(2)"
 >
     <input data-model="input" type="text">
@@ -117,7 +117,7 @@ The `data-computed-*` attribute creates a new store value that is computed based
 </div>
 ```
 
-<div data-signals="{input3: ''}" data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
+<div data-store="{input3: ''}" data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -138,7 +138,7 @@ Another useful attribute is `data-show`, which can be used to show or hide an el
 
 This results in the button being visible only when the input is _not_ empty.
 
-<div data-signals="{input4: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input4: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -162,7 +162,7 @@ The `data-bind-*` attribute can be used to bind a JavaScript expression to any v
 
 This results in the button being given the `disabled` attribute whenever the input _is_ empty.
 
-<div data-signals="{input5: ''}" class="alert flex justify-between items-start p-8">
+<div data-store="{input5: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -190,7 +190,7 @@ The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to exe
 
 This results in the `input` store value being set to an empty string when the button element is clicked. If the `input` store value is used elsewhere, its value will automatically update.
 
-<div data-signals="{input6: 'Some input'}" class="alert flex justify-between items-start p-8">
+<div data-store="{input6: 'Some input'}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-6">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -211,7 +211,7 @@ So what else can we do with these expressions? Anything we want, really.
 See if you can follow the code below _before_ trying the demo.
 
 ```html
-<div data-signals="{response: '', answer: 'bread'}"
+<div data-store="{response: '', answer: 'bread'}"
      data-computed-correct="$response.toLowerCase() == $answer"
 >
     <div id="question">
@@ -229,7 +229,7 @@ See if you can follow the code below _before_ trying the demo.
 </div>
 ```
 
-<div data-signals="{response1: '', answer1: 'bread'}" data-computed-correct1="$response1.toLowerCase() == $answer1" class="alert flex justify-between items-start gap-4 p-8">
+<div data-store="{response1: '', answer1: 'bread'}" data-computed-correct1="$response1.toLowerCase() == $answer1" class="alert flex justify-between items-start gap-4 p-8">
     <div class="space-y-3">
         <div id="question1">
             What do you put in a toaster?
@@ -260,12 +260,12 @@ The following code would exist in a controller action endpoint in your backend.
 
 The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with `id="question"`. An element with the ID `question` must already exist in the DOM.
 
-The `MergeSignals()` method merges the `answer` store value into the frontend store.
+The `mergeStore()` method merges the `answer` store value into the frontend store.
 
 With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 
 ```html
-<div data-signals="{response: '', answer: ''}"
+<div data-store="{response: '', answer: ''}"
      data-computed-correct="$response.toLowerCase() == $answer"
 >
     <button data-on-click="$get('/actions/quiz')">
@@ -288,7 +288,7 @@ With our backend in place, we can now use the `data-on-click` attribute to send 
 
 Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify `answer` store value. We're driving state from the backend!
 
-<div data-signals="{response2: '', answer2: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex items-center gap-4 p-8">
+<div data-store="{response2: '', answer2: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex items-center gap-4 p-8">
     <div class="space-y-3">
         <button data-on-click="$get('/examples/quiz/data')" class="btn btn-secondary">
             Fetch a question
@@ -324,7 +324,7 @@ One of the benefits of using SSE is that we can send multiple events (HTML fragm
 
 Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragments and store updates.
 
-- Declare global state: `data-signals="{foo: ''}"`
+- Declare global state: `data-store="{foo: ''}"`
 - Bind element values to store values: `data-model="foo"`
 - Set the text content of an element to an expression.: `data-text="$foo"`
 - Show or hide an element using an expression: `data-show="$foo"`

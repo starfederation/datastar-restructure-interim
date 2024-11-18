@@ -17,10 +17,10 @@ export type Reactivity = {
 };
 
 export type InitContext = {
-  signals: any;
-  upsertIfMissingSignals: (path: string, value: any) => void;
-  mergeSignals: (signals: DeepState) => void;
-  removeSignals: (...paths: string[]) => void;
+  store: any;
+  upsertIfMissingFromStore: (path: string, value: any) => void;
+  mergeStore: (store: DeepState) => void;
+  removeFromStore: (...paths: string[]) => void;
   actions: Readonly<ActionPlugins>;
   reactivity: Reactivity;
   applyPlugins: (target: Element) => void;

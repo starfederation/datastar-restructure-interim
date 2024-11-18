@@ -11,13 +11,13 @@ enum EventType: string
     case MergeFragments = 'datastar-merge-fragments';
 
     // An event dealing with fine grain signals.
-    case MergeSignals = 'datastar-merge-signals';
+    case MergeStore = 'datastar-merge-store';
 
     // An event dealing with removing elements from the DOM
     case RemoveFragments = 'datastar-remove-fragments';
 
-    // An event dealing with removing signals
-    case RemoveSignals = 'datastar-remove-signals';
+    // An event dealing with removing signals from the store.
+    case RemoveFromStore = 'datastar-remove-from-store';
 
     // An event dealing with executing JavaScript in the browser.
     case ExecuteJs = 'datastar-execute-js';

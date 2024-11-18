@@ -11,6 +11,6 @@ export const RemoteSignals: ActionPlugin = {
     pluginType: PLUGIN_ACTION,
     name: "remote",
     method: async (ctx) => {
-        return remoteSignals(ctx.signals().value);
+        return remoteSignals(ctx.store().value);
     },
 };

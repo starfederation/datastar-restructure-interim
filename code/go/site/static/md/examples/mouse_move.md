@@ -2,7 +2,7 @@
 
 ## Demo
 
-<div data-signals="{id:'unknown',x:0,y:0}" data-on-load="$get('/examples/mouse_move/updates')">
+<div data-store="{id:'unknown',x:0,y:0}" data-on-load="$get('/examples/mouse_move/updates')">
     <div>
         X: <span data-text="$x"></span>
         Y: <span data-text="$y"></span>
@@ -14,7 +14,7 @@
 
 ```html
 <div
-    data-signals="{id:'unknown',x:0,y:0}"
+    data-store="{id:'unknown',x:0,y:0}"
     data-on-load="$get('/examples/mouse_move/updates')">
     <div>
         X: <span data-text="$x"></span>
@@ -39,7 +39,7 @@ templ MouseMouseUI(id string, collection *MouseXYCollection)  {
 	<div
 	id="container"
 			data-on-store-change.throttle_10ms="$put('/examples/mouse_move/updates')"
-			data-signals={fmt.Sprintf("{id:'%s',x:0,y:0}", id)}
+			data-store={fmt.Sprintf("{id:'%s',x:0,y:0}", id)}
 	>
 		<div>My ID: {id}</div>
 	@cursorSVG( collection.Positions)

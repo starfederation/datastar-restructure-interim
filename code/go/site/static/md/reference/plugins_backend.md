@@ -68,7 +68,7 @@ data: onlyIfMissing false
 data: store {foo: 1234}
 ```
 
-The `datastar-signal` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `store` line should be a valid `data-signals` attribute. This will get merged into the store.
+The `datastar-signal` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `store` line should be a valid `data-store` attribute. This will get merged into the store.
 
 ### datastar-delete
 

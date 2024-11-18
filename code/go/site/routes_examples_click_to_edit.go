@@ -9,7 +9,7 @@ import (
 
 func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 
-	c1 := &ClickToEditContactSignals{}
+	c1 := &ClickToEditContactStore{}
 	resetContact := func() {
 		c1.FirstName = "John"
 		c1.LastName = "Doe"
@@ -35,7 +35,7 @@ func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 		})
 
 		contactRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
-			c := &ClickToEditContactSignals{}
+			c := &ClickToEditContactStore{}
 			if err := datastar.ParseIncoming(r, c); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return

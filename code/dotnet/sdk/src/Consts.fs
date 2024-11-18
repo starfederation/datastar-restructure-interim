@@ -26,11 +26,11 @@ type EventType =
 /// An event dealing with HTML fragments.
 | MergeFragments
 /// An event dealing with fine grain signals.
-| MergeSignals
+| MergeStore
 /// An event dealing with removing elements from the DOM
 | RemoveFragments
-/// An event dealing with removing signals
-| RemoveSignals
+/// An event dealing with removing signals from the store.
+| RemoveFromStore
 /// An event dealing with executing JavaScript in the browser.
 | ExecuteJs
 
@@ -38,8 +38,8 @@ type EventType =
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
-    let [<Literal>] VersionClientByteSize     = 42878
-    let [<Literal>] VersionClientByteSizeGzip = 14674
+    let [<Literal>] VersionClientByteSize     = 43016
+    let [<Literal>] VersionClientByteSizeGzip = 14752
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -51,7 +51,7 @@ module Consts =
     let DefaultFragmentMergeMode = Morph
 
     let [<Literal>] DefaultMergeFragmentsUseViewTransitions = false
-    let [<Literal>] DefaultMergeSignalsOnlyIfMissing = false
+    let [<Literal>] DefaultMergeStoreOnlyIfMissing = false
     let [<Literal>] DefaultExecuteJsAutoRemove = true
     let [<Literal>] DefaultCustomEventCancelable = true
     let [<Literal>] DefaultCustomEventComposed = true
@@ -66,7 +66,7 @@ module Consts =
     let [<Literal>] DatastarDatalineSettleDuration = "settleDuration"
     let [<Literal>] DatastarDatalineFragment = "fragment"
     let [<Literal>] DatastarDatalineUseViewTransition = "useViewTransition"
-    let [<Literal>] DatastarDatalineSignals = "signals"
+    let [<Literal>] DatastarDatalineStore = "store"
     let [<Literal>] DatastarDatalineOnlyIfMissing = "onlyIfMissing"
     let [<Literal>] DatastarDatalinePaths = "paths"
     let [<Literal>] DatastarDatalineScript = "script"
@@ -89,7 +89,7 @@ module Consts =
         let toString this =
             match this with
                 | EventType.MergeFragments -> "datastar-merge-fragments"
-                | EventType.MergeSignals -> "datastar-merge-signals"
+                | EventType.MergeStore -> "datastar-merge-store"
                 | EventType.RemoveFragments -> "datastar-remove-fragments"
-                | EventType.RemoveSignals -> "datastar-remove-signals"
+                | EventType.RemoveFromStore -> "datastar-remove-from-store"
                 | EventType.ExecuteJs -> "datastar-execute-js"

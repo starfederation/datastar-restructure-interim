@@ -2,7 +2,7 @@ package site
 
 import "fmt"
 
-type EditRowSignals struct {
+type EditRowStore struct {
 	EditRowIndex int    `json:"editRowIndex"`
 	Name         string `json:"name"`
 	Email        string `json:"email"`
@@ -76,11 +76,11 @@ templ EditRowContact(contacts []*ContactEdit, i int, isEditingRow, isEditingAnyR
 	</tr>
 }
 
-templ EditRowContacts(contacts []*ContactEdit, signals *EditRowSignals) {
+templ EditRowContacts(contacts []*ContactEdit, store *EditRowStore) {
 	<div
 		id="edit_row"
 		class="flex flex-col"
-		data-signals={ templ.JSONString(signals) }
+		data-store={ templ.JSONString(store) }
 	>
 		<table class="table w-full">
 			<caption>Contacts</caption>
@@ -93,7 +93,7 @@ templ EditRowContacts(contacts []*ContactEdit, signals *EditRowSignals) {
 			</thead>
 			<tbody id="edit_row_table_body">
 				for i := range contacts {
-					@EditRowContact(contacts, i, i == signals.EditRowIndex, signals.EditRowIndex != -1)
+					@EditRowContact(contacts, i, i == store.EditRowIndex, store.EditRowIndex != -1)
 				}
 			</tbody>
 		</table>

@@ -2,7 +2,7 @@ package site
 
 import "fmt"
 
-type ActiveSearchSignals struct {
+type ActiveSearchStore struct {
 	Search string `json:"search"`
 }
 
@@ -13,11 +13,11 @@ type ActiveSearchUser struct {
 	Email     string `json:"email"`
 }
 
-templ ActiveSearchComponent(filteredUsers []*ActiveSearchUser, scores map[string]float64, signals *ActiveSearchSignals) {
+templ ActiveSearchComponent(filteredUsers []*ActiveSearchUser, scores map[string]float64, store *ActiveSearchStore) {
 	<div
 		id="active_search"
 		class="flex flex-col gap-4"
-		data-signals={ templ.JSONString(signals) }
+		data-store={ templ.JSONString(store) }
 	>
 		<div class="flex gap-4">
 			<input

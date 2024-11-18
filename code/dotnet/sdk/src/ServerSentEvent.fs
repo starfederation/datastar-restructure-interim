@@ -90,7 +90,7 @@ module ServerSentEvent =
             |] }
         |> send env
 
-    let MergeSignals env eventOptions onlyIfMissing (data:string) =
+    let mergeStore env eventOptions onlyIfMissing (data:string) =
         let dataLines = data.Split( [| "\r\n"; "\n"; "\r" |], StringSplitOptions.None)
         { EventType = Signal
           Id = eventOptions.EventId

@@ -2,21 +2,21 @@ package site
 
 import "fmt"
 
-type AnimationsRestoreSignals struct {
+type AnimationsRestoreStore struct {
 	ShouldRestore bool `json:"shouldRestore"`
 }
 
-templ animationsViewTransition(signals *AnimationsRestoreSignals) {
+templ animationsViewTransition(store *AnimationsRestoreStore) {
 	<div
 		id="view_transition"
-		data-signals={ templ.JSONString(signals) }
+		data-store={ templ.JSONString(store) }
 		class="slide-it"
 	>
 		<button
 			class="btn btn-primary btn-lg"
 			data-on-click="$get('/examples/animations/data/view_transition') "
 		>
-			if signals.ShouldRestore {
+			if store.ShouldRestore {
 				@icon("material-symbols:arrow-left")
 				Restore It!
 			} else {

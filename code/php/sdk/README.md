@@ -41,7 +41,7 @@ $sseGenerator->mergeFragment('<div></div>', [
 $sseGenerator->removeFragments('#my-div');
 
 // Merges values into the store.
-$sseGenerator->MergeSignals(['foo' => 123], [
+$sseGenerator->mergeStore(['foo' => 123], [
     'onlyIfMissing' => true,
 ]);
 

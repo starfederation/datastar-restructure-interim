@@ -10,7 +10,7 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesUpdateSignals(examplesRouter chi.Router) error {
+func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 
 	examplesRouter.Route("/update_store/data", func(dataRouter chi.Router) {
 		dataRouter.Route("/patch", func(patchRouter chi.Router) {
@@ -24,7 +24,7 @@ func setupExamplesUpdateSignals(examplesRouter chi.Router) error {
 				randKey := fmt.Sprintf("%d", rand.Intn(2<<16))
 				store[randKey] = time.Now().Format(time.RFC3339Nano)
 
-				datastar.NewSSE(w, r).MarshalAndMergeSignals(store)
+				datastar.NewSSE(w, r).MarshalAndMergeStore(store)
 			})
 
 			patchRouter.Delete("/", func(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +54,7 @@ func setupExamplesUpdateSignals(examplesRouter chi.Router) error {
 					keysToDelete = keysToDelete[:maxDeletes]
 				}
 
-				sse.RemoveSignals(keysToDelete...)
+				sse.DeleteFromStore(keysToDelete...)
 			})
 		})
 

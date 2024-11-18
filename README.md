@@ -12,11 +12,11 @@ Datastar helps you build real-time web applications with the simplicity of serve
 Here’s what frontend reactivity looks like using Datastar:
 
 ```html
-<div data-signals="{input: ''}">
+<div data-store="{input: ''}">
     <input data-model="input" type="text">
     <div data-text="$input.toUpperCase()"></div>
     <button data-on-click="$post('/endpoint')">Save</button>
-</div>
+</div> 
 ```
 
 ## Getting Started
@@ -27,7 +27,7 @@ Include Datastar with a single 14 KiB file and start adding reactivity to your f
 <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
 
-Read the [Getting Started guide »](https://data-star.dev/guide/getting_started)
+Read the [Getting Started guide »](https://data-star.dev/guide/getting_started)  
 Visit the [Datastar website »](https://data-star.dev/)
 
 ## Contributing

@@ -39,61 +39,61 @@ export const Persist: AttributePlugin = {
         const useRemote = ctx.modifiers.has(REMOTE);
 
         const storeUpdateHandler = ((_: CustomEvent<DatastarEvent>) => {
-            let store = ctx.signals();
+            let store = ctx.store();
             if (useRemote) {
                 store = remoteSignals(store);
             }
             if (keys.size > 0) {
-                const newSignals: Record<string, any> = {};
+                const newStore: Record<string, any> = {};
                 for (const key of keys) {
                     const parts = key.split(".");
-                    let newSubstore = newSignals;
-                    let subSignals = store;
+                    let newSubstore = newStore;
+                    let subStore = store;
                     for (let i = 0; i < parts.length - 1; i++) {
                         const part = parts[i];
                         if (!newSubstore[part]) {
                             newSubstore[part] = {};
                         }
                         newSubstore = newSubstore[part];
-                        subSignals = subSignals[part];
+                        subStore = subStore[part];
                     }
 
                     const lastPart = parts[parts.length - 1];
-                    newSubstore[lastPart] = subSignals[lastPart];
+                    newSubstore[lastPart] = subStore[lastPart];
                 }
-                store = newSignals;
+                store = newStore;
             }
 
-            const marshalledSignals = JSON.stringify(store);
+            const marshalledStore = JSON.stringify(store);
 
-            if (marshalledSignals === lastMarshalled) {
+            if (marshalledStore === lastMarshalled) {
                 return;
             }
 
             if (storageType === SESSION) {
-                window.sessionStorage.setItem(key, marshalledSignals);
+                window.sessionStorage.setItem(key, marshalledStore);
             } else {
-                window.localStorage.setItem(key, marshalledSignals);
+                window.localStorage.setItem(key, marshalledStore);
             }
 
-            lastMarshalled = marshalledSignals;
+            lastMarshalled = marshalledStore;
         }) as EventListener;
 
         window.addEventListener(DATASTAR_EVENT, storeUpdateHandler);
 
-        let marshalledSignals: string | null;
+        let marshalledStore: string | null;
 
         if (storageType === SESSION) {
-            marshalledSignals = window.sessionStorage.getItem(key);
+            marshalledStore = window.sessionStorage.getItem(key);
         } else {
-            marshalledSignals = window.localStorage.getItem(key);
+            marshalledStore = window.localStorage.getItem(key);
         }
 
-        if (!!marshalledSignals) {
-            const store = JSON.parse(marshalledSignals);
+        if (!!marshalledStore) {
+            const store = JSON.parse(marshalledStore);
             for (const key in store) {
                 const value = store[key];
-                ctx.upsertIfMissingSignals(key, value);
+                ctx.upsertIfMissingFromStore(key, value);
             }
         }
 

@@ -15,33 +15,32 @@ import {
 import { storeFromPossibleContents } from "../../../../utils/signals";
 
 // Setup the global store
-const name = "signals";
-export const Signals: AttributePlugin = {
+export const Store: AttributePlugin = {
     pluginType: PLUGIN_ATTRIBUTE,
-    name,
+    name: "store",
     removeNewLines: true,
     preprocessors: {
         pre: [
             {
                 pluginType: PLUGIN_PREPROCESSOR,
-                name,
+                name: "store",
                 regexp: /(?<whole>.+)/g,
                 replacer: (groups: RegexpGroups) => {
                     const { whole } = groups;
-                    return `Object.assign({...ctx.signals()}, ${whole})`;
+                    return `Object.assign({...ctx.store()}, ${whole})`;
                 },
             },
         ],
     },
     allowedModifiers: new Set(["ifmissing"]),
     onLoad: (ctx: AttributeContext) => {
-        const possibleMergeSignals = ctx.expressionFn(ctx);
-        const actualMergeSignals = storeFromPossibleContents(
-            ctx.signals(),
-            possibleMergeSignals,
+        const possibleMergeStore = ctx.expressionFn(ctx);
+        const actualMergeStore = storeFromPossibleContents(
+            ctx.store(),
+            possibleMergeStore,
             ctx.modifiers.has("ifmissing"),
         );
-        ctx.mergeSignals(actualMergeSignals);
+        ctx.mergeStore(actualMergeStore);
 
         delete ctx.el.dataset[ctx.rawKey];
     },

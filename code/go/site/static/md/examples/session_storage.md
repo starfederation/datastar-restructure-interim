@@ -2,14 +2,14 @@
 
 ## Demo
 
-<div data-signals="{sessionId:1234, count:0}" data-persist.session data-on-raf="$count++">Look at your DevTools session storage!</div>
+<div data-store="{sessionId:1234, count:0}" data-persist.session data-on-raf="$count++">Look at your DevTools session storage!</div>
 
 ## Explanation
 
 ```html
 <div
-  data-signals="{sessionId:1234, count:0}"
-  data-persist.session
+  data-store="{sessionId:1234, count:0}"
+  data-persist.session 
   data-on-raf="$count++"
 ></div>
 ```

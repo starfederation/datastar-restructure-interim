@@ -10,29 +10,29 @@ import (
 func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/click_to_load/data", func(w http.ResponseWriter, r *http.Request) {
-		signals := &ClickToLoadSignals{}
-		if err := datastar.ParseIncoming(r, signals); err != nil {
+		store := &ClickToLoadStore{}
+		if err := datastar.ParseIncoming(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
-		if signals.Limit < 1 {
-			signals.Limit = 10
-		} else if signals.Limit > 100 {
-			signals.Limit = 100
+		if store.Limit < 1 {
+			store.Limit = 10
+		} else if store.Limit > 100 {
+			store.Limit = 100
 		}
-		if signals.Offset < 0 {
-			signals.Offset = 0
+		if store.Offset < 0 {
+			store.Offset = 0
 		}
 
 		sse := datastar.NewSSE(w, r)
 
-		if signals.Offset == 0 {
-			sse.MergeFragmentTempl(ClickToEditAgentsTable(signals))
+		if store.Offset == 0 {
+			sse.MergeFragmentTempl(ClickToEditAgentsTable(store))
 		} else {
-			sse.MergeFragmentTempl(ClickToLoadMoreButton(signals))
-			for i := 0; i < signals.Limit; i++ {
-				// log.Printf("ClickToLoadAgentRow: %d", signals.Offset+i)
+			sse.MergeFragmentTempl(ClickToLoadMoreButton(store))
+			for i := 0; i < store.Limit; i++ {
+				// log.Printf("ClickToLoadAgentRow: %d", store.Offset+i)
 				sse.MergeFragmentTempl(
-					ClickToLoadAgentRow(signals.Offset+i),
+					ClickToLoadAgentRow(store.Offset+i),
 					datastar.WithQuerySelectorID("click_to_load_rows"),
 					datastar.WithMergeAppend(),
 				)

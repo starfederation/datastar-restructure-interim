@@ -15,9 +15,9 @@ export const RefAttribute: AttributePlugin = {
     mustNotEmptyExpression: true,
     bypassExpressionFunctionCreation: () => true,
     onLoad: (ctx) => {
-        ctx.upsertIfMissingSignals("_dsPlugins.refs", {});
+        ctx.upsertIfMissingFromStore("_dsPlugins.refs", {});
         const { el, expression } = ctx;
-        const s = ctx.signals();
+        const s = ctx.store();
 
         const revised = {
             _dsPlugins: {
@@ -27,10 +27,10 @@ export const RefAttribute: AttributePlugin = {
                 },
             },
         };
-        ctx.mergeSignals(revised);
+        ctx.mergeStore(revised);
 
         return () => {
-            const s = ctx.signals();
+            const s = ctx.store();
             const revised = { ...s._dsPlugins.refs.value };
             delete revised[expression];
             s._dsPlugins.refs = revised;

@@ -15,7 +15,7 @@ export function remoteSignals(obj: Object): Object {
 }
 
 export function storeFromPossibleContents(
-    currentSignals: any,
+    currentStore: any,
     contents: any,
     hasIfMissing: boolean,
 ) {
@@ -25,7 +25,7 @@ export function storeFromPossibleContents(
         Object.assign(actual, contents);
     } else {
         for (const key in contents) {
-            const currentValue = currentSignals[key]?.value;
+            const currentValue = currentStore[key]?.value;
             if (currentValue === undefined || currentValue === null) {
                 actual[key] = contents[key];
             }

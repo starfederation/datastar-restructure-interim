@@ -12,7 +12,7 @@ export const IsFetching: ActionPlugin = {
     name: "isFetching",
     method: (ctx, selector: string) => {
         const indicators = [...document.querySelectorAll(selector)];
-        const store = ctx.signals();
+        const store = ctx.store();
         const indicatorsVisible: IndicatorReference[] =
             store?._dsPlugins?.fetch.indicatorsVisible?.value || [];
         if (!!!indicators.length) return false;

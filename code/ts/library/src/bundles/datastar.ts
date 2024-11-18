@@ -31,7 +31,7 @@ import { Teleport } from "../plugins/official/attributes/visibility/teleport";
 import { ViewTransition } from "../plugins/official/attributes/visibility/viewTransition";
 import { ExecuteJS } from "../plugins/official/watchers/backend/sseExecuteJS";
 import { MergeFragments } from "../plugins/official/watchers/backend/sseMergeFragment";
-import { MergeSignals } from "../plugins/official/watchers/backend/sseMergeSignals";
+import { MergeStore } from "../plugins/official/watchers/backend/sseMergeSignals";
 import { RemoveFragments } from "../plugins/official/watchers/backend/sseRemoveFragments";
 import { RemoveSignals } from "../plugins/official/watchers/backend/sseRemoveSignals";
 
@@ -76,7 +76,7 @@ Datastar.load(
     ViewTransition,
     // effects
     MergeFragments,
-    MergeSignals,
+    MergeStore,
     RemoveFragments,
     RemoveSignals,
     ExecuteJS,

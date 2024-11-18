@@ -168,10 +168,10 @@ ServerSentEventGenerator.RemoveFragments(
 4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition VIEW_TRANSITION`, unless the view transition is the default of `false`.  `VIEW_TRANSITION` should be `true` or `false` depending on the value of the `useViewTransition` option.
 
 
-### `ServerSentEventGenerator.MergeSignals`
+### `ServerSentEventGenerator.MergeStore`
 
 ```
-ServerSentEventGenerator.MergeSignals(
+ServerSentEventGenerator.MergeStore(
     data: string,
     options ?: {
         onlyIfMissing?: boolean,
@@ -181,7 +181,7 @@ ServerSentEventGenerator.MergeSignals(
  )
 ```
 
-`MergeSignals` is a helper function to send a signal to the browser to update the data-store.
+`MergeStore` is a helper function to send a signal to the browser to update the data-store.
 
 #### Args
 
@@ -197,10 +197,10 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing BOOLEAN`, unless the onlyIfMissing is the default of `false`.  `BOOLEAN` should be `true` or `false` depending on the value of the `onlyIfMissing` option.
 2. The function ***must*** include the store merges in the event data, with each line prefixed with `store `.  This ***should*** be output after all other event data.
 
-### `ServerSentEventGenerator.RemoveSignals`
+### `ServerSentEventGenerator.RemoveFromStore`
 
 ```html
-ServerSentEventGenerator.RemoveSignals(
+ServerSentEventGenerator.RemoveFromStore(
     paths: string[],
     options?: {
         eventId?: string,
@@ -209,7 +209,7 @@ ServerSentEventGenerator.RemoveSignals(
 )
 ```
 
-`RemoveSignals` is a helper function to send a signal to the browser to remove data from the data-store.
+`RemoveFromStore` is a helper function to send a signal to the browser to remove data from the data-store.
 
 #### Args
 

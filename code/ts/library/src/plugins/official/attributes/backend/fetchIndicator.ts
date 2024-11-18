@@ -29,16 +29,16 @@ transition: opacity 300ms ease-in;
     },
     onLoad: (ctx) => {
         return ctx.reactivity.effect(() => {
-            ctx.upsertIfMissingSignals(
+            ctx.upsertIfMissingFromStore(
                 "_dsPlugins.fetch.indicatorElements",
                 {},
             );
-            ctx.upsertIfMissingSignals(
+            ctx.upsertIfMissingFromStore(
                 "_dsPlugins.fetch.indicatorsVisible",
                 [],
             );
             const c = ctx.reactivity.computed(() => `${ctx.expressionFn(ctx)}`);
-            const s = ctx.signals();
+            const s = ctx.store();
 
             const indicators = document.querySelectorAll(c.value);
             if (indicators.length === 0) {

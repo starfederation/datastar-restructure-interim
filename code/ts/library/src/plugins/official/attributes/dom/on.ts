@@ -21,7 +21,7 @@ const knownOnModifiers = new Set([
     "outside",
 ]);
 
-let lastSignalsMarshalled = "";
+let lastStoreMarshalled = "";
 
 // Sets the event listener of the element
 export const On: AttributePlugin = {
@@ -122,16 +122,16 @@ export const On: AttributePlugin = {
                     if (rafId) cancelAnimationFrame(rafId);
                 };
 
-            case "signals-change":
+            case "store-change":
                 return ctx.reactivity.effect(() => {
-                    const signals = ctx.signals();
-                    let signalsValue = signals.value;
+                    const store = ctx.store();
+                    let storeValue = store.value;
                     if (ctx.modifiers.has("remote")) {
-                        signalsValue = remoteSignals(signalsValue);
+                        storeValue = remoteSignals(storeValue);
                     }
-                    const current = JSON.stringify(signalsValue);
-                    if (lastSignalsMarshalled !== current) {
-                        lastSignalsMarshalled = current;
+                    const current = JSON.stringify(storeValue);
+                    if (lastStoreMarshalled !== current) {
+                        lastStoreMarshalled = current;
                         callback();
                     }
                 });

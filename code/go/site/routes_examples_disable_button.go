@@ -14,13 +14,10 @@ func setupExamplesDisableButton(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 
 		fragment := fmt.Sprintf(`<div>The time is %s</div>`, time.Now().UTC().Format(time.RFC3339))
-		sse.MergeFragments(fragment,
-			datastar.WithSelector("#container"),
-			datastar.WithMergeAppend(),
-		)
+		sse.MergeFragments(fragment, datastar.WithMergeAppend())
 
 		time.Sleep(1 * time.Second)
-		sse.MarshalAndMergeSignals(map[string]any{
+		sse.MarshalAndMergeStore(map[string]any{
 			"shouldDisable": false,
 		})
 	})

@@ -2,12 +2,11 @@ package site
 
 import (
 	"fmt"
-	"math/rand"
 	"net/http"
-	"time"
-
 	"github.com/go-chi/chi/v5"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
+	"math/rand"
+	"time"
 )
 
 type QA struct {
@@ -32,9 +31,9 @@ func setupExamplesQuiz(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/quiz/data", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		QA := randomQA()
-		sse.MergeFragments(fmt.Sprintf(`<div id="question2">%s</div>`, QA.Question))
-		sse.MarshalAndMergeSignals(map[string]any{
+        QA := randomQA()
+        sse.MergeFragments(fmt.Sprintf(`<div id="question2">%s</div>`, QA.Question))
+        sse.MarshalAndMergeStore(map[string]any{
 			"answer": QA.Answer,
 		})
 	})

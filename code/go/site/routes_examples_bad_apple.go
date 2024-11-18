@@ -49,7 +49,7 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 
 		frameCount := len(anim.Frames)
 
-		type BadAppleSignals struct {
+		type BadAppleStore struct {
 			Contents   string  `json:"_contents"`
 			Percentage float64 `json:"percentage"`
 		}
@@ -60,12 +60,12 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 			sse := datastar.NewSSE(w, r)
 			currentFrameIdx := 0
 
-			signals := &BadAppleSignals{
+			store := &BadAppleStore{
 				Contents:   "",
 				Percentage: 0,
 			}
 
-			sse.MarshalAndMergeSignals(signals)
+			sse.MarshalAndMergeStore(store)
 
 			for {
 				select {
@@ -74,9 +74,9 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 				case <-t.C:
 					frame := anim.Frames[currentFrameIdx]
 					nextFrame := (currentFrameIdx + 1) % frameCount
-					signals.Contents = frame
-					signals.Percentage = 100 * float64(nextFrame) / float64(frameCount)
-					sse.MarshalAndMergeSignals(signals)
+					store.Contents = frame
+					store.Percentage = 100 * float64(nextFrame) / float64(frameCount)
+					sse.MarshalAndMergeStore(store)
 					currentFrameIdx = nextFrame
 				}
 			}

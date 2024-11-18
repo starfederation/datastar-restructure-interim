@@ -13,16 +13,16 @@ func setupExamplesRedirects(examplesRouter chi.Router) error {
 	examplesRouter.Route("/redirects/data", func(dataRouter chi.Router) {
 
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			signals := &RedirectsSignals{
+			store := &RedirectsStore{
 				RedirectTo: "/essays/grugs_around_fire",
 			}
 			sse := datastar.NewSSE(w, r)
-			sse.MergeFragmentTempl(redirectsView(signals))
+			sse.MergeFragmentTempl(redirectsView(store))
 		})
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
-			signals := &RedirectsSignals{}
-			if err := datastar.ParseIncoming(r, signals); err != nil {
+			store := &RedirectsStore{}
+			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -32,7 +32,7 @@ func setupExamplesRedirects(examplesRouter chi.Router) error {
 				sse.MergeFragmentf(`<div id="update">Redirecting in %d...</div>`, i)
 				time.Sleep(500 * time.Millisecond)
 			}
-			sse.Redirect(signals.RedirectTo)
+			sse.Redirect(store.RedirectTo)
 		})
 	})
 

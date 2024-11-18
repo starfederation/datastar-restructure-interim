@@ -2,7 +2,7 @@
 
 ## Demo
 
-<div data-signals="{shouldRemove:true}">
+<div data-store="{shouldRemove:true}">
     <div>Open the console to see the output</div>
     <button class="btn btn-success" data-on-click="$get('/examples/execute_js/log')">Console log, auto remove</button>
     <button class="btn btn-error" data-on-click="$get('/examples/execute_js/error')">Console Error, leave scripts in head</button>

@@ -25,5 +25,5 @@
 ### Removed
 
 - Removed the `~ref` syntax. Use the new `$ref()` action instead.
-- Removed the `local` and `session` modifiers from `data-signals`. Use the new `data-persist` attribute instead.
+- Removed the `local` and `session` modifiers from `data-store`. Use the new `data-persist` attribute instead.
 - Removed the `datastar-redirect` and `datastar-console` SSE events.  Use the new `datastar-execute-js` SSE event instead.

@@ -1,5 +1,5 @@
 // Authors: Delaney Gillilan
-// Icon: game-icons:ring
+// Icon: material-symbols:rocket
 // Slug: Advice
 // Description: Sage advice for the weary traveler
 

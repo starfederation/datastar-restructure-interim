@@ -1,6 +1,6 @@
-import { expect, Locator, test } from "@playwright/test";
+import { Locator, expect, test } from "@playwright/test";
 
-test.describe("Signals Changed", () => {
+test.describe("Store Changed", () => {
   let increment, clear, local_clicks, serverChanged: Locator;
 
   test.beforeEach(async ({ page }) => {
@@ -14,7 +14,7 @@ test.describe("Signals Changed", () => {
     await Promise.all(
       [increment, clear, local_clicks, serverChanged].map((el) =>
         expect(el).toBeAttached()
-      ),
+      )
     );
   });
 

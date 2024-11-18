@@ -1,6 +1,6 @@
 package site
 
-type TemplCounterSignals struct {
+type TemplCounterStore struct {
 	Global uint32 `json:"global"`
 	User   uint32 `json:"user"`
 }
@@ -35,10 +35,10 @@ templ templCounterExampleCounts() {
 	</div>
 }
 
-templ templCounterExampleInitialContents(signals TemplCounterSignals) {
+templ templCounterExampleInitialContents(store TemplCounterStore) {
 	<div
 		id="container"
-		data-signals={ templ.JSONString(signals) }
+		data-store={ templ.JSONString(store) }
 		class="flex flex-col gap-4"
 	>
 		@templCounterExampleButtons()

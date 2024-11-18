@@ -27,7 +27,7 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
 
-			store := &ScrollIntoViewSignals{
+			store := &ScrollIntoViewStore{
 				Behavior: "smooth",
 				Block:    "vcenter",
 				Inline:   "hcenter",
@@ -37,7 +37,7 @@ func setupExamplesScrollIntoView(examplesRouter chi.Router) error {
 		})
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
-			store := &ScrollIntoViewSignals{}
+			store := &ScrollIntoViewStore{}
 			if err := datastar.ParseIncoming(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return

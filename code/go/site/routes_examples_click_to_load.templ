@@ -5,7 +5,7 @@ import (
 	"github.com/delaneyj/toolbelt"
 )
 
-type ClickToLoadSignals struct {
+type ClickToLoadStore struct {
 	Limit  int `json:"limit"`
 	Offset int `json:"offset"`
 }
@@ -20,7 +20,7 @@ templ ClickToLoadAgentRow(i int) {
 	</tr>
 }
 
-templ ClickToLoadMoreButton(input *ClickToLoadSignals) {
+templ ClickToLoadMoreButton(input *ClickToLoadStore) {
 	<button
 		id="more_btn"
 		class="w-full btn btn-success"
@@ -33,11 +33,11 @@ templ ClickToLoadMoreButton(input *ClickToLoadSignals) {
 	</button>
 }
 
-templ ClickToEditAgentsTable(input *ClickToLoadSignals) {
+templ ClickToEditAgentsTable(input *ClickToLoadStore) {
 	<div
 		id="click_to_load"
 		class="flex flex-col gap-2"
-		data-signals={ templ.JSONString(input) }
+		data-store={ templ.JSONString(input) }
 	>
 		<table class="table table-zebra">
 			<caption>Agents</caption>
@@ -50,7 +50,7 @@ templ ClickToEditAgentsTable(input *ClickToLoadSignals) {
 			</thead>
 			<tbody
 				id="click_to_load_rows"
-				data-signals={ templ.JSONString(input) }
+				data-star-store={ templ.JSONString(input) }
 			>
 				for i := 0; i < input.Limit; i++ {
 					@ClickToLoadAgentRow(i + input.Offset)

@@ -13,7 +13,7 @@ func setupExamplesViewTransitionAPI(examplesRouter chi.Router) error {
 	examplesRouter.Get("/view_transition_api/watch", func(w http.ResponseWriter, r *http.Request) {
 		// You can comment out the below block and still persist the session
 
-		store := &viewTransitionAPISignals{}
+		store := &viewTransitionAPIStore{}
 		if err := datastar.ParseIncoming(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
