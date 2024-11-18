@@ -125,7 +125,7 @@ export class Engine {
 
             if (globalInitializer) {
                 globalInitializer({
-                    store: this.store,
+                    store: () => this.store,
                     upsertIfMissingFromStore: this.upsertIfMissingFromStore
                         .bind(this),
                     mergeSignals: this.mergeSignals.bind(this),
