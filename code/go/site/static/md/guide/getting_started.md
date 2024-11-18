@@ -25,7 +25,7 @@ The quickest way to use Datastar is to include it in your HTML using a script ta
 ```
 
 If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) it or create your own [custom bundle](/bundler), then include it from the appropriate path.
-    
+
 ```html
 <script type="module" defer src="/path/to/datastar.min.js"></script>
 ```
@@ -48,7 +48,7 @@ Let's take a look at how Datastar allows you to handle state using the [`data-st
 <div data-store="{input: ''}"></div>
 ```
 
-This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier). 
+This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier).
 
 Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
 
@@ -64,7 +64,7 @@ Datastar provides us with a way to set up two-way data binding on an element usi
 <input data-model="input" type="text">
 ```
 
-This binds the element's value to the store value of the same name (`input`). If either is changed, the other will automatically update. 
+This binds the element's value to the store value of the same name (`input`). If either is changed, the other will automatically update.
 
 To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
@@ -114,7 +114,7 @@ The `data-computed-*` attribute creates a new store value that is computed based
 >
     <input data-model="input" type="text">
     <div data-text="$repeated"></div>
-</div> 
+</div>
 ```
 
 <div data-store="{input3: ''}" data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
@@ -180,7 +180,7 @@ This results in the button being given the `disabled` attribute whenever the inp
 
 ## Events
 
-The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element. 
+The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element.
 
 ```html
 <button data-on-click="$input = ''">
@@ -206,12 +206,12 @@ This results in the `input` store value being set to an empty string when the bu
     </button>
 </div>
 
-So what else can we do with these expressions? Anything we want, really. 
+So what else can we do with these expressions? Anything we want, really.
 
 See if you can follow the code below _before_ trying the demo.
 
 ```html
-<div data-store="{response: '', answer: 'bread'}" 
+<div data-store="{response: '', answer: 'bread'}"
      data-computed-correct="$response.toLowerCase() == $answer"
 >
     <div id="question">
@@ -222,7 +222,7 @@ See if you can follow the code below _before_ trying the demo.
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
-        That is 
+        That is
         <span data-show="$correct">correct 👍</span>
         <span data-show="!$correct">incorrect 👎</span>
     </div>
@@ -235,7 +235,7 @@ See if you can follow the code below _before_ trying the demo.
             What do you put in a toaster?
         </div>
         <div data-show="$response1 != ''">
-            You answered “<span data-text="$response1 ?? ''"></span>”. 
+            You answered “<span data-text="$response1 ?? ''"></span>”.
             That is
             <span data-show="$correct1">correct 👍</span>
             <span data-show="!$correct1">incorrect 👎</span>
@@ -256,20 +256,7 @@ First, set up your backend in the language of your choice. Using one of the help
 
 The following code would exist in a controller action endpoint in your backend.
 
-```php
-use starfederation\datastar\ServerSentEventGenerator;
-
-// Creates a new `ServerSentEventGenerator` instance.
-$sseGenerator = new ServerSentEventGenerator();
-
-// Merges the HTML fragment into the DOM.
-$sseGenerator->mergeFragments(
-    '<div id="question">What do you put in a toaster?</div>'
-);
-
-// Merges the `answer` value into the store.
-$sseGenerator->mergeStore(['answer' => 'bread']);
-```
+!!!CODE_SNIPPET:getting_started/setup!!!
 
 The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with `id="question"`. An element with the ID `question` must already exist in the DOM.
 
@@ -278,21 +265,21 @@ The `mergeStore()` method merges the `answer` store value into the frontend stor
 With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 
 ```html
-<div data-store="{response: '', answer: ''}" 
+<div data-store="{response: '', answer: ''}"
      data-computed-correct="$response.toLowerCase() == $answer"
 >
     <button data-on-click="$get('/actions/quiz')">
         Fetch a question
     </button>
     <div id="question"></div>
-    <button data-show="$answer != ''" 
+    <button data-show="$answer != ''"
             data-on-click="$response = prompt('Answer:')"
     >
         BUZZ
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
-        That is 
+        That is
         <span data-show="$correct">correct 👍</span>
         <span data-show="!$correct">incorrect 👎</span>
     </div>
@@ -308,7 +295,7 @@ Now when the `Fetch a question` button is clicked, the server will respond with 
         </button>
         <div id="question2"></div>
         <div data-show="$response2 != ''">
-            You answered “<span data-text="$response2 ?? ''"></span>”. 
+            You answered “<span data-text="$response2 ?? ''"></span>”.
             That is
             <span data-show="$correct2">correct 👍</span>
             <span data-show="!$correct2">incorrect 👎</span>
@@ -327,16 +314,11 @@ Here's how we could send an answer to the server for processing, using a `POST` 
 <button data-on-click="$post('/actions/quiz')">
     Submit answer
 </button>
-```    
+```
 
 One of the benefits of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
 
-```php
-$sseGenerator->mergeFragments('<div id="question">...</div>');
-$sseGenerator->mergeFragments('<div id="instructions">...</div>');
-$sseGenerator->mergeStore(['answer' => '...']);
-$sseGenerator->mergeStore(['prize' => '...']);
-```
+!!!CODE_SNIPPET:getting_started/multiple_events!!!
 
 ## A Quick Overview
 

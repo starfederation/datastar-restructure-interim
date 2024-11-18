@@ -20,7 +20,7 @@ var (
 )
 
 func setupExamples(ctx context.Context, router chi.Router, store sessions.Store, ns *embeddednats.Server) (err error) {
-	mdElementRenderers, _, err := markdownRenders("examples")
+	mdElementRenderers, _, err := markdownRenders(ctx, "examples")
 	if err != nil {
 		return err
 	}
