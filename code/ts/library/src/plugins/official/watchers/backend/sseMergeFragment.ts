@@ -5,7 +5,7 @@
 
 import {
     DefaultFragmentMergeMode,
-    DefaultMergeFragmentsUseViewTransitions,
+    DefaultFragmentsUseViewTransitions,
     DefaultSettleDurationMs,
     EventTypes,
     FragmentMergeModes,
@@ -36,7 +36,7 @@ export const MergeFragments: WatcherPlugin = {
             mergeMode = DefaultFragmentMergeMode,
             settleDuration: settleDurationRaw = `${DefaultSettleDurationMs}`,
             useViewTransition: useViewTransitionRaw =
-                `${DefaultMergeFragmentsUseViewTransitions}`,
+                `${DefaultFragmentsUseViewTransitions}`,
         }) => {
             const settleDuration = parseInt(settleDurationRaw);
             const useViewTransition = isBoolString(useViewTransitionRaw);
