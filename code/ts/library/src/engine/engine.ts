@@ -420,7 +420,6 @@ export class Engine {
   ${joined}
     }
     const _datastarReturnVal = _datastarExpression()
-    ctx.sendDatastarEvent('core', 'attributes', 'expr_eval', ctx.el, '${rawKey} equals ' + JSON.stringify(_datastarReturnVal))
     return _datastarReturnVal
   } catch (e) {
    const msg = \`
@@ -431,7 +430,6 @@ export class Engine {
 
   Check if the expression is valid before raising an issue.
   \`.trim()
-   ctx.sendDatastarEvent('core', 'attributes', 'expr_eval_err', ctx.el, msg)
    console.error(msg)
    debugger
   }
