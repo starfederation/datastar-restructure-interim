@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 42817
-    VersionClientByteSizeGzip = 14684
+    VersionClientByteSize     = 42821
+    VersionClientByteSizeGzip = 14683
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
