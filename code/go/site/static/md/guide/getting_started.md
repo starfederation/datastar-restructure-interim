@@ -258,9 +258,9 @@ The following code would exist in a controller action endpoint in your backend.
 
 !!!CODE_SNIPPET:getting_started/setup!!!
 
-The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with `id="question"`. An element with the ID `question` must already exist in the DOM.
+The `mergeFragments()` method merges the provided HTML fragment into the DOM, replacing the element with `id="question"`. An element with the ID `question` must already exist in the DOM.
 
-The `mergeSignals()` method merges the `answer` store value into the frontend store.
+The `mergeSignals()` method merges the `response` and `answer` signals into the frontend store.
 
 With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 
@@ -268,40 +268,43 @@ With our backend in place, we can now use the `data-on-click` attribute to send 
 <div data-store="{response: '', answer: ''}"
      data-computed-correct="$response.toLowerCase() == $answer"
 >
+    <div id="question"></div>
     <button data-on-click="$get('/actions/quiz')">
         Fetch a question
     </button>
-    <div id="question"></div>
     <button data-show="$answer != ''"
-            data-on-click="$response = prompt('Answer:')"
+            data-on-click="$response = prompt('Answer:') ?? ''"
     >
         BUZZ
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
-        That is
-        <span data-show="$correct">correct 👍</span>
-        <span data-show="!$correct">incorrect 👎</span>
+        <span data-show="$correct2">That is correct ✅</span>
+        <span data-show="!$correct2">
+            The correct answer is “<span data-text="$answer2"></span>” 🤷
+        </span>
     </div>
 </div>
 ```
 
 Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify `answer` store value. We're driving state from the backend!
 
-<div data-store="{response2: '', answer2: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex items-center gap-4 p-8">
+<div data-store="{response2: '', answer2: '', lastQuestionId: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex justify-between items-start gap-4 p-8">
+<div data-text="$lastQuestionId"></div>
     <div class="space-y-3">
+        <div id="question2"></div>
+        <div data-show="$response2 != ''">
+            You answered “<span data-text="$response2"></span>”.
+            <span data-show="$correct2">That is correct ✅</span>
+            <span data-show="!$correct2">
+                The correct answer is “<span data-text="$answer2"></span>” 🤷
+            </span>
+        </div>
         <button data-on-click="$get('/examples/quiz/data')" class="btn btn-secondary">
             Fetch a question
         </button>
-        <div id="question2"></div>
-        <div data-show="$response2 != ''">
-            You answered “<span data-text="$response2 ?? ''"></span>”.
-            That is
-            <span data-show="$correct2">correct 👍</span>
-            <span data-show="!$correct2">incorrect 👎</span>
-        </div>
     </div>
-    <button data-show="$answer2 != ''" data-on-click="$response2 = prompt('Answer:')" class="btn btn-primary">
+    <button data-show="$answer2 != ''" data-on-click="$response2 = prompt('Answer:') ?? ''" class="btn btn-primary">
         BUZZ
     </button>
 </div>
