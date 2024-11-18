@@ -31,7 +31,7 @@ type EventType =
 | RemoveFragments
 /// An event dealing with removing signals from the store.
 | RemoveFromStore
-/// An event dealing to execute functions in the browser.
+/// An event dealing with executing JavaScript in the browser.
 | ExecuteJs
 
 

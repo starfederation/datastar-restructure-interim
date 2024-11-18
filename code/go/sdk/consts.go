@@ -83,7 +83,7 @@ const (
     // An event dealing with removing signals from the store.
     EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
 
-    // An event dealing to execute functions in the browser.
+    // An event dealing with executing JavaScript in the browser.
     EventTypeExecuteJs EventType = "datastar-execute-js"
 
 )
