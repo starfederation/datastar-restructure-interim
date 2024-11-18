@@ -4,7 +4,7 @@
 // Description: Merge store data from a server using the Datastar SDK interface
 
 import {
-    DefaultMergeStoreOnlyIfMissing,
+    DefaultMergeSignalsOnlyIfMissing,
     EventTypes,
     InitExpressionFunction,
     WatcherPlugin,
@@ -14,30 +14,30 @@ import { storeFromPossibleContents } from "../../../../utils/signals";
 import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
-export const MergeStore: WatcherPlugin = {
+export const MergeSignals: WatcherPlugin = {
     pluginType: PLUGIN_WATCHER,
-    name: EventTypes.MergeStore,
+    name: EventTypes.MergeSignals,
     onGlobalInit: async (ctx) => {
-        datastarSSEEventWatcher(EventTypes.MergeStore, ({
-            store = "{}",
+        datastarSSEEventWatcher(EventTypes.MergeSignals, ({
+            signals = "{}",
             onlyIfMissing: onlyIfMissingRaw =
-                `${DefaultMergeStoreOnlyIfMissing}`,
+                `${DefaultMergeSignalsOnlyIfMissing}`,
         }) => {
             const onlyIfMissing = isBoolString(onlyIfMissingRaw);
             const fnContents =
-                ` return Object.assign({...ctx.store()}, ${store})`;
+                ` return Object.assign({...ctx.signals()}, ${signals})`;
             try {
                 const fn = new Function(
                     "ctx",
                     fnContents,
                 ) as InitExpressionFunction;
-                const possibleMergeStore = fn(ctx);
-                const actualMergeStore = storeFromPossibleContents(
-                    ctx.store(),
-                    possibleMergeStore,
+                const possibleMergeSignals = fn(ctx);
+                const actualMergeSignals = storeFromPossibleContents(
+                    ctx.signals(),
+                    possibleMergeSignals,
                     onlyIfMissing,
                 );
-                ctx.mergeStore(actualMergeStore);
+                ctx.mergeSignals(actualMergeSignals);
                 ctx.applyPlugins(document.body);
             } catch (e) {
                 console.log(fnContents);

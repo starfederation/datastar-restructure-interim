@@ -1,8 +1,8 @@
-## Multi-line Store
+## Multi-line Signals
 
 ## Demo
 
-<div data-store="{
+<div data-signals="{
     foo:1234,
     bar:'bar'
 }">
@@ -25,7 +25,7 @@
 
 ```html
 <div
-  data-store="{
+  data-signals="{
     foo:1234,
     bar:'bar'
 }"
@@ -35,4 +35,4 @@
 </div>
 ```
 
-The `data-store` attribute is used to define a store object. The store object is a JS object. Before you could not have a multi-line store object. Now you can.
+The `data-signals` attribute is used to define a store object. The store object is a JS object. Before you could not have a multi-line store object. Now you can.

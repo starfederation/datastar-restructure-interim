@@ -9,7 +9,7 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesStoreIfMissing(examplesRouter chi.Router) error {
+func setupExamplesSignalsIfMissing(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/store_ifmissing/updates", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
@@ -27,10 +27,10 @@ func setupExamplesStoreIfMissing(examplesRouter chi.Router) error {
 
 				switch i % 2 {
 				case 0:
-					fragment := fmt.Sprintf(`<div id="placeholder" data-store.ifmissing=%q data-text="$id"></div>`, store)
+					fragment := fmt.Sprintf(`<div id="placeholder" data-signals.ifmissing=%q data-text="$id"></div>`, store)
 					sse.MergeFragments(fragment, datastar.WithMergeUpsertAttributes())
 				case 1:
-					sse.MarshalAndMergeStoreIfMissing(store)
+					sse.MarshalAndMergeSignalsIfMissing(store)
 				}
 				i++
 			}

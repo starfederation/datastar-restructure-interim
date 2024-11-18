@@ -34,8 +34,8 @@ export function sendSSERequest(
             throw new Error("URL is required for SSE request");
         }
 
-        const currentStore = ctx.store().value;
-        let store = Object.assign({}, currentStore);
+        const currentSignals = ctx.signals().value;
+        let store = Object.assign({}, currentSignals);
         if (onlyRemotes) {
             store = remoteSignals(store);
         }
@@ -149,7 +149,7 @@ export function sendSSERequest(
             },
             onclose: () => {
                 try {
-                    const store = ctx.store();
+                    const store = ctx.signals();
                     const indicatorsVisible: Signal<IndicatorReference[]> =
                         store?._dsPlugins?.fetch?.indicatorsVisible || [];
                     const indicatorElements: HTMLElement[] =

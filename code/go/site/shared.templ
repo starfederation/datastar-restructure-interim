@@ -236,7 +236,7 @@ templ SidebarPrevNextLinks(essayGroups []*SidebarGroup, current *SidebarLink) {
 templ codeSnippetFragment(block CodeSnippetBlock) {
 	<div
 		class="flex flex-col gap-2"
-		data-store="{language:'go'}"
+		data-signals="{language:'go'}"
 	>
 		<div class="flex justify-between items-center gap-2">
 			<div class="font-bold text-primary">{ block.BasePath.Lower }</div>

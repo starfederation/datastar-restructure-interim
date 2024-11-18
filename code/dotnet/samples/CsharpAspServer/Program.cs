@@ -45,15 +45,15 @@ public static class Program
             DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
             DataStore newDataStore = store with { Output = $"Your Input: {store.Input}" };
             await sse.MergeFragment(
-                $"<main class='container' id='main' data-store='{newDataStore.SerializeToJson()}'></main>",
+                $"<main class='container' id='main' data-signals='{newDataStore.SerializeToJson()}'></main>",
                 new MergeFragmentOpts() { MergeMode = FragmentMergeMode.UpsertAttributes }
                 );
         });
         app.MapGet("/patch", async (IServerSentEventGenerator sse, IDatastarStore dsStore) =>
         {
             DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
-            DataStore mergeStore = new() { Output = $"Patched Output: {store.Input}" };
-            await sse.MergeStore(mergeStore.SerializeToJson());
+            DataStore MergeSignals = new() { Output = $"Patched Output: {store.Input}" };
+            await sse.MergeSignals(MergeSignals.SerializeToJson());
         });
         app.MapGet("/target", async (IServerSentEventGenerator sse) =>
         {

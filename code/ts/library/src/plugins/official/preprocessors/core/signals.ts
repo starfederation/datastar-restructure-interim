@@ -9,7 +9,7 @@ export const SignalsProcessor: PreprocessorPlugin = {
     regexp: wholePrefixSuffix("\\$", "signal", "(?<method>\\([^\\)]*\\))?"),
     replacer: (groups: RegexpGroups) => {
         const { signal, method } = groups;
-        const prefix = `ctx.store()`;
+        const prefix = `ctx.signals()`;
         if (!method?.length) {
             return `${prefix}.${signal}.value`;
         }

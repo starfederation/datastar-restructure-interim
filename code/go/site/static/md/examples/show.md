@@ -12,7 +12,7 @@ This example displays how to use the show attribute. You can use show without mo
 <div
   id="container"
   class="flex flex-col gap-4"
-  data-store={ templ.JSONString(store) }
+  data-signals={ templ.JSONString(store) }
 >
   <button
     class="btn btn-primary"
@@ -31,7 +31,7 @@ And with modifiers:
 <div
   id="container"
   class="flex flex-col gap-4"
-  data-store={ templ.JSONString(store) }
+  data-signals={ templ.JSONString(store) }
 >
   <button
     class="btn btn-primary"

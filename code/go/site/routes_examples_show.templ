@@ -1,14 +1,14 @@
 package site
 
-type ShowStore struct {
+type ShowSignals struct {
 	BindBool bool `json:"bindBool"`
 }
 
-templ ShowView(store *ShowStore) {
+templ ShowView(signals *ShowSignals) {
 	<div
 		id="container"
 		class="flex flex-col gap-4"
-		data-store={ templ.JSONString(store) }
+		data-signals={ templ.JSONString(signals) }
 	>
 		<button
 			class="btn btn-primary"

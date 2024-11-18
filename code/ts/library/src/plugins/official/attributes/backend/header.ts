@@ -13,16 +13,16 @@ export const Header: AttributePlugin = {
     mustNotEmptyExpression: true,
 
     onLoad: (ctx) => {
-        ctx.upsertIfMissingFromStore("_dsPlugins.fetch.headers", {});
+        ctx.upsertIfMissingSignals("_dsPlugins.fetch.headers", {});
 
         const headers: Object = ctx.expressionFn(ctx);
         for (const [key, value] of Object.entries(headers)) {
-            ctx.store()._dsPlugins.fetch.headers[key] = value;
+            ctx.signals()._dsPlugins.fetch.headers[key] = value;
         }
 
         return () => {
             for (const key of Object.keys(headers)) {
-                delete ctx.store()._dsPlugins.fetch.headers[key];
+                delete ctx.signals()._dsPlugins.fetch.headers[key];
             }
         };
     },
