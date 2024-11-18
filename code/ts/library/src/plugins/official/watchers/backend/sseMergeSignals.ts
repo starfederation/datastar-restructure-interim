@@ -4,7 +4,7 @@
 // Description: Merge store data from a server using the Datastar SDK interface
 
 import {
-    DefaultOnlyIfMissing,
+    DefaultMergeStoreOnlyIfMissing,
     EventTypes,
     InitExpressionFunction,
     WatcherPlugin,
@@ -20,7 +20,8 @@ export const MergeStore: WatcherPlugin = {
     onGlobalInit: async (ctx) => {
         datastarSSEEventWatcher(EventTypes.MergeStore, ({
             store = "{}",
-            onlyIfMissing: onlyIfMissingRaw = `${DefaultOnlyIfMissing}`,
+            onlyIfMissing: onlyIfMissingRaw =
+                `${DefaultMergeStoreOnlyIfMissing}`,
         }) => {
             const onlyIfMissing = isBoolString(onlyIfMissingRaw);
             const fnContents =

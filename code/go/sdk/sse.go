@@ -159,7 +159,7 @@ func (sse *ServerSentEventGenerator) Send(eventType EventType, dataLines []strin
 	// flush the buffer to the client
 	sse.flusher.Flush()
 
-	// log.Print("\n" + buf.String())
+	// log.Print(NewLine + buf.String())
 
 	return nil
 }

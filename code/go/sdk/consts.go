@@ -7,14 +7,15 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 42941
-    VersionClientByteSizeGzip = 14702
+    VersionClientByteSize     = 43016
+    VersionClientByteSizeGzip = 14752
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
 
     // Default strings
+    DefaultExecuteJsType = "module"
     DefaultCustomEventSelector = "document"
     DefaultCustomEventDetailJson = "{}"
 
@@ -26,22 +27,17 @@ const (
     UseViewTransitionDatalineLiteral = "useViewTransition "
     StoreDatalineLiteral = "store "
     OnlyIfMissingDatalineLiteral = "onlyIfMissing "
-    UrlDatalineLiteral = "url "
     PathsDatalineLiteral = "paths "
     ScriptDatalineLiteral = "script "
-    AutoRemoveScriptDatalineLiteral = "autoRemoveScript "
-    EventNameDatalineLiteral = "eventName "
-    CancelableDatalineLiteral = "cancelable "
-    ComposedDatalineLiteral = "composed "
-    BubblesDatalineLiteral = "bubbles "
-    DetailJsonDatalineLiteral = "detailJson "
+    TypeDatalineLiteral = "type "
+    AutoRemoveDatalineLiteral = "autoRemove "
 )
 
 var (
     // Default booleans
-    DefaultUseViewTransitions = false
-    DefaultOnlyIfMissing = false
-    DefaultAutoRemoveScript = true
+    DefaultMergeFragmentsUseViewTransitions = false
+    DefaultMergeStoreOnlyIfMissing = false
+    DefaultExecuteJsAutoRemove = true
     DefaultCustomEventCancelable = true
     DefaultCustomEventComposed = true
     DefaultCustomEventBubbles = true
@@ -95,13 +91,7 @@ const (
     // An event dealing with removing signals from the store.
     EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
 
-    // An event dealing with redirecting the browser.
-    EventTypeRedirect EventType = "datastar-redirect"
-
-    // An event dealing to execute functions in the browser.
+    // An event dealing with executing JavaScript in the browser.
     EventTypeExecuteJs EventType = "datastar-execute-js"
-
-    // An event dealing with custom events.
-    EventTypeDispatchCustomEvent EventType = "datastar-dispatch-custom-event"
 
 )

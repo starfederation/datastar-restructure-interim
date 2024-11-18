@@ -31,19 +31,15 @@ type EventType =
 | RemoveFragments
 /// An event dealing with removing signals from the store.
 | RemoveFromStore
-/// An event dealing with redirecting the browser.
-| Redirect
-/// An event dealing to execute functions in the browser.
+/// An event dealing with executing JavaScript in the browser.
 | ExecuteJs
-/// An event dealing with custom events.
-| DispatchCustomEvent
 
 
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0"
-    let [<Literal>] VersionClientByteSize     = 42941
-    let [<Literal>] VersionClientByteSizeGzip = 14702
+    let [<Literal>] VersionClientByteSize     = 43016
+    let [<Literal>] VersionClientByteSizeGzip = 14752
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -54,13 +50,14 @@ module Consts =
     /// Default: morph - Morphs the fragment into the existing element using idiomorph.
     let DefaultFragmentMergeMode = Morph
 
-    let [<Literal>] DefaultUseViewTransitions = false
-    let [<Literal>] DefaultOnlyIfMissing = false
-    let [<Literal>] DefaultAutoRemoveScript = true
+    let [<Literal>] DefaultMergeFragmentsUseViewTransitions = false
+    let [<Literal>] DefaultMergeStoreOnlyIfMissing = false
+    let [<Literal>] DefaultExecuteJsAutoRemove = true
     let [<Literal>] DefaultCustomEventCancelable = true
     let [<Literal>] DefaultCustomEventComposed = true
     let [<Literal>] DefaultCustomEventBubbles = true
 
+    let [<Literal>] DefaultExecuteJsType = "module"
     let [<Literal>] DefaultCustomEventSelector = "document"
     let [<Literal>] DefaultCustomEventDetailJson = "{}"
 
@@ -71,15 +68,10 @@ module Consts =
     let [<Literal>] DatastarDatalineUseViewTransition = "useViewTransition"
     let [<Literal>] DatastarDatalineStore = "store"
     let [<Literal>] DatastarDatalineOnlyIfMissing = "onlyIfMissing"
-    let [<Literal>] DatastarDatalineUrl = "url"
     let [<Literal>] DatastarDatalinePaths = "paths"
     let [<Literal>] DatastarDatalineScript = "script"
-    let [<Literal>] DatastarDatalineAutoRemoveScript = "autoRemoveScript"
-    let [<Literal>] DatastarDatalineEventName = "eventName"
-    let [<Literal>] DatastarDatalineCancelable = "cancelable"
-    let [<Literal>] DatastarDatalineComposed = "composed"
-    let [<Literal>] DatastarDatalineBubbles = "bubbles"
-    let [<Literal>] DatastarDatalineDetailJson = "detailJson"
+    let [<Literal>] DatastarDatalineType = "type"
+    let [<Literal>] DatastarDatalineAutoRemove = "autoRemove"
 
     module FragmentMergeMode =
         let toString this =
@@ -100,6 +92,4 @@ module Consts =
                 | EventType.MergeStore -> "datastar-merge-store"
                 | EventType.RemoveFragments -> "datastar-remove-fragments"
                 | EventType.RemoveFromStore -> "datastar-remove-from-store"
-                | EventType.Redirect -> "datastar-redirect"
                 | EventType.ExecuteJs -> "datastar-execute-js"
-                | EventType.DispatchCustomEvent -> "datastar-dispatch-custom-event"

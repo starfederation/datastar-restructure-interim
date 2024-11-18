@@ -12,13 +12,14 @@ export const DefaultSettleDurationMs = 300;
 export const DefaultSseRetryDurationMs = 1000;
 
 // Default strings
+export const DefaultExecuteJsType = "module";
 export const DefaultCustomEventSelector = "document";
 export const DefaultCustomEventDetailJson = "{}";
 
 // Default booleans
-export const DefaultUseViewTransitions = false;
-export const DefaultOnlyIfMissing = false;
-export const DefaultAutoRemoveScript = true;
+export const DefaultMergeFragmentsUseViewTransitions = false;
+export const DefaultMergeStoreOnlyIfMissing = false;
+export const DefaultExecuteJsAutoRemove = true;
 export const DefaultCustomEventCancelable = true;
 export const DefaultCustomEventComposed = true;
 export const DefaultCustomEventBubbles = true;
@@ -42,7 +43,5 @@ export const EventTypes = {
     MergeStore: "datastar-merge-store", // An event dealing with fine grain signals.
     RemoveFragments: "datastar-remove-fragments", // An event dealing with removing elements from the DOM
     RemoveFromStore: "datastar-remove-from-store", // An event dealing with removing signals from the store.
-    Redirect: "datastar-redirect", // An event dealing with redirecting the browser.
-    ExecuteJs: "datastar-execute-js", // An event dealing to execute functions in the browser.
-    DispatchCustomEvent: "datastar-dispatch-custom-event", // An event dealing with custom events.
+    ExecuteJs: "datastar-execute-js", // An event dealing with executing JavaScript in the browser.
 } as const;
