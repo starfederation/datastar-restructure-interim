@@ -19,6 +19,8 @@ Here’s what frontend reactivity looks like using Datastar:
 </div> 
 ```
 
+Visit the [Datastar Website »](https://data-star.dev/)
+
 ## Getting Started
 
 Include Datastar with a single 14 KiB file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice, and use the helper SDKs (available for Go, PHP, TypeScript and .NET) to get up and running even faster.
@@ -28,8 +30,6 @@ Include Datastar with a single 14 KiB file and start adding reactivity to your f
 ```
 
 Read the [Getting Started Guide »](https://data-star.dev/guide/getting_started)
-
-Visit the [Datastar Website »](https://data-star.dev/)
 
 ## Contributing
 
