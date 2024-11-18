@@ -86,7 +86,7 @@ Currently valid values are
 When called the function ***must*** write to the response buffer the following in specified order.  If any part of this process fails you ***must*** return/throw an error depending on language norms.
 1. ***Must*** write `event: EVENT_TYPE\n` where `EVENT_TYPE` is [EventType](#EventType)
 2. If a user defined event ID is provided, the function ***must*** write `id: EVENT_ID\n` where `EVENT_ID` is the event ID.
-3. ***Must*** write `retry: RETRY_DURATION\n` where `RETRY_DURATION` is the provided retry duration, ***unless*** the retry duration is the default of `1000` milliseconds.
+3. ***Must*** write `retry: RETRY_DURATION\n` where `RETRY_DURATION` is the provided retry duration, ***unless*** the value is the default of `1000` milliseconds.
 4. For each string in the provided `dataLines`, you ***must*** write `data: DATA\n` where `DATA` is the provided string.
 5. ***Must*** write a `\n\n` to complete the event per the SSE spec.
 6. Afterward the writer ***should*** immediately flush.  This can be confounded by other middlewares such as compression layers
@@ -136,9 +136,9 @@ Valid values should match the [FragmentMergeMode](#FragmentMergeMode) and curren
 #### Logic
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-fragments` event type.
 1. If `selector` is provided, the function ***must*** include the selector in the event data in the format `selector SELECTOR\n`, ***unless*** the selector is empty.
-2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE\n`, ***unless*** the merge mode is the default of `morph`.
-3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration SETTLE_DURATION\n`, ***unless*** the settle duration is the default of `300` milliseconds.
-4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition USE_VIEW_TRANSITION\n`, ***unless*** the view transition is the default of `false`.  `USE_VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
+2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE\n`, ***unless*** the value is the default of `morph`.
+3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration SETTLE_DURATION\n`, ***unless*** the value is the default of `300` milliseconds.
+4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition USE_VIEW_TRANSITION\n`, ***unless*** the value is the default of `false`.  `USE_VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
 5. The function ***must*** include the fragment content in the event data, with each line prefixed with `fragment `. This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveFragments`
@@ -169,8 +169,8 @@ ServerSentEventGenerator.RemoveFragments(
 #### Logic
 1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove-fragments` event type.
 2. The function ***must*** include the selector in the event data in the format `selector SELECTOR\n`.
-3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration SETTLE_DURATION\n`, ***unless*** the settle duration is the default of `300` milliseconds.
-4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition USE_VIEW_TRANSITION\n`, ***unless*** the view transition is the default of `false`.  `USE_VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
+3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration SETTLE_DURATION\n`, ***unless*** the value is the default of `300` milliseconds.
+4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition USE_VIEW_TRANSITION\n`, ***unless*** the value is the default of `false`.  `USE_VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
 
 
 ### `ServerSentEventGenerator.MergeSignals`
@@ -199,7 +199,7 @@ Data is a JS or JSON object that will be sent to the browser to update the store
 #### Logic
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-signals` event type.
 
-1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing ONLY_IF_MISSING\n`, ***unless*** the onlyIfMissing is the default of `false`.  `ONLY_IF_MISSING` should be `true` or `false` (string), depending on the value of the `onlyIfMissing` option.
+1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing ONLY_IF_MISSING\n`, ***unless*** the value is the default of `false`.  `ONLY_IF_MISSING` should be `true` or `false` (string), depending on the value of the `onlyIfMissing` option.
 2. The function ***must*** include the store merges in the event data, with each line prefixed with `store`.  This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveSignals`
@@ -232,6 +232,7 @@ ServerSentEventGenerator.ExecuteJs(
     script: string,
     options?: {
         autoRemove?: boolean,
+        type?: string,
         eventId?: string,
         retryDuration?: durationInMilliseconds
     }
@@ -245,11 +246,13 @@ ServerSentEventGenerator.ExecuteJs(
 ##### Options
 
 * `autoRemove` Whether to remove the script after execution, if not provided the Datastar client side ***will*** default to `true`.
+* `type` The script type to use, if not provided the Datastar client side ***will*** default to `module`.
 
 #### Logic
 1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-execute-js` event type.
-2. If `autoRemove` is provided, the function ***must*** include the auto remove script value in the event data in the format `autoRemove AUTO_REMOVE\n`, ***unless*** the auto remove script value is the default of `true`.  `AUTO_REMOVE` should be `true` or `false` (string), depending on the value of the `autoRemove` option.
-3. The function ***must*** include the script in the event data, with each line prefixed with `script`.  This ***should*** be output after all other event data.
+2. If `autoRemove` is provided, the function ***must*** include the auto remove script value in the event data in the format `autoRemove AUTO_REMOVE\n`, ***unless*** the value is the default of `true`.
+3. If `type` is provided, the function ***must*** include the type value in the event data in the format `type TYPE\n`, ***unless*** the type value is the default of `module`.
+4. The function ***must*** include the script in the event data, with each line prefixed with `script`.  This ***should*** be output after all other event data.
 
 ## `ParseIncoming(r *http.Request, store any) error`
 

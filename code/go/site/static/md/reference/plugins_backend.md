@@ -25,7 +25,7 @@ Every request will be sent with a `{datastar: *}` object containing the current 
 An example of a minimal valid response would be:
 
 ```go
-event: datastar-fragment
+event: datastar-merge-fragments
 data: fragment <div id="foo">Hello!</div>
 ```
 
@@ -42,10 +42,10 @@ Additional `data` lines can be added to the response to override the default beh
 
 ### datastar-merge-fragments
 
-| Key                            | Description                                                                                                             |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| `data: selector #foo`          | Selects the target element of the `merge` process using a CSS selector.                                                 |
-| `data: selector self`          | Selects the initiating element as the target.                                                                           |
+| Key                                | Description                                                                                                             |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `data: selector #foo`              | Selects the target element of the `merge` process using a CSS selector.                                                 |
+| `data: selector self`              | Selects the initiating element as the target.                                                                           |
 | `data: mergeMode morph`            | Merges the fragment using [Idiomorph](https://github.com/bigskysoftware/idiomorph). This is the default merge strategy. |
 | `data: mergeMode inner`            | Replaces the target's innerHTML with the fragment.                                                                      |
 | `data: mergeMode outer`            | Replaces the target's outerHTML with the fragment.                                                                      |
@@ -54,9 +54,9 @@ Additional `data` lines can be added to the response to override the default beh
 | `data: mergeMode before`           | Inserts the fragment before the target as a sibling.                                                                    |
 | `data: mergeMode after`            | Inserts the fragment after the target as a sibling.                                                                     |
 | `data: mergeMode upsertAttributes` | Merges attributes from the fragment into the target – useful for updating a store.                                      |
-| `data: settleDuration 1000`            | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
-| `data: useViewTransition true` | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
-| `data: fragment`               | The HTML fragment to merge into the DOM.                                                                                |
+| `data: settleDuration 1000`        | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
+| `data: useViewTransition true`     | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
+| `data: fragment`                   | The HTML fragment to merge into the DOM.                                                                                |
 
 ### datastar-merge-signals
 
@@ -75,7 +75,7 @@ event: datastar-remove-fragments
 data: selector #foo
 ```
 
-The `datastar-remove-fragments` event is used to remove HTML fragemts that match the provided selector from the DOM.
+The `datastar-remove-fragments` event is used to remove HTML fragments that match the provided selector from the DOM.
 
 ```go
 event: datastar-remove-signals
@@ -89,10 +89,11 @@ The `datastar-remove-signals` event is used to remove signals that match the pro
 ```go
 event: datastar-execute-js
 data: autoRemove true
+data: type module
 data: script console.log('Hello, world!')
 ```
 
-The `datastar-execute-js` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. 
+The `datastar-execute-js` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. The `type` line determines which type attribute to give the script element. 
 
 ## Attribute Plugins
 
