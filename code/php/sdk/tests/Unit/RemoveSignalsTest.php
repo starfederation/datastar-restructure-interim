@@ -1,6 +1,5 @@
 <?php
 
-use starfederation\datastar\Consts;
 use starfederation\datastar\events\RemoveSignals;
 
 test('Event is correctly output for `paths`', function() {
