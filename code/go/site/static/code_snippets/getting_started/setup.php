@@ -1,3 +1,4 @@
+<?php
 use starfederation\datastar\ServerSentEventGenerator;
 
 // Get a random question and answer from somewhere in your code.
