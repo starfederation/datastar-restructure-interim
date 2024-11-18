@@ -4672,6 +4672,14 @@ html:has(.drawer-toggle:checked) {
   position: sticky;
 }
 
+.z-0 {
+  z-index: 0;
+}
+
+.-mb-8 {
+  margin-bottom: -2rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }

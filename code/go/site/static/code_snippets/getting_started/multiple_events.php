@@ -1,4 +1,4 @@
-$sseGenerator->mergeFragments('<div id="question">...</div>');
-$sseGenerator->mergeFragments('<div id="instructions">...</div>');
-$sseGenerator->mergeStore(['answer' => '...']);
-$sseGenerator->mergeStore(['prize' => '...']);
+$sse->mergeFragments('<div id="question">...</div>');
+$sse->mergeFragments('<div id="instructions">...</div>');
+$sse->mergeSignals(['answer' => '...']);
+$sse->mergeSignals(['prize' => '...']);

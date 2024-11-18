@@ -1,12 +1,15 @@
 use starfederation\datastar\ServerSentEventGenerator;
 
+// Get a random question and answer from somewhere in your code.
+[$question, $answer] = getRandomQuestionAnswer();
+
 // Creates a new `ServerSentEventGenerator` instance.
-$sseGenerator = new ServerSentEventGenerator();
+$sse = new ServerSentEventGenerator();
 
 // Merges the HTML fragment into the DOM.
-$sseGenerator->mergeFragments(
-    '<div id="question">What do you put in a toaster?</div>'
+$sse->mergeFragments(
+    '<div id="question">' . $question . '</div>'
 );
 
-// Merges the `answer` value into the store.
-$sseGenerator->mergeStore(['answer' => 'bread']);
+// Merges the `answer` signal into the store.
+$sse->mergeSignals(['answer' => $answer]);
