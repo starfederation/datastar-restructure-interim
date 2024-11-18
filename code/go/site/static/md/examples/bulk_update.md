@@ -45,7 +45,7 @@ Added to the page in this way:
 The server will either activate or deactivate the checked users and then rerender the tbody tag with updated rows. It will apply the class activate or deactivate to rows that have been mutated. This allows us to use a bit of CSS to flash a color helping the user see what happened. The server events look like this:
 
 ```go
-event: datastar-fragment
+event: datastar-merge-fragments
 id: 129798448043016254
 data: selector
 data: mergeMode upsertAttributes

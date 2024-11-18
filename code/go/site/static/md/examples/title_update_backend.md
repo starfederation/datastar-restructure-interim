@@ -11,7 +11,7 @@ Look at the title change in the browser tab!
 A user [in the Discord channel](https://discord.com/channels/725789699527933952/1180902694999838752) was asking about needing a plugin similar to [HTMX's head support](https://v1.htmx.org/extensions/head-support/) to update title or head elements. With Datastar this is unnecessary as you can just update the title directly with an SSE fragment
 
 ```
-event: datastar-fragment
+event: datastar-merge-fragments
 data: selector title
 data: fragment <title>08:30:36 from server</title>
 ```

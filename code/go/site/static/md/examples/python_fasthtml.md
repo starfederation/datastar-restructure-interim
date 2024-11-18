@@ -122,7 +122,7 @@ class DatastarEventMessage:
     data_lines.append(f"fragment {fragment}")
 
     self.data = "\ndata: ".join(data_lines)
-    self.event = "datastar-fragment"
+    self.event = "datastar-merge-fragments"
 
   def format_sse(self):
     return f"event: {self.event}\ndata: {self.data}\n\n"

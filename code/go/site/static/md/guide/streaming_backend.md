@@ -38,7 +38,7 @@ Normally you don't need to do this but its trying to show that you can load a pa
 On the backend (Go in this case) we return a set of render fragments in the form of a set of `text/event-stream` events. In this case it's just a single event.
 
 ```go
-event: datastar-fragment
+event: datastar-merge-fragments
 id: 129618219840307262
 data: selector
 data: mergeMode morph
