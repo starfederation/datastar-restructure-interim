@@ -73,14 +73,14 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
 ```
 
 <div data-store="{input1: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="input1" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$input1"></div>
+            <div data-text="$input1" class="output"></div>
         </div>
     </div>
 </div>
@@ -94,14 +94,14 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 ```
 
 <div data-store="{input2: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="input2" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$input2.toUpperCase()"></div>
+            <div data-text="$input2.toUpperCase()" class="output"></div>
         </div>
     </div>
 </div>
@@ -118,14 +118,14 @@ The `data-computed-*` attribute creates a new store value that is computed based
 ```
 
 <div data-store="{input3: ''}" data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="input3" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$repeated"></div>
+            <div data-text="$repeated" class="output"></div>
         </div>
     </div>
 </div>
@@ -139,14 +139,14 @@ Another useful attribute is `data-show`, which can be used to show or hide an el
 This results in the button being visible only when the input is _not_ empty.
 
 <div data-store="{input4: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="input4" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$input4"></div>
+            <div data-text="$input4" class="output"></div>
         </div>
     </div>
     <button data-show="$input4 != ''" class="btn btn-primary">
@@ -163,14 +163,14 @@ The `data-bind-*` attribute can be used to bind a JavaScript expression to any v
 This results in the button being given the `disabled` attribute whenever the input _is_ empty.
 
 <div data-store="{input5: ''}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="input5" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$input5"></div>
+            <div data-text="$input5" class="output"></div>
         </div>
     </div>
     <button data-bind-disabled="$input5 == ''" class="btn btn-primary">
@@ -191,14 +191,14 @@ The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to exe
 This results in the `input` store value being set to an empty string when the button element is clicked. If the `input` store value is used elsewhere, its value will automatically update.
 
 <div data-store="{input6: 'Some input'}" class="alert flex justify-between items-start p-8">
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
             <input data-model="input6" class="input input-bordered">
         </div>
         <div class="flex items-center">
             <div class="w-20">Output:</div>
-            <div data-text="$input6"></div>
+            <div data-text="$input6" class="output"></div>
         </div>
     </div>
     <button data-on-click="$input6 = ''" class="btn btn-secondary">
@@ -324,7 +324,7 @@ One of the benefits of using SSE is that we can send multiple events (HTML fragm
 
 Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragments and store updates.
 
-- Declare global state: `data-store="{foo: ''}"`
+- Merge values into the global store: `data-store="{foo: ''}"`
 - Bind element values to store values: `data-model="foo"`
 - Set the text content of an element to an expression.: `data-text="$foo"`
 - Show or hide an element using an expression: `data-show="$foo"`

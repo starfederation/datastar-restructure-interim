@@ -10,3 +10,7 @@ h2 a, h3 a, h4 a, h5 a, h6 a {
 pre code {
     @apply text-base !important;
 }
+
+.output {
+    @apply input input-bordered bg-transparent flex flex-grow items-center max-w-64 overflow-hidden;
+}

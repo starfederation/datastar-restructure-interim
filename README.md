@@ -27,8 +27,9 @@ Include Datastar with a single 14 KiB file and start adding reactivity to your f
 <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
 
-Read the [Getting Started guide »](https://data-star.dev/guide/getting_started)  
-Visit the [Datastar website »](https://data-star.dev/)
+Read the [Getting Started Guide »](https://data-star.dev/guide/getting_started)
+
+Visit the [Datastar Website »](https://data-star.dev/)
 
 ## Contributing
 
