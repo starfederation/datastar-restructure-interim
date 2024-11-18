@@ -88,7 +88,7 @@ var ConstsData = &ConstTemplateData{
 	},
 	DefaultStrings: []*DefaultString{
 		{
-			Name:  toolbelt.ToCasedString("ExecuteJSType"),
+			Name:  toolbelt.ToCasedString("ExecuteJsType"),
 			Value: "module",
 		},
 		{
@@ -187,7 +187,7 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event for removing signals from the store.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("ExecuteJS"),
+					Name:        toolbelt.ToCasedString("ExecuteJs"),
 					Value:       "datastar-execute-js",
 					Description: "An event for executing JavaScript in the browser.",
 				},

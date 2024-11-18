@@ -42,7 +42,7 @@ func WithExecuteJSAutoRemove(autoremove bool) ExecuteJSOption {
 func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...ExecuteJSOption) error {
 	options := &ExecuteJSOptions{
 		RetryDuration: DefaultSseRetryDuration,
-		Type:          DefaultExecuteJSType,
+		Type:          DefaultExecuteJsType,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -59,11 +59,11 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 
 	dataLines := make([]string, 0, 64)
 
-	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJSAutoRemove {
+	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJsautoRemove {
 		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
 
-	if options.Type != DefaultExecuteJSType {
+	if options.Type != DefaultExecuteJsType {
 		dataLines = append(dataLines, TypeDatalineLiteral, options.Type)
 	}
 
@@ -73,7 +73,7 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 	}
 
 	return sse.Send(
-		EventTypeExecuteJS,
+		EventTypeExecuteJs,
 		dataLines,
 		sendOpts...,
 	)

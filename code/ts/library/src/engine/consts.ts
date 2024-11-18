@@ -3,7 +3,7 @@
 export const DATASTAR = "datastar";
 export const DATASTAR_EVENT = "datastar-event";
 export const DATASTAR_REQUEST = "datastar-request";
-export const VERSION = "0.20.0";
+export const VERSION = "0.20.0-beta-1";
 
 // Defaults
 
@@ -12,7 +12,7 @@ export const DefaultSettleDurationMs = 300;
 export const DefaultSseRetryDurationMs = 1000;
 
 // Default strings
-export const DefaultExecuteJstype = "module";
+export const DefaultExecuteJsType = "module";
 export const DefaultCustomEventSelector = "document";
 export const DefaultCustomEventDetailJson = "{}";
 
