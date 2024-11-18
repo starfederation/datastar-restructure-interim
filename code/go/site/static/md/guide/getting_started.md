@@ -260,7 +260,7 @@ The following code would exist in a controller action endpoint in your backend.
 
 The `mergeFragments()` method merges the HTML fragment into the DOM, replacing the element with `id="question"`. An element with the ID `question` must already exist in the DOM.
 
-The `mergeStore()` method merges the `answer` store value into the frontend store.
+The `mergeSignals()` method merges the `answer` store value into the frontend store.
 
 With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 

@@ -8,18 +8,18 @@ import (
 	"time"
 )
 
-func (sse *ServerSentEventGenerator) ConsoleLog(msg string, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ConsoleLog(msg string, opts ...ExecuteJsOption) error {
 	call := fmt.Sprintf("console.log(%q)", msg)
-	return sse.ExecuteJS(call, opts...)
+	return sse.ExecuteJs(call, opts...)
 }
 
 func (sse *ServerSentEventGenerator) ConsoleLogf(format string, args ...any) error {
 	return sse.ConsoleLog(fmt.Sprintf(format, args...))
 }
 
-func (sse *ServerSentEventGenerator) ConsoleError(err error, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ConsoleError(err error, opts ...ExecuteJsOption) error {
 	call := fmt.Sprintf("console.error(%q)", err.Error())
-	return sse.ExecuteJS(call, opts...)
+	return sse.ExecuteJs(call, opts...)
 }
 
 func (sse *ServerSentEventGenerator) Redirectf(format string, args ...any) error {
@@ -27,9 +27,9 @@ func (sse *ServerSentEventGenerator) Redirectf(format string, args ...any) error
 	return sse.Redirect(url)
 }
 
-func (sse *ServerSentEventGenerator) Redirect(url string, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) Redirect(url string, opts ...ExecuteJsOption) error {
 	js := fmt.Sprintf("window.location.href = %q;", url)
-	return sse.ExecuteJS(js, opts...)
+	return sse.ExecuteJs(js, opts...)
 }
 
 type DispatchCustomEventOptions struct {
@@ -129,24 +129,24 @@ elements.forEach((element) => {
 		string(detailsJSON),
 	)
 
-	executeOptions := make([]ExecuteJSOption, 0)
+	executeOptions := make([]ExecuteJsOption, 0)
 	if options.EventID != "" {
-		executeOptions = append(executeOptions, WithExecuteJSEventID(options.EventID))
+		executeOptions = append(executeOptions, WithExecuteJsEventID(options.EventID))
 	}
 	if options.RetryDuration != 0 {
-		executeOptions = append(executeOptions, WithExecuteJSRetryDuration(options.RetryDuration))
+		executeOptions = append(executeOptions, WithExecuteJsRetryDuration(options.RetryDuration))
 	}
 
-	return sse.ExecuteJS(js, executeOptions...)
+	return sse.ExecuteJs(js, executeOptions...)
 
 }
 
-func (sse *ServerSentEventGenerator) ReplaceURL(u url.URL, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ReplaceURL(u url.URL, opts ...ExecuteJsOption) error {
 	js := fmt.Sprintf(`window.history.replaceState({}, "", %q)`, u.String())
-	return sse.ExecuteJS(js, opts...)
+	return sse.ExecuteJs(js, opts...)
 }
 
-func (sse *ServerSentEventGenerator) ReplaceURLQuerystring(r *http.Request, values url.Values, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ReplaceURLQuerystring(r *http.Request, values url.Values, opts ...ExecuteJsOption) error {
 	u := *r.URL
 	u.RawQuery = values.Encode()
 	return sse.ReplaceURL(u, opts...)

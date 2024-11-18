@@ -29,7 +29,7 @@ use starfederation\datastar\ServerSentEventGenerator;
 // Creates a new `ServerSentEventGenerator` instance.
 $sse = new ServerSentEventGenerator();
 
-// Merges a fragment into the DOM.
+// Merges HTML fragments into the DOM.
 $sse->mergeFragments('<div></div>', [
     'selector' => '#my-div',
     'mergeMode' => FragmentMergeMode::Append,
@@ -37,7 +37,7 @@ $sse->mergeFragments('<div></div>', [
     'useViewTransition' => true,
 ]);
 
-// Removes one or more fragments from the DOM.
+// Removes HTML fragments from the DOM.
 $sse->removeFragments('#my-div');
 
 // Merges signals into the store.
@@ -45,7 +45,7 @@ $sse->mergeSignals(['foo' => 123], [
     'onlyIfMissing' => true,
 ]);
 
-// Removes one or more signal paths from the store.
+// Removes signals from the store.
 $sse->removeSignals(['foo', 'bar']);
 
 // Executes JavaScript in the browser.

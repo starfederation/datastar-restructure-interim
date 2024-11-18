@@ -28,7 +28,7 @@ class RemoveSignals implements EventInterface
      */
     public function getEventType(): EventType
     {
-        return EventType::RemoveFromStore;
+        return EventType::RemoveSignals;
     }
 
     /**

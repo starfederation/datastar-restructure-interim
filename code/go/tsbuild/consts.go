@@ -56,7 +56,7 @@ var ConstsData = &ConstTemplateData{
 			Value: false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("mergeStoreOnlyIfMissing"),
+			Name:  toolbelt.ToCasedString("mergeSignalsOnlyIfMissing"),
 			Value: false,
 		},
 		{
@@ -110,14 +110,14 @@ var ConstsData = &ConstTemplateData{
 		toolbelt.ToCasedString("fragment"),
 		toolbelt.ToCasedString("useViewTransition"),
 
-		// MergeStore
+		// MergeSignals
 		toolbelt.ToCasedString("store"),
 		toolbelt.ToCasedString("onlyIfMissing"),
 
-		// RemoveFromStore
+		// RemoveSignals
 		toolbelt.ToCasedString("paths"),
 
-		// ExecuteJS
+		// ExecuteJs
 		toolbelt.ToCasedString("script"),
 		toolbelt.ToCasedString("type"),
 		toolbelt.ToCasedString("autoRemove"),
@@ -169,27 +169,27 @@ var ConstsData = &ConstTemplateData{
 				{
 					Name:        toolbelt.ToCasedString("MergeFragments"),
 					Value:       "datastar-merge-fragments",
-					Description: "An event dealing with HTML fragments.",
+					Description: "An event for merging HTML fragments into the DOM.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("MergeStore"),
-					Value:       "datastar-merge-store",
-					Description: "An event dealing with fine grain signals.",
+					Name:        toolbelt.ToCasedString("MergeSignals"),
+					Value:       "datastar-merge-signals",
+					Description: "An event for merging signals into the store.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("RemoveFragments"),
 					Value:       "datastar-remove-fragments",
-					Description: "An event dealing with removing elements from the DOM",
+					Description: "An event for removing HTML fragments from the DOM.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("RemoveFromStore"),
-					Value:       "datastar-remove-from-store",
-					Description: "An event dealing with removing signals from the store.",
+					Name:        toolbelt.ToCasedString("RemoveSignals"),
+					Value:       "datastar-remove-signals",
+					Description: "An event for removing signals from the store.",
 				},
 				{
 					Name:        toolbelt.ToCasedString("ExecuteJs"),
 					Value:       "datastar-execute-js",
-					Description: "An event dealing with executing JavaScript in the browser.",
+					Description: "An event for executing JavaScript in the browser.",
 				},
 			},
 		},

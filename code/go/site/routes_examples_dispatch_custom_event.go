@@ -14,12 +14,12 @@ func setupExamplesDispatchCustomEvent(examplesRouter chi.Router) error {
 		sse := datastar.NewSSE(w, r)
 		ctx := r.Context()
 
-		sse.ExecuteJS(`
+		sse.ExecuteJs(`
 document.addEventListener('example-event-from-server', (e) => {
     const container = document.getElementById('container');
     container.innerHTML = JSON.stringify(e.detail, null,2);
 });
-		`, datastar.WithExecuteJSAutoRemove(false))
+		`, datastar.WithExecuteJsAutoRemove(false))
 
 		type ExampleEventDetails struct {
 			Name          string `faker:"name"`

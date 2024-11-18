@@ -6,41 +6,41 @@ import (
 	"time"
 )
 
-type ExecuteJSOptions struct {
+type ExecuteJsOptions struct {
 	EventID       string
 	RetryDuration time.Duration
 	Type          string
 	AutoRemove    *bool
 }
 
-type ExecuteJSOption func(*ExecuteJSOptions)
+type ExecuteJsOption func(*ExecuteJsOptions)
 
-func WithExecuteJSEventID(id string) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteJsEventID(id string) ExecuteJsOption {
+	return func(o *ExecuteJsOptions) {
 		o.EventID = id
 	}
 }
 
-func WithExecuteJSRetryDuration(retryDuration time.Duration) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteJsRetryDuration(retryDuration time.Duration) ExecuteJsOption {
+	return func(o *ExecuteJsOptions) {
 		o.RetryDuration = retryDuration
 	}
 }
 
-func WithExecuteJSType(t string) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteJsType(t string) ExecuteJsOption {
+	return func(o *ExecuteJsOptions) {
 		o.Type = t
 	}
 }
 
-func WithExecuteJSAutoRemove(autoremove bool) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteJsAutoRemove(autoremove bool) ExecuteJsOption {
+	return func(o *ExecuteJsOptions) {
 		o.AutoRemove = &autoremove
 	}
 }
 
-func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...ExecuteJSOption) error {
-	options := &ExecuteJSOptions{
+func (sse *ServerSentEventGenerator) ExecuteJs(scriptContents string, opts ...ExecuteJsOption) error {
+	options := &ExecuteJsOptions{
 		RetryDuration: DefaultSseRetryDuration,
 		Type:          DefaultExecuteJsType,
 	}

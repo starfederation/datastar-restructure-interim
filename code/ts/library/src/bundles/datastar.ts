@@ -29,9 +29,9 @@ import { ScrollIntoView } from "../plugins/official/attributes/visibility/scroll
 import { Show } from "../plugins/official/attributes/visibility/show";
 import { Teleport } from "../plugins/official/attributes/visibility/teleport";
 import { ViewTransition } from "../plugins/official/attributes/visibility/viewTransition";
-import { ExecuteJS } from "../plugins/official/watchers/backend/sseExecuteJS";
+import { ExecuteJs } from "../plugins/official/watchers/backend/sseExecuteJs";
 import { MergeFragments } from "../plugins/official/watchers/backend/sseMergeFragment";
-import { MergeStore } from "../plugins/official/watchers/backend/sseMergeSignals";
+import { MergeSignals } from "../plugins/official/watchers/backend/sseMergeSignals";
 import { RemoveFragments } from "../plugins/official/watchers/backend/sseRemoveFragments";
 import { RemoveSignals } from "../plugins/official/watchers/backend/sseRemoveSignals";
 
@@ -76,8 +76,8 @@ Datastar.load(
     ViewTransition,
     // effects
     MergeFragments,
-    MergeStore,
+    MergeSignals,
     RemoveFragments,
     RemoveSignals,
-    ExecuteJS,
+    ExecuteJs,
 );

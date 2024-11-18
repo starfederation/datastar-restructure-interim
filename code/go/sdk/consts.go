@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0"
-    VersionClientByteSize     = 42817
-    VersionClientByteSizeGzip = 14684
+    VersionClientByteSize     = 42820
+    VersionClientByteSizeGzip = 14677
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
@@ -36,7 +36,7 @@ const (
 var (
     // Default booleans
     DefaultMergeFragmentsUseViewTransitions = false
-    DefaultMergeStoreOnlyIfMissing = false
+    DefaultMergeSignalsOnlyIfMissing = false
     DefaultExecuteJsAutoRemove = true
     DefaultCustomEventCancelable = true
     DefaultCustomEventComposed = true
@@ -79,19 +79,19 @@ const (
 type EventType string
 
 const (
-    // An event dealing with HTML fragments.
+    // An event for merging HTML fragments into the DOM.
     EventTypeMergeFragments EventType = "datastar-merge-fragments"
 
-    // An event dealing with fine grain signals.
-    EventTypeMergeStore EventType = "datastar-merge-store"
+    // An event for merging signals into the store.
+    EventTypeMergeSignals EventType = "datastar-merge-signals"
 
-    // An event dealing with removing elements from the DOM
+    // An event for removing HTML fragments from the DOM.
     EventTypeRemoveFragments EventType = "datastar-remove-fragments"
 
-    // An event dealing with removing signals from the store.
-    EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
+    // An event for removing signals from the store.
+    EventTypeRemoveSignals EventType = "datastar-remove-signals"
 
-    // An event dealing with executing JavaScript in the browser.
+    // An event for executing JavaScript in the browser.
     EventTypeExecuteJs EventType = "datastar-execute-js"
 
 )

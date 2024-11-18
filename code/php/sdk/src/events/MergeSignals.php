@@ -29,7 +29,7 @@ class MergeSignals implements EventInterface
      */
     public function getEventType(): EventType
     {
-        return EventType::MergeStore;
+        return EventType::MergeSignals;
     }
 
     /**

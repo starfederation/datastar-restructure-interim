@@ -5,20 +5,20 @@ import (
 	"fmt"
 )
 
-func (sse *ServerSentEventGenerator) MarshalAndMergeStore(store any, opts ...MergeStoreOption) error {
+func (sse *ServerSentEventGenerator) MarshalAndMergeSignals(store any, opts ...MergeSignalsOption) error {
 	b, err := json.Marshal(store)
 	if err != nil {
 		panic(err)
 	}
-	if err := sse.MergeStore(b, opts...); err != nil {
+	if err := sse.MergeSignals(b, opts...); err != nil {
 		return fmt.Errorf("failed to merge store: %w", err)
 	}
 
 	return nil
 }
 
-func (sse *ServerSentEventGenerator) MarshalAndMergeStoreIfMissing(store any, opts ...MergeStoreOption) error {
-	if err := sse.MarshalAndMergeStore(
+func (sse *ServerSentEventGenerator) MarshalAndMergeSignalsIfMissing(store any, opts ...MergeSignalsOption) error {
+	if err := sse.MarshalAndMergeSignals(
 		store,
 		append(opts, WithOnlyIfMissing(true))...,
 	); err != nil {
@@ -27,8 +27,8 @@ func (sse *ServerSentEventGenerator) MarshalAndMergeStoreIfMissing(store any, op
 	return nil
 }
 
-func (sse *ServerSentEventGenerator) MergeStoreIfMissingRaw(storeJSON string) error {
-	if err := sse.MergeStore([]byte(storeJSON), WithOnlyIfMissing(true)); err != nil {
+func (sse *ServerSentEventGenerator) MergeSignalsIfMissingRaw(storeJSON string) error {
+	if err := sse.MergeSignals([]byte(storeJSON), WithOnlyIfMissing(true)); err != nil {
 		return fmt.Errorf("failed to merge store if missing: %w", err)
 	}
 	return nil

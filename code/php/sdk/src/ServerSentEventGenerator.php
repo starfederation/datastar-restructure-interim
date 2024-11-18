@@ -22,7 +22,7 @@ class ServerSentEventGenerator
     }
 
     /**
-     * Merges a fragment into the DOM.
+     * Merges HTML fragments into the DOM.
      *
      * @param array{
      *     selector?: string|null,
@@ -33,13 +33,13 @@ class ServerSentEventGenerator
      *     retryDuration?: int|null,
      * } $options
      */
-    public function mergeFragment(string $data, array $options = []): void
+    public function mergeFragments(string $data, array $options = []): void
     {
         $this->sendEvent(new MergeFragments($data, $options));
     }
 
     /**
-     * Removes one or more fragments from the DOM.
+     * Removes HTML fragments from the DOM.
      *
      * @param array{
      *      eventId?: string|null,
@@ -52,17 +52,17 @@ class ServerSentEventGenerator
     }
 
     /**
-     * Merges values into the store.
+     * Merges signals into the store.
      */
-    public function mergeStore(string $data, array $options = []): void
+    public function mergeSignals(string $data, array $options = []): void
     {
         $this->sendEvent(new MergeSignals($data, $options));
     }
 
     /**
-     * Removes one or more paths from the store.
+     * Removes signal paths from the store.
      */
-    public function removeFromStore(array $paths): void
+    public function removeSignals(array $paths): void
     {
         $this->sendEvent(new RemoveSignals(paths: $paths));
     }
@@ -70,7 +70,7 @@ class ServerSentEventGenerator
     /**
      * Executes JavaScript in the browser.
      */
-    public function executeJS(string $script, array $options = []): void
+    public function executeJs(string $script, array $options = []): void
     {
         $this->sendEvent(new ExecuteJs($script, $options));
     }

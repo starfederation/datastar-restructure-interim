@@ -18,7 +18,7 @@ export const DefaultCustomEventDetailJson = "{}";
 
 // Default booleans
 export const DefaultMergeFragmentsUseViewTransitions = false;
-export const DefaultMergeStoreOnlyIfMissing = false;
+export const DefaultMergeSignalsOnlyIfMissing = false;
 export const DefaultExecuteJsAutoRemove = true;
 export const DefaultCustomEventCancelable = true;
 export const DefaultCustomEventComposed = true;
@@ -39,9 +39,9 @@ export const FragmentMergeModes = {
 export const DefaultFragmentMergeMode = FragmentMergeModes.Morph;
 
 export const EventTypes = {
-    MergeFragments: "datastar-merge-fragments", // An event dealing with HTML fragments.
-    MergeStore: "datastar-merge-store", // An event dealing with fine grain signals.
-    RemoveFragments: "datastar-remove-fragments", // An event dealing with removing elements from the DOM
-    RemoveFromStore: "datastar-remove-from-store", // An event dealing with removing signals from the store.
-    ExecuteJs: "datastar-execute-js", // An event dealing with executing JavaScript in the browser.
+    MergeFragments: "datastar-merge-fragments", // An event for merging HTML fragments into the DOM.
+    MergeSignals: "datastar-merge-signals", // An event for merging signals into the store.
+    RemoveFragments: "datastar-remove-fragments", // An event for removing HTML fragments from the DOM.
+    RemoveSignals: "datastar-remove-signals", // An event for removing signals from the store.
+    ExecuteJs: "datastar-execute-js", // An event for executing JavaScript in the browser.
 } as const;

@@ -11,12 +11,12 @@ class Consts
 {
     public const DATASTAR_KEY = 'datastar';
     public const VERSION = '0.20.0';
-    public const VERSION_CLIENT_BYTE_SIZE = 42817;
-    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14684;
+    public const VERSION_CLIENT_BYTE_SIZE = 42820;
+    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14677;
     public const DEFAULT_SETTLE_DURATION = 300;
     public const DEFAULT_SSE_RETRY_DURATION = 1000;
     public const DEFAULT_MERGE_FRAGMENTS_USE_VIEW_TRANSITIONS = false;
-    public const DEFAULT_MERGE_STORE_ONLY_IF_MISSING = false;
+    public const DEFAULT_MERGE_SIGNALS_ONLY_IF_MISSING = false;
     public const DEFAULT_EXECUTE_JS_AUTO_REMOVE = true;
     public const DEFAULT_CUSTOM_EVENT_CANCELABLE = true;
     public const DEFAULT_CUSTOM_EVENT_COMPOSED = true;

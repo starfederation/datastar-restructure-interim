@@ -9,7 +9,7 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesExecuteJS(examplesRouter chi.Router) error {
+func setupExamplesExecuteJs(examplesRouter chi.Router) error {
 	const maxCount = 5
 
 	examplesRouter.Get("/execute_js/log", func(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +26,7 @@ func setupExamplesExecuteJS(examplesRouter chi.Router) error {
 
 		for i := 0; i < maxCount; i++ {
 			err := fmt.Errorf("this is error message %d/%d", i+1, maxCount)
-			sse.ConsoleError(err, datastar.WithExecuteJSAutoRemove(false))
+			sse.ConsoleError(err, datastar.WithExecuteJsAutoRemove(false))
 			time.Sleep(1 * time.Second)
 		}
 	})
