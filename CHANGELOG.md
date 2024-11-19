@@ -10,7 +10,7 @@
 - Added SDKs for Go, PHP, .NET  and TypeScript.
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
-- Added the `datastar-execute-js` SSE event.
+- Added the `datastar-execute-script` SSE event.
 - Added `replaceUrl` examples from both signals and the backend.
 
 ### Changed
@@ -30,4 +30,4 @@
 - Removed the `~ref` syntax. Use the new `$ref()` action instead.
 - Removed the `local` and `session` modifiers from `data-store`. Use the new `data-persist` attribute instead.
 - Removed the `datastar-delete` SSE event. Use the new `datastar-remove-fragments` and `datastar-remove-signals` SSE events instead.
-- Removed the `datastar-redirect` and `datastar-console` SSE events.  Use the new `datastar-execute-js` SSE event instead.
+- Removed the `datastar-redirect` and `datastar-console` SSE events.  Use the new `datastar-execute-script` SSE event instead.
