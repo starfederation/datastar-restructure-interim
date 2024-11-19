@@ -38,8 +38,8 @@ type EventType =
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0-beta-1"
-    let [<Literal>] VersionClientByteSize     = 42948
-    let [<Literal>] VersionClientByteSizeGzip = 14719
+    let [<Literal>] VersionClientByteSize     = 42952
+    let [<Literal>] VersionClientByteSizeGzip = 14720
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -64,13 +64,13 @@ module Consts =
     let [<Literal>] DatastarDatalineSelector = "selector"
     let [<Literal>] DatastarDatalineMergeMode = "mergeMode"
     let [<Literal>] DatastarDatalineSettleDuration = "settleDuration"
-    let [<Literal>] DatastarDatalineFragment = "fragment"
+    let [<Literal>] DatastarDatalineFragments = "fragments"
     let [<Literal>] DatastarDatalineUseViewTransition = "useViewTransition"
-    let [<Literal>] DatastarDatalineStore = "store"
+    let [<Literal>] DatastarDatalineSignals = "signals"
     let [<Literal>] DatastarDatalineOnlyIfMissing = "onlyIfMissing"
     let [<Literal>] DatastarDatalinePaths = "paths"
     let [<Literal>] DatastarDatalineScript = "script"
-    let [<Literal>] DatastarDatalineAttribute = "attribute"
+    let [<Literal>] DatastarDatalineAttributes = "attributes"
     let [<Literal>] DatastarDatalineAutoRemove = "autoRemove"
 
     module FragmentMergeMode =

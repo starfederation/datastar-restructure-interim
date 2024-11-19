@@ -31,7 +31,7 @@ export const MergeFragments: WatcherPlugin = {
     onGlobalInit: async (ctx) => {
         const fragmentContainer = document.createElement("template");
         datastarSSEEventWatcher(EventTypes.MergeFragments, ({
-            fragment = "<div></div>",
+            fragments: fragmentsRaw = "<div></div>",
             selector = "",
             mergeMode = DefaultFragmentMergeMode,
             settleDuration: settleDurationRaw = `${DefaultSettleDurationMs}`,
@@ -41,7 +41,7 @@ export const MergeFragments: WatcherPlugin = {
             const settleDuration = parseInt(settleDurationRaw);
             const useViewTransition = isBoolString(useViewTransitionRaw);
 
-            fragmentContainer.innerHTML = fragment.trim();
+            fragmentContainer.innerHTML = fragmentsRaw.trim();
             const fragments = [...fragmentContainer.content.children];
             fragments.forEach((fragment) => {
                 if (!(fragment instanceof Element)) {
