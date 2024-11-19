@@ -225,10 +225,10 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 
 1. The function ***must*** include the paths in the event data in the format `paths PATHS\n` where `PATHS` is a space separated list of the provided paths.
 
-### `ServerSentEventGenerator.ExecuteJS`
+### `ServerSentEventGenerator.ExecuteScript`
 
 ```
-ServerSentEventGenerator.ExecuteJS(
+ServerSentEventGenerator.ExecuteScript(
     script: string,
     options?: {
         autoRemove?: boolean,

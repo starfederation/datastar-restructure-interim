@@ -49,7 +49,7 @@ $sse->mergeSignals(['foo' => 123], [
 $sse->removeSignals(['foo', 'bar']);
 
 // Executes JavaScript in the browser.
-$sse->ExecuteJS('console.log("Hello, world!")');
+$sse->ExecuteScript('console.log("Hello, world!")');
 ```
 
 ```php

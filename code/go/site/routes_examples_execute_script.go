@@ -9,7 +9,7 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesExecuteJS(examplesRouter chi.Router) error {
+func setupExamplesExecuteScript(examplesRouter chi.Router) error {
 	const maxCount = 5
 
 	examplesRouter.Get("/execute_js/log", func(w http.ResponseWriter, r *http.Request) {

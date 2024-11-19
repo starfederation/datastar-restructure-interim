@@ -12,7 +12,7 @@ import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
-export const ExecuteJS: WatcherPlugin = {
+export const ExecuteScript: WatcherPlugin = {
     pluginType: PLUGIN_WATCHER,
     name: EventTypes.ExecuteScript,
     onGlobalInit: async () => {

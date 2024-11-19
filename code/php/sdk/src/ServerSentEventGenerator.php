@@ -8,7 +8,7 @@ namespace starfederation\datastar;
 use starfederation\datastar\enums\EventType;
 use starfederation\datastar\enums\FragmentMergeMode;
 use starfederation\datastar\events\EventInterface;
-use starfederation\datastar\events\ExecuteJS;
+use starfederation\datastar\events\ExecuteScript;
 use starfederation\datastar\events\MergeFragments;
 use starfederation\datastar\events\MergeSignals;
 use starfederation\datastar\events\RemoveFragments;
@@ -70,9 +70,9 @@ class ServerSentEventGenerator
     /**
      * Executes JavaScript in the browser.
      */
-    public function executeJS(string $script, array $options = []): void
+    public function executeScript(string $script, array $options = []): void
     {
-        $this->sendEvent(new ExecuteJS($script, $options));
+        $this->sendEvent(new ExecuteScript($script, $options));
     }
 
     /**
