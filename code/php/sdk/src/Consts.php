@@ -11,17 +11,17 @@ class Consts
 {
     public const DATASTAR_KEY = 'datastar';
     public const VERSION = '0.20.0-beta-1';
-    public const VERSION_CLIENT_BYTE_SIZE = 42831;
-    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14683;
+    public const VERSION_CLIENT_BYTE_SIZE = 42948;
+    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14719;
     public const DEFAULT_SETTLE_DURATION = 300;
     public const DEFAULT_SSE_RETRY_DURATION = 1000;
     public const DEFAULT_FRAGMENTS_USE_VIEW_TRANSITIONS = false;
     public const DEFAULT_MERGE_SIGNALS_ONLY_IF_MISSING = false;
-    public const DEFAULT_EXECUTE_JS_AUTO_REMOVE = true;
+    public const DEFAULT_EXECUTE_SCRIPT_AUTO_REMOVE = true;
     public const DEFAULT_CUSTOM_EVENT_CANCELABLE = true;
     public const DEFAULT_CUSTOM_EVENT_COMPOSED = true;
     public const DEFAULT_CUSTOM_EVENT_BUBBLES = true;
-    public const DEFAULT_EXECUTE_JS_TYPE = 'module';
+    public const DEFAULT_EXECUTE_SCRIPT_ATTRIBUTES = 'type module';
     public const DEFAULT_CUSTOM_EVENT_SELECTOR = 'document';
     public const DEFAULT_CUSTOM_EVENT_DETAIL_JSON = '{}';
     public const DEFAULT_FRAGMENT_MERGE_MODE = FragmentMergeMode::Morph;
@@ -34,6 +34,6 @@ class Consts
     public const ONLY_IF_MISSING_DATALINE_LITERAL = 'onlyIfMissing ';
     public const PATHS_DATALINE_LITERAL = 'paths ';
     public const SCRIPT_DATALINE_LITERAL = 'script ';
-    public const TYPE_DATALINE_LITERAL = 'type ';
+    public const ATTRIBUTE_DATALINE_LITERAL = 'attribute ';
     public const AUTO_REMOVE_DATALINE_LITERAL = 'autoRemove ';
 }
