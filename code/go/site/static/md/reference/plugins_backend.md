@@ -84,16 +84,16 @@ data: paths foo.bar 1234 abc
 
 The `datastar-remove-signals` event is used to remove signals that match the provided paths from the store.
 
-### datastar-execute-js
+### datastar-execute-script
 
 ```go
-event: datastar-execute-js
+event: datastar-execute-script
 data: autoRemove true
 data: type module
 data: script console.log('Hello, world!')
 ```
 
-The `datastar-execute-js` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. The `type` line determines which type attribute to give the script element. 
+The `datastar-execute-script` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. The `type` line determines which type attribute to give the script element. 
 
 ## Attribute Plugins
 
