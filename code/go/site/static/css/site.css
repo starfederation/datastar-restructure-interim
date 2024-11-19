@@ -3555,10 +3555,6 @@ details.collapse summary::-webkit-details-marker {
       calc(var(--filler-size) * -1 - var(--filler-offset)) 0 0 var(--filler-size);
 }
 
-.range-primary {
-  --range-shdw: var(--fallback-p,oklch(var(--p)/1));
-}
-
 @keyframes rating-pop {
   0% {
     transform: translateY(-0.125em);

@@ -107,11 +107,11 @@ var ConstsData = &ConstTemplateData{
 		// MergeFragments
 		toolbelt.ToCasedString("mergeMode"),
 		toolbelt.ToCasedString("settleDuration"),
-		toolbelt.ToCasedString("fragment"),
+		toolbelt.ToCasedString("fragments"),
 		toolbelt.ToCasedString("useViewTransition"),
 
 		// MergeSignals
-		toolbelt.ToCasedString("store"),
+		toolbelt.ToCasedString("signals"),
 		toolbelt.ToCasedString("onlyIfMissing"),
 
 		// RemoveSignals
@@ -119,7 +119,7 @@ var ConstsData = &ConstTemplateData{
 
 		// ExecuteScript
 		toolbelt.ToCasedString("script"),
-		toolbelt.ToCasedString("attribute"),
+		toolbelt.ToCasedString("attributes"),
 		toolbelt.ToCasedString("autoRemove"),
 	},
 	Enums: []*EnumDefinition{

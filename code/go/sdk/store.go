@@ -55,7 +55,7 @@ func (sse *ServerSentEventGenerator) MergeSignals(storeContents []byte, opts ...
 	}
 	lines := bytes.Split(storeContents, newLineBuf)
 	for _, line := range lines {
-		dataRows = append(dataRows, StoreDatalineLiteral+string(line))
+		dataRows = append(dataRows, SignalsDatalineLiteral+string(line))
 	}
 
 	sendOptions := make([]SSEEventOption, 0, 2)

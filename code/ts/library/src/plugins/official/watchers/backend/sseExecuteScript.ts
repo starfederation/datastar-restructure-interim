@@ -21,7 +21,7 @@ export const ExecuteJS: WatcherPlugin = {
             (
                 {
                     autoRemove: autoRemoveRaw = "true",
-                    attribute: attributesRaw = DefaultExecuteScriptAttributes,
+                    attributes: attributesRaw = DefaultExecuteScriptAttributes,
                     script,
                 },
             ) => {

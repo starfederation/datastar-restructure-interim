@@ -11,8 +11,8 @@ class Consts
 {
     public const DATASTAR_KEY = 'datastar';
     public const VERSION = '0.20.0-beta-2';
-    public const VERSION_CLIENT_BYTE_SIZE = 42948;
-    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14719;
+    public const VERSION_CLIENT_BYTE_SIZE = 42952;
+    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14720;
     public const DEFAULT_SETTLE_DURATION = 300;
     public const DEFAULT_SSE_RETRY_DURATION = 1000;
     public const DEFAULT_FRAGMENTS_USE_VIEW_TRANSITIONS = false;
@@ -28,12 +28,12 @@ class Consts
     public const SELECTOR_DATALINE_LITERAL = 'selector ';
     public const MERGE_MODE_DATALINE_LITERAL = 'mergeMode ';
     public const SETTLE_DURATION_DATALINE_LITERAL = 'settleDuration ';
-    public const FRAGMENT_DATALINE_LITERAL = 'fragment ';
+    public const FRAGMENTS_DATALINE_LITERAL = 'fragments ';
     public const USE_VIEW_TRANSITION_DATALINE_LITERAL = 'useViewTransition ';
-    public const STORE_DATALINE_LITERAL = 'store ';
+    public const SIGNALS_DATALINE_LITERAL = 'signals ';
     public const ONLY_IF_MISSING_DATALINE_LITERAL = 'onlyIfMissing ';
     public const PATHS_DATALINE_LITERAL = 'paths ';
     public const SCRIPT_DATALINE_LITERAL = 'script ';
-    public const ATTRIBUTE_DATALINE_LITERAL = 'attribute ';
+    public const ATTRIBUTES_DATALINE_LITERAL = 'attributes ';
     public const AUTO_REMOVE_DATALINE_LITERAL = 'autoRemove ';
 }

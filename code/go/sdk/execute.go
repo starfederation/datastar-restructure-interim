@@ -80,7 +80,7 @@ func (sse *ServerSentEventGenerator) ExecuteScript(scriptContents string, opts .
 		// skip
 	} else {
 		for _, attribute := range options.Attributes {
-			dataLines = append(dataLines, AttributeDatalineLiteral+attribute)
+			dataLines = append(dataLines, AttributesDatalineLiteral+attribute)
 		}
 	}
 
