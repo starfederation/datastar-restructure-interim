@@ -56,4 +56,4 @@
 <div id="greeting"></div>
 ```
 
-The `data-indicator` attribute is used to specify a signal name that should be added to the store, whose value is set to `true` the fetch request is in progress, otherwise `false`. 
+The `data-indicator` attribute accepts the name of a signal whose value is set to `true` when a fetch request initiated from the same element is in progress, otherwise `false`. If the signal does not exist in the store, it will be added.
