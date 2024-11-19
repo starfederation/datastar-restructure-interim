@@ -22,6 +22,9 @@ func ParseIncoming(r *http.Request, store any) error {
 		buf := bytebufferpool.Get()
 		defer bytebufferpool.Put(buf)
 		if _, err := buf.ReadFrom(r.Body); err != nil {
+			if err == http.ErrBodyReadAfterClose {
+				return fmt.Errorf("body already closed, are you sure you created the SSE ***AFTER*** the ParseIncoming? %w", err)
+			}
 			return fmt.Errorf("failed to read body: %w", err)
 		}
 		dsInput = buf.Bytes()

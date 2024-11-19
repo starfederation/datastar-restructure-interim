@@ -64,7 +64,7 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 	}
 
 	if options.Type != DefaultExecuteJsType {
-		dataLines = append(dataLines, TypeDatalineLiteral, options.Type)
+		dataLines = append(dataLines, TypeDatalineLiteral+options.Type)
 	}
 
 	scriptLines := strings.Split(scriptContents, NewLine)
