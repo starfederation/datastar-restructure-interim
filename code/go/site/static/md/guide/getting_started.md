@@ -48,9 +48,11 @@ Let's take a look at how Datastar allows you to handle state using the [`data-st
 <div data-store="{input: ''}"></div>
 ```
 
-This is a global store. If you add `data-store` to multiple elements, the values will be merged into the global store (values defined later in the DOM tree override those defined earlier).
+The “store” is a global collection of reactive signals. You can think of signals as variables that automatically track and propagate changes to expressions. Don't worry if this sounds complicated; it will become clearer as we look at some examples.
 
-Store values are nestable, which can be useful for namespacing values. The values must be written as a JavaScript object literal _or_ using JSON syntax.
+If you add `data-store` to multiple elements, the signals provided will be _merged_ into the store (values defined later in the DOM tree override those defined earlier).
+
+Signals are nestable, which can be useful for namespacing. The `data-store` value must be written as a JavaScript object literal _or_ using JSON syntax.
 
 ```html
 <div data-store="{primary: {input: ''}, secondary: {input: '' }}"></div>
@@ -64,7 +66,9 @@ Datastar provides us with a way to set up two-way data binding on an element usi
 <input data-model="input" type="text">
 ```
 
-This binds the element's value to the store value of the same name (`input`). If either is changed, the other will automatically update.
+This binds the element's value to the signal of the same name. If either is changed, the other will automatically update.
+
+Note how when using `data-model`, the value is the bare name of the signal (without the `$`). 
 
 To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
@@ -85,7 +89,7 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
     </div>
 </div>
 
-This sets the text content of an element to the store value with the name `input`. The `$` in `data-text="$input"` is required because `$input` is a store value.
+This sets the text content of an element to the value of the signal `$input`. The `$` is required to denote a signal.
 
 The value of the `data-text` attribute is an expression that is evaluated, meaning that we can include JavaScript in it.
 
@@ -106,7 +110,7 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
     </div>
 </div>
 
-The `data-computed-*` attribute creates a new store value that is computed based on an expression. The computed store value is read-only, and its value is automatically updated when any store values in the expression are updated.
+The `data-computed-*` attribute creates a new signal that is computed based on an expression. The computed signal is read-only, and its value is automatically updated when any signals in the expression are updated.
 
 ```html
 <div data-store="{input: ''}"
@@ -160,7 +164,7 @@ The `data-bind-*` attribute can be used to bind a JavaScript expression to any v
 <button data-bind-disabled="$input == ''">Save</button>
 ```
 
-This results in the button being given the `disabled` attribute whenever the input _is_ empty.
+This results in the button being given the `disabled` attribute whenever the input is empty.
 
 <div data-store="{input5: ''}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
@@ -188,7 +192,7 @@ The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to exe
 </button>
 ```
 
-This results in the `input` store value being set to an empty string when the button element is clicked. If the `input` store value is used elsewhere, its value will automatically update.
+This results in the `$input` signal being set to an empty string when the button element is clicked. If the `$input` signal is used elsewhere, its value will automatically update.
 
 <div data-store="{input6: 'Some input'}" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
@@ -222,9 +226,10 @@ See if you can follow the code below _before_ trying the demo.
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
-        That is
-        <span data-show="$correct">correct 👍</span>
-        <span data-show="!$correct">incorrect 👎</span>
+        <span data-show="$correct2">That is correct ✅</span>
+        <span data-show="!$correct2">
+            The correct answer is “<span data-text="$answer2"></span>” 🤷
+        </span>
     </div>
 </div>
 ```
@@ -235,10 +240,11 @@ See if you can follow the code below _before_ trying the demo.
             What do you put in a toaster?
         </div>
         <div data-show="$response1 != ''">
-            You answered “<span data-text="$response1 ?? ''"></span>”.
-            That is
-            <span data-show="$correct1">correct 👍</span>
-            <span data-show="!$correct1">incorrect 👎</span>
+            You answered “<span data-text="$response1"></span>”.
+            <span data-show="$correct1">That is correct ✅</span>
+            <span data-show="!$correct1">
+                The correct answer is “<span data-text="$answer1"></span>” 🤷
+            </span>
         </div>
     </div>
     <button data-on-click="$response1 = prompt('Answer:')" class="btn btn-primary">
@@ -287,7 +293,7 @@ With our backend in place, we can now use the `data-on-click` attribute to send 
 </div>
 ```
 
-Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify `answer` store value. We're driving state from the backend!
+Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify the `response` and `answer` signals. We're driving state from the backend!
 
 <div data-store="{response2: '', answer2: '', lastQuestionId: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex justify-between items-start gap-4 p-8">
     <div class="space-y-3 pb-3">
@@ -318,23 +324,23 @@ Here's how we could send an answer to the server for processing, using a `POST` 
 </button>
 ```
 
-One of the benefits of using SSE is that we can send multiple events (HTML fragments, store value updates, etc.) in a single response.
+One of the benefits of using SSE is that we can send multiple events (HTML fragments, signal updates, etc.) in a single response.
 
 !!!CODE_SNIPPET:getting_started/multiple_events!!!
 
 ## A Quick Overview
 
-Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragments and store updates.
+Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragment and signal updates.
 
-- Merge values into the global store: `data-store="{foo: ''}"`
-- Bind element values to store values: `data-model="foo"`
+- Merge signals into the store: `data-store="{foo: ''}"`
+- Bind element values to signals: `data-model="foo"`
 - Set the text content of an element to an expression.: `data-text="$foo"`
 - Show or hide an element using an expression: `data-show="$foo"`
 - Modify the classes on an element: `data-class="{'font-bold': $foo}"`
 - Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
 - Execute an expression on an event: `data-on-click="$get(/endpoint)"`
-- Persist all store values in local storage: `data-persist`
-- Create a computed store value: `data-computed-foo="$bar + 1"`
+- Persist all signals in local storage: `data-persist`
+- Create a computed signal: `data-computed-foo="$bar + 1"`
 - Create a reference to an element: `data-ref="alert"`
 - Send a header with a request: `data-header-foo="{'x-powered-by': $foo}"`
-- Replaces the URL: `data-replace-url="'/page1'"`
+- Replace the URL: `data-replace-url="'/page1'"`
