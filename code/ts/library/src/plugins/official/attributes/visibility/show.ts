@@ -26,7 +26,7 @@ const OPACITY = "opacity";
 export const Show: AttributePlugin = {
     pluginType: PLUGIN_ATTRIBUTE,
     name: "show",
-    "allowedModifiers": new Set([IMPORTANT, DURATION]),
+    allowedModifiers: new Set([IMPORTANT, DURATION]),
 
     onLoad: (ctx) => {
         const { el, modifiers, expressionFn, reactivity } = ctx;
