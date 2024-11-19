@@ -35,7 +35,7 @@ Read the [Getting Started Guide »](https://data-star.dev/guide/getting_started)
 
 You can build a custom bundle using the [Bundler »](https://data-star.dev/bundler)
 
-Or, if you want to add your own plugins to the core:
+Or manually add your own plugins to the core:
 
 ```html
 <script type="importmap">
