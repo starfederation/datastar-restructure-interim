@@ -31,6 +31,29 @@ Include Datastar with a single 14 KiB file and start adding reactivity to your f
 
 Read the [Getting Started Guide »](https://data-star.dev/guide/getting_started)
 
+## Custom Bundles
+
+You can build a custom bundle using the [Bundler »](https://data-star.dev/bundler)
+
+Or, if you want to add your own plugins to the core:
+
+```html
+<script type="importmap">
+{
+    "imports": {
+      "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar/datastar/bundles/datastar-core.js"
+    }
+}
+</script>
+<script type="module">
+import {Datastar} from 'datastar'
+
+Datastar.load(
+    // all my preprocessor, action and attribute plugins!
+)
+</script>
+```
+
 ## Contributing
 
 Read the [Contribution Guidelines »](CONTRIBUTING.md)
