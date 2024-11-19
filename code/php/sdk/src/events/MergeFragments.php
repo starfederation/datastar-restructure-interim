@@ -62,7 +62,7 @@ class MergeFragments implements EventInterface
 
         $lines = explode("\n", $data);
         foreach ($lines as $line) {
-            $dataLines[] = $this->getDataLine(Consts::FRAGMENT_DATALINE_LITERAL, $line);
+            $dataLines[] = $this->getDataLine(Consts::FRAGMENTS_DATALINE_LITERAL, $line);
         }
 
         return $dataLines;

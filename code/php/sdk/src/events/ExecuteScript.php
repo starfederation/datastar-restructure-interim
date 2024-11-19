@@ -13,8 +13,8 @@ class ExecuteScript implements EventInterface
     use EventTrait;
 
     public string $script;
-    public bool $autoRemove = Consts::DEFAULT_EXECUTE_JS_AUTO_REMOVE;
-    public string $type = Consts::DEFAULT_EXECUTE_JS_TYPE;
+    public bool $autoRemove = Consts::DEFAULT_EXECUTE_SCRIPT_AUTO_REMOVE;
+    public array $attributes = [];
 
     public function __construct(string $script, array $options = [])
     {
@@ -40,12 +40,14 @@ class ExecuteScript implements EventInterface
     {
         $dataLines = [];
 
-        if ($this->autoRemove !== Consts::DEFAULT_EXECUTE_JS_AUTO_REMOVE) {
+        if ($this->autoRemove !== Consts::DEFAULT_EXECUTE_SCRIPT_AUTO_REMOVE) {
             $dataLines[] = $this->getDataLine(Consts::AUTO_REMOVE_DATALINE_LITERAL, $this->getBooleanAsString($this->autoRemove));
         }
 
-        if ($this->type !== Consts::DEFAULT_EXECUTE_JS_TYPE) {
-            $dataLines[] = $this->getDataLine(Consts::TYPE_DATALINE_LITERAL, $this->type);
+        foreach ($this->attributes as $attribute) {
+            if ($attribute !== Consts::DEFAULT_EXECUTE_SCRIPT_ATTRIBUTES) {
+                $dataLines[] = $this->getDataLine(Consts::ATTRIBUTES_DATALINE_LITERAL, $attribute);
+            }
         }
 
         $dataLines[] = $this->getDataLine(Consts::SCRIPT_DATALINE_LITERAL, $this->script);

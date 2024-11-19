@@ -46,7 +46,7 @@ class MergeSignals implements EventInterface
 
         $lines = explode("\n", $data);
         foreach ($lines as $line) {
-            $dataLines[] = $this->getDataLine(Consts::STORE_DATALINE_LITERAL, $line);
+            $dataLines[] = $this->getDataLine(Consts::SIGNALS_DATALINE_LITERAL, $line);
         }
 
         return $dataLines;

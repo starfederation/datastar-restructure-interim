@@ -12,7 +12,7 @@ import (
 func setupExamplesExecuteScript(examplesRouter chi.Router) error {
 	const maxCount = 5
 
-	examplesRouter.Get("/execute_js/log", func(w http.ResponseWriter, r *http.Request) {
+	examplesRouter.Get("/execute_script/log", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 
 		for i := 0; i < maxCount; i++ {
@@ -21,7 +21,7 @@ func setupExamplesExecuteScript(examplesRouter chi.Router) error {
 		}
 	})
 
-	examplesRouter.Get("/execute_js/error", func(w http.ResponseWriter, r *http.Request) {
+	examplesRouter.Get("/execute_script/error", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 
 		for i := 0; i < maxCount; i++ {

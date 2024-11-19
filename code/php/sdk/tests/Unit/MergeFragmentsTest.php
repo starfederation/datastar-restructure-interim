@@ -18,7 +18,7 @@ test('Options are correctly output', function() {
             'data: mergeMode append',
             'data: settleDuration 1000',
             'data: useViewTransition true',
-            'data: fragment ' . $content,
+            'data: fragments ' . $content,
         ]);
 });
 
@@ -32,7 +32,7 @@ test('Default options are not output', function() {
     ]);
     expect($event->getDataLines())
         ->toBe([
-            'data: fragment ' . $content,
+            'data: fragments ' . $content,
         ]);
 });
 
@@ -41,7 +41,7 @@ test('Multi-line content is correctly output', function() {
     $event = new MergeFragments("\n" . $content . "\n" . $content . "\n");
     expect($event->getDataLines())
         ->toBe([
-            'data: fragment ' . $content,
-            'data: fragment ' . $content,
+            'data: fragments ' . $content,
+            'data: fragments ' . $content,
         ]);
 });

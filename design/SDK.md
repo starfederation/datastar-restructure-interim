@@ -139,7 +139,7 @@ When called the function ***must*** call `ServerSentEventGenerator.send` with th
 2. If `mergeMode` is provided, the function ***must*** include the merge mode in the event data in the format `merge MERGE_MODE\n`, ***unless*** the value is the default of `morph`.
 3. If `settleDuration` is provided, the function ***must*** include the settle duration in the event data in the format `settleDuration SETTLE_DURATION\n`, ***unless*** the value is the default of `300` milliseconds.
 4. If `useViewTransition` is provided, the function ***must*** include the view transition in the event data in the format `useViewTransition USE_VIEW_TRANSITION\n`, ***unless*** the value is the default of `false`.  `USE_VIEW_TRANSITION` should be `true` or `false` (string), depending on the value of the `useViewTransition` option.
-5. The function ***must*** include the fragment content in the event data, with each line prefixed with `fragment `. This ***should*** be output after all other event data.
+5. The function ***must*** include the fragment content in the event data, with each line prefixed with `fragments `. This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveFragments`
 
@@ -190,7 +190,7 @@ ServerSentEventGenerator.MergeSignals(
 
 #### Args
 
-Data is a JS or JSON object that will be sent to the browser to update the store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to signals by the Datastar client side.
+Data is a JS or JSON object that will be sent to the browser to update signals in the store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to signals by the Datastar client side.
 
 ##### Options
 
@@ -200,7 +200,7 @@ Data is a JS or JSON object that will be sent to the browser to update the store
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-merge-signals` event type.
 
 1. If `onlyIfMissing` is provided, the function ***must*** include the onlyIfMissing in the event data in the format `onlyIfMissing ONLY_IF_MISSING\n`, ***unless*** the value is the default of `false`.  `ONLY_IF_MISSING` should be `true` or `false` (string), depending on the value of the `onlyIfMissing` option.
-2. The function ***must*** include the store merges in the event data, with each line prefixed with `store`.  This ***should*** be output after all other event data.
+2. The function ***must*** include the signals in the event data, with each line prefixed with `signals `.  This ***should*** be output after all other event data.
 
 ### `ServerSentEventGenerator.RemoveSignals`
 
@@ -218,7 +218,7 @@ ServerSentEventGenerator.RemoveSignals(
 
 #### Args
 
-`paths` is a list of strings that represent the path to the signals to be removed from the store.  The paths ***must*** be valid `.` delimited paths within the store.  The Datastar client side will use these paths to remove the data from the store.
+`paths` is a list of strings that represent the path to the signals to be removed from the store.  The paths ***must*** be valid `.` delimited paths to signals within the store.  The Datastar client side will use these paths to remove the data from the store.
 
 #### Logic
 When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-remove-signals` event type.
@@ -232,7 +232,7 @@ ServerSentEventGenerator.ExecuteScript(
     script: string,
     options?: {
         autoRemove?: boolean,
-        type?: string,
+        attributes?: string[],
         eventId?: string,
         retryDuration?: durationInMilliseconds
     }
@@ -246,13 +246,13 @@ ServerSentEventGenerator.ExecuteScript(
 ##### Options
 
 * `autoRemove` Whether to remove the script after execution, if not provided the Datastar client side ***will*** default to `true`.
-* `type` The script type to use, if not provided the Datastar client side ***will*** default to `module`.
+* `attributes` An array of attributes to add to the `script` element, if not provided the Datastar client side ***will*** default to `['type module']`. Each item in the array should be a string in the format `key value`.
 
 #### Logic
 1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-execute-js` event type.
 2. If `autoRemove` is provided, the function ***must*** include the auto remove script value in the event data in the format `autoRemove AUTO_REMOVE\n`, ***unless*** the value is the default of `true`.
-3. If `type` is provided, the function ***must*** include the type value in the event data in the format `type TYPE\n`, ***unless*** the type value is the default of `module`.
-4. The function ***must*** include the script in the event data, with each line prefixed with `script`.  This ***should*** be output after all other event data.
+3. If `attributes` is provided, the function ***must*** include the attributes in the event data, with each line prefixed with `attributes `, ***unless*** the attributes value is the default of `type module`.
+4. The function ***must*** include the script in the event data, with each line prefixed with `script `.  This ***should*** be output after all other event data.
 
 ## `ParseIncoming(r *http.Request, store any) error`
 
