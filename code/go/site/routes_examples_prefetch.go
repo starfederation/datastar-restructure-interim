@@ -2,6 +2,7 @@ package site
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strconv"
 
@@ -16,12 +17,12 @@ func setupExamplesPrefetch(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/prefetch/load", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		c := prefetchCarousel(1)
+		c := prefetchCarousel(rand.Intn(pokemonCount) + 1)
 		sse.MergeFragmentTempl(c)
 
 		prefetchURLs := make([]string, 0, pokemonCount)
-		for i := 2; i <= pokemonCount; i++ {
-			prefetchURLs = append(prefetchURLs, fmt.Sprintf(pokemonURLFormat, i))
+		for i := 0; i < pokemonCount; i++ {
+			prefetchURLs = append(prefetchURLs, fmt.Sprintf(pokemonURLFormat, i+1))
 		}
 		sse.Prefetch(prefetchURLs...)
 	})

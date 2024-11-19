@@ -11,7 +11,7 @@
     <div class="flex gap-4 items-center font-mono">
         <input
             disabled
-            class="range range-primary flex-1"
+            class="range range-neutral flex-1"
             type="range" min="1" max="100"
             data-model="percentage"
          />

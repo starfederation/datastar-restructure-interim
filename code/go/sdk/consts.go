@@ -7,8 +7,8 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0-beta-1"
-    VersionClientByteSize     = 42948
-    VersionClientByteSizeGzip = 14719
+    VersionClientByteSize     = 42952
+    VersionClientByteSizeGzip = 14720
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
@@ -23,13 +23,13 @@ const (
     SelectorDatalineLiteral = "selector "
     MergeModeDatalineLiteral = "mergeMode "
     SettleDurationDatalineLiteral = "settleDuration "
-    FragmentDatalineLiteral = "fragment "
+    FragmentsDatalineLiteral = "fragments "
     UseViewTransitionDatalineLiteral = "useViewTransition "
-    StoreDatalineLiteral = "store "
+    SignalsDatalineLiteral = "signals "
     OnlyIfMissingDatalineLiteral = "onlyIfMissing "
     PathsDatalineLiteral = "paths "
     ScriptDatalineLiteral = "script "
-    AttributeDatalineLiteral = "attribute "
+    AttributesDatalineLiteral = "attributes "
     AutoRemoveDatalineLiteral = "autoRemove "
 )
 
