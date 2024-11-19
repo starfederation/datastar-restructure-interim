@@ -31,15 +31,15 @@ type EventType =
 | RemoveFragments
 /// An event for removing signals from the store.
 | RemoveSignals
-/// An event for executing JavaScript in the browser.
-| ExecuteJs
+/// An event for executing &lt;script/&gt; elements in the browser.
+| ExecuteScript
 
 
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
-    let [<Literal>] Version                   = "0.20.0-beta-1"
-    let [<Literal>] VersionClientByteSize     = 42831
-    let [<Literal>] VersionClientByteSizeGzip = 14683
+    let [<Literal>] Version                   = "0.20.0-beta-2"
+    let [<Literal>] VersionClientByteSize     = 42952
+    let [<Literal>] VersionClientByteSizeGzip = 14720
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -52,25 +52,25 @@ module Consts =
 
     let [<Literal>] DefaultFragmentsUseViewTransitions = false
     let [<Literal>] DefaultMergeSignalsOnlyIfMissing = false
-    let [<Literal>] DefaultExecuteJsautoRemove = true
+    let [<Literal>] DefaultExecuteScriptAutoRemove = true
     let [<Literal>] DefaultCustomEventCancelable = true
     let [<Literal>] DefaultCustomEventComposed = true
     let [<Literal>] DefaultCustomEventBubbles = true
 
-    let [<Literal>] DefaultExecuteJsType = "module"
+    let [<Literal>] DefaultExecuteScriptAttributes = "type module"
     let [<Literal>] DefaultCustomEventSelector = "document"
     let [<Literal>] DefaultCustomEventDetailJson = "{}"
 
     let [<Literal>] DatastarDatalineSelector = "selector"
     let [<Literal>] DatastarDatalineMergeMode = "mergeMode"
     let [<Literal>] DatastarDatalineSettleDuration = "settleDuration"
-    let [<Literal>] DatastarDatalineFragment = "fragment"
+    let [<Literal>] DatastarDatalineFragments = "fragments"
     let [<Literal>] DatastarDatalineUseViewTransition = "useViewTransition"
-    let [<Literal>] DatastarDatalineStore = "store"
+    let [<Literal>] DatastarDatalineSignals = "signals"
     let [<Literal>] DatastarDatalineOnlyIfMissing = "onlyIfMissing"
     let [<Literal>] DatastarDatalinePaths = "paths"
     let [<Literal>] DatastarDatalineScript = "script"
-    let [<Literal>] DatastarDatalineType = "type"
+    let [<Literal>] DatastarDatalineAttributes = "attributes"
     let [<Literal>] DatastarDatalineAutoRemove = "autoRemove"
 
     module FragmentMergeMode =
@@ -92,4 +92,4 @@ module Consts =
                 | EventType.MergeSignals -> "datastar-merge-signals"
                 | EventType.RemoveFragments -> "datastar-remove-fragments"
                 | EventType.RemoveSignals -> "datastar-remove-signals"
-                | EventType.ExecuteJs -> "datastar-execute-js"
+                | EventType.ExecuteScript -> "datastar-execute-script"

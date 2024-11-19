@@ -19,13 +19,13 @@ export const MergeSignals: WatcherPlugin = {
     name: EventTypes.MergeSignals,
     onGlobalInit: async (ctx) => {
         datastarSSEEventWatcher(EventTypes.MergeSignals, ({
-            store = "{}",
+            signals = "{}",
             onlyIfMissing: onlyIfMissingRaw =
                 `${DefaultMergeSignalsOnlyIfMissing}`,
         }) => {
             const onlyIfMissing = isBoolString(onlyIfMissingRaw);
             const fnContents =
-                ` return Object.assign({...ctx.store()}, ${store})`;
+                ` return Object.assign({...ctx.store()}, ${signals})`;
             try {
                 const fn = new Function(
                     "ctx",
