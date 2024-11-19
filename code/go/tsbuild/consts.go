@@ -60,7 +60,7 @@ var ConstsData = &ConstTemplateData{
 			Value: false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("ExecuteJSAutoRemove"),
+			Name:  toolbelt.ToCasedString("executeScriptAutoRemove"),
 			Value: true,
 		},
 		{
@@ -88,8 +88,8 @@ var ConstsData = &ConstTemplateData{
 	},
 	DefaultStrings: []*DefaultString{
 		{
-			Name:  toolbelt.ToCasedString("ExecuteJsType"),
-			Value: "module",
+			Name:  toolbelt.ToCasedString("executeScriptAttributes"),
+			Value: `type module`,
 		},
 		{
 			Name:  toolbelt.ToCasedString("customEventSelector"),
@@ -117,9 +117,9 @@ var ConstsData = &ConstTemplateData{
 		// RemoveSignals
 		toolbelt.ToCasedString("paths"),
 
-		// ExecuteJS
+		// ExecuteScript
 		toolbelt.ToCasedString("script"),
-		toolbelt.ToCasedString("type"),
+		toolbelt.ToCasedString("attribute"),
 		toolbelt.ToCasedString("autoRemove"),
 	},
 	Enums: []*EnumDefinition{
@@ -187,9 +187,9 @@ var ConstsData = &ConstTemplateData{
 					Description: "An event for removing signals from the store.",
 				},
 				{
-					Name:        toolbelt.ToCasedString("ExecuteJs"),
-					Value:       "datastar-execute-js",
-					Description: "An event for executing JavaScript in the browser.",
+					Name:        toolbelt.ToCasedString("ExecuteScript"),
+					Value:       "datastar-execute-script",
+					Description: "An event for executing <script/> elements in the browser.",
 				},
 			},
 		},

@@ -5,21 +5,22 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
-func (sse *ServerSentEventGenerator) ConsoleLog(msg string, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ConsoleLog(msg string, opts ...ExecuteScriptOption) error {
 	call := fmt.Sprintf("console.log(%q)", msg)
-	return sse.ExecuteJS(call, opts...)
+	return sse.ExecuteScript(call, opts...)
 }
 
 func (sse *ServerSentEventGenerator) ConsoleLogf(format string, args ...any) error {
 	return sse.ConsoleLog(fmt.Sprintf(format, args...))
 }
 
-func (sse *ServerSentEventGenerator) ConsoleError(err error, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ConsoleError(err error, opts ...ExecuteScriptOption) error {
 	call := fmt.Sprintf("console.error(%q)", err.Error())
-	return sse.ExecuteJS(call, opts...)
+	return sse.ExecuteScript(call, opts...)
 }
 
 func (sse *ServerSentEventGenerator) Redirectf(format string, args ...any) error {
@@ -27,9 +28,9 @@ func (sse *ServerSentEventGenerator) Redirectf(format string, args ...any) error
 	return sse.Redirect(url)
 }
 
-func (sse *ServerSentEventGenerator) Redirect(url string, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) Redirect(url string, opts ...ExecuteScriptOption) error {
 	js := fmt.Sprintf("window.location.href = %q;", url)
-	return sse.ExecuteJS(js, opts...)
+	return sse.ExecuteScript(js, opts...)
 }
 
 type DispatchCustomEventOptions struct {
@@ -129,25 +130,49 @@ elements.forEach((element) => {
 		string(detailsJSON),
 	)
 
-	executeOptions := make([]ExecuteJSOption, 0)
+	executeOptions := make([]ExecuteScriptOption, 0)
 	if options.EventID != "" {
-		executeOptions = append(executeOptions, WithExecuteJSEventID(options.EventID))
+		executeOptions = append(executeOptions, WithExecuteScriptEventID(options.EventID))
 	}
 	if options.RetryDuration != 0 {
-		executeOptions = append(executeOptions, WithExecuteJSRetryDuration(options.RetryDuration))
+		executeOptions = append(executeOptions, WithExecuteScriptRetryDuration(options.RetryDuration))
 	}
 
-	return sse.ExecuteJS(js, executeOptions...)
+	return sse.ExecuteScript(js, executeOptions...)
 
 }
 
-func (sse *ServerSentEventGenerator) ReplaceURL(u url.URL, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ReplaceURL(u url.URL, opts ...ExecuteScriptOption) error {
 	js := fmt.Sprintf(`window.history.replaceState({}, "", %q)`, u.String())
-	return sse.ExecuteJS(js, opts...)
+	return sse.ExecuteScript(js, opts...)
 }
 
-func (sse *ServerSentEventGenerator) ReplaceURLQuerystring(r *http.Request, values url.Values, opts ...ExecuteJSOption) error {
+func (sse *ServerSentEventGenerator) ReplaceURLQuerystring(r *http.Request, values url.Values, opts ...ExecuteScriptOption) error {
 	u := *r.URL
 	u.RawQuery = values.Encode()
 	return sse.ReplaceURL(u, opts...)
+}
+
+func (sse *ServerSentEventGenerator) Prefetch(urls ...string) error {
+	wrappedURLs := make([]string, len(urls))
+	for i, url := range urls {
+		wrappedURLs[i] = fmt.Sprintf(`"%s"`, url)
+	}
+	script := fmt.Sprintf(`
+	{
+		"prefetch": [
+			{
+				"source": "list",
+				"urls": [
+	%s
+				]
+			}
+		]
+	}
+		`, strings.Join(wrappedURLs, ",\n"))
+	return sse.ExecuteScript(
+		script,
+		WithExecuteScriptAutoRemove(false),
+		WithExecuteScriptAttributes("type speculationrules"),
+	)
 }

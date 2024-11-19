@@ -7,15 +7,15 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0-beta-1"
-    VersionClientByteSize     = 42831
-    VersionClientByteSizeGzip = 14683
+    VersionClientByteSize     = 42948
+    VersionClientByteSizeGzip = 14719
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
 
     // Default strings
-    DefaultExecuteJsType = "module"
+    DefaultExecuteScriptAttributes = "type module"
     DefaultCustomEventSelector = "document"
     DefaultCustomEventDetailJson = "{}"
 
@@ -29,7 +29,7 @@ const (
     OnlyIfMissingDatalineLiteral = "onlyIfMissing "
     PathsDatalineLiteral = "paths "
     ScriptDatalineLiteral = "script "
-    TypeDatalineLiteral = "type "
+    AttributeDatalineLiteral = "attribute "
     AutoRemoveDatalineLiteral = "autoRemove "
 )
 
@@ -37,7 +37,7 @@ var (
     // Default booleans
     DefaultFragmentsUseViewTransitions = false
     DefaultMergeSignalsOnlyIfMissing = false
-    DefaultExecuteJsautoRemove = true
+    DefaultExecuteScriptAutoRemove = true
     DefaultCustomEventCancelable = true
     DefaultCustomEventComposed = true
     DefaultCustomEventBubbles = true
@@ -91,7 +91,7 @@ const (
     // An event for removing signals from the store.
     EventTypeRemoveSignals EventType = "datastar-remove-signals"
 
-    // An event for executing JavaScript in the browser.
-    EventTypeExecuteJs EventType = "datastar-execute-js"
+    // An event for executing &lt;script/&gt; elements in the browser.
+    EventTypeExecuteScript EventType = "datastar-execute-script"
 
 )

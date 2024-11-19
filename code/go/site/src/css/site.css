@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-h2 a, h3 a, h4 a, h5 a, h6 a {
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
     @apply pl-2 no-underline hover:opacity-80 !important;
     color: var(--tw-prose-headings) !important;
 }
@@ -13,4 +17,10 @@ pre code {
 
 .output {
     @apply input input-bordered bg-transparent flex flex-grow items-center max-w-64 overflow-hidden;
+}
+
+@layer components {
+    .pixelated {
+        image-rendering: pixelated;
+    }
 }

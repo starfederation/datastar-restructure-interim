@@ -22,9 +22,8 @@ templ Page() {
 			<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 			<script type="module" src={ staticPath("js/datastar.js") }></script>
 			<script defer>
+				// console.log(`Hot reload initializing @ ${hotReloadPath}`)
 	        	const hotReloadPath = `/hotreload`
-
-				console.log(`Hot reload initializing @ ${hotReloadPath}`)
 				if (typeof(EventSource) !== "undefined") {
 					const es = new EventSource(hotReloadPath);
 					es.onmessage = function(event) {
