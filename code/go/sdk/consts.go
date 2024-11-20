@@ -8,7 +8,7 @@ const (
     DatastarKey = "datastar"
     Version                   = "0.20.0-beta-2"
     VersionClientByteSize     = 36376
-    VersionClientByteSizeGzip = 12713
+    VersionClientByteSizeGzip = 12717
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
