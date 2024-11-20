@@ -4,20 +4,14 @@
 // Description: This plugin allows you to persist data to local storage or session storage.  Once you add this attribute the data will be persisted to local storage or session storage.
 
 import { AttributePlugin } from "../../../../engine";
-import {
-    LOCAL,
-    PLUGIN_ATTRIBUTE,
-    REMOTE,
-    SESSION,
-} from "../../../../engine/client_only_consts";
 import { DATASTAR, DATASTAR_EVENT } from "../../../../engine/consts";
 import { remoteSignals } from "../../../../utils/signals";
 import { DatastarSSEEvent } from "../../watchers/backend/sseShared";
 
 export const Persist: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "persist",
-    allowedModifiers: new Set([LOCAL, SESSION, REMOTE]),
+    allowedModifiers: new Set(["local", "session", "remote"]),
     onLoad: (ctx) => {
         const key = ctx.key || DATASTAR;
         const expression = ctx.expression;
@@ -32,8 +26,8 @@ export const Persist: AttributePlugin = {
         }
 
         let lastMarshalled = "";
-        const storageType = ctx.modifiers.has(SESSION) ? SESSION : LOCAL;
-        const useRemote = ctx.modifiers.has(REMOTE);
+        const storageType = ctx.modifiers.has("session") ? "session" : "local";
+        const useRemote = ctx.modifiers.has("remote");
 
         const storeUpdateHandler = ((_: CustomEvent<DatastarSSEEvent>) => {
             let store = ctx.store();
@@ -67,7 +61,7 @@ export const Persist: AttributePlugin = {
                 return;
             }
 
-            if (storageType === SESSION) {
+            if (storageType === "session") {
                 window.sessionStorage.setItem(key, marshalledStore);
             } else {
                 window.localStorage.setItem(key, marshalledStore);
@@ -80,7 +74,7 @@ export const Persist: AttributePlugin = {
 
         let marshalledStore: string | null;
 
-        if (storageType === SESSION) {
+        if (storageType === "session") {
             marshalledStore = window.sessionStorage.getItem(key);
         } else {
             marshalledStore = window.localStorage.getItem(key);

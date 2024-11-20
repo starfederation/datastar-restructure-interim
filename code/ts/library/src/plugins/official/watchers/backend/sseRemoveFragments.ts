@@ -4,7 +4,6 @@
 // Description: Merge store data from a server using the Datastar SDK interface
 
 import { WatcherPlugin } from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import {
     DefaultFragmentsUseViewTransitions,
     DefaultSettleDurationMs,
@@ -19,7 +18,7 @@ import {
 import { datastarSSEEventWatcher, SWAPPING_CLASS } from "./sseShared";
 
 export const RemoveFragments: WatcherPlugin = {
-    pluginType: PLUGIN_WATCHER,
+    pluginType: "watcher",
     name: EventTypes.RemoveFragments,
     onGlobalInit: async () => {
         datastarSSEEventWatcher(EventTypes.RemoveFragments, ({

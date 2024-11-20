@@ -13,12 +13,6 @@ import {
     STARTED,
 } from "../../watchers/backend/sseShared";
 
-export const GET = "GET";
-export const POST = "POST";
-export const PUT = "PUT";
-export const PATCH = "PATCH";
-export const DELETE = "DELETE";
-
 export type IndicatorReference = { el: HTMLElement; count: number };
 
 const isWrongContent = (err: any) => `${err}`.includes(`text/event-stream`);
@@ -109,7 +103,7 @@ export function sendSSERequest(
             },
         };
 
-        if (method === GET) {
+        if (method === "GET") {
             const queryParams = new URLSearchParams(urlInstance.search);
             queryParams.append(DATASTAR, storeJSON);
             urlInstance.search = queryParams.toString();

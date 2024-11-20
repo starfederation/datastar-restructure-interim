@@ -4,7 +4,6 @@
 // Description: Remember, SSE is just a regular SSE request but with the ability to send 0-inf messages to the client.
 
 import { InitContext, WatcherPlugin } from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import {
     DefaultFragmentMergeMode,
     DefaultFragmentsUseViewTransitions,
@@ -26,7 +25,7 @@ import {
 } from "./sseShared";
 
 export const MergeFragments: WatcherPlugin = {
-    pluginType: PLUGIN_WATCHER,
+    pluginType: "watcher",
     name: EventTypes.MergeFragments,
     onGlobalInit: async (ctx) => {
         const fragmentContainer = document.createElement("template");

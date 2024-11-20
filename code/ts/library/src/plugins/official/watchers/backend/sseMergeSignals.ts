@@ -4,7 +4,6 @@
 // Description: Merge store data from a server using the Datastar SDK interface
 
 import { InitExpressionFunction, WatcherPlugin } from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import {
     DefaultMergeSignalsOnlyIfMissing,
     EventTypes,
@@ -14,7 +13,7 @@ import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
 export const MergeSignals: WatcherPlugin = {
-    pluginType: PLUGIN_WATCHER,
+    pluginType: "watcher",
     name: EventTypes.MergeSignals,
     onGlobalInit: async (ctx) => {
         datastarSSEEventWatcher(EventTypes.MergeSignals, ({

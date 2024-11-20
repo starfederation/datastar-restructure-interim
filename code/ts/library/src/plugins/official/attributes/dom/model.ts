@@ -4,7 +4,6 @@
 // Description: This attribute plugin enables two-way data binding for input elements.
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import {
     ERR_BAD_ARGS,
     ERR_METHOD_NOT_ALLOWED,
@@ -14,7 +13,7 @@ const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;
 const updateModelEvents = ["change", "input", "keydown"];
 
 export const Model: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "model",
     mustHaveEmptyKey: true,
     // bypassExpressionFunctionCreation: () => true,

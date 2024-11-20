@@ -5,7 +5,6 @@
 
 import { WatcherPlugin } from "../../../../engine/types";
 
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import {
     DefaultExecuteScriptAttributes,
     DefaultExecuteScriptAutoRemove,
@@ -16,7 +15,7 @@ import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
 export const ExecuteScript: WatcherPlugin = {
-    pluginType: PLUGIN_WATCHER,
+    pluginType: "watcher",
     name: EventTypes.ExecuteScript,
     onGlobalInit: async () => {
         datastarSSEEventWatcher(

@@ -4,13 +4,12 @@
 // Description: This attribute teleports an element to another element in the DOM.
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { FragmentMergeModes } from "../../../../engine/consts";
 import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { nodeHTMLorSVGElement } from "../../../../utils/dom";
 
 export const Teleport: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "teleport",
     allowedModifiers: new Set([
         FragmentMergeModes.Prepend,

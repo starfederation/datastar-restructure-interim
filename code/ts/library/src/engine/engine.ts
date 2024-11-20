@@ -3,12 +3,7 @@ import { HTMLorSVGElement } from "../utils/types";
 import { DeepSignal, deepSignal, DeepState } from "../vendored/deepsignal";
 import { computed, effect, Signal, signal } from "../vendored/preact-core";
 import { apply } from "../vendored/ts-merge-patch";
-import {
-    PLUGIN_ACTION,
-    PLUGIN_ATTRIBUTE,
-    PLUGIN_PREPROCESSOR,
-    PLUGIN_WATCHER,
-} from "./client_only_consts";
+
 import {
     ERR_ALREADY_EXISTS,
     ERR_BAD_ARGS,
@@ -32,13 +27,13 @@ import {
 import { VERSION } from "./version";
 
 const isPreprocessorPlugin = (p: DatastarPlugin): p is PreprocessorPlugin =>
-    p.pluginType === PLUGIN_PREPROCESSOR;
+    p.pluginType === "preprocessor";
 const isWatcherPlugin = (p: DatastarPlugin): p is WatcherPlugin =>
-    p.pluginType === PLUGIN_WATCHER;
+    p.pluginType === "watcher";
 const isAttributePlugin = (p: DatastarPlugin): p is AttributePlugin =>
-    p.pluginType === PLUGIN_ATTRIBUTE;
+    p.pluginType === "attribute";
 const isActionPlugin = (p: DatastarPlugin): p is ActionPlugin =>
-    p.pluginType === PLUGIN_ACTION;
+    p.pluginType === "action";
 
 export class Engine {
     plugins: AttributePlugin[] = [];

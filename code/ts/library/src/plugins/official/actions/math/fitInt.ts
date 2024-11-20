@@ -4,10 +4,9 @@
 // Description: This action linearly fits a value to a new range. The value is first scaled to the new range.  Note it is not clamped to the new range.
 
 import { ActionPlugin, AttributeContext } from "../../../../engine";
-import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
 
 export const FitInt: ActionPlugin = {
-    pluginType: PLUGIN_ACTION,
+    pluginType: "action",
     name: "fitInt",
     method: (
         _: AttributeContext,

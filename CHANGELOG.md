@@ -13,7 +13,6 @@
 - Added the `datastar-execute-script` SSE event.
 - Added `replaceUrl` examples from both signals and the backend.
 - Added `data-sse-indicator` attribute, which upsert a signal to show when SSE is active.
--
 
 ### Changed
 

@@ -4,7 +4,6 @@
 // Description: must be a valid signal name
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { DATASTAR } from "../../../../engine/consts";
 import {
     DATASTAR_SSE_EVENT,
@@ -17,7 +16,7 @@ export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
 export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
 
 export const SSEIndicator: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "sseIndicator",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,

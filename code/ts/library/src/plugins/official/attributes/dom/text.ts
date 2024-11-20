@@ -4,11 +4,10 @@
 // Description: This attribute sets the text content of an element to the result of the expression.
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { ERR_BAD_ARGS } from "../../../../engine/errors";
 
 export const Text: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "text",
     mustHaveEmptyKey: true,
     onLoad: (ctx) => {

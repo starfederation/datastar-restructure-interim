@@ -4,10 +4,6 @@
 // Description: This action adds an event listener to an element. The event listener can be triggered by a variety of events, such as clicks, keypresses, and more. The event listener can also be set to trigger only once, or to be passive or capture. The event listener can also be debounced or throttled. The event listener can also be set to trigger only when the event target is outside the element.
 
 import { AttributePlugin } from "../../../../engine";
-import {
-    PLUGIN_ATTRIBUTE,
-    REMOTE,
-} from "../../../../engine/client_only_consts";
 import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { argsHas, argsToMs } from "../../../../utils/arguments";
 import { remoteSignals } from "../../../../utils/signals";
@@ -21,7 +17,7 @@ const knownOnModifiers = new Set([
     "capture",
     "debounce",
     "throttle",
-    REMOTE,
+    "remote",
     "outside",
 ]);
 
@@ -29,7 +25,7 @@ let lastStoreMarshalled = "";
 
 // Sets the event listener of the element
 export const On: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "on",
     mustNotEmptyKey: true,
     mustNotEmptyExpression: true,
@@ -126,7 +122,7 @@ export const On: AttributePlugin = {
                 return ctx.reactivity.effect(() => {
                     const store = ctx.store();
                     let storeValue = store.value;
-                    if (ctx.modifiers.has(REMOTE)) {
+                    if (ctx.modifiers.has("remote")) {
                         storeValue = remoteSignals(storeValue);
                     }
                     const current = JSON.stringify(storeValue);

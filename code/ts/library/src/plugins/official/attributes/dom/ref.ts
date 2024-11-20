@@ -4,11 +4,10 @@
 // Description: This attribute creates a reference to an element that can be used in other expressions.
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 
 // Sets the value of the element
 export const Ref: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "ref",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
