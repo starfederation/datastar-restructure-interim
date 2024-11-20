@@ -58,6 +58,10 @@ export function sendSSERequest(
         dispatchSSE(STARTED, { el: ctx.el.id });
 
         const urlInstance = new URL(url, window.location.origin);
+
+        // https://fetch.spec.whatwg.org/#concept-method-normalize
+        method = method.toUpperCase();
+
         const req: FetchEventSourceInit = {
             method,
             headers,
