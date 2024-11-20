@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"path/filepath"
 	"regexp"
 	"slices"
@@ -17,6 +18,7 @@ import (
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
 	"github.com/delaneyj/toolbelt"
+	"github.com/goccy/go-json"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
 	mdhtml "github.com/gomarkdown/markdown/html"
@@ -102,7 +104,7 @@ func markdownRenders(ctx context.Context, staticMdPath string) (mdElementRendere
 						defer bytebufferpool.Put(buf)
 						level := strconv.Itoa(n.Level)
 						if level != "1" {
-							buf.WriteString(`<a href="#`)
+							buf.WriteString(`<a class="prose link-neutral" href="#`)
 							buf.WriteString(n.HeadingID)
 							buf.WriteString(`">#</a>`)
 						}
@@ -248,4 +250,12 @@ func KVPairsAttrs(kvPairs ...string) templ.Attributes {
 		attrs[kvPairs[i]] = kvPairs[i+1]
 	}
 	return attrs
+}
+
+func logJSON(message string, v any) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	log.Printf("%s: %s", message, string(b))
 }

@@ -147,6 +147,7 @@ export class Engine {
 
     private removeSignals(...keys: string[]) {
         const revisedStore = { ...this.store.value };
+        let found = false;
         for (const key of keys) {
             const parts = key.split(".");
             let currentID = parts[0];
@@ -160,7 +161,9 @@ export class Engine {
                 currentID = part;
             }
             delete subStore[currentID];
+            found = true;
         }
+        if (!found) return;
         this.store = deepSignal(revisedStore);
         this.applyPlugins(document.body);
     }

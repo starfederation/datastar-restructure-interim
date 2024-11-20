@@ -47,7 +47,6 @@ export function sendSSERequest(
                 DATASTAR_REQUEST: "true",
             },
         }, args);
-
         const currentStore = ctx.store().value;
         let store = Object.assign({}, currentStore);
         if (onlyRemoteSignals) {
@@ -55,7 +54,8 @@ export function sendSSERequest(
         }
         const storeJSON = JSON.stringify(store);
 
-        dispatchSSE(STARTED, { el: ctx.el.id });
+        const { el: { id: elID } } = ctx;
+        dispatchSSE(STARTED, { elID });
 
         const urlInstance = new URL(url, window.location.origin);
 
@@ -103,7 +103,7 @@ export function sendSSERequest(
                 console.error(err.message);
             },
             onclose: () => {
-                dispatchSSE(FINISHED, { el: ctx.el.id });
+                dispatchSSE(FINISHED, { elID });
             },
         };
 

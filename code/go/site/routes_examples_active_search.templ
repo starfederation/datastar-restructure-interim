@@ -27,8 +27,9 @@ templ ActiveSearchComponent(filteredUsers []*ActiveSearchUser, scores map[string
 				placeholder="Search..."
 				data-model="search"
 				data-on-input.debounce_500ms="$get('/examples/active_search/updates')"
+				data-sse-indicator="fetching"
 			/>
-			@icon("svg-spinners:blocks-wave", "class", "text-5xl datastar-indicator")
+			@sseIndicator("fetching")
 		</div>
 		<table class="table w-full">
 			<caption>Contacts</caption>

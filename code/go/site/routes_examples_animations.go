@@ -68,7 +68,7 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 		dataRouter.Get("/fade_me_in", func(w http.ResponseWriter, r *http.Request) {
 			sse := datastar.NewSSE(w, r)
 			sse.MergeFragmentTempl(animationsFadeMeIn(false))
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(1500 * time.Millisecond)
 			sse.MergeFragmentTempl(animationsFadeMeIn(true))
 		})
 

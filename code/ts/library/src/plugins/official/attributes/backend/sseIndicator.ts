@@ -19,14 +19,15 @@ export const SSEIndicator: AttributePlugin = {
     pluginType: "attribute",
     name: "sseIndicator",
     mustHaveEmptyKey: true,
-    mustNotEmptyExpression: true,
     onLoad: (ctx) => {
-        const { expressionFn, upsertSignal, removeSignals } = ctx;
-        const signalName = expressionFn(ctx);
+        const { expression, upsertSignal, el } = ctx;
+        const signalName = expression;
         const signal = upsertSignal(signalName, false);
 
         const watcher = (event: CustomEvent<DatastarSSEEvent>) => {
-            switch (event.detail.type) {
+            const { type, argsRaw: { elID } } = event.detail;
+            if (elID !== el.id) return;
+            switch (type) {
                 case STARTED:
                     signal.value = true;
                     break;
@@ -39,7 +40,6 @@ export const SSEIndicator: AttributePlugin = {
         document.addEventListener(DATASTAR_SSE_EVENT, watcher);
 
         return () => {
-            removeSignals(signalName);
             document.removeEventListener(DATASTAR_SSE_EVENT, watcher);
         };
     },

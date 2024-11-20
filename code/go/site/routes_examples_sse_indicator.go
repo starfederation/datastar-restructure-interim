@@ -8,7 +8,7 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesFetchIndicator(examplesRouter chi.Router) error {
+func setupExamplesSSEIndicator(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/fetch_indicator/greet", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
