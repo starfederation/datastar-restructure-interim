@@ -28,7 +28,7 @@ export const Model: AttributePlugin = {
         const tnl = el.tagName.toLowerCase();
 
         let signalDefault: string | boolean | File = "";
-        const isInput = tnl.includes("imput");
+        const isInput = tnl.includes("input");
         const type = el.getAttribute("type");
         const isCheckbox = tnl.includes("checkbox") ||
             (isInput && type === "checkbox");
