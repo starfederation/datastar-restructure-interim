@@ -9,6 +9,7 @@ export const Show: AttributePlugin = {
     pluginType: "attribute",
     name: "show",
     mustHaveEmptyKey: true,
+    mustNotEmptyExpression: true,
 
     onLoad: (ctx) => {
         return ctx.reactivity.effect(async () => {

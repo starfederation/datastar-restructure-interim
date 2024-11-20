@@ -23,6 +23,7 @@ import { Persist } from "../plugins/official/attributes/storage/persist";
 import { ReplaceUrl } from "../plugins/official/attributes/url/replaceUrl";
 import { Intersection } from "../plugins/official/attributes/visibility/intersects";
 import { ScrollIntoView } from "../plugins/official/attributes/visibility/scrollIntoView";
+import { Show } from "../plugins/official/attributes/visibility/show";
 import { Teleport } from "../plugins/official/attributes/visibility/teleport";
 import { ViewTransition } from "../plugins/official/attributes/visibility/viewTransition";
 import { ExecuteScript } from "../plugins/official/watchers/backend/sseExecuteScript";
@@ -64,6 +65,7 @@ Datastar.load(
     // attributes/visibility
     Intersection,
     ScrollIntoView,
+    Show,
     Teleport,
     ViewTransition,
     // effects
