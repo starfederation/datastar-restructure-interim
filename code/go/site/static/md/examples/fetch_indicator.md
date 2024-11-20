@@ -2,17 +2,27 @@
 
 ## Demo
 
+<style>
+    .indicator {
+        opacity:0;
+        transition: opacity 300ms ease-out;
+    }
+    .indicator.loading {
+        opacity:1;
+        transition: opacity 300ms ease-in;
+    }
+</style>
 <div class="flex flex-col gap-4" >
-  <div id="ind" class="flex items-center gap-2">
+  <div data-class="{loading: $fetching}" class="indicator flex items-center gap-2">
     <iconify-icon  icon="svg-spinners:blocks-wave"></iconify-icon>
     <span>Loading</span>
   </div>
     <button
     class="btn btn-primary"
     data-on-click="$get('/examples/fetch_indicator/greet')"
-    data-fetch-indicator="'#ind'"
+    data-indicator="fetching"
     data-testid="greeting_button"
-    data-bind-disabled="$isFetching('#ind')"
+    data-bind-disabled="$fetching"
 >
     Click me for a greeting
   </button>
@@ -22,19 +32,28 @@
 ## Explanation
 
 ```html
-<div id="ind">Loading Indicator</div>
+<style>
+    .indicator {
+        opacity:0;
+        transition: opacity 300ms ease-out;
+    }
+    .indicator.loading {
+        opacity:1;
+        transition: opacity 300ms ease-in;
+    }
+</style>
+
+<div data-class="{loading: $fetching}" class="indicator">
+    Loading Indicator
+</div>
 <button
   data-on-click="$get('/examples/fetch_indicator/greet')"
-  data-fetch-indicator="'#ind'"
-  data-bind-disabled="$isFetching('#ind')"
+  data-indicator="fetching"
+  data-bind-disabled="$fetching"
 >
   Click me for a greeting
 </button>
 <div id="greeting"></div>
 ```
 
-The `data-fetch-indicator` attribute is used to specify the elements that should be made visible when the fetch request is in progress. The value of the attribute is a CSS selector that can represent multiple elements. The same `data-fetch-indicator` selector can be used by different elements at the same time.
-
-The `$isFetching("#ind")` action returns a computed value that allows you to easily react to the state of the indicator.
-
-**Note:** The contents of the `data-fetch-indicator` is an expression. In this case, the expression is a string literal, hence the single quotes around the CSS selector.
+The `data-indicator` attribute accepts the name of a signal whose value is set to `true` when a fetch request initiated from the same element is in progress, otherwise `false`. If the signal does not exist in the store, it will be added.

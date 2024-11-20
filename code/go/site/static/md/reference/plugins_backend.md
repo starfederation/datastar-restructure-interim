@@ -45,7 +45,6 @@ Additional `data` lines can be added to the response to override the default beh
 | Key                                | Description                                                                                                             |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
 | `data: selector #foo`              | Selects the target element of the `merge` process using a CSS selector.                                                 |
-| `data: selector self`              | Selects the initiating element as the target.                                                                           |
 | `data: mergeMode morph`            | Merges the fragment using [Idiomorph](https://github.com/bigskysoftware/idiomorph). This is the default merge strategy. |
 | `data: mergeMode inner`            | Replaces the target's innerHTML with the fragment.                                                                      |
 | `data: mergeMode outer`            | Replaces the target's outerHTML with the fragment.                                                                      |
@@ -54,19 +53,19 @@ Additional `data` lines can be added to the response to override the default beh
 | `data: mergeMode before`           | Inserts the fragment before the target as a sibling.                                                                    |
 | `data: mergeMode after`            | Inserts the fragment after the target as a sibling.                                                                     |
 | `data: mergeMode upsertAttributes` | Merges attributes from the fragment into the target – useful for updating a store.                                      |
-| `data: settleDuration 1000`        | Settles the element after 1000ms, useful for transitions. Defaults to `500`.                                            |
+| `data: settleDuration 1000`        | Settles the element after 1000ms, useful for transitions. Defaults to `300`.                                            |
 | `data: useViewTransition true`     | Whether to use view transitions when merging into the DOM. Defaults to `false`.                                         |
-| `data: fragment`                   | The HTML fragment to merge into the DOM.                                                                                |
+| `data: fragments`                  | The HTML fragments to merge into the DOM.                                                                               |
 
 ### datastar-merge-signals
 
 ```go
 event: datastar-merge-signals
 data: onlyIfMissing false
-data: store {foo: 1234}
+data: signals {foo: 1234}
 ```
 
-The `datastar-merge-signals` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `store` line should be a valid `data-store` attribute. This will get merged into the store.
+The `datastar-merge-signals` event is used to update the store with new values. The `onlyIfMissing` line determines whether to update the store with new values only if the key does not exist. The `signals` line should be a valid `data-store` attribute. This will get merged into the store.
 
 ### datastar-remove-fragments
 
@@ -84,16 +83,17 @@ data: paths foo.bar 1234 abc
 
 The `datastar-remove-signals` event is used to remove signals that match the provided paths from the store.
 
-### datastar-execute-js
+### datastar-execute-script
 
 ```go
-event: datastar-execute-js
+event: datastar-execute-script
 data: autoRemove true
-data: type module
+data: attributes type module
+data: attributes defer true
 data: script console.log('Hello, world!')
 ```
 
-The `datastar-execute-js` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. The `type` line determines which type attribute to give the script element. 
+The `datastar-execute-script` event is used to execute JavaScript in the browser. The `autoRemove` line determines whether to remove the script after execution. Each `attributes` line adds an attribute (in the format `name value`) to the `script` element. Each `script` line contains JavaScript to be executed by the browser. 
 
 ## Attribute Plugins
 

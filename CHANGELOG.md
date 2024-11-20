@@ -10,7 +10,7 @@
 - Added SDKs for Go, PHP, .NET  and TypeScript.
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
-- Added the `datastar-execute-js` SSE event.
+- Added the `datastar-execute-script` SSE event.
 - Added `replaceUrl` examples from both signals and the backend.
 - Added `data-sse-indicator` attribute, which upsert a signal to show when SSE is active.
 -
@@ -35,9 +35,9 @@
 - Removed the `~ref` syntax. Use the new `$ref()` action instead.
 - Removed the `local` and `session` modifiers from `data-store`. Use the new `data-persist` attribute instead.
 - Removed the `datastar-delete` SSE event. Use the new `datastar-remove-fragments` and `datastar-remove-signals` SSE events instead.
-- Removed the `datastar-redirect` and `datastar-console` SSE events.  Use the new `datastar-execute-js` SSE event instead.
 - Removed `sendDatastarEvent` from ctx.  We have to rethink how to expose events for a better try at the inspector.
 - Removed `data-show` now covered by `data-class`
 - Removed `$$isFetching` action and `data-fetch-indicator` attribute.  Use data-sse-indicator instead.
 - Removed `data-header` attribute.  Use `header` args in sse actions instead.
 - The concept of `_dsPlugins` is removed, more consisten architecture made is unnecessary.
+- Removed the `datastar-redirect` and `datastar-console` SSE events.  Use the new `datastar-execute-script` SSE event instead.

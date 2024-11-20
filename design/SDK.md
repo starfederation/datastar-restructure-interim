@@ -76,7 +76,7 @@ Currently valid values are
 | datastar-merge-signals    | Merges signals into the store       |
 | datastar-remove-fragments | Removes HTML fragments from the DOM |
 | datastar-remove-signals   | Removes signals from the store      |
-| datastar-execute-js       | Executes JavaScript in the browser  |
+| datastar-execute-script   | Executes JavaScript in the browser  |
 
 ##### Options
 * `eventId` (string) Each event ***may*** include an `eventId`.  This can be used by the backend to replay events.  This is part of the SSE spec and is used to tell the browser how to handle the event.  For more details see https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#id
@@ -249,7 +249,7 @@ ServerSentEventGenerator.ExecuteScript(
 * `attributes` An array of attributes to add to the `script` element, if not provided the Datastar client side ***will*** default to `['type module']`. Each item in the array should be a string in the format `key value`.
 
 #### Logic
-1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-execute-js` event type.
+1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-execute-script` event type.
 2. If `autoRemove` is provided, the function ***must*** include the auto remove script value in the event data in the format `autoRemove AUTO_REMOVE\n`, ***unless*** the value is the default of `true`.
 3. If `attributes` is provided, the function ***must*** include the attributes in the event data, with each line prefixed with `attributes `, ***unless*** the attributes value is the default of `type module`.
 4. The function ***must*** include the script in the event data, with each line prefixed with `script `.  This ***should*** be output after all other event data.
