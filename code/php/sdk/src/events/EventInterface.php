@@ -37,4 +37,9 @@ interface EventInterface
      * Returns a data line.
      */
     public function getDataLine(string $value): string;
+
+    /**
+     * Returns multiple data lines.
+     */
+    public function getMultiDataLines(string $literal, string $data): array;
 }

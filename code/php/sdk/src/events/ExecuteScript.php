@@ -12,13 +12,13 @@ class ExecuteScript implements EventInterface
 {
     use EventTrait;
 
-    public string $script;
+    public string $data;
     public bool $autoRemove = Consts::DEFAULT_EXECUTE_SCRIPT_AUTO_REMOVE;
     public array $attributes = [];
 
-    public function __construct(string $script, array $options = [])
+    public function __construct(string $data, array $options = [])
     {
-        $this->script = $script;
+        $this->data = $data;
 
         foreach ($options as $key => $value) {
             $this->$key = $value;
@@ -50,8 +50,9 @@ class ExecuteScript implements EventInterface
             }
         }
 
-        $dataLines[] = $this->getDataLine(Consts::SCRIPT_DATALINE_LITERAL, $this->script);
-
-        return $dataLines;
+        return array_merge(
+            $dataLines,
+            $this->getMultiDataLines(Consts::SCRIPT_DATALINE_LITERAL, $this->data),
+        );
     }
 }

@@ -27,3 +27,13 @@ test('Default options are not output', function() {
             'data: script ' . $content,
         ]);
 });
+
+test('Multi-line content is correctly output', function() {
+    $content = 'console.log("Hello, world!")';
+    $event = new ExecuteScript("\n" . $content . "\n" . $content . "\n");
+    expect($event->getDataLines())
+        ->toBe([
+            'data: script ' . $content,
+            'data: script ' . $content,
+        ]);
+});
