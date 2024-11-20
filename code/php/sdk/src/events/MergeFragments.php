@@ -41,7 +41,6 @@ class MergeFragments implements EventInterface
      */
     public function getDataLines(): array
     {
-        $data = trim($this->data);
         $dataLines = [];
 
         if (!empty($this->selector)) {
@@ -60,11 +59,9 @@ class MergeFragments implements EventInterface
             $dataLines[] = $this->getDataLine(Consts::USE_VIEW_TRANSITION_DATALINE_LITERAL, $this->getBooleanAsString($this->useViewTransition));
         }
 
-        $lines = explode("\n", $data);
-        foreach ($lines as $line) {
-            $dataLines[] = $this->getDataLine(Consts::FRAGMENTS_DATALINE_LITERAL, $line);
-        }
-
-        return $dataLines;
+        return array_merge(
+            $dataLines,
+            $this->getMultiDataLines(Consts::FRAGMENTS_DATALINE_LITERAL, $this->data),
+        );
     }
 }

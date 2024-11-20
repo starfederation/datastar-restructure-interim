@@ -37,18 +37,15 @@ class MergeSignals implements EventInterface
      */
     public function getDataLines(): array
     {
-        $data = trim($this->data);
         $dataLines = [];
 
         if ($this->onlyIfMissing !== Consts::DEFAULT_MERGE_SIGNALS_ONLY_IF_MISSING) {
             $dataLines[] = $this->getDataLine(Consts::ONLY_IF_MISSING_DATALINE_LITERAL, $this->getBooleanAsString($this->onlyIfMissing));
         }
 
-        $lines = explode("\n", $data);
-        foreach ($lines as $line) {
-            $dataLines[] = $this->getDataLine(Consts::SIGNALS_DATALINE_LITERAL, $line);
-        }
-
-        return $dataLines;
+        return array_merge(
+            $dataLines,
+            $this->getMultiDataLines(Consts::SIGNALS_DATALINE_LITERAL, $this->data),
+        );
     }
 }

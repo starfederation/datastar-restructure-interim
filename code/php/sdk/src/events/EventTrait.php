@@ -41,12 +41,23 @@ trait EventTrait
     /**
      * @inerhitdoc
      */
-    public function getDataLine(string|int ...$parts): string
+    public function getDataLine(string $datalineLiteral, string|int ...$parts): string
     {
-        if (!empty($parts[0])) {
-            $parts[0] = trim($parts[0]);
+        return 'data: ' . $datalineLiteral. implode(' ', $parts);
+    }
+
+    /**
+     * @inerhitdoc
+     */
+    public function getMultiDataLines(string $datalineLiteral, string $data): array
+    {
+        $dataLines = [];
+        $lines = explode("\n", trim($data));
+
+        foreach ($lines as $line) {
+            $dataLines[] = $this->getDataLine($datalineLiteral, $line);
         }
 
-        return 'data: ' . implode(' ', $parts);
+        return $dataLines;
     }
 }
