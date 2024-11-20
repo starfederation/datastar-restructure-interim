@@ -12,7 +12,7 @@ export const DefaultSettleDurationMs = 300;
 export const DefaultSseRetryDurationMs = 1000;
 
 // Default strings
-export const DefaultExecuteScriptAttributes = "type module";
+export const DefaultExecuteScriptAttribute = "type module";
 export const DefaultCustomEventSelector = "document";
 export const DefaultCustomEventDetailJson = "{}";
 

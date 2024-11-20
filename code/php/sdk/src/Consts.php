@@ -11,8 +11,8 @@ class Consts
 {
     public const DATASTAR_KEY = 'datastar';
     public const VERSION = '0.20.0-beta-2';
-    public const VERSION_CLIENT_BYTE_SIZE = 42952;
-    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14720;
+    public const VERSION_CLIENT_BYTE_SIZE = 42953;
+    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14721;
     public const DEFAULT_SETTLE_DURATION = 300;
     public const DEFAULT_SSE_RETRY_DURATION = 1000;
     public const DEFAULT_FRAGMENTS_USE_VIEW_TRANSITIONS = false;
@@ -21,7 +21,7 @@ class Consts
     public const DEFAULT_CUSTOM_EVENT_CANCELABLE = true;
     public const DEFAULT_CUSTOM_EVENT_COMPOSED = true;
     public const DEFAULT_CUSTOM_EVENT_BUBBLES = true;
-    public const DEFAULT_EXECUTE_SCRIPT_ATTRIBUTES = 'type module';
+    public const DEFAULT_EXECUTE_SCRIPT_ATTRIBUTE = 'type module';
     public const DEFAULT_CUSTOM_EVENT_SELECTOR = 'document';
     public const DEFAULT_CUSTOM_EVENT_DETAIL_JSON = '{}';
     public const DEFAULT_FRAGMENT_MERGE_MODE = FragmentMergeMode::Morph;

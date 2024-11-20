@@ -7,15 +7,15 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0-beta-2"
-    VersionClientByteSize     = 42952
-    VersionClientByteSizeGzip = 14720
+    VersionClientByteSize     = 42953
+    VersionClientByteSizeGzip = 14721
 
     // Default durations
     DefaultSettleDuration = 300 * time.Millisecond
     DefaultSseRetryDuration = 1000 * time.Millisecond
 
     // Default strings
-    DefaultExecuteScriptAttributes = "type module"
+    DefaultExecuteScriptAttribute = "type module"
     DefaultCustomEventSelector = "document"
     DefaultCustomEventDetailJson = "{}"
 

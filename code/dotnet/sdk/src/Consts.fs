@@ -38,8 +38,8 @@ type EventType =
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
     let [<Literal>] Version                   = "0.20.0-beta-2"
-    let [<Literal>] VersionClientByteSize     = 42952
-    let [<Literal>] VersionClientByteSizeGzip = 14720
+    let [<Literal>] VersionClientByteSize     = 42953
+    let [<Literal>] VersionClientByteSizeGzip = 14721
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -57,7 +57,7 @@ module Consts =
     let [<Literal>] DefaultCustomEventComposed = true
     let [<Literal>] DefaultCustomEventBubbles = true
 
-    let [<Literal>] DefaultExecuteScriptAttributes = "type module"
+    let [<Literal>] DefaultExecuteScriptAttribute = "type module"
     let [<Literal>] DefaultCustomEventSelector = "document"
     let [<Literal>] DefaultCustomEventDetailJson = "{}"
 

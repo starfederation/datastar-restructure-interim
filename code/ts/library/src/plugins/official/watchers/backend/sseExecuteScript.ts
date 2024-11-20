@@ -4,7 +4,7 @@
 // Description: Execute JavaScript from a Server-Sent Event
 
 import {
-    DefaultExecuteScriptAttributes,
+    DefaultExecuteScriptAttribute,
     EventTypes,
     WatcherPlugin,
 } from "../../../../engine";
@@ -21,7 +21,7 @@ export const ExecuteScript: WatcherPlugin = {
             (
                 {
                     autoRemove: autoRemoveRaw = "true",
-                    attributes: attributesRaw = DefaultExecuteScriptAttributes,
+                    attributes: attributesRaw = DefaultExecuteScriptAttribute,
                     script,
                 },
             ) => {

@@ -88,7 +88,7 @@ var ConstsData = &ConstTemplateData{
 	},
 	DefaultStrings: []*DefaultString{
 		{
-			Name:  toolbelt.ToCasedString("executeScriptAttributes"),
+			Name:  toolbelt.ToCasedString("executeScriptAttribute"),
 			Value: `type module`,
 		},
 		{

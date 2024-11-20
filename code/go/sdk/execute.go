@@ -76,10 +76,8 @@ func (sse *ServerSentEventGenerator) ExecuteScript(scriptContents string, opts .
 		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
 
-	if len(options.Attributes) == 1 && options.Attributes[0] == DefaultExecuteScriptAttributes {
-		// skip
-	} else {
-		for _, attribute := range options.Attributes {
+	for _, attribute := range options.Attributes {
+        if attribute != DefaultExecuteScriptAttribute {
 			dataLines = append(dataLines, AttributesDatalineLiteral+attribute)
 		}
 	}

@@ -45,7 +45,7 @@ class ExecuteScript implements EventInterface
         }
 
         foreach ($this->attributes as $attribute) {
-            if ($attribute !== Consts::DEFAULT_EXECUTE_SCRIPT_ATTRIBUTES) {
+            if ($attribute !== Consts::DEFAULT_EXECUTE_SCRIPT_ATTRIBUTE) {
                 $dataLines[] = $this->getDataLine(Consts::ATTRIBUTES_DATALINE_LITERAL, $attribute);
             }
         }
