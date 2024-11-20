@@ -48,7 +48,7 @@
 </div>
 <button
   data-on-click="$get('/examples/fetch_indicator/greet')"
-  data-indicator="fetching"
+  data-sse-indicator="fetching"
   data-bind-disabled="$fetching"
 >
   Click me for a greeting
@@ -56,4 +56,4 @@
 <div id="greeting"></div>
 ```
 
-The `data-indicator` attribute accepts the name of a signal whose value is set to `true` when a fetch request initiated from the same element is in progress, otherwise `false`. If the signal does not exist in the store, it will be added.
+The `data-sse-indicator` attribute accepts the name of a signal whose value is set to `true` when a fetch request initiated from the same element is in progress, otherwise `false`. If the signal does not exist in the store, it will be added.

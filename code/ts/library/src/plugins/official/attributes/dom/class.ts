@@ -15,11 +15,11 @@ export const Class: AttributePlugin = {
         return ctx.reactivity.effect(() => {
             const classes: Object = ctx.expressionFn(ctx);
             for (const [k, v] of Object.entries(classes)) {
-                const clss = k.split(" ");
+                const classNames = k.split(" ");
                 if (v) {
-                    ctx.el.classList.add(...clss);
+                    ctx.el.classList.add(...classNames);
                 } else {
-                    ctx.el.classList.remove(...clss);
+                    ctx.el.classList.remove(...classNames);
                 }
             }
         });
