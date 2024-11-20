@@ -18,7 +18,7 @@ export type IndicatorReference = { el: HTMLElement; count: number };
 const isWrongContent = (err: any) => `${err}`.includes(`text/event-stream`);
 
 export type SSERequestArgs = {
-    onlyRemotes?: boolean;
+    onlyRemoteSignals?: boolean;
     headers?: Record<string, string>;
 };
 
@@ -40,8 +40,8 @@ export function sendSSERequest(
     ) => {
         if (!!!url?.length) throw ERR_BAD_ARGS;
 
-        const { onlyRemotes, headers } = Object.assign({
-            onlyRemotes: true,
+        const { onlyRemoteSignals, headers } = Object.assign({
+            onlyRemoteSignals: true,
             headers: {
                 CONTENT_TYPE: "application/json",
                 DATASTAR_REQUEST: "true",
@@ -50,7 +50,7 @@ export function sendSSERequest(
 
         const currentStore = ctx.store().value;
         let store = Object.assign({}, currentStore);
-        if (onlyRemotes) {
+        if (onlyRemoteSignals) {
             store = remoteSignals(store);
         }
         const storeJSON = JSON.stringify(store);
