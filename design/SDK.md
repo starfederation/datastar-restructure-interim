@@ -190,7 +190,7 @@ ServerSentEventGenerator.MergeSignals(
 
 #### Args
 
-Data is a JS or JSON object that will be sent to the browser to update signals in the store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to signals by the Datastar client side.
+Data is a JavaScript object or JSON string that will be sent to the browser to update signals in the store.  The data ***must*** evaluate to a valid JavaScript.  It will be converted to signals by the Datastar client side.
 
 ##### Options
 
