@@ -20,6 +20,7 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 
 The quickest way to use Datastar is to include it in your HTML using a script tag hosted on a CDN.
 
+### BEN this is out of date start: import maps are the way to go
 ```html
 <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
@@ -39,8 +40,11 @@ You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@
 ```bash
 npm install @sudodevnull/datastar
 ```
+### BEN this is out of date end
 
 ## Handling State
+
+### BEN data-store isn't needed at this stage to teach now!
 
 Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
 
@@ -68,7 +72,7 @@ Datastar provides us with a way to set up two-way data binding on an element usi
 
 This binds the element's value to the signal of the same name. If either is changed, the other will automatically update.
 
-Note how when using `data-model`, the value is the bare name of the signal (without the `$`). 
+Note how when using `data-model`, the value is the bare name of the signal (without the `$`).
 
 To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
@@ -76,7 +80,7 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
 <div data-text="$input"></div>
 ```
 
-<div data-store="{input1: ''}" class="alert flex justify-between items-start p-8">
+<div class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -97,7 +101,7 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 <div data-text="$input.toUpperCase()"></div>
 ```
 
-<div data-store="{input2: ''}" class="alert flex justify-between items-start p-8">
+<div class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -113,15 +117,13 @@ The value of the `data-text` attribute is an expression that is evaluated, meani
 The `data-computed-*` attribute creates a new signal that is computed based on an expression. The computed signal is read-only, and its value is automatically updated when any signals in the expression are updated.
 
 ```html
-<div data-store="{input: ''}"
-     data-computed-repeated="$input.repeat(2)"
->
+<div data-computed-repeated="$input.repeat(2)">
     <input data-model="input" type="text">
     <div data-text="$repeated"></div>
 </div>
 ```
 
-<div data-store="{input3: ''}" data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
+<div data-computed-repeated="$input3.repeat(2)" class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
