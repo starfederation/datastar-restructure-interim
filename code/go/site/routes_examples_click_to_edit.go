@@ -36,7 +36,7 @@ func setupExamplesClickToEdit(examplesRouter chi.Router) error {
 
 		contactRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
 			c := &ClickToEditContactStore{}
-			if err := datastar.ParseIncoming(r, c); err != nil {
+			if err := datastar.ReadSignals(r, c); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}

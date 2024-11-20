@@ -29,7 +29,7 @@ func setupExamplesQuickPrimerGo(examplesRouter chi.Router) error {
 
 		dataRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
 			reqStore := &QuickPrimerGoStore{}
-			if err := datastar.ParseIncoming(r, reqStore); err != nil {
+			if err := datastar.ReadSignals(r, reqStore); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}

@@ -75,7 +75,7 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 
 		setActivation := func(w http.ResponseWriter, r *http.Request, isActive bool) {
 			store := &BulkUpdateSelectionStore{}
-			if err := datastar.ParseIncoming(r, store); err != nil {
+			if err := datastar.ReadSignals(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}

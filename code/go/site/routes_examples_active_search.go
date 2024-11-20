@@ -28,7 +28,7 @@ func setupExamplesActiveSearch(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/active_search/updates", func(w http.ResponseWriter, r *http.Request) {
 		store := &ActiveSearchStore{}
-		if err := datastar.ParseIncoming(r, store); err != nil {
+		if err := datastar.ReadSignals(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}

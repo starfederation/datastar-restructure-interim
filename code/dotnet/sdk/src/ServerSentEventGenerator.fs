@@ -27,7 +27,7 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
     member this.Redirect = ServerSentEvent.redirect this.Context EventOptions.defaults
     member this.Console = ServerSentEvent.console this.Context EventOptions.defaults
 
-    static member ParseIncoming (httpRequest:HttpRequest) = task {
+    static member ReadSignals (httpRequest:HttpRequest) = task {
         let serializedDatastoreOptTask =
             match httpRequest.Method with
             | System.Net.WebRequestMethods.Http.Get ->
@@ -51,8 +51,8 @@ type ServerSentEventGenerator (context:IServerSentEventContext) =
             with _ -> ValueNone
             }
 
-    static member ParseIncomingAsync<'T when 'T:null and 'T :> IDatastarStore> (httpRequest:HttpRequest) : Task<'T> = task {
-        let! storeVOpt = ServerSentEventGenerator.ParseIncoming(httpRequest)
+    static member ReadSignalsAsync<'T when 'T:null and 'T :> IDatastarStore> (httpRequest:HttpRequest) : Task<'T> = task {
+        let! storeVOpt = ServerSentEventGenerator.ReadSignals(httpRequest)
         return
             match storeVOpt with
             | ValueSome store -> store

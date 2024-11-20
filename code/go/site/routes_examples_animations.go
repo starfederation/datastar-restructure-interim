@@ -79,7 +79,7 @@ func setupExamplesAnimations(examplesRouter chi.Router) error {
 
 		dataRouter.Get("/view_transition", func(w http.ResponseWriter, r *http.Request) {
 			store := &AnimationsRestoreStore{}
-			if err := datastar.ParseIncoming(r, store); err != nil {
+			if err := datastar.ReadSignals(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}

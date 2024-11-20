@@ -17,7 +17,7 @@ func setupExamplesDialogsBrowser(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/dialogs_browser/sure", func(w http.ResponseWriter, r *http.Request) {
 		store := &DialogBrowserStore{}
-		if err := datastar.ParseIncoming(r, store); err != nil {
+		if err := datastar.ReadSignals(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}

@@ -305,7 +305,7 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 						}
 						store := &Store{}
 
-						if err := datastar.ParseIncoming(r, store); err != nil {
+						if err := datastar.ReadSignals(r, store); err != nil {
 							http.Error(w, err.Error(), http.StatusBadRequest)
 							return
 						}

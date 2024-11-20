@@ -254,9 +254,9 @@ ServerSentEventGenerator.ExecuteScript(
 3. If `attributes` is provided, the function ***must*** include the attributes in the event data, with each line prefixed with `attributes `, ***unless*** the attributes value is the default of `type module`.
 4. The function ***must*** include the script in the event data, with each line prefixed with `script `.  This ***should*** be output after all other event data.
 
-## `ParseIncoming(r *http.Request, store any) error`
+## `ReadSignals(r *http.Request, store any) error`
 
-`ParseIncoming` is a helper function to parse incoming data from the browser.  It should take the incoming request and convert into an object that can be used by the backend.
+`ReadSignals` is a helper function to parse incoming data from the browser.  It should take the incoming request and convert into an object that can be used by the backend.
 
 #### Args
 

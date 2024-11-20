@@ -16,7 +16,7 @@ func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 		dataRouter.Route("/patch", func(patchRouter chi.Router) {
 			patchRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 				store := map[string]any{}
-				if err := datastar.ParseIncoming(r, &store); err != nil {
+				if err := datastar.ReadSignals(r, &store); err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
@@ -29,7 +29,7 @@ func setupExamplesUpdateStore(examplesRouter chi.Router) error {
 
 			patchRouter.Delete("/", func(w http.ResponseWriter, r *http.Request) {
 				store := map[string]any{}
-				if err := datastar.ParseIncoming(r, &store); err != nil {
+				if err := datastar.ReadSignals(r, &store); err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 					return
 				}
