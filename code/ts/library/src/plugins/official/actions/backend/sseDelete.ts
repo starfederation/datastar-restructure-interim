@@ -5,10 +5,10 @@
 
 import { ActionPlugin } from "../../../../engine";
 import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
-import { sendSSERequest } from "./sseShared";
+import { DELETE, sendSSERequest } from "./sseShared";
 
 export const DeleteSSE: ActionPlugin = {
     pluginType: PLUGIN_ACTION,
-    name: "delete",
-    method: sendSSERequest("DELETE"),
+    name: DELETE,
+    method: sendSSERequest(DELETE),
 };

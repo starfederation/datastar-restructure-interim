@@ -17,15 +17,14 @@ export type Reactivity = {
 };
 
 export type InitContext = {
-  store: any;
-  upsertIfMissingFromStore: (path: string, value: any) => void;
+  store: () => any;
+  upsertSignal: (path: string, value: any) => Signal<any>;
   mergeSignals: (store: DeepState) => void;
   removeSignals: (...paths: string[]) => void;
   actions: Readonly<ActionPlugins>;
   reactivity: Reactivity;
   applyPlugins: (target: Element) => void;
-  cleanupElementRemovals: (el: Element) => void;
-  // sendDatastarEvent: SendDatastarEvent;
+  cleanup: (el: Element) => void;
 };
 
 export type AttributeContext = InitContext & {
@@ -92,22 +91,4 @@ export type ActionPlugins = Record<string, ActionPlugin>;
 export interface WatcherPlugin extends DatastarPlugin {
   pluginType: "watcher";
   onGlobalInit?: (ctx: InitContext) => void;
-}
-
-export type SendDatastarEvent = (
-  category: "core" | "plugin",
-  subcategory: string,
-  type: string,
-  target: Element | Document | Window | string,
-  message: string,
-  opts?: CustomEventInit,
-) => void;
-
-export interface DatastarEvent {
-  time: Date;
-  category: "core" | "plugin";
-  subcategory: string;
-  type: string;
-  target: string;
-  message: string;
 }

@@ -3,12 +3,15 @@
 // Slug: Execute JavaScript from a Server-Sent Event
 // Description: Execute JavaScript from a Server-Sent Event
 
+import { WatcherPlugin } from "../../../../engine/types";
+
+import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import {
     DefaultExecuteScriptAttributes,
+    DefaultExecuteScriptAutoRemove,
     EventTypes,
-    WatcherPlugin,
-} from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
+} from "../../../../engine/consts";
+import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { isBoolString } from "../../../../utils/text";
 import { datastarSSEEventWatcher } from "./sseShared";
 
@@ -20,14 +23,16 @@ export const ExecuteScript: WatcherPlugin = {
             EventTypes.ExecuteScript,
             (
                 {
-                    autoRemove: autoRemoveRaw = "true",
+                    autoRemove: autoRemoveRaw =
+                        `${DefaultExecuteScriptAutoRemove}`,
                     attributes: attributesRaw = DefaultExecuteScriptAttributes,
                     script,
                 },
             ) => {
                 const autoRemove = isBoolString(autoRemoveRaw);
                 if (!script?.length) {
-                    throw new Error("No script provided");
+                    // No script provided
+                    throw ERR_BAD_ARGS;
                 }
                 const scriptEl = document.createElement("script");
                 attributesRaw.split("\n").forEach((attr) => {

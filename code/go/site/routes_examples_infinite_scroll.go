@@ -30,7 +30,7 @@ func setupExamplesInfiniteScroll(examplesRouter chi.Router) error {
 
 					sse.MergeFragmentTempl(
 						infiniteScrollAgent(store.Offset+i),
-						datastar.WithQuerySelectorID("click_to_load_rows"),
+						datastar.WithSelectorID("click_to_load_rows"),
 						datastar.WithMergeAppend(),
 					)
 				}

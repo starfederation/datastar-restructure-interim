@@ -1,3 +1,6 @@
+import { FragmentMergeModes } from "../engine/consts";
+import { ERR_BAD_ARGS, ERR_NOT_FOUND } from "../engine/errors";
+
 const generatedByIdiomorphId = new WeakSet();
 
 //=============================================================================
@@ -61,7 +64,8 @@ function morphNormalizedContent(
         // into either side of the best match
         const bestMatch = findBestNodeMatch(normalizedNewContent, oldNode, ctx);
         if (!bestMatch) {
-            throw new Error("Could not find best match");
+            // could not find a best match, so throw an error
+            throw ERR_NOT_FOUND;
         }
 
         // stash the siblings that will need to be inserted on either side of the best match
@@ -80,7 +84,8 @@ function morphNormalizedContent(
             return [];
         }
     } else {
-        throw "Do not understand how to morph style " + ctx.morphStyle;
+        // console.error(`Do not understand how to morph style ${ctx.morphStyle}`);
+        throw ERR_BAD_ARGS;
     }
 }
 
@@ -104,7 +109,8 @@ function morphOldNodeTo(oldNode: Element, newContent: Element, ctx: any) {
         if (ctx.callbacks.beforeNodeAdded(newContent) === false) return;
 
         if (!oldNode.parentElement) {
-            throw new Error("oldNode has no parentElement");
+            // oldNode has no parentElement
+            throw ERR_BAD_ARGS;
         }
         oldNode.parentElement.replaceChild(newContent, oldNode);
         ctx.callbacks.afterNodeAdded(newContent);
@@ -120,7 +126,7 @@ function morphOldNodeTo(oldNode: Element, newContent: Element, ctx: any) {
         } else if (
             newContent instanceof HTMLHeadElement &&
             oldNode instanceof HTMLHeadElement &&
-            ctx.head.style !== "morph"
+            ctx.head.style !== FragmentMergeModes.Morph
         ) {
             handleHeadElement(newContent, oldNode, ctx);
         } else {
@@ -351,7 +357,7 @@ function handleHeadElement(
                 preserved.push(currentHeadElt);
             }
         } else {
-            if (headMergeStyle === "append") {
+            if (headMergeStyle === FragmentMergeModes.Append) {
                 // we are appending and this existing element is not new content
                 // so if and only if it is marked for re-append do we do anything
                 if (isReAppended) {
@@ -379,9 +385,8 @@ function handleHeadElement(
             newNode.outerHTML,
         ).firstChild as Element | null;
         if (!newElt) {
-            throw new Error(
-                "could not create new element from: " + newNode.outerHTML,
-            );
+            // console.error(`could not create new element from: ${newNode.outerHTML}`);
+            throw ERR_BAD_ARGS;
         }
         // console.log(newElt)
         if (!!ctx.callbacks.beforeNodeAdded(newElt)) {
@@ -488,7 +493,8 @@ function removeNodesBetween(
         const tempNode = startInclusive;
         startInclusive = startInclusive?.nextSibling as Element;
         if (!tempNode) {
-            throw new Error("tempNode is null");
+            // tempNode is null
+            throw ERR_BAD_ARGS;
         }
         removeNode(tempNode, ctx);
     }
@@ -638,7 +644,8 @@ function parseContent(newContent: string) {
         );
         const content = responseDoc.body.querySelector("template")?.content;
         if (!content) {
-            throw new Error("content is null");
+            // Content is null
+            throw ERR_NOT_FOUND;
         }
         generatedByIdiomorphId.add(content);
         return content;

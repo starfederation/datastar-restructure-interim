@@ -5,35 +5,21 @@
 
 import { AttributePlugin } from "../../../../engine";
 import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
-import { elemToSelector } from "../../../../utils/dom";
 
 // Sets the value of the element
-export const RefAttribute: AttributePlugin = {
+export const Ref: AttributePlugin = {
     pluginType: PLUGIN_ATTRIBUTE,
     name: "ref",
     mustHaveEmptyKey: true,
     mustNotEmptyExpression: true,
     bypassExpressionFunctionCreation: () => true,
     onLoad: (ctx) => {
-        ctx.upsertIfMissingFromStore("_dsPlugins.refs", {});
-        const { el, expression } = ctx;
-        const s = ctx.store();
-
-        const revised = {
-            _dsPlugins: {
-                refs: {
-                    ...s._dsPlugins.refs.value,
-                    [expression]: elemToSelector(el),
-                },
-            },
-        };
-        ctx.mergeSignals(revised);
+        const { expressionFn, el, upsertSignal, removeSignals } = ctx;
+        const signalPath = expressionFn(ctx);
+        upsertSignal(signalPath, el);
 
         return () => {
-            const s = ctx.store();
-            const revised = { ...s._dsPlugins.refs.value };
-            delete revised[expression];
-            s._dsPlugins.refs = revised;
+            removeSignals(signalPath);
         };
     },
 };

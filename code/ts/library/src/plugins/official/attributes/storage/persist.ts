@@ -3,19 +3,16 @@
 // Slug: Persist data to local storage or session storage
 // Description: This plugin allows you to persist data to local storage or session storage.  Once you add this attribute the data will be persisted to local storage or session storage.
 
-import {
-    AttributePlugin,
-    DATASTAR,
-    DATASTAR_EVENT,
-    DatastarEvent,
-} from "../../../../engine";
+import { AttributePlugin } from "../../../../engine";
 import {
     LOCAL,
     PLUGIN_ATTRIBUTE,
     REMOTE,
     SESSION,
 } from "../../../../engine/client_only_consts";
+import { DATASTAR, DATASTAR_EVENT } from "../../../../engine/consts";
 import { remoteSignals } from "../../../../utils/signals";
+import { DatastarSSEEvent } from "../../watchers/backend/sseShared";
 
 export const Persist: AttributePlugin = {
     pluginType: PLUGIN_ATTRIBUTE,
@@ -38,7 +35,7 @@ export const Persist: AttributePlugin = {
         const storageType = ctx.modifiers.has(SESSION) ? SESSION : LOCAL;
         const useRemote = ctx.modifiers.has(REMOTE);
 
-        const storeUpdateHandler = ((_: CustomEvent<DatastarEvent>) => {
+        const storeUpdateHandler = ((_: CustomEvent<DatastarSSEEvent>) => {
             let store = ctx.store();
             if (useRemote) {
                 store = remoteSignals(store);
@@ -92,8 +89,7 @@ export const Persist: AttributePlugin = {
         if (!!marshalledStore) {
             const store = JSON.parse(marshalledStore);
             for (const key in store) {
-                const value = store[key];
-                ctx.upsertIfMissingFromStore(key, value);
+                ctx.upsertSignal(key, store[key]);
             }
         }
 

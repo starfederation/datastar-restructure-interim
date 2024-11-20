@@ -1,3 +1,4 @@
+import { ERR_BAD_ARGS, ERR_NOT_FOUND } from "../engine/errors";
 import { HTMLorSVGElement } from "./types";
 
 export function elemToSelector(
@@ -14,7 +15,8 @@ export function elemToSelector(
         if (elm.id) {
             const idAttr = elm.getAttribute("id");
             if (!idAttr) {
-                throw new Error("Element has an ID but no ID attribute");
+                // Element has an ID but no ID attribute
+                throw ERR_BAD_ARGS;
             }
             names.unshift("#" + idAttr); // getAttribute, because `elm.id` could also return a child element with name "id"
             break; // Because ID should be unique, no more is needed. Remove the break, if you always want a full path.
@@ -42,7 +44,8 @@ export function scrollIntoView(
     shouldFocus = true,
 ) {
     if (!(el instanceof HTMLElement || el instanceof SVGElement)) {
-        throw new Error("Element not found");
+        // Element is not an HTMLElement or SVGElement
+        throw ERR_NOT_FOUND;
     }
     if (!el.tabIndex) el.setAttribute("tabindex", "0");
 

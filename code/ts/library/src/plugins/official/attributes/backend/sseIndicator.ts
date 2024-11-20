@@ -1,0 +1,47 @@
+// Authors: Delaney Gillilan
+// Icon: material-symbols:network-wifi
+// Slug: Sets the indicator signal used when fetching data via SSE
+// Description: must be a valid signal name
+
+import { AttributePlugin } from "../../../../engine";
+import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
+import { DATASTAR } from "../../../../engine/consts";
+import {
+    DATASTAR_SSE_EVENT,
+    DatastarSSEEvent,
+    FINISHED,
+    STARTED,
+} from "../../watchers/backend/sseShared";
+
+export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
+export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
+
+export const SSEIndicator: AttributePlugin = {
+    pluginType: PLUGIN_ATTRIBUTE,
+    name: "sseIndicator",
+    mustHaveEmptyKey: true,
+    mustNotEmptyExpression: true,
+    onLoad: (ctx) => {
+        const { expressionFn, upsertSignal, removeSignals } = ctx;
+        const signalName = expressionFn(ctx);
+        const signal = upsertSignal(signalName, false);
+
+        const watcher = (event: CustomEvent<DatastarSSEEvent>) => {
+            switch (event.detail.type) {
+                case STARTED:
+                    signal.value = true;
+                    break;
+                case FINISHED:
+                    signal.value = false;
+                    break;
+            }
+        };
+
+        document.addEventListener(DATASTAR_SSE_EVENT, watcher);
+
+        return () => {
+            removeSignals(signalName);
+            document.removeEventListener(DATASTAR_SSE_EVENT, watcher);
+        };
+    },
+};

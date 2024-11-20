@@ -1,38 +1,58 @@
-import {
-    ActionMethod,
-    DATASTAR,
-    DATASTAR_REQUEST,
-    DefaultSettleDurationMs,
-} from "../../../../engine";
+import { ActionMethod } from "../../../../engine";
+import { DATASTAR } from "../../../../engine/consts";
+import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { remoteSignals } from "../../../../utils/signals";
 import {
     fetchEventSource,
     FetchEventSourceInit,
 } from "../../../../vendored/fetch-event-source";
-import { Signal } from "../../../../vendored/preact-core";
-import {
-    INDICATOR_CLASS,
-    INDICATOR_LOADING_CLASS,
-} from "../../attributes/backend/fetchIndicator";
 import {
     DATASTAR_SSE_EVENT,
     DatastarSSEEvent,
+    FINISHED,
+    STARTED,
 } from "../../watchers/backend/sseShared";
+
+export const GET = "GET";
+export const POST = "POST";
+export const PUT = "PUT";
+export const PATCH = "PATCH";
+export const DELETE = "DELETE";
 
 export type IndicatorReference = { el: HTMLElement; count: number };
 
-const isWrongContent = (err: any) =>
-    `${err}`.includes(
-        `Expected content-type to be text/event-stream`,
+const isWrongContent = (err: any) => `${err}`.includes(`text/event-stream`);
+
+export type SSERequestArgs = {
+    onlyRemotes?: boolean;
+    headers?: Record<string, string>;
+};
+
+function dispatchSSE(type: string, argsRaw: Record<string, string>) {
+    document.dispatchEvent(
+        new CustomEvent<DatastarSSEEvent>(DATASTAR_SSE_EVENT, {
+            detail: { type, argsRaw },
+        }),
     );
+}
 
 export function sendSSERequest(
     method: string,
 ): ActionMethod {
-    return async (ctx, url, onlyRemotes = true) => {
-        if (!!!url?.length) {
-            throw new Error("URL is required for SSE request");
-        }
+    return async (
+        ctx,
+        url,
+        args?: SSERequestArgs,
+    ) => {
+        if (!!!url?.length) throw ERR_BAD_ARGS;
+
+        const { onlyRemotes, headers } = Object.assign({
+            onlyRemotes: true,
+            headers: {
+                CONTENT_TYPE: "application/json",
+                DATASTAR_REQUEST: "true",
+            },
+        }, args);
 
         const currentStore = ctx.store().value;
         let store = Object.assign({}, currentStore);
@@ -41,68 +61,12 @@ export function sendSSERequest(
         }
         const storeJSON = JSON.stringify(store);
 
-        const sendFromElement = ctx.el as HTMLElement;
-        // ctx.sendDatastarEvent(
-        //     "plugin",
-        //     "backend",
-        //     "fetch_start",
-        //     sendFromElement,
-        //     JSON.stringify({ method, url, onlyRemotes, storeJSON }),
-        // );
-
-        const indicatorElements: HTMLElement[] =
-            store?._dsPlugins?.fetch?.indicatorElements
-                ? store?._dsPlugins?.fetch
-                    ?.indicatorElements?.[sendFromElement.id]
-                    ?.value || []
-                : [];
-        const indicatorsVisible: Signal<IndicatorReference[]> | undefined =
-            store
-                ?._dsPlugins?.fetch?.indicatorsVisible;
-
-        indicatorElements.forEach((indicator) => {
-            if (!indicator || !indicatorsVisible) {
-                return;
-            }
-            const indicatorVisibleIndex = indicatorsVisible.value.findIndex(
-                (indicatorVisible) => {
-                    if (!indicatorVisible) {
-                        return false;
-                    }
-                    return indicator.isSameNode(indicatorVisible.el);
-                },
-            );
-            if (indicatorVisibleIndex > -1) {
-                const indicatorVisible =
-                    indicatorsVisible.value[indicatorVisibleIndex];
-                const indicatorsVisibleNew = [...indicatorsVisible.value];
-                delete indicatorsVisibleNew[indicatorVisibleIndex];
-                indicatorsVisible.value = [
-                    ...indicatorsVisibleNew.filter((indicator) => {
-                        return !!indicator;
-                    }),
-                    { el: indicator, count: indicatorVisible.count + 1 },
-                ];
-            } else {
-                indicator.classList.remove(INDICATOR_CLASS);
-                indicator.classList.add(INDICATOR_LOADING_CLASS);
-                indicatorsVisible.value = [
-                    ...indicatorsVisible.value,
-                    {
-                        el: indicator,
-                        count: 1,
-                    },
-                ];
-            }
-        });
+        dispatchSSE(STARTED, { el: ctx.el.id });
 
         const urlInstance = new URL(url, window.location.origin);
         const req: FetchEventSourceInit = {
             method,
-            headers: {
-                ["Content-Type"]: "application/json",
-                [DATASTAR_REQUEST]: "true",
-            },
+            headers,
             onmessage: (evt) => {
                 if (!evt.event.startsWith(DATASTAR)) {
                     return;
@@ -130,14 +94,7 @@ export function sendSSERequest(
 
                 // if you aren't seeing your event you can debug by using this line in the console
                 // document.addEventListener("datastar-sse",(e) => console.log(e));
-
-                const datastarSSEEvent = new CustomEvent<DatastarSSEEvent>(
-                    DATASTAR_SSE_EVENT,
-                    {
-                        detail: { type, argsRaw },
-                    },
-                );
-                document.dispatchEvent(datastarSSEEvent);
+                dispatchSSE(type, argsRaw);
             },
             onerror: (err) => {
                 if (isWrongContent(err)) {
@@ -145,90 +102,14 @@ export function sendSSERequest(
                     throw err;
                 }
                 // do nothing and it will retry
-                console.error(`Error with SSE request: ${err.message}`);
+                console.error(err.message);
             },
             onclose: () => {
-                try {
-                    const store = ctx.store();
-                    const indicatorsVisible: Signal<IndicatorReference[]> =
-                        store?._dsPlugins?.fetch?.indicatorsVisible || [];
-                    const indicatorElements: HTMLElement[] =
-                        store?._dsPlugins?.fetch?.indicatorElements
-                            ? store._dsPlugins.fetch
-                                .indicatorElements[sendFromElement.id]?.value ||
-                                []
-                            : [];
-                    const indicatorCleanupPromises: Promise<() => void>[] = [];
-                    if (indicatorElements?.forEach) {
-                        indicatorElements.forEach((indicator) => {
-                            if (!indicator || !indicatorsVisible) {
-                                return;
-                            }
-                            const indicatorsVisibleNew =
-                                indicatorsVisible.value;
-                            const indicatorVisibleIndex = indicatorsVisibleNew
-                                .findIndex((indicatorVisible) => {
-                                    if (!indicatorVisible) {
-                                        return false;
-                                    }
-                                    return indicator.isSameNode(
-                                        indicatorVisible.el,
-                                    );
-                                });
-                            const indicatorVisible =
-                                indicatorsVisibleNew[indicatorVisibleIndex];
-                            if (!indicatorVisible) {
-                                return;
-                            }
-                            if (indicatorVisible.count < 2) {
-                                indicatorCleanupPromises.push(
-                                    new Promise(() =>
-                                        setTimeout(() => {
-                                            indicator.classList.remove(
-                                                INDICATOR_LOADING_CLASS,
-                                            );
-                                            indicator.classList.add(
-                                                INDICATOR_CLASS,
-                                            );
-                                        }, DefaultSettleDurationMs)
-                                    ),
-                                );
-                                delete indicatorsVisibleNew[
-                                    indicatorVisibleIndex
-                                ];
-                            } else if (indicatorVisibleIndex > -1) {
-                                indicatorsVisibleNew[indicatorVisibleIndex]
-                                    .count = indicatorsVisibleNew[
-                                        indicatorVisibleIndex
-                                    ]
-                                        .count - 1;
-                            }
-                            indicatorsVisible.value = indicatorsVisibleNew
-                                .filter(
-                                    (indicator) => {
-                                        return !!indicator;
-                                    },
-                                );
-                        });
-                    }
-
-                    Promise.all(indicatorCleanupPromises);
-                } catch (e) {
-                    console.error(e);
-                    debugger;
-                } finally {
-                    // ctx.sendDatastarEvent(
-                    //     "plugin",
-                    //     "backend",
-                    //     "fetch_end",
-                    //     sendFromElement,
-                    //     JSON.stringify({ method, url }),
-                    // );
-                }
+                dispatchSSE(FINISHED, { el: ctx.el.id });
             },
         };
 
-        if (method === "GET") {
+        if (method === GET) {
             const queryParams = new URLSearchParams(urlInstance.search);
             queryParams.append(DATASTAR, storeJSON);
             urlInstance.search = queryParams.toString();
@@ -236,22 +117,12 @@ export function sendSSERequest(
             req.body = storeJSON;
         }
 
-        const headers = store?._dsPlugins?.fetch?.headers || {};
-        if (req.headers) {
-            for (const [key, value] of Object.entries(headers)) {
-                if (key.startsWith("_")) {
-                    continue;
-                }
-                req.headers[key] = `${value}`;
-            }
-        }
-
         try {
             const revisedURL = urlInstance.toString();
             await fetchEventSource(revisedURL, req);
         } catch (err) {
             if (!isWrongContent(err)) {
-                throw new Error(`Failed to fetch ${url}: ${err}`);
+                throw err;
             }
 
             // exit gracefully and do nothing if the content-type is wrong

@@ -3,13 +3,14 @@
 // Slug: Merge fine grain signals store data from a server using the Datastar SDK interface
 // Description: Merge store data from a server using the Datastar SDK interface
 
+import { WatcherPlugin } from "../../../../engine";
+import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
 import {
     DefaultFragmentsUseViewTransitions,
     DefaultSettleDurationMs,
     EventTypes,
-    WatcherPlugin,
-} from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
+} from "../../../../engine/consts";
+import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { isBoolString } from "../../../../utils/text";
 import {
     docWithViewTransitionAPI,
@@ -28,9 +29,8 @@ export const RemoveFragments: WatcherPlugin = {
                 `${DefaultFragmentsUseViewTransitions}`,
         }) => {
             if (!!!selector.length) {
-                throw new Error(
-                    "No selector provided for remove-fragments",
-                );
+                // No selector provided for remove-fragments
+                throw ERR_BAD_ARGS;
             }
 
             const settleDuration = parseInt(settleDurationRaw);

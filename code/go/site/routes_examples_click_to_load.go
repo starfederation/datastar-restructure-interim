@@ -33,7 +33,7 @@ func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 				// log.Printf("ClickToLoadAgentRow: %d", store.Offset+i)
 				sse.MergeFragmentTempl(
 					ClickToLoadAgentRow(store.Offset+i),
-					datastar.WithQuerySelectorID("click_to_load_rows"),
+					datastar.WithSelectorID("click_to_load_rows"),
 					datastar.WithMergeAppend(),
 				)
 			}

@@ -5,10 +5,10 @@
 
 import { ActionPlugin } from "../../../../engine";
 import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
-import { sendSSERequest } from "./sseShared";
+import { POST, sendSSERequest } from "./sseShared";
 
 export const PostSSE: ActionPlugin = {
     pluginType: PLUGIN_ACTION,
-    name: "post",
-    method: sendSSERequest("POST"),
+    name: POST,
+    method: sendSSERequest(POST),
 };

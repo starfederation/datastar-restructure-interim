@@ -5,7 +5,7 @@ import { ActionsProcessor } from "../plugins/official/preprocessors/core/actions
 import { SignalsProcessor } from "../plugins/official/preprocessors/core/signals";
 import { Engine } from "./engine";
 
-export * from "./consts";
+export { VERSION } from "./consts";
 export type * from "./types";
 
 const ds = new Engine();

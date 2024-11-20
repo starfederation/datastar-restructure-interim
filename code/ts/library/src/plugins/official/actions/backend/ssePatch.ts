@@ -5,10 +5,10 @@
 
 import { ActionPlugin } from "../../../../engine";
 import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
-import { sendSSERequest } from "./sseShared";
+import { PATCH, sendSSERequest } from "./sseShared";
 
 export const PatchSSE: ActionPlugin = {
     pluginType: PLUGIN_ACTION,
-    name: "patch",
-    method: sendSSERequest("PATCH"),
+    name: PATCH,
+    method: sendSSERequest(PATCH),
 };
