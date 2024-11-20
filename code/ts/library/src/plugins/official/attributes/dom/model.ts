@@ -18,8 +18,8 @@ export const Model: AttributePlugin = {
     mustHaveEmptyKey: true,
     // bypassExpressionFunctionCreation: () => true,
     onLoad: (ctx) => {
-        const { el, expressionFn, upsertSignal } = ctx;
-        const signalName = expressionFn(ctx);
+        const { el, expression, upsertSignal } = ctx;
+        const signalName = expression;
         if (typeof signalName !== "string") {
             // Signal name must be a string
             throw ERR_BAD_ARGS;

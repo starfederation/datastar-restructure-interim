@@ -1,6 +1,6 @@
 const err = (code: number) => {
     const e = new Error();
-    e.name = `Status${code}`;
+    e.name = `DS${code}`;
 };
 
 export const ERR_BAD_ARGS = err(400);
