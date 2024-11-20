@@ -1,6 +1,6 @@
 // Authors: Delaney Gillilan
 // Icon: material-symbols:rocket
-// Slug: Advice
+// Slug: Star
 // Description: Sage advice for the weary traveler
 
 import { AttributePlugin } from "../../../../engine";

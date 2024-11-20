@@ -18,7 +18,7 @@
 
 - Changed the `$$` prefix to `$` for action plugins.
 - The `data-model` attribute now upserts missing signals.
-- The `data-show` attribute now shows/hides an element using the `style` attribute only. For anything custom, use `data-class` instead.
+- The `data-show` attribute now shows/hides an element using the `style` attribute only. Modifiers have been removed. For anything custom, use `data-class` instead.
 - Renamed the `datastar-fragment` SSE event to `datastar-merge-fragments`.
 - Renamed the `datastar-signal` SSE event to `datastar-merge-signals`.
 - Renamed the `fragment` dataline literal for SSE events to `fragments`.
