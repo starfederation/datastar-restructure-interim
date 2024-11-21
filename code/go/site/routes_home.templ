@@ -172,7 +172,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 										class="btn btn-lg"
 										data-on-click="$post('/api/todos/-1/toggle')"
 										data-testid="toggle_all_todos"
-										data-sse-indicator="toggleAllFetching"
+										data-indicator="toggleAllFetching"
 										data-bind-disabled="$toggleAllFetching"
 									>
 										@icon("material-symbols:checklist")
@@ -287,7 +287,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				id={ fmt.Sprintf("toggle%d", i) }
 				class="text-4xl cursor-pointer"
 				data-on-click={ datastar.PostSSE("/api/todos/%d/toggle", i) }
-				data-sse-indicator={ fetchingSignalName }
+				data-indicator={ fetchingSignalName }
 			>
 				if todo.Completed {
 					@icon("material-symbols:check-box-outline")
@@ -299,7 +299,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				id={ indicatorID }
 				class="flex-1 text-lg cursor-pointer select-none"
 				data-on-click={ datastar.GetSSE("/api/todos/%d/edit", i) }
-				data-sse-indicator={ fetchingSignalName }
+				data-indicator={ fetchingSignalName }
 			>
 				{ todo.Text }
 			</label>
@@ -309,7 +309,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				class="invisible btn btn-error group-hover:visible"
 				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
 				data-testid={ fmt.Sprintf("delete_todo%d", i) }
-				data-sse-indicator={ fetchingSignalName }
+				data-indicator={ fetchingSignalName }
 				data-disabled={ "$" + fetchingSignalName }
 			>
 				@icon("material-symbols:close")

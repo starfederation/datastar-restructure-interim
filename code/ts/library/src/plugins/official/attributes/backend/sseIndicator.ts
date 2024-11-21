@@ -19,7 +19,7 @@ export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
 
 export const SSEIndicator: AttributePlugin = {
     pluginType: "attribute",
-    name: "sseIndicator",
+    name: "indicator",
     mustHaveEmptyKey: true,
     onLoad: (ctx) => {
         const { expression, upsertSignal, el } = ctx;
