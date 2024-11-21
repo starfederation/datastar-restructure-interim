@@ -74,7 +74,7 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 	examplesRouter.Route("/edit_row/edit", func(editRouter chi.Router) {
 		editRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &EditRowStore{}
-			if err := datastar.ParseIncoming(r, &store); err != nil {
+			if err := datastar.ReadSignals(r, &store); err != nil {
 				http.Error(w, fmt.Sprintf("error unmarshalling contact : %s", err), http.StatusBadRequest)
 			}
 
@@ -97,7 +97,7 @@ func setupExamplesEditRow(examplesRouter chi.Router) error {
 
 		editRouter.Patch("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &EditRowStore{}
-			if err := datastar.ParseIncoming(r, &store); err != nil {
+			if err := datastar.ReadSignals(r, &store); err != nil {
 				http.Error(w, fmt.Sprintf("error unmarshalling store : %s", err), http.StatusBadRequest)
 				return
 			}

@@ -34,7 +34,7 @@ def send_index():
     return HTMLResponse(index_page)
 
 def send_event(frag, merge=False):
-    yield 'event: datastar-fragment\n'
+    yield 'event: datastar-merge-fragments\n'
     if merge:
         yield 'data: mergeMode upsertAttributes\n'
     yield f'data: fragment {frag}\n\n'

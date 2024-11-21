@@ -85,7 +85,7 @@ func (sse *ServerSentEventGenerator) MergeFragments(fragment string, opts ...Mer
 	if fragment != "" {
 		parts := strings.Split(fragment, "\n")
 		for _, part := range parts {
-			dataRows = append(dataRows, FragmentDatalineLiteral+part)
+			dataRows = append(dataRows, FragmentsDatalineLiteral+part)
 		}
 	}
 

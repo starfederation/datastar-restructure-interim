@@ -29,7 +29,7 @@ func setupExamplesCSRF(examplesRouter chi.Router) error {
 			sse.MergeFragmentTempl(CSRFDemoResponse(
 				fmt.Sprintf("POST request received with token: %s", token),
 			),
-				datastar.WithQuerySelectorID("responses"),
+				datastar.WithSelectorID("responses"),
 				datastar.WithMergeAppend(),
 			)
 		})

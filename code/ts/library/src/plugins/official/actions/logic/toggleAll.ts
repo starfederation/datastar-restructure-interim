@@ -3,10 +3,9 @@
 // Slug: Toggle all signals that match a regular expression
 
 import { ActionPlugin } from "../../../../engine";
-import { PLUGIN_ACTION } from "../../../../engine/client_only_consts";
 
 export const ToggleAll: ActionPlugin = {
-    pluginType: PLUGIN_ACTION,
+    pluginType: "action",
     name: "toggleAll",
     method: (ctx, regexp) => {
         const re = new RegExp(regexp);

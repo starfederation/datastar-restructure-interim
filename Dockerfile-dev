@@ -8,13 +8,13 @@ WORKDIR /app
 RUN set -eux; \
     # Packages to install
     apk add --no-cache \
-        g++ \
-        go-task-task \
-        git \
-        git-lfs \
-        jq \
-        make \
-        rsync \
+    g++ \
+    go-task-task \
+    git \
+    git-lfs \
+    jq \
+    make \
+    rsync \
     && \
     # Clean out directories that don't need to be part of the image
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

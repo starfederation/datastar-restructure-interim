@@ -4,10 +4,9 @@
 // Description: This attribute creates a computed signal that updates when its dependencies change.
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 
 export const Computed: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "computed",
     mustNotEmptyKey: true,
     onLoad: (ctx) => {

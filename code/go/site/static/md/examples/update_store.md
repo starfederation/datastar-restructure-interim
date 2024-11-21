@@ -31,7 +31,7 @@
 This example demonstrates how to update the store directly from the frontend. This is using an SSE event
 
 ```text/event-stream
-event: datastar-signal,
+event: datastar-merge-signals,
 data: store { HYAAA4BK7IFQE: "2024-05-23T10:33:14.167189214-07:00", stuffAlreadyInStore: "this is already in the store"}
 ```
 It will accept anything that is also accepted by the `data-store` attribute.

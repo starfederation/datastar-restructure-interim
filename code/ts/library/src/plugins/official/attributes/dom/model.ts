@@ -3,53 +3,44 @@
 // Slug: Enable two-way data binding
 // Description: This attribute plugin enables two-way data binding for input elements.
 
-import { AttributePlugin, RegexpGroups } from "../../../../engine";
+import { AttributePlugin } from "../../../../engine";
 import {
-    PLUGIN_ATTRIBUTE,
-    PLUGIN_PREPROCESSOR,
-} from "../../../../engine/client_only_consts";
+    ERR_BAD_ARGS,
+    ERR_METHOD_NOT_ALLOWED,
+} from "../../../../engine/errors";
 
 const dataURIRegex = /^data:(?<mime>[^;]+);base64,(?<contents>.*)$/;
 const updateModelEvents = ["change", "input", "keydown"];
 
 export const Model: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "model",
     mustHaveEmptyKey: true,
-    preprocessors: {
-        post: [
-            {
-                pluginType: PLUGIN_PREPROCESSOR,
-                name: "model",
-                regexp: /(?<whole>.+)/g,
-                replacer: (groups: RegexpGroups) => {
-                    const { whole } = groups;
-                    return `ctx.store().${whole}`;
-                },
-            },
-        ],
-    },
     // bypassExpressionFunctionCreation: () => true,
     onLoad: (ctx) => {
-        const { el, expression } = ctx;
-        const signal = ctx.expressionFn(ctx);
-        const tnl = el.tagName.toLowerCase();
-
-        if (expression.startsWith("ctx.store().ctx.store()")) {
-            throw new Error(
-                `Model attribute on #${el.id} must have a signal name, you probably prefixed with $ by accident`,
-            );
+        const { el, expression, upsertSignal } = ctx;
+        const signalName = expression;
+        if (typeof signalName !== "string") {
+            // Signal name must be a string
+            throw ERR_BAD_ARGS;
         }
 
+        const tnl = el.tagName.toLowerCase();
+
+        let signalDefault: string | boolean | File = "";
         const isInput = tnl.includes("input");
         const type = el.getAttribute("type");
         const isCheckbox = tnl.includes("checkbox") ||
             (isInput && type === "checkbox");
+        if (isCheckbox) {
+            signalDefault = false;
+        }
         const isSelect = tnl.includes("select");
         const isRadio = tnl.includes("radio") || (isInput && type === "radio");
         const isFile = isInput && type === "file";
-
-        const signalName = expression.replaceAll("ctx.store().", "");
+        if (isFile) {
+            // can't set a default value for a file input, yet
+        }
         if (isRadio) {
             const name = el.getAttribute("name");
             if (!name?.length) {
@@ -57,14 +48,12 @@ export const Model: AttributePlugin = {
             }
         }
 
+        const signal = upsertSignal(signalName, signalDefault);
+
         const setInputFromSignal = () => {
-            if (!signal) {
-                throw new Error(
-                    `Signal '${signalName}' not found in a data-model attribute on #${el.id}`,
-                );
-            }
             const hasValue = "value" in el;
             const v = signal.value;
+            const vStr = `${v}`;
             if (isCheckbox || isRadio) {
                 const input = el as HTMLInputElement;
                 if (isCheckbox) {
@@ -72,25 +61,24 @@ export const Model: AttributePlugin = {
                 } else if (isRadio) {
                     // evaluate the value as string to handle any type casting
                     // automatically since the attribute has to be a string anyways
-                    input.checked = `${v}` === input.value;
+                    input.checked = vStr === input.value;
                 }
             } else if (isFile) {
                 // File input reading from a signal is not supported yet
             } else if (isSelect) {
                 const select = el as HTMLSelectElement;
                 if (select.multiple) {
-                    const v = signal.value;
                     Array.from(select.options).forEach((opt) => {
                         if (opt?.disabled) return;
                         opt.selected = v.includes(opt.value);
                     });
                 } else {
-                    select.value = `${v}`;
+                    select.value = vStr;
                 }
             } else if (hasValue) {
-                el.value = `${v}`;
+                el.value = vStr;
             } else {
-                el.setAttribute("value", `${v}`);
+                el.setAttribute("value", vStr);
             }
         };
         const cleanupSetInputFromSignal = ctx.reactivity.effect(
@@ -110,16 +98,13 @@ export const Model: AttributePlugin = {
                             const reader = new FileReader();
                             reader.onload = () => {
                                 if (typeof reader.result !== "string") {
-                                    throw new Error(
-                                        `Invalid result type: ${typeof reader
-                                            .result}`,
-                                    );
+                                    // console.error(`Invalid result type: ${typeof reader.result}`);
+                                    throw ERR_BAD_ARGS;
                                 }
                                 const match = reader.result.match(dataURIRegex);
                                 if (!match?.groups) {
-                                    throw new Error(
-                                        `Invalid data URI: ${reader.result}`,
-                                    );
+                                    // console.error(`Invalid data URI: ${reader.result}`);
+                                    throw ERR_BAD_ARGS;
                                 }
                                 allContents.push(match.groups.contents);
                                 allMimes.push(match.groups.mime);
@@ -152,7 +137,8 @@ export const Model: AttributePlugin = {
                     input.value || input.getAttribute("value"),
                 );
             } else if (typeof current === "string") {
-                signal.value = input.value || input.getAttribute("value") || "";
+                signal.value = input.value || input.getAttribute("value") ||
+                    "";
             } else if (typeof current === "boolean") {
                 if (isCheckbox) {
                     signal.value = input.checked ||
@@ -181,10 +167,8 @@ export const Model: AttributePlugin = {
                 }
                 console.log(input.value);
             } else {
-                console.log(typeof current);
-                throw new Error(
-                    `Unsupported type ${typeof current} for signal ${signalName}`,
-                );
+                // console.log(`Unsupported type ${typeof current}`);
+                throw ERR_METHOD_NOT_ALLOWED;
             }
         };
 

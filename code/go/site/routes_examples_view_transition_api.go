@@ -14,7 +14,7 @@ func setupExamplesViewTransitionAPI(examplesRouter chi.Router) error {
 		// You can comment out the below block and still persist the session
 
 		store := &viewTransitionAPIStore{}
-		if err := datastar.ParseIncoming(r, store); err != nil {
+		if err := datastar.ReadSignals(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}

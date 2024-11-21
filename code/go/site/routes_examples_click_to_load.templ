@@ -50,7 +50,7 @@ templ ClickToEditAgentsTable(input *ClickToLoadStore) {
 			</thead>
 			<tbody
 				id="click_to_load_rows"
-				data-star-store={ templ.JSONString(input) }
+				data-store={ templ.JSONString(input) }
 			>
 				for i := 0; i < input.Limit; i++ {
 					@ClickToLoadAgentRow(i + input.Offset)

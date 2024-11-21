@@ -11,7 +11,7 @@ func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/click_to_load/data", func(w http.ResponseWriter, r *http.Request) {
 		store := &ClickToLoadStore{}
-		if err := datastar.ParseIncoming(r, store); err != nil {
+		if err := datastar.ReadSignals(r, store); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 		if store.Limit < 1 {
@@ -33,7 +33,7 @@ func setupExamplesClickToLoad(examplesRouter chi.Router) error {
 				// log.Printf("ClickToLoadAgentRow: %d", store.Offset+i)
 				sse.MergeFragmentTempl(
 					ClickToLoadAgentRow(store.Offset+i),
-					datastar.WithQuerySelectorID("click_to_load_rows"),
+					datastar.WithSelectorID("click_to_load_rows"),
 					datastar.WithMergeAppend(),
 				)
 			}

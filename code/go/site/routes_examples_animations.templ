@@ -80,16 +80,14 @@ templ animationsRequestInFlight() {
 					name="name"
 					class="flex-1 input input-primary"
 				/>
-				<div id="request_in_flight_indicator">
-					@icon("svg-spinners:blocks-wave")
-				</div>
+				@sseIndicator("fetching")
 			</div>
 		</div>
 		<button
 			id="submit_request_in_flight"
 			class="btn btn-success"
 			data-on-click="$post('/examples/animations/data/request_in_flight')"
-			data-fetch-indicator="'#request_in_flight_indicator'"
+			data-indicator="fetching"
 		>
 			@icon("material-symbols:person-add")
 			Submit

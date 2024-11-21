@@ -6,48 +6,64 @@ import "time"
 
 const (
     DatastarKey = "datastar"
-    Version                   = "0.20.0"
-    VersionClientByteSize     = 42817
-    VersionClientByteSizeGzip = 14684
+    Version                   = "0.20.0-beta-3"
+    VersionClientByteSize     = 36058
+    VersionClientByteSizeGzip = 12673
 
-    // Default durations
+    //region Default durations
+
+    // The default duration for settling during merges. Allows for CSS transitions to complete.
     DefaultSettleDuration = 300 * time.Millisecond
+    // The default duration for retrying SSE on connection reset. This is part of the underlying retry mechanism of SSE.
     DefaultSseRetryDuration = 1000 * time.Millisecond
 
-    // Default strings
-    DefaultExecuteJsType = "module"
-    DefaultCustomEventSelector = "document"
-    DefaultCustomEventDetailJson = "{}"
+    //endregion Default durations
 
-    // Dataline literals
+    //region Default strings
+
+    // The default attributes for <script/> element use when executing scripts. It is a set of of key-value pairs delimited by a newline \\n character.
+    DefaultExecuteScriptAttributes = "type module"
+
+    //endregion Default strings
+
+    //region Dataline literals
     SelectorDatalineLiteral = "selector "
     MergeModeDatalineLiteral = "mergeMode "
     SettleDurationDatalineLiteral = "settleDuration "
-    FragmentDatalineLiteral = "fragment "
+    FragmentsDatalineLiteral = "fragments "
     UseViewTransitionDatalineLiteral = "useViewTransition "
-    StoreDatalineLiteral = "store "
+    SignalsDatalineLiteral = "signals "
     OnlyIfMissingDatalineLiteral = "onlyIfMissing "
     PathsDatalineLiteral = "paths "
     ScriptDatalineLiteral = "script "
-    TypeDatalineLiteral = "type "
+    AttributesDatalineLiteral = "attributes "
     AutoRemoveDatalineLiteral = "autoRemove "
+    //endregion Dataline literals
 )
 
 var (
-    // Default booleans
-    DefaultMergeFragmentsUseViewTransitions = false
-    DefaultMergeStoreOnlyIfMissing = false
-    DefaultExecuteJsAutoRemove = true
-    DefaultCustomEventCancelable = true
-    DefaultCustomEventComposed = true
-    DefaultCustomEventBubbles = true
+    //region Default booleans
+
+    // Should fragments be merged using the ViewTransition API?
+    DefaultFragmentsUseViewTransitions = false
+
+    // Should a given set of signals merge if they are missing from the store?
+    DefaultMergeSignalsOnlyIfMissing = false
+
+    // Should script element remove itself after execution?
+    DefaultExecuteScriptAutoRemove = true
+
+    //endregion Default booleans
 )
 
-// Enums
+//region Enums
+
+//region The mode in which a fragment is merged into the DOM.
 type FragmentMergeMode string
 
 const (
     // Default value for FragmentMergeMode
+    // Morphs the fragment into the existing element using idiomorph.
     DefaultFragmentMergeMode = FragmentMergeModeMorph
 
     // Morphs the fragment into the existing element using idiomorph.
@@ -75,23 +91,28 @@ const (
     FragmentMergeModeUpsertAttributes FragmentMergeMode = "upsertAttributes"
 
 )
+//endregion FragmentMergeMode
 
+//region The type protocol on top of SSE which allows for core pushed based communication between the server and the client.
 type EventType string
 
 const (
-    // An event dealing with HTML fragments.
+    // An event for merging HTML fragments into the DOM.
     EventTypeMergeFragments EventType = "datastar-merge-fragments"
 
-    // An event dealing with fine grain signals.
-    EventTypeMergeStore EventType = "datastar-merge-store"
+    // An event for merging signals into the store.
+    EventTypeMergeSignals EventType = "datastar-merge-signals"
 
-    // An event dealing with removing elements from the DOM
+    // An event for removing HTML fragments from the DOM.
     EventTypeRemoveFragments EventType = "datastar-remove-fragments"
 
-    // An event dealing with removing signals from the store.
-    EventTypeRemoveFromStore EventType = "datastar-remove-from-store"
+    // An event for removing signals from the store.
+    EventTypeRemoveSignals EventType = "datastar-remove-signals"
 
-    // An event dealing with executing JavaScript in the browser.
-    EventTypeExecuteJs EventType = "datastar-execute-js"
+    // An event for executing <script/> elements in the browser.
+    EventTypeExecuteScript EventType = "datastar-execute-script"
 
 )
+//endregion EventType
+
+//endregion Enums

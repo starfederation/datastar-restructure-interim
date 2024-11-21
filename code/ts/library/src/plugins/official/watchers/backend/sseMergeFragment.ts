@@ -3,16 +3,15 @@
 // Slug: Use Server-Sent Events to fetch data from a server using the Datastar SDK interface
 // Description: Remember, SSE is just a regular SSE request but with the ability to send 0-inf messages to the client.
 
+import { InitContext, WatcherPlugin } from "../../../../engine";
 import {
     DefaultFragmentMergeMode,
-    DefaultMergeFragmentsUseViewTransitions,
+    DefaultFragmentsUseViewTransitions,
     DefaultSettleDurationMs,
     EventTypes,
     FragmentMergeModes,
-    InitContext,
-    WatcherPlugin,
-} from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
+} from "../../../../engine/consts";
+import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { isBoolString } from "../../../../utils/text";
 import {
     docWithViewTransitionAPI,
@@ -26,26 +25,27 @@ import {
 } from "./sseShared";
 
 export const MergeFragments: WatcherPlugin = {
-    pluginType: PLUGIN_WATCHER,
+    pluginType: "watcher",
     name: EventTypes.MergeFragments,
     onGlobalInit: async (ctx) => {
         const fragmentContainer = document.createElement("template");
         datastarSSEEventWatcher(EventTypes.MergeFragments, ({
-            fragment = "<div></div>",
+            fragments: fragmentsRaw = "<div></div>",
             selector = "",
             mergeMode = DefaultFragmentMergeMode,
             settleDuration: settleDurationRaw = `${DefaultSettleDurationMs}`,
             useViewTransition: useViewTransitionRaw =
-                `${DefaultMergeFragmentsUseViewTransitions}`,
+                `${DefaultFragmentsUseViewTransitions}`,
         }) => {
             const settleDuration = parseInt(settleDurationRaw);
             const useViewTransition = isBoolString(useViewTransitionRaw);
 
-            fragmentContainer.innerHTML = fragment.trim();
+            fragmentContainer.innerHTML = fragmentsRaw.trim();
             const fragments = [...fragmentContainer.content.children];
             fragments.forEach((fragment) => {
                 if (!(fragment instanceof Element)) {
-                    throw new Error(`No fragment found`);
+                    // No fragments found
+                    throw ERR_BAD_ARGS;
                 }
 
                 const selectorOrID = selector ||
@@ -54,7 +54,8 @@ export const MergeFragments: WatcherPlugin = {
                     [];
                 const allTargets = [...targets];
                 if (!allTargets.length) {
-                    throw new Error(`No targets found for ${selector}`);
+                    // No targets found
+                    throw ERR_BAD_ARGS;
                 }
 
                 if (supportsViewTransitions && useViewTransition) {
@@ -103,7 +104,7 @@ function applyToTargets(
                                 oldNode: Element,
                                 _: Element,
                             ) => {
-                                ctx.cleanupElementRemovals(
+                                ctx.cleanup(
                                     oldNode,
                                 );
                                 return true;
@@ -112,10 +113,10 @@ function applyToTargets(
                     },
                 );
                 if (!result?.length) {
-                    throw new Error(`No morph result `);
+                    // No morph result
+                    throw ERR_BAD_ARGS;
                 }
-                const first = result[0] as Element;
-                modifiedTarget = first;
+                modifiedTarget = result[0] as Element;
                 break;
             case FragmentMergeModes.Inner:
                 // Replace the contents of the target element with the response
@@ -156,11 +157,10 @@ function applyToTargets(
                 );
                 break;
             default:
-                throw new Error(
-                    `Unknown merge type: ${mergeMode}`,
-                );
+                // Unknown merge type
+                throw ERR_BAD_ARGS;
         }
-        ctx.cleanupElementRemovals(modifiedTarget);
+        ctx.cleanup(modifiedTarget);
         modifiedTarget.classList.add(SWAPPING_CLASS);
 
         ctx.applyPlugins(document.body);

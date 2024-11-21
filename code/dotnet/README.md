@@ -25,7 +25,7 @@ app.MapGet("/get", async (IServerSentEventGenerator sse, IDatastarStore dsStore)
     // read back the DataStore
     DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
     DataStore newDataStore = store with { Output = $"Your Input: {store.Input}" };
-    await sse.MergeFragment(
+    await sse.MergeFragments(
         $"<main class='container' id='main' data-store='{newDataStore.SerializeToJson()}'></main>",
         new MergeFragmentOpts() { MergeMode = FragmentMergeMode.UpsertAttributes }
         );

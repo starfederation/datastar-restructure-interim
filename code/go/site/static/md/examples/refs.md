@@ -5,12 +5,18 @@
 <div>
      <div data-ref="foo">I'm a div that is getting referenced</div>
      <pre
-          class=""
+          class="code"
           data-text="JSON.stringify(ctx.store(),null,2)"
      >
           Stuff in store
      </pre>
-     <div data-text="`I'm using content of '${$ref('foo').innerHTML}'`">
+     <div class="card bg-primary text-primary-content">
+          <div class="card-body">
+               <div class="card-title" data-text="`I'm using content of '${($foo).innerHTML}'`">
+                    I should be replaced with the content of the referenced div
+               </div>
+          </div>
+     </div>
 </div>
 
 ## Explanation
@@ -18,12 +24,10 @@
 ```html
 <div>
   <div data-ref="foo">I'm a div that is getting referenced</div>
-  <div data-text="`I'm using content of '${#(foo).innerHTML}'`"></div>
+  <div data-text="`I'm using content of '${($foo).innerHTML}'`"></div>
 </div>
 ```
 
-By adding `data-ref="foo"` to an element, you can reference it in other Datastar attribute expressions. It automatically creates a valid selector that can be used in other actions on the page.
+Adding `data-ref="foo"` to an element creates a signal called `$foo` that points to that element.
 
-**Note:** The parentheses around `#(foo)` are required to ensure that the reference is properly evaluated. We can't discern between a property and a nested signal without them.
-
-**Note:** Every element that has any Datastar plugins associated with it will automatically create an `id` attribute if it doesn't already have one. This is to ensure that the element can be referenced in cleanup steps.
+***Note:*** We have to wrap the reference in `()` to avoid parsing issues.  This is most do to supported nested signals.  To the parser `foo.bar.bar` and `foo.bar.length` look the same.  We are looking at efficient ways to handle this but for now this is the solution.

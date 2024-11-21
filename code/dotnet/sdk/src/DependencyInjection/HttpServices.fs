@@ -27,7 +27,7 @@ type ServiceCollectionExtensionMethods() =
         serviceCollection.AddScoped<IDatastarStore>(fun (svcPvd:IServiceProvider) ->
             let httpContext = svcPvd.GetService<IHttpContextAccessor>()
             ServerSentEventGenerator(httpContext) |> ignore
-            let result = ServerSentEventGenerator.ParseIncoming<'T>(httpContext.HttpContext.Request).GetAwaiter().GetResult()
+            let result = ServerSentEventGenerator.ReadSignals<'T>(httpContext.HttpContext.Request).GetAwaiter().GetResult()
             match result with
             | ValueSome store -> store :> IDatastarStore
             | ValueNone -> failwith "Unable"

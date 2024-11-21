@@ -4,9 +4,12 @@
 
 <div>
   <style>
-    cloak { display: none; }
+    .cloak { 
+        opacity: 0;
+        transition: opacity 2s ease-in; 
+    }
   </style>
-  <div class="cloak" data-class="{cloak:false}" data-show="true">
+  <div class="cloak" data-class="{cloak:false}">
     Cloaked text
   </div>
 </div>
@@ -14,19 +17,19 @@
 ## Explanation
 
 This example displays how to prevent flickering of the element before Datastar has processed the DOM.
-By removing the `cloak` class on initialisation `data-show` will come into effect smoothly.
+By removing the `cloak` class on initialisation, there will never be any flickering on load.
 
 ```html
 <style>
   cloak {
-    display: none;
+    opacity: 0;
+    transition: opacity 1s;
   }
 </style>
 
 <div
   class="cloak"
   data-class="{cloak:false}"
-  data-show="$visible"
 >
   Cloaked text
 </div>

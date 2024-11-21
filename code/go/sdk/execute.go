@@ -1,48 +1,61 @@
 package datastar
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
 )
 
-type ExecuteJSOptions struct {
+type ExecuteScriptOptions struct {
 	EventID       string
 	RetryDuration time.Duration
-	Type          string
+	Attributes    []string
 	AutoRemove    *bool
 }
 
-type ExecuteJSOption func(*ExecuteJSOptions)
+type ExecuteScriptOption func(*ExecuteScriptOptions)
 
-func WithExecuteJSEventID(id string) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteScriptEventID(id string) ExecuteScriptOption {
+	return func(o *ExecuteScriptOptions) {
 		o.EventID = id
 	}
 }
 
-func WithExecuteJSRetryDuration(retryDuration time.Duration) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteScriptRetryDuration(retryDuration time.Duration) ExecuteScriptOption {
+	return func(o *ExecuteScriptOptions) {
 		o.RetryDuration = retryDuration
 	}
 }
 
-func WithExecuteJSType(t string) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
-		o.Type = t
+func WithExecuteScriptAttributes(attributes ...string) ExecuteScriptOption {
+	return func(o *ExecuteScriptOptions) {
+		o.Attributes = attributes
 	}
 }
 
-func WithExecuteJSAutoRemove(autoremove bool) ExecuteJSOption {
-	return func(o *ExecuteJSOptions) {
+func WithExecuteScriptAttributeKVs(kvs ...string) ExecuteScriptOption {
+	if len(kvs)%2 != 0 {
+		panic("WithExecuteScriptAttributeKVs requires an even number of arguments")
+	}
+	attributes := make([]string, 0, len(kvs)/2)
+	for i := 0; i < len(kvs); i += 2 {
+		attribute := fmt.Sprintf("%s %s", kvs[i], kvs[i+1])
+		attributes = append(attributes, attribute)
+	}
+	return WithExecuteScriptAttributes(attributes...)
+}
+
+func WithExecuteScriptAutoRemove(autoremove bool) ExecuteScriptOption {
+	return func(o *ExecuteScriptOptions) {
 		o.AutoRemove = &autoremove
 	}
 }
 
-func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...ExecuteJSOption) error {
-	options := &ExecuteJSOptions{
+func (sse *ServerSentEventGenerator) ExecuteScript(scriptContents string, opts ...ExecuteScriptOption) error {
+	options := &ExecuteScriptOptions{
 		RetryDuration: DefaultSseRetryDuration,
-		Type:          DefaultExecuteJsType,
+		Attributes:    []string{"type module"},
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -58,13 +71,15 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 	}
 
 	dataLines := make([]string, 0, 64)
-
-	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteJsAutoRemove {
+	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteScriptAutoRemove {
 		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
+	dataLinesJoined := strings.Join(dataLines, NewLine)
 
-	if options.Type != DefaultExecuteJsType {
-		dataLines = append(dataLines, TypeDatalineLiteral, options.Type)
+	if dataLinesJoined != DefaultExecuteScriptAttributes {
+		for _, attribute := range options.Attributes {
+			dataLines = append(dataLines, AttributesDatalineLiteral+attribute)
+		}
 	}
 
 	scriptLines := strings.Split(scriptContents, NewLine)
@@ -73,7 +88,7 @@ func (sse *ServerSentEventGenerator) ExecuteJS(scriptContents string, opts ...Ex
 	}
 
 	return sse.Send(
-		EventTypeExecuteJs,
+		EventTypeExecuteScript,
 		dataLines,
 		sendOpts...,
 	)

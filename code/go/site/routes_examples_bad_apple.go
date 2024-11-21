@@ -65,7 +65,7 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 				Percentage: 0,
 			}
 
-			sse.MarshalAndMergeStore(store)
+			sse.MarshalAndMergeSignals(store)
 
 			for {
 				select {
@@ -76,7 +76,7 @@ func setupExamplesBadApple(examplesRouter chi.Router) error {
 					nextFrame := (currentFrameIdx + 1) % frameCount
 					store.Contents = frame
 					store.Percentage = 100 * float64(nextFrame) / float64(frameCount)
-					sse.MarshalAndMergeStore(store)
+					sse.MarshalAndMergeSignals(store)
 					currentFrameIdx = nextFrame
 				}
 			}

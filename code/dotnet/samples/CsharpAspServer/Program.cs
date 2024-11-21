@@ -39,12 +39,12 @@ public static class Program
             FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "..", "Shared", "wwwroot")),
         });
 
-        app.MapGet("/language/{lang:required}", (string lang, IServerSentEventGenerator sse) => sse.MergeFragment($"""<span id="language">{lang}</span>"""));
+        app.MapGet("/language/{lang:required}", (string lang, IServerSentEventGenerator sse) => sse.MergeFragments($"""<span id="language">{lang}</span>"""));
         app.MapGet("/get", async (IServerSentEventGenerator sse, IDatastarStore dsStore) =>
         {
             DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
             DataStore newDataStore = store with { Output = $"Your Input: {store.Input}" };
-            await sse.MergeFragment(
+            await sse.MergeFragments(
                 $"<main class='container' id='main' data-store='{newDataStore.SerializeToJson()}'></main>",
                 new MergeFragmentOpts() { MergeMode = FragmentMergeMode.UpsertAttributes }
                 );
@@ -52,13 +52,13 @@ public static class Program
         app.MapGet("/patch", async (IServerSentEventGenerator sse, IDatastarStore dsStore) =>
         {
             DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
-            DataStore mergeStore = new() { Output = $"Patched Output: {store.Input}" };
-            await sse.MergeStore(mergeStore.SerializeToJson());
+            DataStore mergeSignals = new() { Output = $"Patched Output: {store.Input}" };
+            await sse.MergeSignals(mergeSignals.SerializeToJson());
         });
         app.MapGet("/target", async (IServerSentEventGenerator sse) =>
         {
             string today = DateTime.Now.ToString("%y-%M-%d %h:%m:%s");
-            await sse.MergeFragment($"""<div id='target'><b>{today}</b><button data-on-click="$get('/removeTarget')">Remove</button></div>""");
+            await sse.MergeFragments($"""<div id='target'><b>{today}</b><button data-on-click="$get('/removeTarget')">Remove</button></div>""");
         });
         app.MapGet("/feed", async (IHttpContextAccessor acc, IServerSentEventGenerator sse, CancellationToken ct) =>
         {
@@ -67,7 +67,7 @@ public static class Program
                 while (!ct.IsCancellationRequested)
                 {
                     long rand = Random.Shared.NextInt64(1000000000000000000, 5999999999999999999);
-                    await sse.MergeFragment($"<span id='feed'>{rand}</span>");
+                    await sse.MergeFragments($"<span id='feed'>{rand}</span>");
                     await Task.Delay(TimeSpan.FromSeconds(1), ct);
                 }
             }

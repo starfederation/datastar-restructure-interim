@@ -21,7 +21,7 @@ func setupExampleInlineValidation(examplesRouter chi.Router) error {
 
 		dataRouter.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			u := &inlineValidationUser{}
-			if err := datastar.ParseIncoming(r, u); err != nil {
+			if err := datastar.ReadSignals(r, u); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
@@ -32,7 +32,7 @@ func setupExampleInlineValidation(examplesRouter chi.Router) error {
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			u := &inlineValidationUser{}
-			if err := datastar.ParseIncoming(r, u); err != nil {
+			if err := datastar.ReadSignals(r, u); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}

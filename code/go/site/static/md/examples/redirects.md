@@ -7,10 +7,9 @@
 
 ## Explanation
 
-As part of SSE updates you may want to redirect the user to a different page. This can be done by returning a
-```go
-event: datastar-redirect
-data: url /essays/grugs_around_fire
-```
+As part of SSE updates you may want to redirect the user to a different page. The `datastar-execute-script` event can be used to execute JavaScript on the client.
 
-event from the server. The client will then redirect the user to the specified URL.  This can also be a full url such as `https://www.google.com`
+```html
+event: datastar-execute-script
+data: script window.location = "/essays/grugs_around_fire"
+```

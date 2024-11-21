@@ -5,7 +5,8 @@ version: "3"
 interval: 100ms
 
 vars:
-  GREETING: Hello, World!
+  VERSION:
+    sh: cat code/ts/library/package.json | jq -r .version
 
 tasks:
   tools:
@@ -41,6 +42,20 @@ tasks:
       - rm -rf code/go/site/static/librarySource/*
       - cp -r code/ts/library/src/* code/go/site/static/librarySource/
 
+  libpub:
+    requires:
+      vars: [VERSION]
+    deps:
+      - tsbuild
+    cmds:
+      - git push origin
+      - git tag v{{.VERSION}}
+      - git push origin --tags
+      # - npm publish --access public
+      - git push --tags
+      - GOPROXY=proxy.golang.org go list -m github.com/starfederation/datastar@v{{.VERSION}}
+      # - task: deploy
+
   css:
     dir: code/go/site
     sources:
@@ -68,9 +83,7 @@ tasks:
     cmds:
       - fuser -k 4222/tcp > /dev/null 2>&1 || true
 
-  site:
-    method: none
-    desc: build and run site
+  support:
     sources:
       - code/go/**/*.templ
       - code/go/**/*.go
@@ -84,6 +97,11 @@ tasks:
       - templ
       - css
 
+  site:
+    method: none
+    desc: build and run site
+    deps:
+      - support
     cmds:
       - go mod tidy
       - go build -o ./datastar-website code/go/cmd/site/main.go

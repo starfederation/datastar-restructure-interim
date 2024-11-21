@@ -8,21 +8,17 @@ import {
     AttributePlugin,
     RegexpGroups,
 } from "../../../../engine";
-import {
-    PLUGIN_ATTRIBUTE,
-    PLUGIN_PREPROCESSOR,
-} from "../../../../engine/client_only_consts";
 import { storeFromPossibleContents } from "../../../../utils/signals";
 
 // Setup the global store
 export const Store: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "store",
     removeNewLines: true,
     preprocessors: {
         pre: [
             {
-                pluginType: PLUGIN_PREPROCESSOR,
+                pluginType: "preprocessor",
                 name: "store",
                 regexp: /(?<whole>.+)/g,
                 replacer: (groups: RegexpGroups) => {
@@ -34,13 +30,13 @@ export const Store: AttributePlugin = {
     },
     allowedModifiers: new Set(["ifmissing"]),
     onLoad: (ctx: AttributeContext) => {
-        const possibleMergeStore = ctx.expressionFn(ctx);
-        const actualMergeStore = storeFromPossibleContents(
+        const possibleMergeSignals = ctx.expressionFn(ctx);
+        const actualMergeSignals = storeFromPossibleContents(
             ctx.store(),
-            possibleMergeStore,
+            possibleMergeSignals,
             ctx.modifiers.has("ifmissing"),
         );
-        ctx.mergeStore(actualMergeStore);
+        ctx.mergeSignals(actualMergeSignals);
 
         delete ctx.el.dataset[ctx.rawKey];
     },

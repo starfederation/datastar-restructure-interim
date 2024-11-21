@@ -22,7 +22,7 @@ func setupExamplesRedirects(examplesRouter chi.Router) error {
 
 		dataRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &RedirectsStore{}
-			if err := datastar.ParseIncoming(r, store); err != nil {
+			if err := datastar.ReadSignals(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}

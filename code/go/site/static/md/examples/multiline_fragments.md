@@ -10,7 +10,7 @@
 As long as the fragment has a newline at the end of the line it will be treated as a multiline fragment. This is useful when you are writing a lot of text by hand.
 
 ```text
-event: datastar-fragment
+event: datastar-merge-fragments
 data: mergeMode morph
 data: settleDuration 500
 data: fragment
