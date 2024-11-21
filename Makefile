@@ -20,6 +20,8 @@ image-build:
 ifeq ($(ARCH),arm64)
 	${DOCKER_RUN} --name ${CONTAINER}-$@ ${IMAGE_NAME} -c '	wget -O code/go/site/tailwindcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v1.7.21/tailwindcss-extra-linux-arm64'
 endif
+    # Make this a safe .git directory per https://stackoverflow.com/questions/68242465/not-in-a-git-repository-error-in-git-lfs
+	git config --global --add safe.directory .
 	${DOCKER_RUN} --name ${CONTAINER}-$@ ${IMAGE_NAME} -c 'git lfs fetch --all && git lfs pull && git lfs checkout'
 	${DOCKER_RUN} --name ${CONTAINER}-$@ ${IMAGE_NAME} -c 'task tools'
 # Run the passed in task command
