@@ -1,6 +1,6 @@
 # Getting Started
 
-Datastar brings the functionality provided by libraries like [AlpineJs](https://alpinejs.dev/) (frontend reactivity) and [HTMX](https://htmx.org/) (backend reactivity) together, into one cohesive solution. It's a lightweight, extensible framework that allows you to:
+Datastar brings the functionality provided by libraries like [Alpine.js](https://alpinejs.dev/) (frontend reactivity) and [htmx](https://htmx.org/) (backend reactivity) together, into one cohesive solution. It's a lightweight, extensible framework that allows you to:
 
 1. Manage state and build reactivity into your frontend using HTML attributes.
 2. Modify the DOM and state by sending events from your backend.
@@ -28,6 +28,14 @@ If you prefer to host the file yourself, download your own bundle using the [bun
 
 ```html
 <script type="module" defer src="/path/to/datastar.js"></script>
+```
+
+### Using NPM
+
+You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
+
+```bash
+npm install @sudodevnull/datastar
 ```
 
 ## Data Attributes
@@ -292,6 +300,7 @@ See if you can follow the code below _before_ trying the demo.
 We've just scratched the surface of frontend reactivity. Now let's take a look at how we can bring the backend into play.
 
 ## Backend Setup
+
 Datastar uses [Server-Sent Events](https://en.wikipedia.org/wiki/Server-sent_events) or SSE. There's no special backend plumbing required to use SSE, just some special syntax. Fortunately, SSE is straightforward and [provides us with some advantages](/essays/event_streams_all_the_way_down).
 
 First, set up your backend in the language of your choice. Using one of the helper SDKs (available for Go, PHP and TypeScript) will help you get up and running faster. We're going to use the SDKs in the examples below, which set the appropriate headers and format the events for us, but this is optional.
