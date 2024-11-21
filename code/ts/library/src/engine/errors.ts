@@ -1,6 +1,9 @@
+import { DATASTAR } from "./consts";
+
 const err = (code: number) => {
     const e = new Error();
-    e.name = `DS${code}`;
+    e.name = `${DATASTAR}${code}`;
+    return e;
 };
 
 export const ERR_BAD_ARGS = err(400);

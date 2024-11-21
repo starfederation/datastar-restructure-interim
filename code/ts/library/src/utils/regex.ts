@@ -1,3 +1,5 @@
+import { DATASTAR } from "../engine/consts";
+
 export const validJSIdentifier = `[a-zA-Z_$]+`;
 export const validNestedJSIdentifier = validJSIdentifier + `[0-9a-zA-Z_$.]*`;
 
@@ -13,3 +15,6 @@ export function wholePrefixSuffix(
         `g`,
     );
 }
+
+export const isDatastarGeneratedID = (el: Element) =>
+    el.id.match(`^${DATASTAR}-`) !== null;

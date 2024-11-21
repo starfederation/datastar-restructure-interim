@@ -83,9 +83,7 @@ tasks:
     cmds:
       - fuser -k 4222/tcp > /dev/null 2>&1 || true
 
-  site:
-    method: none
-    desc: build and run site
+  support:
     sources:
       - code/go/**/*.templ
       - code/go/**/*.go
@@ -99,6 +97,11 @@ tasks:
       - templ
       - css
 
+  site:
+    method: none
+    desc: build and run site
+    deps:
+      - support
     cmds:
       - go mod tidy
       - go build -o ./datastar-website code/go/cmd/site/main.go

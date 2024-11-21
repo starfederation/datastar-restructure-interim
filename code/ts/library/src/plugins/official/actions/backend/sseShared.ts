@@ -100,7 +100,9 @@ export function sendSSERequest(
                     throw err;
                 }
                 // do nothing and it will retry
-                console.error(err.message);
+                if (err) {
+                    console.error(err.message);
+                }
             },
             onclose: () => {
                 dispatchSSE(FINISHED, { elID });

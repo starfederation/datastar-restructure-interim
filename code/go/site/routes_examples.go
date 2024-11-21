@@ -62,7 +62,6 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 		{
 			Label: "Reactive Examples",
 			Links: []*SidebarLink{
-				{ID: "backoff"},
 				{ID: "multiline_fragments"},
 				{ID: "bind_keys"},
 				{ID: "classes"},
@@ -206,7 +205,6 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 			setupExamplesQuickPrimerGo(examplesRouter),
 			setupExamplesTemplCounter(examplesRouter, store),
 			setupExamplesShow(examplesRouter),
-			setupExamplesBackoff(examplesRouter),
 		); err != nil {
 			panic(fmt.Sprintf("error setting up examples routes: %s", err))
 		}

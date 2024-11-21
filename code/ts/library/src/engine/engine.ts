@@ -3,6 +3,7 @@ import { HTMLorSVGElement } from "../utils/types";
 import { DeepSignal, deepSignal, DeepState } from "../vendored/deepsignal";
 import { computed, effect, Signal, signal } from "../vendored/preact-core";
 import { apply } from "../vendored/ts-merge-patch";
+import { DATASTAR } from "./consts";
 
 import {
     ERR_ALREADY_EXISTS,
@@ -203,7 +204,8 @@ export class Engine {
                     if (!rawKey.startsWith(p.name)) continue;
 
                     if (el.id.length === 0) {
-                        el.id = `ds-${this.parentID}-${this.missingIDNext++}`;
+                        el.id = `${DATASTAR}-${this.parentID}-${this
+                            .missingIDNext++}`;
                     }
 
                     appliedProcessors.clear();

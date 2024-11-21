@@ -130,7 +130,7 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 			{Label: "SvelteKit", Value: 25800},
 			{Label: "HTMX+\nhyperscript", Value: 54000},
 			{Label: "HTMX+\nAlpine", Value: 40300},
-			{Label: "Datastar", Value: float64(datastar.VersionClientByteSizeGzip)},
+			{Label: "Datastar\nAll Plugins", Value: float64(datastar.VersionClientByteSizeGzip)},
 			{Label: "Datastar Core", Value: 5698},
 		},
 	}
@@ -178,7 +178,11 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 							http.Error(w, err.Error(), http.StatusInternalServerError)
 							return
 						}
-						sse.MergeFragmentTempl(TodosMVCView(mvc))
+						c := TodosMVCView(mvc)
+						if err := sse.MergeFragmentTempl(c); err != nil {
+							sse.ConsoleError(err)
+							return
+						}
 					}
 				}
 			})
@@ -200,14 +204,15 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 			todosRouter.Put("/cancel", func(w http.ResponseWriter, r *http.Request) {
 
 				sessionID, mvc, err := mvcSession(w, r)
+				sse := datastar.NewSSE(w, r)
 				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
+					sse.ConsoleError(err)
 					return
 				}
 
 				mvc.EditingIdx = -1
 				if err := saveMVC(r.Context(), sessionID, mvc); err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
+					sse.ConsoleError(err)
 					return
 				}
 			})
@@ -253,13 +258,16 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 
 				todoRouter.Post("/toggle", func(w http.ResponseWriter, r *http.Request) {
 					sessionID, mvc, err := mvcSession(w, r)
+
+					sse := datastar.NewSSE(w, r)
 					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
+						sse.ConsoleError(err)
 						return
 					}
 
 					i, err := routeIndex(w, r)
 					if err != nil {
+						sse.ConsoleError(err)
 						return
 					}
 
