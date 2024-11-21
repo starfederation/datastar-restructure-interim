@@ -17,7 +17,7 @@ import {
 export const INDICATOR_CLASS = `${DATASTAR}-indicator`;
 export const INDICATOR_LOADING_CLASS = `${INDICATOR_CLASS}-loading`;
 
-export const SSEIndicator: AttributePlugin = {
+export const Indicator: AttributePlugin = {
     pluginType: "attribute",
     name: "indicator",
     mustHaveEmptyKey: true,

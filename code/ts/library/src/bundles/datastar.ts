@@ -12,7 +12,7 @@ import { ClampFit } from "../plugins/official/actions/math/clampFit";
 import { ClampFitInt } from "../plugins/official/actions/math/clampFitInt";
 import { Fit } from "../plugins/official/actions/math/fit";
 import { FitInt } from "../plugins/official/actions/math/fitInt";
-import { SSEIndicator } from "../plugins/official/attributes/backend/sseIndicator";
+import { Indicator } from "../plugins/official/attributes/backend/sseIndicator";
 import { Bind } from "../plugins/official/attributes/dom/bind";
 import { Class } from "../plugins/official/attributes/dom/class";
 import { Model } from "../plugins/official/attributes/dom/model";
@@ -32,40 +32,34 @@ import { RemoveFragments } from "../plugins/official/watchers/backend/sseRemoveF
 import { RemoveSignals } from "../plugins/official/watchers/backend/sseRemoveSignals";
 
 Datastar.load(
-    // actions/backend
+    // attributes
+    Model,
+    Ref,
+    Indicator,
+    Bind,
+    ReplaceUrl,
+    Class,
+    On,
+    Text,
+    Persist,
+    Intersection,
+    ScrollIntoView,
+    Show,
+    ViewTransition,
+    // actions
     RemoteSignals,
     DeleteSSE,
     GetSSE,
     PatchSSE,
     PostSSE,
     PutSSE,
-    // actions/dom
     Clipboard,
-    // actions/logic
     SetAll,
     ToggleAll,
-    // actions/math
     ClampFit,
     ClampFitInt,
     Fit,
     FitInt,
-    // attributes/backend
-    SSEIndicator,
-    ReplaceUrl,
-    // attributes/dom
-    Bind,
-    Class,
-    Model,
-    On,
-    Ref,
-    Text,
-    // attributes/storage
-    Persist,
-    // attributes/visibility
-    Intersection,
-    ScrollIntoView,
-    Show,
-    ViewTransition,
     // effects
     MergeFragments,
     MergeSignals,
