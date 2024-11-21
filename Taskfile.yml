@@ -81,7 +81,7 @@ tasks:
   kill:
     method: none
     cmds:
-      - fuser -k 4222/tcp > /dev/null 2>&1 || true
+      - fuser -k 8080/tcp > /dev/null 2>&1 || true
 
   support:
     sources:
