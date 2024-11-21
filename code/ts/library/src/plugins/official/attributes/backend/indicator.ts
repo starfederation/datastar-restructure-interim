@@ -24,9 +24,9 @@ export const Indicator: AttributePlugin = {
     onLoad: (ctx) => {
         const { expression, upsertSignal, el } = ctx;
         if (isDatastarGeneratedID(el)) {
-            // SSE indicator cannot be used on an element without an ID
-            // other wise it will auto generate and most like will be incorrect
-            // if you get to the point match sure this element has an unique ID
+            // Indicator cannot be used on an element without an ID
+            // otherwise it will auto generate and most like will be incorrect
+            // if you get to the point match sure this element has a unique ID.
             throw ERR_NOT_FOUND;
         }
         const signalName = expression;

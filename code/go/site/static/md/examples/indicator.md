@@ -1,4 +1,4 @@
-## SSE Indicator
+## Indicator
 
 ## Demo
 
