@@ -6,7 +6,7 @@ using StarFederation.Datastar.DependencyInjection;
 
 namespace CsharpAspServer;
 
-public record DataStore : IDatastarStore
+public record DataSignalsStore : IDatastarSignalsStore
 {
     [JsonPropertyName("input")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -19,7 +19,8 @@ public record DataStore : IDatastarStore
     [JsonPropertyName("show")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public bool? Show { get; init; } = null;
-    public string SerializeToJson() => JsonSerializer.Serialize(this);
+
+    public string Serialize() => JsonSerializer.Serialize(this);
 }
 
 public static class Program
@@ -27,7 +28,7 @@ public static class Program
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddDatastarGenerator<DataStore>();
+        builder.Services.AddDatastarGenerator<DataSignalsStore>();
 
         WebApplication app = builder.Build();
         app.UseDefaultFiles(new DefaultFilesOptions
@@ -40,26 +41,18 @@ public static class Program
         });
 
         app.MapGet("/language/{lang:required}", (string lang, IServerSentEventGenerator sse) => sse.MergeFragments($"""<span id="language">{lang}</span>"""));
-        app.MapGet("/get", async (IServerSentEventGenerator sse, IDatastarStore dsStore) =>
+        app.MapGet("/patch", async (IServerSentEventGenerator sse, IDatastarSignalsStore dsStore) =>
         {
-            DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
-            DataStore newDataStore = store with { Output = $"Your Input: {store.Input}" };
-            await sse.MergeFragments(
-                $"<main class='container' id='main' data-store='{newDataStore.SerializeToJson()}'></main>",
-                new MergeFragmentOpts() { MergeMode = FragmentMergeMode.UpsertAttributes }
-                );
-        });
-        app.MapGet("/patch", async (IServerSentEventGenerator sse, IDatastarStore dsStore) =>
-        {
-            DataStore store = (dsStore as DataStore) ?? throw new InvalidCastException("Unknown Datastore passed");
-            DataStore mergeSignals = new() { Output = $"Patched Output: {store.Input}" };
-            await sse.MergeSignals(mergeSignals.SerializeToJson());
+            DataSignalsStore signalsStore = (dsStore as DataSignalsStore) ?? throw new InvalidCastException("Unknown Datastore passed");
+            DataSignalsStore mergeSignalsStore = new() { Output = $"Patched Output: {signalsStore.Input}" };
+            await sse.MergeSignals(mergeSignalsStore);
         });
         app.MapGet("/target", async (IServerSentEventGenerator sse) =>
         {
             string today = DateTime.Now.ToString("%y-%M-%d %h:%m:%s");
-            await sse.MergeFragments($"""<div id='target'><b>{today}</b><button data-on-click="$get('/removeTarget')">Remove</button></div>""");
+            await sse.MergeFragments($"""<div id='target'><span id='date'><b>{today}</b><button data-on-click="$get('/removeDate')">Remove</button></span></div>""");
         });
+        app.MapGet("/removeDate", (IServerSentEventGenerator sse) => sse.RemoveFragments("#date"));
         app.MapGet("/feed", async (IHttpContextAccessor acc, IServerSentEventGenerator sse, CancellationToken ct) =>
         {
             try
@@ -76,10 +69,6 @@ public static class Program
                 try { acc?.HttpContext?.Connection.RequestClose(); } catch { }
             }
         });
-        app.MapGet("/removeTarget", (IServerSentEventGenerator sse) => sse.RemoveFragments("#target"));
-        app.MapGet("/clickRocket", (IServerSentEventGenerator sse) => sse.Console(ConsoleMode.Info, "You clicked the rocket!"));
-        app.MapGet("/redirect", (IServerSentEventGenerator sse) => sse.Redirect("https://data-star.dev"));
-
 
         app.Run();
     }

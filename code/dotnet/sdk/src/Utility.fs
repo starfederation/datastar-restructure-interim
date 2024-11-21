@@ -13,6 +13,8 @@ let lowerFirstCharacter item =
 
 let inline toLower item = item.ToString().ToLower()
 
+let splitLine (line:string) = line.Split( [| "\r\n"; "\n"; "\r" |], StringSplitOptions.None)
+
 module ValueOption =
     let inline fromNullable thing =
         if thing = null
