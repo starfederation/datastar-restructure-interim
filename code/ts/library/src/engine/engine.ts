@@ -38,7 +38,7 @@ const isActionPlugin = (p: DatastarPlugin): p is ActionPlugin =>
 
 export class Engine {
     plugins: AttributePlugin[] = [];
-    store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
+    store: DeepSignal<any> = deepSignal({});
     preprocessors = new Array<PreprocessorPlugin>();
     actions: ActionPlugins = {};
     watchers = new Array<WatcherPlugin>();
