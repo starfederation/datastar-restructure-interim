@@ -5292,6 +5292,7 @@ h4 a,
 h5 a,
 h6 a {
   color: var(--tw-prose-headings) !important;
+  font-size: inherit !important;
 }
 
 pre code {

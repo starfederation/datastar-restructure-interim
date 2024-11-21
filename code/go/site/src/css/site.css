@@ -9,6 +9,7 @@ h5 a,
 h6 a {
     @apply pl-2 no-underline hover:opacity-80 !important;
     color: var(--tw-prose-headings) !important;
+    font-size: inherit !important;
 }
 
 pre code {
