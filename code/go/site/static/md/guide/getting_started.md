@@ -27,7 +27,7 @@ The quickest way to use Datastar is to include it in your HTML using a script ta
 If you prefer to host the file yourself, download your own bundle using the [bundler](/bundler), then include it from the appropriate path.
 
 ```html
-<script type="module" defer src="/path/to/datastar.js"></script>
+<script type="module" src="/path/to/datastar.js"></script>
 ```
 
 ### Using NPM
