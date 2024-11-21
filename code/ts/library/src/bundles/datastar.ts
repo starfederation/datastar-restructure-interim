@@ -12,7 +12,7 @@ import { ClampFit } from "../plugins/official/actions/math/clampFit";
 import { ClampFitInt } from "../plugins/official/actions/math/clampFitInt";
 import { Fit } from "../plugins/official/actions/math/fit";
 import { FitInt } from "../plugins/official/actions/math/fitInt";
-import { Indicator } from "../plugins/official/attributes/backend/sseIndicator";
+import { Indicator } from "../plugins/official/attributes/backend/indicator";
 import { Bind } from "../plugins/official/attributes/dom/bind";
 import { Class } from "../plugins/official/attributes/dom/class";
 import { Model } from "../plugins/official/attributes/dom/model";

@@ -11,8 +11,9 @@
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
 - Added the `data-indicator` attribute.
+- Added the `datastar-remove-fragments` SSE event.
+- Added the `datastar-remove-signals` SSE event.
 - Added the `datastar-execute-script` SSE event.
-- Added `replaceUrl` examples using both signals and the backend.
 
 ### Changed
 
@@ -34,6 +35,7 @@
 - Removed the `~ref` syntax. Use the signal created by `data-ref` directly instead.
 - Removed the `local` and `session` modifiers from `data-store`. Use the new `data-persist` attribute instead.
 - Removed the `data-header` attribute.  Use the `headers` option in SSE actions instead.
+- Removed the `data-teleport` attribute. 
 - Removed the `$$isFetching` action and the `data-fetch-indicator` attribute. Use `data-indicator` instead.
 - Removed the `datastar-delete` SSE event. Use the new `datastar-remove-fragments` and `datastar-remove-signals` SSE events instead.
 - Removed the `datastar-redirect` and `datastar-console` SSE events. Use the new `datastar-execute-script` SSE event instead.

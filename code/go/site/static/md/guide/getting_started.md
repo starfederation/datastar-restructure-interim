@@ -20,12 +20,12 @@ With Datastar, you can build any UI that a full-stack framework like React, Vue.
 
 The quickest way to use Datastar is to include it in your HTML using a script tag hosted on a CDN.
 
-### BEN this is out of date start: import maps are the way to go
+<!-- TODO: Import maps? -->
 ```html
 <script type="module" defer src="https://cdn.jsdelivr.net/npm/@sudodevnull/datastar"></script>
 ```
 
-If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) it or create your own [custom bundle](/bundler), then include it from the appropriate path.
+If you prefer to host the file yourself, [download](https://cdn.jsdelivr.net/npm/@sudodevnull/datastar/dist/datastar.min.js) it or create your own custom version using the [bundler(/bundler), then include it from the appropriate path.
 
 ```html
 <script type="module" defer src="/path/to/datastar.min.js"></script>
@@ -40,29 +40,14 @@ You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@
 ```bash
 npm install @sudodevnull/datastar
 ```
-### BEN this is out of date end
 
-## Handling State
+## Data Attributes
 
-### BEN data-store isn't needed at this stage to teach now!
+At the core of Datastar are [`data-*`](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) attributes (hence the name). They allow you to add reactivity to your frontend in a declarative way, and interact with your backend.
 
-Let's take a look at how Datastar allows you to handle state using the [`data-store`](/reference/plugins_core#store) attribute.
+Datastar uses signals to manage state. You can think of signals as reactive variables that automatically track and propagate changes to expressions. They can be created and modified using data attributes on the frontend, and using events sent from the backend. Don't worry if this sounds complicated; it will become clearer as we look at some examples.
 
-```html
-<div data-store="{input: ''}"></div>
-```
-
-The “store” is a global collection of reactive signals. You can think of signals as variables that automatically track and propagate changes to expressions. Don't worry if this sounds complicated; it will become clearer as we look at some examples.
-
-If you add `data-store` to multiple elements, the signals provided will be _merged_ into the store (values defined later in the DOM tree override those defined earlier).
-
-Signals are nestable, which can be useful for namespacing. The `data-store` value must be written as a JavaScript object literal _or_ using JSON syntax.
-
-```html
-<div data-store="{primary: {input: ''}, secondary: {input: '' }}"></div>
-```
-
-## Adding Reactivity
+### Adding Reactivity
 
 Datastar provides us with a way to set up two-way data binding on an element using the [`data-model`](/reference/plugins_attributes#model) attribute, which can be placed on `input`, `textarea`, `select`, `checkbox` and `radio` elements.
 
@@ -70,9 +55,7 @@ Datastar provides us with a way to set up two-way data binding on an element usi
 <input data-model="input" type="text">
 ```
 
-This binds the element's value to the signal of the same name. If either is changed, the other will automatically update.
-
-Note how when using `data-model`, the value is the bare name of the signal (without the `$`).
+This creates a new signal called `input`, and binds it to the element's value. If either is changed, the other automatically updates.
 
 To see this in action, we can use the [`data-text`](/reference/plugins_attributes#text) attribute.
 
@@ -95,7 +78,7 @@ To see this in action, we can use the [`data-text`](/reference/plugins_attribute
 
 This sets the text content of an element to the value of the signal `$input`. The `$` is required to denote a signal.
 
-The value of the `data-text` attribute is an expression that is evaluated, meaning that we can include JavaScript in it.
+The value of the `data-text` attribute is an expression that is evaluated, meaning that we can use JavaScript in it.
 
 ```html
 <div data-text="$input.toUpperCase()"></div>
@@ -160,13 +143,19 @@ This results in the button being visible only when the input is _not_ empty.
     </button>
 </div>
 
-The `data-bind-*` attribute can be used to bind a JavaScript expression to any valid HTML attribute.
+If we wanted to customise the show/hide behaviour, we could use the [`data-class`](/reference/plugins_attributes#class) attribute. This allows us to add or remove classes from an element using a set of key-value pairs that map to the class name and expression.
 
 ```html
-<button data-bind-disabled="$input == ''">Save</button>
+<button data-class="{hidden: $input == ''}">Save</button>
 ```
 
-This results in the button being given the `disabled` attribute whenever the input is empty.
+Since the expression evaluates to `true` or `false`, we can rewrite it as `!$input`.
+
+```html
+<button data-class="{hidden: !$input}">Save</button>
+```
+
+```html
 
 <div class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
@@ -179,12 +168,56 @@ This results in the button being given the `disabled` attribute whenever the inp
             <div data-text="$input5" class="output"></div>
         </div>
     </div>
-    <button data-bind-disabled="$input5 == ''" class="btn btn-primary">
+    <button data-class="{hidden: !$input5}" class="btn btn-primary">
         Save
     </button>
 </div>
 
-## Events
+The `data-bind-*` attribute can be used to bind a JavaScript expression to any valid HTML attribute.
+
+```html
+<button data-bind-disabled="$input == ''">Save</button>
+```
+
+This results in the button being given the `disabled` attribute whenever the input is empty.
+
+<div class="alert flex justify-between items-start p-8">
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center">
+            <div class="w-20">Input:</div>
+            <input data-model="input6" class="input input-bordered">
+        </div>
+        <div class="flex items-center">
+            <div class="w-20">Output:</div>
+            <div data-text="$input6" class="output"></div>
+        </div>
+    </div>
+    <button data-bind-disabled="$input6 == ''" class="btn btn-primary">
+        Save
+    </button>
+</div>
+
+### The Store
+
+So far, we've created signals on the fly using `data-model` and `data-computed-*`. All signals are merged into a global “store” that is accessible from anywhere in the DOM.
+
+We can merge signals into the store using the [`data-store`](/reference/plugins_core#store) attribute.
+
+```html
+<div data-store="{input: ''}"></div>
+```
+
+The `data-store` value must be written as a JavaScript object literal _or_ using JSON syntax.
+
+Adding `data-store` to multiple elements is allowed, and the signals provided will be _merged_ into the existing store (values defined later in the DOM tree override those defined earlier).
+
+Signals are nestable, which can be useful for namespacing. 
+
+```html
+<div data-store="{primary: {input: ''}, secondary: {input: '' }}"></div>
+```
+
+### Events
 
 The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to execute a JavaScript expression whenever an event is triggered on an element.
 
@@ -215,8 +248,6 @@ This results in the `$input` signal being set to an empty string when the button
 So what else can we do with these expressions? Anything we want, really.
 
 See if you can follow the code below _before_ trying the demo.
-
-# BEN!!! At this point we haven't explained the data-store, nor the data-computed.  At least hand wave it to the reader and say we'll explain it later.  We have to use the store because we're using the computed signal.  We'll explain it later.
 
 ```html
 <div
@@ -336,21 +367,17 @@ One of the benefits of using SSE is that we can send multiple events (HTML fragm
 
 ## A Quick Overview
 
-Using [`data-*`](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragment and signal updates.
+Using [`data-*`](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) attributes, you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragment and signal updates.
 
-# BEN!!! Change the order to be the order your are teaching in
-
-- Merge signals into the store: `data-store="{foo: ''}"`
+<! TODO: ensure this is a full list. !>
 - Bind element values to signals: `data-model="foo"`
 - Set the text content of an element to an expression.: `data-text="$foo"`
-- Show or hide an element using an expression: `data-show="$foo"`
-- Modify the classes on an element: `data-class="{'font-bold': $foo}"`
-- Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
-- Execute an expression on an event: `data-on-click="$get(/endpoint)"`
-
-# BEN!!! Add there are even more attributes to learn, just a few (pick data-star) :P
-- Persist all signals in local storage: `data-persist`
 - Create a computed signal: `data-computed-foo="$bar + 1"`
-- Create a reference to an element: `data-ref="alert"`
-- Send a header with a request: `data-header-foo="{'x-powered-by': $foo}"`
+- Show or hide an element using an expression: `data-show="$foo"`
+- Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
+- Merge signals into the store: `data-store="{foo: ''}"`
+- Execute an expression on an event: `data-on-click="$get(/endpoint)"`
+- Modify the classes on an element: `data-class="{'font-bold': $foo}"`
 - Replace the URL: `data-replace-url="'/page1'"`
+- Persist all signals in local storage: `data-persist`
+- Create a reference to an element: `data-ref="alert"`
