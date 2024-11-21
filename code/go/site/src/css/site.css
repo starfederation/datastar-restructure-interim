@@ -19,8 +19,7 @@ pre code {
     @apply input input-bordered bg-transparent flex flex-grow items-center max-w-64 overflow-hidden;
 }
 
-@layer components {
-    .pixelated {
-        image-rendering: pixelated;
-    }
+.pixelated {
+    image-rendering: pixelated;
 }
+

@@ -12,17 +12,19 @@ templ Home() {
 	}}
 	@Page() {
 		<div class="flex flex-col w-full min-h-screen bg-base-200 md:bg-gradient-to-br md:items-center from-base-300 to-base-100">
-			<div class="flex flex-col items-center gap-7 p-4 md:pt-8 md:max-w-3xl max-w-none">
-				<img class="w-64" src={ staticPath("images/rocket.webp") }/>
-				<div class="flex flex-col items-end font-bold uppercase font-brand">
-					<div class="text-3xl md:text-5xl text-primary">Datastar</div>
-					<div class="text-sm text-secondary">v{ datastar.Version }</div>
-				</div>
-				<div class="text-center font-brand">
-					<div class="text-xl md:text-2xl">
-						A real-time hypermedia framework
-					</div>
-				</div>
+			<div class="flex flex-col items-stretch gap-7 p-4 md:pt-8 md:max-w-3xl max-w-none">
+				<div class="flex flex-col items-center gap-7">
+                    <img class="w-64" src={ staticPath("images/rocket.webp") }/>
+                    <div class="flex flex-col items-end font-bold uppercase font-brand">
+                        <div class="text-3xl md:text-5xl text-primary">Datastar</div>
+                        <div class="text-sm text-secondary">v{ datastar.Version }</div>
+                    </div>
+                    <div class="text-center font-brand">
+                        <div class="text-xl md:text-2xl">
+                            A real-time hypermedia framework
+                        </div>
+                    </div>
+                </div>
 				<p class="md:text-xl">
 					Datastar helps you build real-time web applications with the simplicity of server-side rendering and the power of a full-stack SPA framework.
 				</p>
@@ -46,8 +48,8 @@ templ Home() {
 					<span class="text-lg font-bold text-primary">
 						{ humanize.CommafWithDigits( datastar.VersionClientByteSizeGzip / 1024.0, 1) }KiB
 					</span>
-					file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice!  Official SDKs are currently available for
-					<div class="flex gap-2">
+					file and start adding reactivity to your frontend immediately. Write your backend in the language of your choice!  Official SDKs are currently available for Go, PHP and TypeScript, to help you get up and running even faster.  More languages are on the way now that we have a stable API!
+					<div class="flex justify-center gap-2">
 						for _, sdk := range sdksAvailable {
 							<div class="flex flex-col justify-center items-center">
 								@icon(sdkIcons[sdk], "class", "text-9xl")
@@ -55,9 +57,8 @@ templ Home() {
 							</div>
 						}
 					</div>
-					to get up and running even faster.  More languages are on the way now that we have a stable API!
 				</p>
-				<p>Getting started is as easy as adding a single script tag to your HTML</p>
+				<p>Getting started is as easy as adding a single script tag to your HTML.</p>
 				<div class="w-full shadow-xl card bg-base-100">
 					<div class="card-body">
 						<div class="flex items-center gap-4">
@@ -93,7 +94,7 @@ templ Home() {
 					</a>
 				</div>
 				<p>
-					We are by far the smallest and fastest full featured framework, even with everything included.  But don't fret, we are support "pay what for what you use" bundling system available when you want less or have naming conflicts.
+					We are by far the smallest and fastest full-featured framework, even with everything included.  But don't fret, we provide a “pay what for what you use” bundling system for when you want a custom build.
 				</p>
 				<img class="w-full" src="/chart"/>
 				<div id="todosMVC" data-on-load="$get('/api/todos')">

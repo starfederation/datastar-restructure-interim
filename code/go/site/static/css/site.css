@@ -4667,10 +4667,6 @@ html:has(.drawer-toggle:checked) {
   bottom: var(--tooltip-tail-offset);
 }
 
-.pixelated {
-  image-rendering: pixelated;
-}
-
 .visible {
   visibility: visible;
 }
@@ -4859,6 +4855,10 @@ html:has(.drawer-toggle:checked) {
 
 .items-baseline {
   align-items: baseline;
+}
+
+.items-stretch {
+  align-items: stretch;
 }
 
 .justify-end {
@@ -5433,6 +5433,10 @@ pre code {
   background-color: transparent;
 }
 
+.pixelated {
+  image-rendering: pixelated;
+}
+
 .prose-a\:link-primary :is(:where(a):not(:where([class~="not-prose"],[class~="not-prose"] *))) {
   --tw-text-opacity: 1;
   color: var(--fallback-p,oklch(var(--p)/var(--tw-text-opacity)));
@@ -5781,3 +5785,4 @@ pre code {
     line-height: 1.75rem;
   }
 }
+

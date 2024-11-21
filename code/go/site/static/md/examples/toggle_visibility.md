@@ -1,12 +1,12 @@
-## Show
+## Toggle Visibility
 
 ## Demo
 
-<div id="container" data-on-load="$get('/examples/show/data')"></div>
+<div id="container" data-on-load="$get('/examples/toggle_visibility/data')"></div>
 
 ## Explanation
 
-This example displays how to use the show attribute.
+This example displays how to toggle visibility using the `data-show` attribute.
 
 ```html
 <div

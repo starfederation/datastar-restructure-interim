@@ -18,7 +18,7 @@
 ### Changed
 
 - Changed the `$$` prefix to `$` for action plugins.
-- The `data-model` attribute now upserts missing signals.
+- The `data-model` attribute now upserts signals into the store.
 - The `data-show` attribute now shows/hides an element using the `style` attribute only. Modifiers have been removed. For anything custom, use `data-class` instead.
 - Renamed the `datastar-fragment` SSE event to `datastar-merge-fragments`.
 - Renamed the `datastar-signal` SSE event to `datastar-merge-signals`.
@@ -34,8 +34,8 @@
 
 - Removed the `~ref` syntax. Use the signal created by `data-ref` directly instead.
 - Removed the `local` and `session` modifiers from `data-store`. Use the new `data-persist` attribute instead.
-- Removed the `data-header` attribute.  Use the `headers` option in SSE actions instead.
 - Removed the `data-teleport` attribute. 
+- Removed the `data-header` attribute.  Use the `headers` option in SSE actions instead.
 - Removed the `$$isFetching` action and the `data-fetch-indicator` attribute. Use `data-indicator` instead.
 - Removed the `datastar-delete` SSE event. Use the new `datastar-remove-fragments` and `datastar-remove-signals` SSE events instead.
 - Removed the `datastar-redirect` and `datastar-console` SSE events. Use the new `datastar-execute-script` SSE event instead.

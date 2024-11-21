@@ -85,7 +85,7 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 				{ID: "refs"},
 				{ID: "multiline_expressions"},
 				{ID: "custom_events"},
-				{ID: "show"},
+				{ID: "toggle_visibility"},
 				{ID: "cloak"},
 				{ID: "img_src_bind"},
 				{ID: "dbmon"},
@@ -204,7 +204,7 @@ func setupExamples(ctx context.Context, router chi.Router, store sessions.Store,
 			setupExamplesScrollIntoView(examplesRouter),
 			setupExamplesQuickPrimerGo(examplesRouter),
 			setupExamplesTemplCounter(examplesRouter, store),
-			setupExamplesShow(examplesRouter),
+			setupExamplesToggleVisibility(examplesRouter),
 		); err != nil {
 			panic(fmt.Sprintf("error setting up examples routes: %s", err))
 		}

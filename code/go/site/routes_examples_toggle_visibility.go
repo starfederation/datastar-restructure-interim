@@ -7,15 +7,15 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesShow(examplesRouter chi.Router) error {
-	examplesRouter.Get("/show/data", func(w http.ResponseWriter, r *http.Request) {
+func setupExamplesToggleVisibility(examplesRouter chi.Router) error {
+	examplesRouter.Get("/toggle_visibility/data", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
 
 		store := &ShowStore{
 			BindBool: false,
 		}
 
-		sse.MergeFragmentTempl(ShowView(store))
+		sse.MergeFragmentTempl(ToggleVisibilityView(store))
 	})
 
 	return nil

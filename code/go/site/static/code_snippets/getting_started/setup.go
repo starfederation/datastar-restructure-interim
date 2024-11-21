@@ -1,24 +1,12 @@
-import (
-	"fmt"
-	datastar "github.com/starfederation/datastar/code/go/sdk"
-)
-
-// Get a random question and answer from somewhere in your code.
-QA := getRandomQuestionAnswer()
+import (datastar "github.com/starfederation/datastar/code/go/sdk")
 
 // Creates a new `ServerSentEventGenerator` instance.
 sse := datastar.NewSSE(w,r)
 
 // Merges HTML fragments into the DOM.
 sse.MergeFragments(
-    fmt.Sprintf(
-		`<div id="question">%s</div>`,
-		QA.question,
-	)
+    `<div id="question">What do you put in a toaster?</div>`
 )
 
 // Merges signals into the store.
-sse.MergeSignals(
-	fmt.Sprintf(`{response: '', answer: '%s'}`,
-	QA.answer),
-)
+sse.MergeSignals(`{response: '', answer: 'bread'}`)

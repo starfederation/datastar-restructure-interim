@@ -130,7 +130,7 @@ func setupHome(router chi.Router, store sessions.Store, ns *embeddednats.Server)
 			{Label: "SvelteKit", Value: 25800},
 			{Label: "HTMX+\nhyperscript", Value: 54000},
 			{Label: "HTMX+\nAlpine", Value: 40300},
-			{Label: "Datastar\nAll Plugins", Value: float64(datastar.VersionClientByteSizeGzip)},
+			{Label: "Datastar+\nPlugins", Value: float64(datastar.VersionClientByteSizeGzip)},
 			{Label: "Datastar Core", Value: 5698},
 		},
 	}
