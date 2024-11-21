@@ -7,19 +7,26 @@ import "time"
 const (
     DatastarKey = "datastar"
     Version                   = "0.20.0-beta-3"
-    VersionClientByteSize     = 36397
-    VersionClientByteSizeGzip = 12745
+    VersionClientByteSize     = 36057
+    VersionClientByteSizeGzip = 12659
 
-    // Default durations
+    //region Default durations
+
+    // The default duration for settling during merges. Allows for CSS transitions to complete.
     DefaultSettleDuration = 300 * time.Millisecond
+    // The default duration for retrying SSE on connection reset. This is part of the underlying retry mechanism of SSE.
     DefaultSseRetryDuration = 1000 * time.Millisecond
 
-    // Default strings
-    DefaultExecuteScriptAttributes = "type module"
-    DefaultCustomEventSelector = "document"
-    DefaultCustomEventDetailJson = "{}"
+    //endregion Default durations
 
-    // Dataline literals
+    //region Default strings
+
+    // The default attributes for <script/> element use when executing scripts. It is a set of of key-value pairs delimited by a newline \\n character.
+    DefaultExecuteScriptAttributes = "type module"
+
+    //endregion Default strings
+
+    //region Dataline literals
     SelectorDatalineLiteral = "selector "
     MergeModeDatalineLiteral = "mergeMode "
     SettleDurationDatalineLiteral = "settleDuration "
@@ -31,23 +38,32 @@ const (
     ScriptDatalineLiteral = "script "
     AttributesDatalineLiteral = "attributes "
     AutoRemoveDatalineLiteral = "autoRemove "
+    //endregion Dataline literals
 )
 
 var (
-    // Default booleans
+    //region Default booleans
+
+    // Should fragments be merged using the ViewTransition API?
     DefaultFragmentsUseViewTransitions = false
+
+    // Should a given set of signals merge if they are missing from the store?
     DefaultMergeSignalsOnlyIfMissing = false
+
+    // Should script element remove itself after execution?
     DefaultExecuteScriptAutoRemove = true
-    DefaultCustomEventCancelable = true
-    DefaultCustomEventComposed = true
-    DefaultCustomEventBubbles = true
+
+    //endregion Default booleans
 )
 
-// Enums
+//region Enums
+
+//region The mode in which a fragment is merged into the DOM.
 type FragmentMergeMode string
 
 const (
     // Default value for FragmentMergeMode
+    // Morphs the fragment into the existing element using idiomorph.
     DefaultFragmentMergeMode = FragmentMergeModeMorph
 
     // Morphs the fragment into the existing element using idiomorph.
@@ -75,7 +91,9 @@ const (
     FragmentMergeModeUpsertAttributes FragmentMergeMode = "upsertAttributes"
 
 )
+//endregion FragmentMergeMode
 
+//region The type protocol on top of SSE which allows for core pushed based communication between the server and the client.
 type EventType string
 
 const (
@@ -91,7 +109,10 @@ const (
     // An event for removing signals from the store.
     EventTypeRemoveSignals EventType = "datastar-remove-signals"
 
-    // An event for executing &lt;script/&gt; elements in the browser.
+    // An event for executing <script/> elements in the browser.
     EventTypeExecuteScript EventType = "datastar-execute-script"
 
 )
+//endregion EventType
+
+//endregion Enums

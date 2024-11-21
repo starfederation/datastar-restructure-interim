@@ -8,30 +8,34 @@ import (
 
 type EnumValueDefinition struct {
 	Name        toolbelt.CasedString
-	Value       string
 	Description string
+	Value       string
 }
 
 type EnumDefinition struct {
 	Name         toolbelt.CasedString
+	Description  string
 	Values       []*EnumValueDefinition
 	DefaultIndex int
 	Default      *EnumValueDefinition
 }
 
 type DefaultDuration struct {
-	Name     toolbelt.CasedString
-	Duration time.Duration
+	Name        toolbelt.CasedString
+	Description string
+	Duration    time.Duration
 }
 
 type DefaultBool struct {
-	Name  toolbelt.CasedString
-	Value bool
+	Name        toolbelt.CasedString
+	Description string
+	Value       bool
 }
 
 type DefaultString struct {
-	Name  toolbelt.CasedString
-	Value string
+	Name        toolbelt.CasedString
+	Description string
+	Value       string
 }
 
 type ConstTemplateData struct {
@@ -52,52 +56,38 @@ var ConstsData = &ConstTemplateData{
 	DatastarKey: "datastar",
 	DefaultBools: []*DefaultBool{
 		{
-			Name:  toolbelt.ToCasedString("fragmentsUseViewTransitions"),
-			Value: false,
+			Name:        toolbelt.ToCasedString("fragmentsUseViewTransitions"),
+			Description: "Should fragments be merged using the ViewTransition API?",
+			Value:       false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("mergeSignalsOnlyIfMissing"),
-			Value: false,
+			Name:        toolbelt.ToCasedString("mergeSignalsOnlyIfMissing"),
+			Description: "Should a given set of signals merge if they are missing from the store?",
+			Value:       false,
 		},
 		{
-			Name:  toolbelt.ToCasedString("executeScriptAutoRemove"),
-			Value: true,
-		},
-		{
-			Name:  toolbelt.ToCasedString("customEventCancelable"),
-			Value: true,
-		},
-		{
-			Name:  toolbelt.ToCasedString("customEventComposed"),
-			Value: true,
-		},
-		{
-			Name:  toolbelt.ToCasedString("customEventBubbles"),
-			Value: true,
+			Name:        toolbelt.ToCasedString("executeScriptAutoRemove"),
+			Description: "Should script element remove itself after execution?",
+			Value:       true,
 		},
 	},
 	DefaultDurations: []*DefaultDuration{
 		{
-			Name:     toolbelt.ToCasedString("settleDuration"),
-			Duration: 300 * time.Millisecond,
+			Name:        toolbelt.ToCasedString("settleDuration"),
+			Description: "The default duration for settling during merges. Allows for CSS transitions to complete.",
+			Duration:    300 * time.Millisecond,
 		},
 		{
-			Name:     toolbelt.ToCasedString("sseRetryDuration"),
-			Duration: 1 * time.Second,
+			Name:        toolbelt.ToCasedString("sseRetryDuration"),
+			Description: "The default duration for retrying SSE on connection reset. This is part of the underlying retry mechanism of SSE.",
+			Duration:    1 * time.Second,
 		},
 	},
 	DefaultStrings: []*DefaultString{
 		{
-			Name:  toolbelt.ToCasedString("executeScriptAttributes"),
-			Value: `type module`,
-		},
-		{
-			Name:  toolbelt.ToCasedString("customEventSelector"),
-			Value: "document",
-		},
-		{
-			Name:  toolbelt.ToCasedString("customEventDetailJson"),
-			Value: "{}",
+			Name:        toolbelt.ToCasedString("executeScriptAttributes"),
+			Description: `The default attributes for <script/> element use when executing scripts. It is a set of of key-value pairs delimited by a newline \\n character.`,
+			Value:       "type module",
 		},
 	},
 	DatalineLiterals: []toolbelt.CasedString{
@@ -125,6 +115,7 @@ var ConstsData = &ConstTemplateData{
 	Enums: []*EnumDefinition{
 		{
 			Name:         toolbelt.ToCasedString("FragmentMergeMode"),
+			Description:  "The mode in which a fragment is merged into the DOM.",
 			DefaultIndex: 0,
 			Values: []*EnumValueDefinition{
 				{
@@ -164,32 +155,33 @@ var ConstsData = &ConstTemplateData{
 
 		{
 			Name:         toolbelt.ToCasedString("EventType"),
+			Description:  "The type protocol on top of SSE which allows for core pushed based communication between the server and the client.",
 			DefaultIndex: -1,
 			Values: []*EnumValueDefinition{
 				{
 					Name:        toolbelt.ToCasedString("MergeFragments"),
-					Value:       "datastar-merge-fragments",
 					Description: "An event for merging HTML fragments into the DOM.",
+					Value:       "datastar-merge-fragments",
 				},
 				{
 					Name:        toolbelt.ToCasedString("MergeSignals"),
-					Value:       "datastar-merge-signals",
 					Description: "An event for merging signals into the store.",
+					Value:       "datastar-merge-signals",
 				},
 				{
 					Name:        toolbelt.ToCasedString("RemoveFragments"),
-					Value:       "datastar-remove-fragments",
 					Description: "An event for removing HTML fragments from the DOM.",
+					Value:       "datastar-remove-fragments",
 				},
 				{
 					Name:        toolbelt.ToCasedString("RemoveSignals"),
-					Value:       "datastar-remove-signals",
 					Description: "An event for removing signals from the store.",
+					Value:       "datastar-remove-signals",
 				},
 				{
 					Name:        toolbelt.ToCasedString("ExecuteScript"),
-					Value:       "datastar-execute-script",
 					Description: "An event for executing <script/> elements in the browser.",
+					Value:       "datastar-execute-script",
 				},
 			},
 		},

@@ -2,6 +2,7 @@ package datastar
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -76,9 +77,7 @@ func (sse *ServerSentEventGenerator) ExecuteScript(scriptContents string, opts .
 		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
 
-	if len(options.Attributes) == 1 && options.Attributes[0] == DefaultExecuteScriptAttributes {
-		// skip
-	} else {
+	if !slices.Equal(options.Attributes, DefaultExecuteScriptAttributes) {
 		for _, attribute := range options.Attributes {
 			dataLines = append(dataLines, AttributesDatalineLiteral+attribute)
 		}
