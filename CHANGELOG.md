@@ -7,7 +7,8 @@
 
 ### Added
 
-- Added SDKs for Go, PHP, .NET  and TypeScript.
+- Added a custom bundle [bundler](https://data-star.dev/bundler).
+- Added SDKs for Go, PHP and .NET.
 - Added the `data-persist` attribute.
 - Added the `data-replace-url` attribute.
 - Added the `data-indicator` attribute.
@@ -19,6 +20,7 @@
 
 - Changed the `$$` prefix to `$` for action plugins.
 - The `data-model` attribute now upserts signals into the store.
+- The `data-ref` attribute now upserts a signal into the store.
 - The `data-show` attribute now shows/hides an element using the `style` attribute only. Modifiers have been removed. For anything custom, use `data-class` instead.
 - Renamed the `datastar-fragment` SSE event to `datastar-merge-fragments`.
 - Renamed the `datastar-signal` SSE event to `datastar-merge-signals`.
