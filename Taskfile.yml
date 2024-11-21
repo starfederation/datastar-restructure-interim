@@ -107,6 +107,13 @@ tasks:
       - go build -o ./datastar-website code/go/cmd/site/main.go
       - ./datastar-website
 
+  test:
+    dir: code/go/site/smoketests
+    deps:
+      - support
+    cmds:
+      - go test -v
+
   default:
     cmds:
       - task: site
