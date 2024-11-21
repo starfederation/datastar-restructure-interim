@@ -11,6 +11,7 @@ test('Event is correctly output', function() {
     expect($event->getDataLines())
         ->toBe([
             'data: autoRemove false',
+            'data: attributes type module',
             'data: attributes defer',
             'data: script ' . $content,
         ]);

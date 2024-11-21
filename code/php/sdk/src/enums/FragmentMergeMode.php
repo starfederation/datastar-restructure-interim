@@ -7,6 +7,7 @@ namespace starfederation\datastar\enums;
  */
 enum FragmentMergeMode: string
 {
+
     // Morphs the fragment into the existing element using idiomorph.
     case Morph = 'morph';
 

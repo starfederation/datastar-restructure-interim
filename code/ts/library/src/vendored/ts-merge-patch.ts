@@ -19,7 +19,9 @@ export function apply(target: any, patchItem: any): any {
    * the result will always be to replace
    * the entire target with the entire patch.
    */
-  if (typeof patchItem !== "object" || Array.isArray(patchItem) || !patchItem) {
+  if (
+    typeof patchItem !== "object" || Array.isArray(patchItem) || !patchItem
+  ) {
     return JSON.parse(JSON.stringify(patchItem)); //return new instance of variable
   }
 

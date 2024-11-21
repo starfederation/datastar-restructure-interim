@@ -12,14 +12,7 @@ Focused on showing and hiding elements based on signals. Most of the time you wa
 <div data-show="$showMe"></div>
 ```
 
-Shows the element when the expression is true.
-
-#### Modifiers
-
-- `.duration`* - Duration for the show animation
-  - `_1000ms` - Duration for 1000ms
-
-*default is 300ms if duration value not provided
+Shows the element when the expression is true. For anything custom, use `data-class` instead.
 
 ### Intersects
 
@@ -77,6 +70,4 @@ Scrolls the element into view. Useful when updating DOM from the server, and you
 <div data-view-transition="foo"></div>
 ```
 
-Page level transitions are automatically handled by an injected meta tag. Inter-page elements are automatically transitioned if the [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) is available. To set the `view-transition-name` style attribute explicitly you use the `data-view-transition` attribute. The spec is still in draft and not available in all browsers but Datastar will do best effort.
-
-When sending many Datastar messages in a small period of time it is often recommended to not perform view-transitions as it can make elements unresponsive. You can always [turn them off](/reference/plugins_backend#data-fragment) on a per-message basis.
+Page level transitions are automatically handled by an injected meta tag. Inter-page elements are automatically transitioned if the [View Transition API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) is available in the browser and `useViewTransitions` is `true`. To set the `view-transition-name` style attribute explicitly you use the `data-view-transition` attribute.

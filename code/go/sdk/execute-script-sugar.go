@@ -90,13 +90,14 @@ func (sse *ServerSentEventGenerator) DispatchCustomEvent(eventName string, detai
 		return fmt.Errorf("failed to marshal detail: %w", err)
 	}
 
+	const defaultSelector = "document"
 	options := DispatchCustomEventOptions{
 		EventID:       "",
 		RetryDuration: DefaultSseRetryDuration,
-		Selector:      DefaultCustomEventSelector,
-		Bubbles:       DefaultCustomEventBubbles,
-		Cancelable:    DefaultCustomEventCancelable,
-		Composed:      DefaultCustomEventComposed,
+		Selector:      defaultSelector,
+		Bubbles:       true,
+		Cancelable:    true,
+		Composed:      true,
 	}
 
 	for _, opt := range opts {
@@ -104,7 +105,7 @@ func (sse *ServerSentEventGenerator) DispatchCustomEvent(eventName string, detai
 	}
 
 	elementsJS := `[document]`
-	if options.Selector != "" && options.Selector != DefaultCustomEventSelector {
+	if options.Selector != "" && options.Selector != defaultSelector {
 		elementsJS = fmt.Sprintf(`document.querySelectorAll(%q)`, options.Selector)
 	}
 
@@ -159,17 +160,17 @@ func (sse *ServerSentEventGenerator) Prefetch(urls ...string) error {
 		wrappedURLs[i] = fmt.Sprintf(`"%s"`, url)
 	}
 	script := fmt.Sprintf(`
-	{
-		"prefetch": [
-			{
-				"source": "list",
-				"urls": [
-	%s
-				]
-			}
-		]
-	}
-		`, strings.Join(wrappedURLs, ",\n"))
+{
+	"prefetch": [
+		{
+			"source": "list",
+			"urls": [
+				%s
+			]
+		}
+	]
+}
+		`, strings.Join(wrappedURLs, ",\n\t\t\t\t"))
 	return sse.ExecuteScript(
 		script,
 		WithExecuteScriptAutoRemove(false),

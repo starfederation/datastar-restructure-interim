@@ -53,9 +53,9 @@ $sse->ExecuteScript('console.log("Hello, world!")');
 ```
 
 ```php
-use starfederation\datastar\ParseIncoming;
+use starfederation\datastar\ReadSignals;
 
-$store = ParseIncoming::getStore();
+$store = ReadSignals::getStore();
 ```
 
 ---

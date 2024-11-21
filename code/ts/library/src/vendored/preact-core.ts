@@ -1,4 +1,7 @@
 // An named symbol/brand for detecting Signal instances even when they weren't
+
+import { ERR_BAD_ARGS } from "../engine/errors";
+
 // created using the same signals library version.
 const BRAND_SYMBOL = Symbol.for("preact-signals");
 
@@ -220,7 +223,7 @@ function addDependency(signal: Signal): Node | undefined {
 // A function with the same name is defined later, so we need to ignore TypeScript's
 // warning about a redeclared variable.
 //
-// The class is declared here, but later implemented with ES5-style prototypes.
+// The class is declared here, but later implemented with ES5-style protoTYPEOF_
 // This enables better control of the transpiled output size.
 declare class Signal<T = any> {
   /** @internal */
@@ -272,7 +275,7 @@ declare class Signal<T = any> {
 // A class with the same name has already been declared, so we need to ignore
 // TypeScript's warning about a redeclared variable.
 //
-// The previously declared class is implemented here with ES5-style prototypes.
+// The previously declared class is implemented here with ES5-style protoTYPEOF_
 // This enables better control of the transpiled output size.
 function Signal(this: Signal, value?: unknown) {
   this._value = value;
@@ -363,7 +366,8 @@ Object.defineProperty(Signal.prototype, "value", {
   set(this: Signal, value) {
     if (value !== this._value) {
       if (batchIteration > 100) {
-        throw new Error("Cycle detected");
+        // Cycle detected
+        throw ERR_BAD_ARGS;
       }
 
       this._value = value;
@@ -640,7 +644,8 @@ Computed.prototype._notify = function () {
 Object.defineProperty(Computed.prototype, "value", {
   get(this: Computed) {
     if (this._flags & RUNNING) {
-      throw new Error("Cycle detected");
+      // Cycle detected
+      throw ERR_BAD_ARGS;
     }
     const node = addDependency(this);
     this._refresh();
@@ -692,7 +697,7 @@ function cleanupEffect(effect: Effect) {
     const prevContext = evalContext;
     evalContext = undefined;
     try {
-      cleanup();
+      cleanup!();
     } catch (err) {
       effect._flags &= ~RUNNING;
       effect._flags |= DISPOSED;
@@ -721,7 +726,8 @@ function disposeEffect(effect: Effect) {
 
 function endEffect(this: Effect, prevContext?: Computed | Effect) {
   if (evalContext !== this) {
-    throw new Error("Out-of-order effect");
+    // Out-of-order effect
+    throw ERR_BAD_ARGS;
   }
   cleanupSources(this);
   evalContext = prevContext;
@@ -766,7 +772,7 @@ Effect.prototype._callback = function () {
 
     const cleanup = this._fn();
     if (typeof cleanup === "function") {
-      this._cleanup = cleanup;
+      this._cleanup = cleanup!;
     }
   } finally {
     finish();
@@ -775,7 +781,8 @@ Effect.prototype._callback = function () {
 
 Effect.prototype._start = function () {
   if (this._flags & RUNNING) {
-    throw new Error("Cycle detected");
+    // Cycle detected
+    throw ERR_BAD_ARGS;
   }
   this._flags |= RUNNING;
   this._flags &= ~DISPOSED;

@@ -19,16 +19,17 @@ templ ActiveSearchComponent(filteredUsers []*ActiveSearchUser, scores map[string
 		class="flex flex-col gap-4"
 		data-store={ templ.JSONString(store) }
 	>
-		<div class="flex gap-4">
+		<div class="flex">
 			<input
+				id="searchInput"
 				class="flex-1 input input-bordered"
 				type="text"
-				data-testid="search"
 				placeholder="Search..."
 				data-model="search"
 				data-on-input.debounce_500ms="$get('/examples/active_search/updates')"
+				data-indicator="fetching"
 			/>
-			@icon("svg-spinners:blocks-wave", "class", "text-5xl datastar-indicator")
+			@sseIndicator("fetching")
 		</div>
 		<table class="table w-full">
 			<caption>Contacts</caption>
@@ -51,5 +52,6 @@ templ ActiveSearchComponent(filteredUsers []*ActiveSearchUser, scores map[string
 				}
 			</tbody>
 		</table>
+		@templStoreJSON()
 	</div>
 }

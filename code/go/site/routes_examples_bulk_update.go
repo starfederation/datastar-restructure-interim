@@ -75,10 +75,11 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 
 		setActivation := func(w http.ResponseWriter, r *http.Request, isActive bool) {
 			store := &BulkUpdateSelectionStore{}
-			if err := datastar.ParseIncoming(r, store); err != nil {
+			if err := datastar.ReadSignals(r, store); err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
+			logJSON("incoming", store)
 
 			sse := datastar.NewSSE(w, r)
 			for key, wasSelected := range store.Selections {
@@ -101,14 +102,16 @@ func setupExamplesBulkUpdate(examplesRouter chi.Router) error {
 
 					sse.MergeFragmentTempl(
 						bulkUpdateContact(i, c, wasChanged && wasSelected),
-						// datastar.WithSettleDuration(5*time.Second),
 					)
 				}
 			}
 
+			// Reset all selections
 			for k := range store.Selections {
 				store.Selections[k] = false
 			}
+
+			logJSON("outgoing", store)
 			sse.MarshalAndMergeSignals(store)
 		}
 

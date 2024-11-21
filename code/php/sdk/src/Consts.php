@@ -10,21 +10,32 @@ use starfederation\datastar\enums\FragmentMergeMode;
 class Consts
 {
     public const DATASTAR_KEY = 'datastar';
-    public const VERSION = '0.20.0-beta-2';
-    public const VERSION_CLIENT_BYTE_SIZE = 42952;
-    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 14720;
+    public const VERSION = '0.20.0-beta-3';
+    public const VERSION_CLIENT_BYTE_SIZE = 36058;
+    public const VERSION_CLIENT_BYTE_SIZE_GZIP = 12673;
+
+    // The default duration for settling during merges. Allows for CSS transitions to complete.
     public const DEFAULT_SETTLE_DURATION = 300;
+
+    // The default duration for retrying SSE on connection reset. This is part of the underlying retry mechanism of SSE.
     public const DEFAULT_SSE_RETRY_DURATION = 1000;
+
+    // Should fragments be merged using the ViewTransition API?
     public const DEFAULT_FRAGMENTS_USE_VIEW_TRANSITIONS = false;
+
+    // Should a given set of signals merge if they are missing from the store?
     public const DEFAULT_MERGE_SIGNALS_ONLY_IF_MISSING = false;
+
+    // Should script element remove itself after execution?
     public const DEFAULT_EXECUTE_SCRIPT_AUTO_REMOVE = true;
-    public const DEFAULT_CUSTOM_EVENT_CANCELABLE = true;
-    public const DEFAULT_CUSTOM_EVENT_COMPOSED = true;
-    public const DEFAULT_CUSTOM_EVENT_BUBBLES = true;
+
+    // The default attributes for <script/> element use when executing scripts. It is a set of of key-value pairs delimited by a newline \\n character.}
     public const DEFAULT_EXECUTE_SCRIPT_ATTRIBUTES = 'type module';
-    public const DEFAULT_CUSTOM_EVENT_SELECTOR = 'document';
-    public const DEFAULT_CUSTOM_EVENT_DETAIL_JSON = '{}';
+
+    // The mode in which a fragment is merged into the DOM.
     public const DEFAULT_FRAGMENT_MERGE_MODE = FragmentMergeMode::Morph;
+
+    // Dataline literals.
     public const SELECTOR_DATALINE_LITERAL = 'selector ';
     public const MERGE_MODE_DATALINE_LITERAL = 'mergeMode ';
     public const SETTLE_DURATION_DATALINE_LITERAL = 'settleDuration ';

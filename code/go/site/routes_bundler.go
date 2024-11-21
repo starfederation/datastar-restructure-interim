@@ -205,7 +205,7 @@ func setupBundler(router chi.Router) error {
 
 		bundlerRouter.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			store := &BundlerStore{}
-			if err := datastar.ParseIncoming(r, store); err != nil {
+			if err := datastar.ReadSignals(r, store); err != nil {
 				http.Error(w, "error parsing request: "+err.Error(), http.StatusBadRequest)
 				return
 			}

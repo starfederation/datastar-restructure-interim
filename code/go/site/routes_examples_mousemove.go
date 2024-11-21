@@ -148,7 +148,7 @@ func setupExamplesMousemove(setupCtx context.Context, examplesRouter chi.Router,
 				Y  int    `json:"y"`
 			}
 			form := &Form{}
-			if err := datastar.ParseIncoming(r, form); err != nil {
+			if err := datastar.ReadSignals(r, form); err != nil {
 				datastar.NewSSE(w, r).ConsoleError(err)
 				return
 			}

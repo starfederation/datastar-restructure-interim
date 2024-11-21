@@ -1,3 +1,4 @@
+import { ERR_SERVICE_UNAVAILABLE } from "../../engine/errors";
 import { EventSourceMessage, getBytes, getLines, getMessages } from "./parse";
 
 export const EventStreamContentType = "text/event-stream";
@@ -115,7 +116,11 @@ export function fetchEventSource(input: RequestInfo, {
         });
 
         const fetch = inputFetch ?? window.fetch;
-        const onopen = inputOnOpen ?? defaultOnOpen;
+        const onopen = inputOnOpen ??
+            function defaultOnOpen(
+                // response: Response
+            ) {};
+
         async function create() {
             curRequestController = new AbortController();
             try {
@@ -159,14 +164,11 @@ export function fetchEventSource(input: RequestInfo, {
                         if (retries >= retryMaxCount) {
                             // we should not retry anymore:
                             dispose();
-                            reject(
-                                new Error(
-                                    `Max retries hit, check your server or network connection.`,
-                                ),
-                            );
+                            // Max retries hit, check your server or network connection
+                            reject(ERR_SERVICE_UNAVAILABLE);
                         } else {
                             console.error(
-                                `Error fetching event source, retrying in ${interval}ms`,
+                                `Datastar failed to reach ${rest.method}:${input.toString()} retry in ${interval}ms`,
                             );
                         }
                     } catch (innerErr) {
@@ -180,13 +182,4 @@ export function fetchEventSource(input: RequestInfo, {
 
         create();
     });
-}
-
-function defaultOnOpen(response: Response) {
-    const contentType = response.headers.get("content-type");
-    if (!contentType?.startsWith(EventStreamContentType)) {
-        throw new Error(
-            `Expected content-type to be ${EventStreamContentType}, Actual: ${contentType}`,
-        );
-    }
 }

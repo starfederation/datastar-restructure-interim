@@ -190,7 +190,7 @@ ServerSentEventGenerator.MergeSignals(
 
 #### Args
 
-Data is a JS or JSON object that will be sent to the browser to update signals in the store.  The data ***must*** be a valid JS object.  Usually this will be in the form of a JSON string.  It will be converted to signals by the Datastar client side.
+Data is a JavaScript object or JSON string that will be sent to the browser to update signals in the store.  The data ***must*** evaluate to a valid JavaScript.  It will be converted to signals by the Datastar client side.
 
 ##### Options
 
@@ -232,7 +232,7 @@ ServerSentEventGenerator.ExecuteScript(
     script: string,
     options?: {
         autoRemove?: boolean,
-        attributes?: string[],
+        attributes?: string,
         eventId?: string,
         retryDuration?: durationInMilliseconds
     }
@@ -246,7 +246,7 @@ ServerSentEventGenerator.ExecuteScript(
 ##### Options
 
 * `autoRemove` Whether to remove the script after execution, if not provided the Datastar client side ***will*** default to `true`.
-* `attributes` An array of attributes to add to the `script` element, if not provided the Datastar client side ***will*** default to `['type module']`. Each item in the array should be a string in the format `key value`.
+* `attributes` A line separated list of attributes to add to the `script` element, if not provided the Datastar client side ***will*** default to `type module`. Each item in the array should be a string in the format `key value`.
 
 #### Logic
 1. When called the function ***must*** call `ServerSentEventGenerator.send` with the `data` and `datastar-execute-script` event type.
@@ -254,9 +254,9 @@ ServerSentEventGenerator.ExecuteScript(
 3. If `attributes` is provided, the function ***must*** include the attributes in the event data, with each line prefixed with `attributes `, ***unless*** the attributes value is the default of `type module`.
 4. The function ***must*** include the script in the event data, with each line prefixed with `script `.  This ***should*** be output after all other event data.
 
-## `ParseIncoming(r *http.Request, store any) error`
+## `ReadSignals(r *http.Request, store any) error`
 
-`ParseIncoming` is a helper function to parse incoming data from the browser.  It should take the incoming request and convert into an object that can be used by the backend.
+`ReadSignals` is a helper function to parse incoming data from the browser.  It should take the incoming request and convert into an object that can be used by the backend.
 
 #### Args
 

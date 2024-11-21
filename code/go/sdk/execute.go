@@ -71,14 +71,12 @@ func (sse *ServerSentEventGenerator) ExecuteScript(scriptContents string, opts .
 	}
 
 	dataLines := make([]string, 0, 64)
-
 	if options.AutoRemove != nil && *options.AutoRemove != DefaultExecuteScriptAutoRemove {
 		dataLines = append(dataLines, AutoRemoveDatalineLiteral+strconv.FormatBool(*options.AutoRemove))
 	}
+	dataLinesJoined := strings.Join(dataLines, NewLine)
 
-	if len(options.Attributes) == 1 && options.Attributes[0] == DefaultExecuteScriptAttributes {
-		// skip
-	} else {
+	if dataLinesJoined != DefaultExecuteScriptAttributes {
 		for _, attribute := range options.Attributes {
 			dataLines = append(dataLines, AttributesDatalineLiteral+attribute)
 		}

@@ -3,7 +3,7 @@
 use starfederation\datastar\Consts;
 use starfederation\datastar\events\RemoveFragments;
 
-test('Options are correctly output for `selector`', function() {
+test('Options are correctly output', function() {
     $content = 'body';
     $event = new RemoveFragments($content, [
         'settleDuration' => 1000,
@@ -17,7 +17,7 @@ test('Options are correctly output for `selector`', function() {
         ]);
 });
 
-test('Default options are not output for `selector`', function() {
+test('Default options are not output', function() {
     $content = 'body';
     $event = new RemoveFragments($content, [
         'settleDuration' => Consts::DEFAULT_SETTLE_DURATION,

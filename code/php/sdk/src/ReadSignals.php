@@ -5,7 +5,7 @@
 
 namespace starfederation\datastar;
 
-class ParseIncoming
+class ReadSignals
 {
     /**
      * Returns the store from the incoming request.

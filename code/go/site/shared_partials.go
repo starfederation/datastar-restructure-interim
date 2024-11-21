@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"path/filepath"
 	"regexp"
 	"slices"
@@ -17,6 +18,7 @@ import (
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/alecthomas/chroma/styles"
 	"github.com/delaneyj/toolbelt"
+	"github.com/goccy/go-json"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/ast"
 	mdhtml "github.com/gomarkdown/markdown/html"
@@ -42,6 +44,23 @@ type CodeSnippetBlock struct {
 	BasePath toolbelt.CasedString
 	Snippets []CodeSnippet
 }
+
+var sdkIcons = map[string]string{
+	"go": "vscode-icons:file-type-go-gopher",
+	// "fs":      "vscode-icons:file-type-fsharp",
+	// "cs":      "vscode-icons:file-type-csharp2",
+	"php": "vscode-icons:file-type-php2",
+	"ts":  "vscode-icons:file-type-typescript-official",
+	// "js":      "vscode-icons:file-type-js-official",
+	// "haskell": "vscode-icons:file-type-haskell",
+	// "java":    "vscode-icons:file-type-java",
+}
+var sdkLanguageNames = map[string]string{
+	"go":  "Go",
+	"php": "PHP",
+	"ts":  "TypeScript",
+}
+var sdksAvailable = []string{"go", "php", "ts"}
 
 func markdownRenders(ctx context.Context, staticMdPath string) (mdElementRenderers map[string]string, mdAnchors map[string][]string, err error) {
 	if mdRenderer == nil {
@@ -102,7 +121,7 @@ func markdownRenders(ctx context.Context, staticMdPath string) (mdElementRendere
 						defer bytebufferpool.Put(buf)
 						level := strconv.Itoa(n.Level)
 						if level != "1" {
-							buf.WriteString(`<a href="#`)
+							buf.WriteString(`<a class="prose link-neutral" href="#`)
 							buf.WriteString(n.HeadingID)
 							buf.WriteString(`">#</a>`)
 						}
@@ -129,16 +148,6 @@ func markdownRenders(ctx context.Context, staticMdPath string) (mdElementRendere
 
 	codeSnippets := regexp.MustCompile(`!!!CODE_SNIPPET:(?<basePath>[^!]*)!!!`)
 	// Icon or mascot from https://icones.js.org/collection/vscode-icons
-	codeSnippetsIcons := map[string]string{
-		"go":      "vscode-icons:file-type-go-gopher",
-		"fs":      "vscode-icons:file-type-fsharp",
-		"cs":      "vscode-icons:file-type-csharp2",
-		"php":     "vscode-icons:file-type-php2",
-		"ts":      "vscode-icons:file-type-typescript-official",
-		"js":      "vscode-icons:file-type-js-official",
-		"haskell": "vscode-icons:file-type-haskell",
-		"java":    "vscode-icons:file-type-java",
-	}
 
 	mdElementRenderers = map[string]string{}
 	mdAnchors = map[string][]string{}
@@ -198,7 +207,7 @@ func markdownRenders(ctx context.Context, staticMdPath string) (mdElementRendere
 
 				snippet := CodeSnippet{
 					Extension:          ext,
-					Icon:               codeSnippetsIcons[ext],
+					Icon:               sdkIcons[ext],
 					Content:            codeSnippet,
 					ContentHighlighted: buf.String(),
 				}
@@ -248,4 +257,12 @@ func KVPairsAttrs(kvPairs ...string) templ.Attributes {
 		attrs[kvPairs[i]] = kvPairs[i+1]
 	}
 	return attrs
+}
+
+func logJSON(message string, v any) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	log.Printf("%s: %s", message, string(b))
 }

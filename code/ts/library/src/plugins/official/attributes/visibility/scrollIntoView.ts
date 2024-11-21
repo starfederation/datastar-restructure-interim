@@ -4,7 +4,6 @@
 // Description: This attribute scrolls the element into view.
 
 import { AttributeContext, AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
 import { scrollIntoView } from "../../../../utils/dom";
 
 const SMOOTH = "smooth";
@@ -27,7 +26,7 @@ const NEAREST = "nearest";
 
 // Scrolls the element into view
 export const ScrollIntoView: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "scrollIntoView",
     mustHaveEmptyKey: true,
     mustHaveEmptyExpression: true,

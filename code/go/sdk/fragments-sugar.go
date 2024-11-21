@@ -52,8 +52,8 @@ func WithMergeUpsertAttributes() MergeFragmentOption {
 	return WithMergeMode(FragmentMergeModeUpsertAttributes)
 }
 
-func WithQuerySelectorID(id string) MergeFragmentOption {
-	return WithSelectorf("#%s", id)
+func WithSelectorID(id string) MergeFragmentOption {
+	return WithSelectorf("#" + id)
 }
 
 func WithViewTransitions() MergeFragmentOption {

@@ -57,9 +57,6 @@
 
 ```json
 {
-  "_dsPlugins": {
-    "on": {}
-  },
   "_sidebarOpen": false,
   "clicks": 0,
   "_localState": {

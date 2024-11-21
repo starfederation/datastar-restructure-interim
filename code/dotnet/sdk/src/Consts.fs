@@ -37,9 +37,9 @@ type EventType =
 
 module Consts =
     let [<Literal>] DatastarKey               = "datastar"
-    let [<Literal>] Version                   = "0.20.0-beta-2"
-    let [<Literal>] VersionClientByteSize     = 42952
-    let [<Literal>] VersionClientByteSizeGzip = 14720
+    let [<Literal>] Version                   = "0.20.0-beta-3"
+    let [<Literal>] VersionClientByteSize     = 36058
+    let [<Literal>] VersionClientByteSizeGzip = 12673
 
     /// Default: TimeSpan.FromMilliseconds 300
     let DefaultSettleDuration = TimeSpan.FromMilliseconds 300
@@ -53,13 +53,8 @@ module Consts =
     let [<Literal>] DefaultFragmentsUseViewTransitions = false
     let [<Literal>] DefaultMergeSignalsOnlyIfMissing = false
     let [<Literal>] DefaultExecuteScriptAutoRemove = true
-    let [<Literal>] DefaultCustomEventCancelable = true
-    let [<Literal>] DefaultCustomEventComposed = true
-    let [<Literal>] DefaultCustomEventBubbles = true
 
     let [<Literal>] DefaultExecuteScriptAttributes = "type module"
-    let [<Literal>] DefaultCustomEventSelector = "document"
-    let [<Literal>] DefaultCustomEventDetailJson = "{}"
 
     let [<Literal>] DatastarDatalineSelector = "selector"
     let [<Literal>] DatastarDatalineMergeMode = "mergeMode"

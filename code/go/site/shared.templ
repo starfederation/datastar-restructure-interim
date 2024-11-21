@@ -22,21 +22,31 @@ templ Page() {
 			<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 			<script type="module" src={ staticPath("js/datastar.js") }></script>
 			<script defer>
-				// console.log(`Hot reload initializing @ ${hotReloadPath}`)
-	        	const hotReloadPath = `/hotreload`
-				if (typeof(EventSource) !== "undefined") {
-					const es = new EventSource(hotReloadPath);
-					es.onmessage = function(event) {
-						location.reload();
-					}
-					es.onerror = function(err) {
-						console.log("lost connection to server, reloading");
-						setTimeout(() => {
-						location.reload();
-						}, 500);
-					};
-				}
+// console.log(`Hot reload initializing @ ${hotReloadPath}`)
+const hotReloadPath = `/hotreload`
+if (typeof(EventSource) !== "undefined") {
+	const es = new EventSource(hotReloadPath);
+	es.onmessage = function(event) {
+		location.reload();
+	}
+	es.onerror = function(err) {
+		console.log("lost connection to server, reloading");
+		setTimeout(() => {
+		location.reload();
+		}, 500);
+	};
+}
 			</script>
+			<style>
+.indicator {
+	opacity:0;
+	transition: opacity 300ms ease-out;
+}
+.indicator.loading {
+	opacity:1;
+	transition: opacity 300ms ease-in;
+}
+			</style>
 		</head>
 		<body class="flex flex-col min-h-screen overflow-y-scroll min-w-screen scrollbar scrollbar-thumb-primary scrollbar-track-accent">
 			{ children... }
@@ -261,4 +271,14 @@ templ codeSnippetFragment(block CodeSnippetBlock) {
 			</div>
 		}
 	</div>
+}
+
+templ templStoreJSON() {
+	<div>
+		<pre data-text="JSON.stringify(ctx.store(),null,2)"></pre>
+	</div>
+}
+
+templ sseIndicator(signalName string) {
+	<div class="loading-dots text-primary" data-class={ fmt.Sprintf("{'loading ml-4': $%s}", signalName) }></div>
 }

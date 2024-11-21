@@ -3,12 +3,15 @@ import { HTMLorSVGElement } from "../utils/types";
 import { DeepSignal, deepSignal, DeepState } from "../vendored/deepsignal";
 import { computed, effect, Signal, signal } from "../vendored/preact-core";
 import { apply } from "../vendored/ts-merge-patch";
+import { DATASTAR } from "./consts";
+
 import {
-    PLUGIN_ACTION,
-    PLUGIN_ATTRIBUTE,
-    PLUGIN_PREPROCESSOR,
-    PLUGIN_WATCHER,
-} from "./client_only_consts";
+    ERR_ALREADY_EXISTS,
+    ERR_BAD_ARGS,
+    ERR_METHOD_NOT_ALLOWED,
+    ERR_NOT_ALLOWED,
+    ERR_NOT_FOUND,
+} from "./errors";
 import {
     ActionPlugin,
     ActionPlugins,
@@ -25,19 +28,17 @@ import {
 import { VERSION } from "./version";
 
 const isPreprocessorPlugin = (p: DatastarPlugin): p is PreprocessorPlugin =>
-    p.pluginType === PLUGIN_PREPROCESSOR;
+    p.pluginType === "preprocessor";
 const isWatcherPlugin = (p: DatastarPlugin): p is WatcherPlugin =>
-    p.pluginType === PLUGIN_WATCHER;
+    p.pluginType === "watcher";
 const isAttributePlugin = (p: DatastarPlugin): p is AttributePlugin =>
-    p.pluginType === PLUGIN_ATTRIBUTE;
+    p.pluginType === "attribute";
 const isActionPlugin = (p: DatastarPlugin): p is ActionPlugin =>
-    p.pluginType === PLUGIN_ACTION;
+    p.pluginType === "action";
 
-const alreadyExistsErr = (type: string, name: string) =>
-    new Error(`A ${type} named '${name}' already exists`);
 export class Engine {
     plugins: AttributePlugin[] = [];
-    store: DeepSignal<any> = deepSignal({ _dsPlugins: {} });
+    store: DeepSignal<any> = deepSignal({});
     preprocessors = new Array<PreprocessorPlugin>();
     actions: ActionPlugins = {};
     watchers = new Array<WatcherPlugin>();
@@ -51,27 +52,6 @@ export class Engine {
     missingIDNext = 0;
     removals = new Map<Element, { id: string; set: Set<OnRemovalFn> }>();
     mergeRemovals = new Array<OnRemovalFn>();
-
-    constructor() {
-        // const observer = new MutationObserver(
-        //     (_mutationList, _observer) => {
-        //         this.sendDatastarEvent(
-        //             "core",
-        //             "dom",
-        //             "mutation",
-        //             document.body,
-        //             document.body.outerHTML,
-        //         );
-        //     },
-        // );
-
-        // Start observing the target node for configured mutations
-        // observer.observe(document.body, {
-        //     attributes: true,
-        //     childList: true,
-        //     subtree: true,
-        // });
-    }
 
     get version() {
         return VERSION;
@@ -89,9 +69,8 @@ export class Engine {
                     if (
                         !allLoadedPlugins.has(requiredPluginType)
                     ) {
-                        throw new Error(
-                            `Plugin '${plugin.name}' requires plugin '${requiredPluginType}' to be loaded`,
-                        );
+                        // requires other plugin to be loaded
+                        throw ERR_NOT_ALLOWED;
                     }
                 }
             }
@@ -99,54 +78,45 @@ export class Engine {
             let globalInitializer: ((ctx: InitContext) => void) | undefined;
             if (isPreprocessorPlugin(plugin)) {
                 if (this.preprocessors.includes(plugin)) {
-                    throw alreadyExistsErr("Preprocessor", plugin.name);
+                    throw ERR_ALREADY_EXISTS;
                 }
                 this.preprocessors.push(plugin);
             } else if (isWatcherPlugin(plugin)) {
                 if (this.watchers.includes(plugin)) {
-                    throw alreadyExistsErr("Watcher", plugin.name);
+                    throw ERR_ALREADY_EXISTS;
                 }
                 this.watchers.push(plugin);
                 globalInitializer = plugin.onGlobalInit;
             } else if (isActionPlugin(plugin)) {
                 if (!!this.actions[plugin.name]) {
-                    throw alreadyExistsErr("Action", plugin.name);
+                    throw ERR_ALREADY_EXISTS;
                 }
                 this.actions[plugin.name] = plugin;
             } else if (isAttributePlugin(plugin)) {
                 if (this.plugins.includes(plugin)) {
-                    throw alreadyExistsErr("Attribute", plugin.name);
+                    throw ERR_ALREADY_EXISTS;
                 }
                 this.plugins.push(plugin);
                 globalInitializer = plugin.onGlobalInit;
             } else {
-                throw new Error(`Unknown plugin type: ${plugin}`);
+                throw ERR_NOT_FOUND;
             }
 
             if (globalInitializer) {
                 globalInitializer({
                     store: () => this.store,
-                    upsertIfMissingFromStore: this.upsertIfMissingFromStore
+                    upsertSignal: this.upsertSignal
                         .bind(this),
                     mergeSignals: this.mergeSignals.bind(this),
                     removeSignals: this.removeSignals.bind(this),
                     actions: this.actions,
                     reactivity: this.reactivity,
                     applyPlugins: this.applyPlugins.bind(this),
-                    cleanupElementRemovals: this.cleanupElementRemovals.bind(
+                    cleanup: this.cleanup.bind(
                         this,
                     ),
-                    // sendDatastarEvent: this.sendDatastarEvent.bind(this),
                 });
             }
-
-            // this.sendDatastarEvent(
-            //     "core",
-            //     "plugins",
-            //     "registration",
-            //     "BODY",
-            //     `On prefix ${plugin.name}`,
-            // );
 
             allLoadedPlugins.add(plugin);
         });
@@ -154,37 +124,7 @@ export class Engine {
         this.applyPlugins(document.body);
     }
 
-    // private sendDatastarEvent(
-    //     category: "core" | "plugin",
-    //     subcategory: string,
-    //     type: string,
-    //     target: Element | Document | Window | string,
-    //     message: string,
-    //     opts: CustomEventInit = {
-    //         bubbles: true,
-    //         cancelable: true,
-    //         composed: true,
-    //     },
-    // ) {
-    //     const contents = Object.assign(
-    //         {
-    //             detail: {
-    //                 time: new Date(),
-    //                 category,
-    //                 subcategory,
-    //                 type,
-    //                 target: elemToSelector(target),
-    //                 message,
-    //             },
-    //         },
-    //         opts,
-    //     );
-    //     const evt = new CustomEvent<DatastarEvent>(DATASTAR_EVENT, contents);
-    //     // console.log("Sending Datastar event", evt);
-    //     window.dispatchEvent(evt);
-    // }
-
-    private cleanupElementRemovals(element: Element) {
+    private cleanup(element: Element) {
         const removalSet = this.removals.get(element);
         if (removalSet) {
             for (const removal of removalSet.set) {
@@ -204,18 +144,11 @@ export class Engine {
 
         const marshalledStore = JSON.stringify(this.store.value);
         if (marshalledStore === this.lastMarshalledStore) return;
-
-        // this.sendDatastarEvent(
-        //     "core",
-        //     "store",
-        //     "merged",
-        //     "STORE",
-        //     marshalledStore,
-        // );
     }
 
     private removeSignals(...keys: string[]) {
         const revisedStore = { ...this.store.value };
+        let found = false;
         for (const key of keys) {
             const parts = key.split(".");
             let currentID = parts[0];
@@ -229,12 +162,14 @@ export class Engine {
                 currentID = part;
             }
             delete subStore[currentID];
+            found = true;
         }
+        if (!found) return;
         this.store = deepSignal(revisedStore);
         this.applyPlugins(document.body);
     }
 
-    private upsertIfMissingFromStore(path: string, value: any) {
+    private upsertSignal<T>(path: string, value: T) {
         const parts = path.split(".");
         let subStore = this.store as any;
         for (let i = 0; i < parts.length - 1; i++) {
@@ -245,13 +180,14 @@ export class Engine {
             subStore = subStore[part];
         }
         const last = parts[parts.length - 1];
-        if (!!subStore[last]) return;
-        subStore[last] = this.reactivity.signal(value);
-        // this.sendDatastarEvent("core", "store", "upsert", path, value);
-    }
 
-    signalByName<T>(name: string) {
-        return (this.store as any)[name] as Signal<T>;
+        const current = subStore[last];
+        if (!!current) return current;
+
+        const signal = this.reactivity.signal(value);
+        subStore[last] = signal;
+
+        return signal;
     }
 
     private applyPlugins(rootElement: Element) {
@@ -259,7 +195,7 @@ export class Engine {
 
         this.plugins.forEach((p, pi) => {
             this.walkDownDOM(rootElement, (el) => {
-                if (!pi) this.cleanupElementRemovals(el);
+                if (!pi) this.cleanup(el);
 
                 for (const rawKey in el.dataset) {
                     const rawExpression = `${el.dataset[rawKey]}` || "";
@@ -268,7 +204,8 @@ export class Engine {
                     if (!rawKey.startsWith(p.name)) continue;
 
                     if (el.id.length === 0) {
-                        el.id = `ds-${this.parentID}-${this.missingIDNext++}`;
+                        el.id = `${DATASTAR}-${this.parentID}-${this
+                            .missingIDNext++}`;
                     }
 
                     appliedProcessors.clear();
@@ -279,25 +216,19 @@ export class Engine {
                             lowerCaseTag.match(r)
                         );
                         if (!allowed) {
-                            throw new Error(
-                                `'${el.tagName}' not allowed for '${rawKey}', allowed ${
-                                    [
-                                        [...p.allowedTagRegexps].map((t) =>
-                                            `'${t}'`
-                                        ),
-                                    ].join(", ")
-                                }`,
-                            );
+                            throw ERR_NOT_ALLOWED;
                         }
                     }
 
                     let keyRaw = rawKey.slice(p.name.length);
                     let [key, ...modifiersWithArgsArr] = keyRaw.split(".");
                     if (p.mustHaveEmptyKey && key.length > 0) {
-                        throw new Error(`'${rawKey}' must have empty key`);
+                        // must have empty key
+                        throw ERR_BAD_ARGS;
                     }
                     if (p.mustNotEmptyKey && key.length === 0) {
-                        throw new Error(`'${rawKey}' must have non-empty key`);
+                        // must have non-empty key
+                        throw ERR_BAD_ARGS;
                     }
                     if (key.length) {
                         key = key[0].toLowerCase() + key.slice(1);
@@ -310,9 +241,8 @@ export class Engine {
                     if (p.allowedModifiers) {
                         for (const modifier of modifiersArr) {
                             if (!p.allowedModifiers.has(modifier.label)) {
-                                throw new Error(
-                                    `'${modifier.label}' is not allowed`,
-                                );
+                                // modifier not allowed
+                                throw ERR_NOT_ALLOWED;
                             }
                         }
                     }
@@ -322,14 +252,12 @@ export class Engine {
                     }
 
                     if (p.mustHaveEmptyExpression && expression.length) {
-                        throw new Error(
-                            `'${rawKey}' must have empty expression`,
-                        );
+                        // must have empty expression
+                        throw ERR_BAD_ARGS;
                     }
                     if (p.mustNotEmptyExpression && !expression.length) {
-                        throw new Error(
-                            `'${rawKey}' must have non-empty expression`,
-                        );
+                        // must have non-empty expression
+                        throw ERR_BAD_ARGS;
                     }
 
                     const splitRegex = /;|\n/;
@@ -379,11 +307,11 @@ export class Engine {
                     const ctx: AttributeContext = {
                         store: () => this.store,
                         mergeSignals: this.mergeSignals.bind(this),
-                        upsertIfMissingFromStore: this.upsertIfMissingFromStore
+                        upsertSignal: this.upsertSignal
                             .bind(this),
                         removeSignals: this.removeSignals.bind(this),
                         applyPlugins: this.applyPlugins.bind(this),
-                        cleanupElementRemovals: this.cleanupElementRemovals
+                        cleanup: this.cleanup
                             .bind(this),
                         walkSignals: this.walkSignals.bind(this),
                         actions: this.actions,
@@ -394,10 +322,9 @@ export class Engine {
                         rawExpression,
                         expression,
                         expressionFn: () => {
-                            throw new Error("Expression function not created");
+                            throw ERR_METHOD_NOT_ALLOWED;
                         },
                         modifiers,
-                        // sendDatastarEvent: this.sendDatastarEvent.bind(this),
                     };
 
                     if (
@@ -435,13 +362,6 @@ export class Engine {
   }
               `;
 
-                        /*sendDatastarEvent(
-                'core',
-                'attributes',
-                'expr_construction',
-                ctx.el,
-                `${rawKey}="${rawExpression}" becomes: ${joined}`,
-              )*/
                         try {
                             const argumentNames = p.argumentNames || [];
                             const fn = new Function(
@@ -451,16 +371,7 @@ export class Engine {
                             ) as AttribtueExpressionFunction;
                             ctx.expressionFn = fn;
                         } catch (e) {
-                            const err = new Error(
-                                `Error creating expression function for '${fnContent}', error: ${e}`,
-                            );
-                            // this.sendDatastarEvent(
-                            //     "core",
-                            //     "attributes",
-                            //     "expr_construction_err",
-                            //     ctx.el,
-                            //     String(err),
-                            // );
+                            const err = new Error(`${e}\nwith\n${fnContent}`);
                             console.error(err);
                             debugger;
                         }

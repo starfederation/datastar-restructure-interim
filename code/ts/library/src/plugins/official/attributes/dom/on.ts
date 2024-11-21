@@ -4,7 +4,7 @@
 // Description: This action adds an event listener to an element. The event listener can be triggered by a variety of events, such as clicks, keypresses, and more. The event listener can also be set to trigger only once, or to be passive or capture. The event listener can also be debounced or throttled. The event listener can also be set to trigger only when the event target is outside the element.
 
 import { AttributePlugin } from "../../../../engine";
-import { PLUGIN_ATTRIBUTE } from "../../../../engine/client_only_consts";
+import { ERR_BAD_ARGS } from "../../../../engine/errors";
 import { argsHas, argsToMs } from "../../../../utils/arguments";
 import { remoteSignals } from "../../../../utils/signals";
 import { kebabize } from "../../../../utils/text";
@@ -25,7 +25,7 @@ let lastStoreMarshalled = "";
 
 // Sets the event listener of the element
 export const On: AttributePlugin = {
-    pluginType: PLUGIN_ATTRIBUTE,
+    pluginType: "attribute",
     name: "on",
     mustNotEmptyKey: true,
     mustNotEmptyExpression: true,
@@ -39,7 +39,6 @@ export const On: AttributePlugin = {
         }
 
         let callback = (evt?: Event) => {
-            // ctx.sendDatastarEvent("plugin", "event", key, target, "triggered");
             expressionFn(ctx, evt);
         };
 
@@ -89,11 +88,8 @@ export const On: AttributePlugin = {
                     const expr = eventValues.join("").toLowerCase().trim();
                     valid = lowerAttr === expr;
                 } else {
-                    const msg =
-                        `Invalid value for ${attrName} modifier on ${key} on ${el}`;
-                    console.error(msg);
-                    debugger;
-                    throw new Error(msg);
+                    // console.error(`Invalid value for ${attrName} modifier on ${key} on ${el}`);
+                    throw ERR_BAD_ARGS;
                 }
 
                 if (valid) {

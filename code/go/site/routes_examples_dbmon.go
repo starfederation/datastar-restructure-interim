@@ -33,7 +33,7 @@ func setupExamplesDbmon(examplesRouter chi.Router) error {
 		}
 		input := &dbmonInput{}
 
-		if err := datastar.ParseIncoming(r, input); err != nil {
+		if err := datastar.ReadSignals(r, input); err != nil {
 			datastar.NewSSE(w, r).ConsoleError(err)
 			return
 		}

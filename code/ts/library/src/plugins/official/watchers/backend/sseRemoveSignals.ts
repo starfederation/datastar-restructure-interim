@@ -3,12 +3,13 @@
 // Slug: Merge fine grain signals store data from a server using the Datastar SDK interface
 // Description: Merge store data from a server using the Datastar SDK interface
 
-import { EventTypes, WatcherPlugin } from "../../../../engine";
-import { PLUGIN_WATCHER } from "../../../../engine/client_only_consts";
+import { EventTypes } from "../../../../engine/consts";
+import { ERR_BAD_ARGS } from "../../../../engine/errors";
+import { WatcherPlugin } from "../../../../engine/types";
 import { datastarSSEEventWatcher } from "./sseShared";
 
 export const RemoveSignals: WatcherPlugin = {
-    pluginType: PLUGIN_WATCHER,
+    pluginType: "watcher",
     name: EventTypes.RemoveSignals,
     onGlobalInit: async (ctx) => {
         datastarSSEEventWatcher(
@@ -17,9 +18,8 @@ export const RemoveSignals: WatcherPlugin = {
                 // replace all whitespace with a single space
                 pathsRaw = pathsRaw.replaceAll(/\s+/g, " ");
                 if (!!!pathsRaw?.length) {
-                    throw new Error(
-                        "No paths provided for remove-signals",
-                    );
+                    // No paths provided for remove-signals
+                    throw ERR_BAD_ARGS;
                 }
                 const paths = pathsRaw.split(" ");
                 ctx.removeSignals(...paths);

@@ -2,11 +2,15 @@ package datastar
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/valyala/bytebufferpool"
 )
 
 var (
@@ -86,6 +90,34 @@ func (sse *ServerSentEventGenerator) DeleteFromStore(paths ...string) error {
 		[]string{PathsDatalineLiteral + strings.Join(paths, " ")},
 	); err != nil {
 		return fmt.Errorf("failed to send delete from store: %w", err)
+	}
+	return nil
+}
+
+func ReadSignals(r *http.Request, store any) error {
+	var dsInput []byte
+
+	if r.Method == "GET" {
+		dsJSON := r.URL.Query().Get(DatastarKey)
+		if dsJSON == "" {
+			return nil
+		} else {
+			dsInput = []byte(dsJSON)
+		}
+	} else {
+		buf := bytebufferpool.Get()
+		defer bytebufferpool.Put(buf)
+		if _, err := buf.ReadFrom(r.Body); err != nil {
+			if err == http.ErrBodyReadAfterClose {
+				return fmt.Errorf("body already closed, are you sure you created the SSE ***AFTER*** the ReadSignals? %w", err)
+			}
+			return fmt.Errorf("failed to read body: %w", err)
+		}
+		dsInput = buf.Bytes()
+	}
+
+	if err := json.Unmarshal(dsInput, store); err != nil {
+		return fmt.Errorf("failed to unmarshal: %w", err)
 	}
 	return nil
 }

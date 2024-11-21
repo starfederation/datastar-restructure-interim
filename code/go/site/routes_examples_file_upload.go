@@ -31,20 +31,19 @@ func setupExamplesFileUpload(examplesRouter chi.Router) error {
 		r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytesSize))
 		data, err := io.ReadAll(r.Body)
 		if err != nil {
+			if len(data) >= maxBytesSize {
+				http.Error(w, "file too large", http.StatusRequestEntityTooLarge)
+				return
+			}
+
 			datastar.NewSSE(w, r).ConsoleError(fmt.Errorf("error reading body: %w", err))
 			return
 		}
 
-		if len(data) >= maxBytesSize {
-			sse := datastar.NewSSE(w, r)
-			sse.MergeFragmentTempl(FileUpdateAlert(err))
-			return
-		}
-
-		store := &FileUploadStore{}
 		sse := datastar.NewSSE(w, r)
+		store := &FileUploadStore{}
 		if err := json.Unmarshal(data, store); err != nil {
-			sse.MergeFragmentTempl(FileUpdateAlert(err))
+			sse.ConsoleError(fmt.Errorf("error unmarshalling json: %w", err))
 			return
 		}
 

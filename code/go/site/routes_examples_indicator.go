@@ -8,13 +8,13 @@ import (
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
-func setupExamplesFetchIndicator(examplesRouter chi.Router) error {
+func setupExamplesIndicator(examplesRouter chi.Router) error {
 
 	examplesRouter.Get("/fetch_indicator/greet", func(w http.ResponseWriter, r *http.Request) {
 		sse := datastar.NewSSE(w, r)
-		sse.MergeFragmentTempl(fetchIndicatorEmpty())
+		sse.MergeFragmentTempl(indicatorEmpty())
 		time.Sleep(2 * time.Second)
-		sse.MergeFragmentTempl(fetchIndicatorGreeting())
+		sse.MergeFragmentTempl(indicatorGreeting())
 	})
 
 	return nil

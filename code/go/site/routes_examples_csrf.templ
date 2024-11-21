@@ -1,15 +1,19 @@
 
 package site
 
+import "fmt"
+
 templ CSRFDemo(csrf string) {
 	<div
 		id="update_me"
 		class="flex flex-col gap-4"
-		data-header="{'X-CSRF-Token':'{ csrf }'}"
 	>
 		<button
 			class="btn btn-primary"
-			data-on-click="$post('/examples/csrf/data')"
+			data-on-click={ fmt.Sprintf(
+				"$post('/examples/csrf/data', {headers: {'X-CSRF-Token':'%s'}})",
+				csrf,
+			) }
 		>Send update</button>
 		<div class="card bg-base-200">
 			<div id="responses" class="card-body">
