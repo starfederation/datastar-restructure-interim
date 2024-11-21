@@ -39,7 +39,7 @@ func run(ctx context.Context) error {
 
 	eg := toolbelt.NewErrGroupSharedCtx(
 		ctx,
-		site.RunBlocking(port),
+		site.RunBlocking(port, nil),
 	)
 	if err := eg.Wait(); err != nil {
 		return fmt.Errorf("error running docs server: %w", err)

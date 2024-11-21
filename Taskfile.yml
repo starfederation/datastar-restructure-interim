@@ -81,7 +81,7 @@ tasks:
   kill:
     method: none
     cmds:
-      - fuser -k 4222/tcp > /dev/null 2>&1 || true
+      - fuser -k 8080/tcp > /dev/null 2>&1 || true
 
   support:
     sources:
@@ -106,6 +106,13 @@ tasks:
       - go mod tidy
       - go build -o ./datastar-website code/go/cmd/site/main.go
       - ./datastar-website
+
+  test:
+    dir: code/go/site/smoketests
+    deps:
+      - support
+    cmds:
+      - go test -v
 
   default:
     cmds:

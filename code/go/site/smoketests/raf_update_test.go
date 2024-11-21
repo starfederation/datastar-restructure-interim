@@ -1,51 +1,23 @@
 package smoketests
 
 import (
-	"context"
-	"errors"
-	"fmt"
+	"testing"
 	"time"
 
-	playwright "github.com/playwright-community/playwright-go"
+	"github.com/stretchr/testify/assert"
 )
 
-func rafUpdateExampleTest(ctx context.Context, page playwright.Page) error {
-	suite := []func(page playwright.Page) error{
-		rafUpdateTimeUpdate,
-	}
+func TestExamplesRafUpdate(t *testing.T) {
+	page := testExamplesPage(t, "raf_update")
 
-	errs := []error{}
-
-	for _, test := range suite {
-		err := test(page)
-		if err != nil {
-			errs = append(errs, err)
-		}
-	}
-
-	if len(errs) > 0 {
-		return errors.Join(errs...)
-	}
-
-	return nil
-}
-
-func rafUpdateTimeUpdate(page playwright.Page) error {
-
+	timeEl := page.MustElement("#time")
 	last := ""
 	for i := 0; i < 3; i++ {
-		current, err := page.Locator("#time").InnerText()
-		if err != nil {
-			return fmt.Errorf("could not read InnerText: %w", err)
-		}
+		current, err := timeEl.Text()
+		assert.NoError(t, err)
 
-		if current == last {
-			return errors.New("expected current time to not equal last time")
-		}
-
+		assert.NotEqual(t, last, current)
 		last = current
-		time.Sleep(1 * time.Second)
+		time.Sleep(1001 * time.Millisecond)
 	}
-
-	return nil
 }
