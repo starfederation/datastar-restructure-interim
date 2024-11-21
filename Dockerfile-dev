@@ -22,9 +22,6 @@ RUN set -eux; \
     # Install needed Go tooling
     go install github.com/a-h/templ/cmd/templ@latest \
     && \
-    go install github.com/valyala/quicktemplate/qtc@latest \
-    && \
-    # Make this a safe .git directory
-    git config --global --add safe.directory /app
+    go install github.com/valyala/quicktemplate/qtc@latest
 
 ENTRYPOINT ["/bin/sh"]
