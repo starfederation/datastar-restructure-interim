@@ -1,4 +1,5 @@
 import (
+	"fmt"
 	datastar "github.com/starfederation/datastar/code/go/sdk"
 )
 
@@ -10,8 +11,14 @@ sse := datastar.NewSSE(w,r)
 
 // Merges HTML fragments into the DOM.
 sse.MergeFragments(
-    fmt.Sprintf(`<div id="question">%s</div>`, QA.question)
+    fmt.Sprintf(
+		`<div id="question">%s</div>`,
+		QA.question,
+	)
 )
 
 // Merges signals into the store.
-sse.MergeSignals(fmt.Sprintf(`{response: '', answer: '%s'}`, QA.answer))
+sse.MergeSignals(
+	fmt.Sprintf(`{response: '', answer: '%s'}`,
+	QA.answer),
+)

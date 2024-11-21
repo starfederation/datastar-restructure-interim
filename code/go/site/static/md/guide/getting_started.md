@@ -144,7 +144,7 @@ Another useful attribute is `data-show`, which can be used to show or hide an el
 
 This results in the button being visible only when the input is _not_ empty.
 
-<div data-store="{input4: ''}" class="alert flex justify-between items-start p-8">
+<div class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -168,7 +168,7 @@ The `data-bind-*` attribute can be used to bind a JavaScript expression to any v
 
 This results in the button being given the `disabled` attribute whenever the input is empty.
 
-<div data-store="{input5: ''}" class="alert flex justify-between items-start p-8">
+<div class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -196,7 +196,7 @@ The [`data-on-*`](/reference/plugins_attributes#on) attribute can be used to exe
 
 This results in the `$input` signal being set to an empty string when the button element is clicked. If the `$input` signal is used elsewhere, its value will automatically update.
 
-<div data-store="{input6: 'Some input'}" class="alert flex justify-between items-start p-8">
+<div class="alert flex justify-between items-start p-8">
     <div class="flex flex-col gap-4">
         <div class="flex items-center">
             <div class="w-20">Input:</div>
@@ -216,9 +216,12 @@ So what else can we do with these expressions? Anything we want, really.
 
 See if you can follow the code below _before_ trying the demo.
 
+# BEN!!! At this point we haven't explained the data-store, nor the data-computed.  At least hand wave it to the reader and say we'll explain it later.  We have to use the store because we're using the computed signal.  We'll explain it later.
+
 ```html
-<div data-store="{response: '', answer: 'bread'}"
-     data-computed-correct="$response.toLowerCase() == $answer"
+<div
+    data-store="{response: '', answer: 'bread'}"
+    data-computed-correct="$response.toLowerCase() == $answer"
 >
     <div id="question">
         What do you put in a toaster?
@@ -228,9 +231,9 @@ See if you can follow the code below _before_ trying the demo.
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
-        <span data-show="$correct2">That is correct ✅</span>
-        <span data-show="!$correct2">
-            The correct answer is “<span data-text="$answer2"></span>” 🤷
+        <span data-show="$correct">That is correct ✅</span>
+        <span data-show="!$correct">
+            The correct answer is “<span data-text="$answer"></span>” 🤷
         </span>
     </div>
 </div>
@@ -273,8 +276,9 @@ The `mergeSignals()` method merges the `response` and `answer` signals into the 
 With our backend in place, we can now use the `data-on-click` attribute to send a `GET` request to the `/actions/quiz` endpoint on the server when a button is clicked.
 
 ```html
-<div data-store="{response: '', answer: ''}"
-     data-computed-correct="$response.toLowerCase() == $answer"
+<div
+    data-store="{response: '', answer: '', correct: false}"
+    data-computed-correct="$response.toLowerCase() == $answer"
 >
     <div id="question"></div>
     <button data-on-click="$get('/actions/quiz')">
@@ -287,8 +291,8 @@ With our backend in place, we can now use the `data-on-click` attribute to send 
     </button>
     <div data-show="$response != ''">
         You answered “<span data-text="$response"></span>”.
-        <span data-show="$correct2">That is correct ✅</span>
-        <span data-show="!$correct2">
+        <span data-show="$correct">That is correct ✅</span>
+        <span data-show="!$correct">
             The correct answer is “<span data-text="$answer2"></span>” 🤷
         </span>
     </div>
@@ -297,7 +301,7 @@ With our backend in place, we can now use the `data-on-click` attribute to send 
 
 Now when the `Fetch a question` button is clicked, the server will respond with an event to modify the `question` element in the DOM and an event to modify the `response` and `answer` signals. We're driving state from the backend!
 
-<div data-store="{response2: '', answer2: '', lastQuestionId: ''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex justify-between items-start gap-4 p-8">
+<div data-store="{response2: '', answer2: '', correct2:''}" data-computed-correct2="$response2.toLowerCase() == $answer2" class="alert flex justify-between items-start gap-4 p-8">
     <div class="space-y-3 pb-3">
         <div id="question2"></div>
         <div data-show="$response2 != ''">
@@ -332,7 +336,9 @@ One of the benefits of using SSE is that we can send multiple events (HTML fragm
 
 ## A Quick Overview
 
-Using `data-*` attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragment and signal updates.
+Using [`data-*`](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) attributes (hence the name), you can introduce reactive state to your frontend and access it anywhere in the DOM and in your backend. You can set up events that trigger requests to backend endpoints that respond with HTML fragment and signal updates.
+
+# BEN!!! Change the order to be the order your are teaching in
 
 - Merge signals into the store: `data-store="{foo: ''}"`
 - Bind element values to signals: `data-model="foo"`
@@ -341,6 +347,8 @@ Using `data-*` attributes (hence the name), you can introduce reactive state to 
 - Modify the classes on an element: `data-class="{'font-bold': $foo}"`
 - Bind an expression to an HTML attribute: `data-bind-disabled="$foo == ''"`
 - Execute an expression on an event: `data-on-click="$get(/endpoint)"`
+
+# BEN!!! Add there are even more attributes to learn, just a few (pick data-star) :P
 - Persist all signals in local storage: `data-persist`
 - Create a computed signal: `data-computed-foo="$bar + 1"`
 - Create a reference to an element: `data-ref="alert"`
