@@ -32,7 +32,7 @@ If you prefer to host the file yourself, download your own bundle using the [bun
 
 ### Using NPM
 
-You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@sudodevnull/datastar) and then use `node_modules/@sudodevnull/datastar/dist/datastar.js` (or `datastar.min.js`).
+You can alternatively install Datastar via [npm](https://www.npmjs.com/package/@starfederation/datastar).
 
 ```bash
 npm install @sudodevnull/datastar
